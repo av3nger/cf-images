@@ -1,0 +1,24 @@
+{
+  "name": "cf-images-plugin",
+  "description": "Cloudflare Images",
+  "version": "1.0.0",
+  "main": "cf-images.php",
+  "author": "Anton Vanyukov",
+  "license": "GPL-2.0-or-later",
+  "keywords": [
+    "performance",
+    "optimization"
+  ],
+  "devDependencies": {
+    "css-loader": "^6.4.0",
+    "mini-css-extract-plugin": "^2.4.2",
+    "sass": "^1.43.2",
+    "sass-loader": "^12.2.0",
+    "webpack": "^5.58.2",
+    "webpack-cli": "^4.9.0"
+  },
+  "scripts": {
+    "watch": "webpack --watch",
+    "build": "webpack --progress"
+  }
+}
