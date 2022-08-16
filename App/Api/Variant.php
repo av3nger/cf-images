@@ -2,7 +2,7 @@
 /**
  * Cloudflare API class that handles variants manipulations.
  *
- * @link       https://wpmudev.com
+ * @link       https://vcore.ru
  * @since      1.0.0
  *
  * @package    CF_Images

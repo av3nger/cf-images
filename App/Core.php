@@ -5,7 +5,7 @@
  * A class definition that App attributes and functions used across both the
  * public-facing side of the site and the Admin area.
  *
- * @link       https://wpmudev.com
+ * @link       https://vcore.ru
  * @since      1.0.0
  *
  * @package    CF_Images

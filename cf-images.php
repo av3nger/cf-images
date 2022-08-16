@@ -3,18 +3,17 @@
  * The plugin bootstrap file
  *
  * This file is read by WordPress to generate the plugin information in the plugin
- * Admin area. This file also App all of the dependencies used by the plugin,
- * registers the activation and deactivation functions, and defines a function
- * that starts the plugin.
+ * Admin area. This file also App all the dependencies used by the plugin, registers
+ * the activation and deactivation functions, and defines a function that starts the plugin.
  *
- * @link              https://wpmudev.com
+ * @link              https://vcore.ru
  * @since             1.0.0
  * @package           CF_Images
  *
  * @wordpress-plugin
  * Plugin Name:       Cloudflare Images
- * Plugin URI:        https://wpmudev.com
- * Description:       This is a short description of what the plugin does. It's displayed in the WordPress Admin area.
+ * Plugin URI:        https://vcore.ru
+ * Description:       Offload media library images to the `Cloudflare Images` service.
  * Version:           1.0.0
  * Author:            Anton Vanyukov
  * Author URI:        https://vanyukov.su
