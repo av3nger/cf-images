@@ -184,14 +184,9 @@ class Core {
 
 			// Register size.
 			try {
-				$results = $variant->create( $name, $width, $height, $fit );
+				$variant->create( $name, $width, $height, $fit );
 			} catch ( Exception $e ) {
-				$results = new WP_Error( $e->getCode(), $e->getMessage() );
-			}
-
-			if ( is_wp_error( $results ) ) {
-				$this->error = $results;
-				do_action( 'admin_notices' );
+				$this->error = new WP_Error( $e->getCode(), $e->getMessage() );
 				break;
 			}
 

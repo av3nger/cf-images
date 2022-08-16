@@ -153,6 +153,11 @@ class Api {
 
 		$body = wp_remote_retrieve_body( $response );
 
+		// Duplicate entry.
+		if ( 409 === (int) $code ) {
+			return new stdClass();
+		}
+
 		if ( 200 !== (int) $code ) {
 			throw new Exception( $body, $code );
 		}
