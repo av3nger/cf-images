@@ -33,7 +33,7 @@ if ( ! defined( 'WPINC' ) ) {
  * @since      1.0.0
  * @package    CF_Images
  * @subpackage CF_Images/App
- * @author     Anton Vanyukov <anton@incsub.com>
+ * @author     Anton Vanyukov <a.vanyukov@vcore.ru>
  */
 class Core {
 
