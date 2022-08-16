@@ -133,12 +133,14 @@ class Core {
 	 */
 	private function load_libs() {
 
-		require_once 'Api/Api.php';
-		require_once 'Api/Image.php';
-		require_once 'Api/Variant.php';
+		require_once __DIR__ . '/Admin.php';
 
-		require_once 'Async/Task.php';
-		require_once 'Async/Upload.php';
+		require_once __DIR__ . '/Api/Api.php';
+		require_once __DIR__ . '/Api/Image.php';
+		require_once __DIR__ . '/Api/Variant.php';
+
+		require_once __DIR__ . '/Async/Task.php';
+		require_once __DIR__ . '/Async/Upload.php';
 		new Async\Upload();
 
 	}
