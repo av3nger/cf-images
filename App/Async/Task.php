@@ -96,7 +96,7 @@ abstract class Task {
 			throw new Exception( 'Action not defined for class ' . __CLASS__ );
 		}
 
-		add_action( $this->action, array( $this, 'launch' ), (int) $this->priority, (int) $this->argument_count );
+		add_action( $this->action, array( $this, 'launch' ), $this->priority, $this->argument_count );
 
 		if ( $auth_level & self::LOGGED_IN ) {
 			add_action( "admin_post_wp_async_$this->action", array( $this, 'handle_postback' ) );
@@ -143,7 +143,7 @@ abstract class Task {
 	/**
 	 * Launch the request on the WordPress shutdown hook.
 	 *
-	 * On VIP we got into data races due to the postback sometimes completing
+	 * On VIP, we got into data races due to the postback sometimes completing
 	 * faster than the data could propagate to the database server cluster.
 	 * This made WordPress get empty data sets from the database without
 	 * failing. On their advice, we're moving the actual firing of the async
