@@ -65,6 +65,15 @@ class Core {
 	private $error = false;
 
 	/**
+	 * Admin instance.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 * @var      Admin
+	 */
+	private $admin;
+
+	/**
 	 * Define the core functionality of the plugin.
 	 *
 	 * Set the plugin name and the plugin version that can be used throughout the plugin.
@@ -80,11 +89,15 @@ class Core {
 		} else {
 			$this->version = '1.0.0';
 		}
-		$this->plugin_name = 'cf-perf';
+		$this->plugin_name = 'cf-images';
 
 		$this->load_libs();
 		add_action( 'admin_init', array( $this, 'register_image_sizes' ) );
 		add_action( 'admin_notices', array( $this, 'error_notice' ) );
+
+		if ( is_admin() ) {
+			$this->admin = new Admin();
+		}
 
 		// Disable generation of image sizes.
 		add_filter( 'wp_image_editors', '__return_empty_array' );
@@ -419,6 +432,16 @@ class Core {
 	 */
 	public function get_version(): string {
 		return $this->version;
+	}
+
+	/**
+	 * Retrieve the admin instance.
+	 *
+	 * @since     1.0.0
+	 * @return    Admin     The admin instance of the plugin.
+	 */
+	public function get_admin(): Admin {
+		return $this->admin;
 	}
 
 }
