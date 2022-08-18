@@ -38,6 +38,15 @@ if ( ! defined( 'WPINC' ) ) {
 class Core {
 
 	/**
+	 * Plugin instance.
+	 *
+	 * @since  1.0.0
+	 * @access private
+	 * @var    null|Core $instance  Plugin instance.
+	 */
+	private static $instance = null;
+
+	/**
 	 * The unique identifier of this plugin.
 	 *
 	 * @since    1.0.0
@@ -74,6 +83,21 @@ class Core {
 	private $admin;
 
 	/**
+	 * Get plugin instance.
+	 *
+	 * @since    1.0.0
+	 *
+	 * @return   Core
+	 */
+	public static function get_instance(): Core {
+		if ( ! self::$instance ) {
+			self::$instance = new self();
+		}
+
+		return self::$instance;
+	}
+
+	/**
 	 * Define the core functionality of the plugin.
 	 *
 	 * Set the plugin name and the plugin version that can be used throughout the plugin.
@@ -82,7 +106,7 @@ class Core {
 	 *
 	 * @since    1.0.0
 	 */
-	public function __construct() {
+	private function __construct() {
 
 		if ( defined( 'CF_IMAGES_VERSION' ) ) {
 			$this->version = CF_IMAGES_VERSION;
@@ -133,6 +157,7 @@ class Core {
 	 */
 	private function load_libs() {
 
+		require_once __DIR__ . '/Traits/Helpers.php';
 		require_once __DIR__ . '/Admin.php';
 
 		require_once __DIR__ . '/Api/Api.php';
