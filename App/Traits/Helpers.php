@@ -1,12 +1,13 @@
 <?php
 /**
- * The file that defines helper traits that are used across all classes.
+ * The file that defines helper traits that are used across all classes
  *
- * @link       https://vcore.ru
- * @since      1.0.0
+ * @link https://vcore.ru
  *
- * @package    CF_Images
+ * @package CF_Images
  * @subpackage CF_Images/App/Traits
+ * @author Anton Vanyukov <a.vanyukov@vcore.ru>
+ * @since 1.0.0
  */
 
 namespace CF_Images\App\Traits;
@@ -20,10 +21,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * The helpers trait class.
  *
- * @since      1.0.0
- * @package    CF_Images
- * @subpackage CF_Images/App/Traits
- * @author     Anton Vanyukov <a.vanyukov@vcore.ru>
+ * @since 1.0.0
  */
 trait Helpers {
 
@@ -35,9 +33,7 @@ trait Helpers {
 	 * @return string
 	 */
 	public function get_slug(): string {
-
 		return Core::get_instance()->get_plugin_name();
-
 	}
 
 }

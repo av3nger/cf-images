@@ -1,12 +1,15 @@
 <?php
 /**
- * Asynchronous upload class.
+ * Asynchronous upload class
  *
- * @link       https://vcore.ru
- * @since      1.0.0
+ * This class defines all code necessary to implement async processing of image uploads.
  *
- * @package    CF_Images
+ * @link https://vcore.ru
+ *
+ * @package CF_Images
  * @subpackage CF_Images/App/Async
+ * @author Anton Vanyukov <a.vanyukov@vcore.ru>
+ * @since 1.0.0
  */
 
 namespace CF_Images\App\Async;
@@ -18,18 +21,15 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Asynchronous upload class.
  *
- * This class defines all code necessary to implement async processing of image uploads.
- *
- * @since      1.0.0
- * @package    CF_Images
- * @subpackage CF_Images/App/Async
- * @author     Anton Vanyukov <a.vanyukov@vcore.ru>
+ * @since 1.0.0
  */
 class Upload extends Task {
 
 	/**
 	 * Action.
 	 *
+	 * @since 1.0.0
+	 * @access protected
 	 * @var string
 	 */
 	protected $action = 'wp_generate_attachment_metadata';
@@ -39,6 +39,8 @@ class Upload extends Task {
 	 * is set to an arbitrarily high value of twenty, but can be overridden if
 	 * necessary.
 	 *
+	 * @since 1.0.0
+	 * @access protected
 	 * @var int
 	 */
 	protected $argument_count = 3;
@@ -66,6 +68,8 @@ class Upload extends Task {
 	 * Run the do_action function for the asynchronous postback.
 	 *
 	 * @since 1.0.0
+	 *
+	 * @return void
 	 */
 	protected function run_action() {
 

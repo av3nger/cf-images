@@ -1,12 +1,15 @@
 <?php
 /**
- * Cloudflare API class.
+ * Cloudflare API class
  *
- * @link       https://vcore.ru
- * @since      1.0.0
+ * This class defines all code necessary to communicate with the Cloudflare API.
  *
- * @package    CF_Images
+ * @link https://vcore.ru
+ *
+ * @package CF_Images
  * @subpackage CF_Images/App/Api
+ * @author Anton Vanyukov <a.vanyukov@vcore.ru>
+ * @since 1.0.0
  */
 
 namespace CF_Images\App\Api;
@@ -21,18 +24,15 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Cloudflare API class.
  *
- * This class defines all code necessary to communicate with the Cloudflare API.
- *
- * @since      1.0.0
- * @package    CF_Images
- * @subpackage CF_Images/App/Api
- * @author     Anton Vanyukov <a.vanyukov@vcore.ru>
+ * @since 1.0.0
  */
 class Api {
 
 	/**
 	 * Cloudflare API URL.
 	 *
+	 * @since 1.0.0
+	 * @access protected
 	 * @var string
 	 */
 	protected $url = 'https://api.cloudflare.com/client/v4/accounts/';
@@ -40,6 +40,8 @@ class Api {
 	/**
 	 * Endpoint for API call.
 	 *
+	 * @since 1.0.0
+	 * @access private
 	 * @var string
 	 */
 	private $endpoint = '';
@@ -47,6 +49,8 @@ class Api {
 	/**
 	 * Body for API call.
 	 *
+	 * @since 1.0.0
+	 * @access private
 	 * @var null|string|array
 	 */
 	private $body = null;
@@ -54,6 +58,8 @@ class Api {
 	/**
 	 * Method used to do API call.
 	 *
+	 * @since 1.0.0
+	 * @access private
 	 * @var string
 	 */
 	private $method = 'POST';
@@ -64,6 +70,8 @@ class Api {
 	 * @since 1.0.0
 	 *
 	 * @param string $endpoint  Endpoint.
+	 *
+	 * @return void
 	 */
 	protected function set_endpoint( string $endpoint ) {
 		$this->endpoint = $endpoint;
@@ -75,6 +83,8 @@ class Api {
 	 * @since 1.0.0
 	 *
 	 * @param null|string|array $data  JSON-encoded data or array for image uploads.
+	 *
+	 * @return void
 	 */
 	protected function set_body( $data ) {
 		$this->body = $data;
@@ -86,6 +96,8 @@ class Api {
 	 * @since 1.0.0
 	 *
 	 * @param string $method  Method.
+	 *
+	 * @return void
 	 */
 	protected function set_method( string $method ) {
 		$this->method = $method;

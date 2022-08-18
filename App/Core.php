@@ -5,17 +5,21 @@
  * A class definition that App attributes and functions used across both the
  * public-facing side of the site and the Admin area.
  *
- * @link       https://vcore.ru
- * @since      1.0.0
+ * Also maintains the unique identifier of this plugin as well as the current
+ * version of the plugin.
  *
- * @package    CF_Images
+ * @link https://vcore.ru
+ *
+ * @package CF_Images
  * @subpackage CF_Images/App
+ * @author Anton Vanyukov <a.vanyukov@vcore.ru>
+ * @since 1.0.0
  */
-
 namespace CF_Images\App;
 
 use Exception;
 use WP_Error;
+use WP_Post;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -24,77 +28,70 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * The core plugin class.
  *
- * This is used to define internationalization, Admin-specific hooks, and
- * public-facing site hooks.
- *
- * Also maintains the unique identifier of this plugin as well as the current
- * version of the plugin.
- *
- * @since      1.0.0
- * @package    CF_Images
- * @subpackage CF_Images/App
- * @author     Anton Vanyukov <a.vanyukov@vcore.ru>
+ * @since 1.0.0
  */
 class Core {
 
 	/**
 	 * Plugin instance.
 	 *
-	 * @since  1.0.0
+	 * @since 1.0.0
 	 * @access private
-	 * @var    null|Core $instance  Plugin instance.
+	 * @var null|Core $instance  Plugin instance.
 	 */
 	private static $instance = null;
 
 	/**
 	 * The unique identifier of this plugin.
 	 *
-	 * @since    1.0.0
-	 * @access   protected
-	 * @var      string    $plugin_name    The string used to uniquely identify this plugin.
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string $plugin_name  The string used to uniquely identify this plugin.
 	 */
 	protected $plugin_name;
 
 	/**
 	 * The current version of the plugin.
 	 *
-	 * @since    1.0.0
-	 * @access   protected
-	 * @var      string    $version    The current version of the plugin.
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string $version  The current version of the plugin.
 	 */
 	protected $version;
 
 	/**
 	 * Error status.
 	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      bool|WP_Error
+	 * @since 1.0.0
+	 * @access private
+	 * @var bool|WP_Error $error
 	 */
 	private $error = false;
 
 	/**
 	 * Admin instance.
 	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      Admin
+	 * @since 1.0.0
+	 * @access private
+	 * @var Admin $admin
 	 */
 	private $admin;
 
 	/**
 	 * Get plugin instance.
 	 *
-	 * @since    1.0.0
+	 * @since 1.0.0
 	 *
-	 * @return   Core
+	 * @return Core
 	 */
 	public static function get_instance(): Core {
+
 		if ( ! self::$instance ) {
 			self::$instance = new self();
 		}
 
 		return self::$instance;
+
 	}
 
 	/**
@@ -104,7 +101,7 @@ class Core {
 	 * Load the dependencies, define the locale, and set the hooks for the Admin area and
 	 * the public-facing side of the site.
 	 *
-	 * @since    1.0.0
+	 * @since 1.0.0
 	 */
 	private function __construct() {
 
@@ -141,8 +138,8 @@ class Core {
 		 *
 		 * @since 1.0.0
 		 *
-		 * @param string $url           URL for the given attachment.
-		 * @param int    $attachment_id Attachment post ID.
+		 * @param string $url  URL for the given attachment.
+		 * @param int    $id   Attachment post ID.
 		 */
 		add_filter( 'wp_get_attachment_url', function ( $url, $id ) {
 			return $url;
@@ -176,6 +173,7 @@ class Core {
 	 * @since 1.0.0
 	 */
 	public function error_notice() {
+
 		if ( false === $this->error ) {
 			return;
 		}
@@ -192,6 +190,7 @@ class Core {
 			</p>
 		</div>
 		<?php
+
 	}
 
 	/**
@@ -281,6 +280,8 @@ class Core {
 	 *
 	 * @param int    $attachment_id  Attachment ID.
 	 * @param string $path           Full image path on server.
+	 *
+	 * @return void
 	 */
 	private function update_image_meta( int $attachment_id, string $path ) {
 
@@ -320,6 +321,8 @@ class Core {
 	 * @since 1.0.0
 	 *
 	 * @param array $variants  Saved variants.
+	 *
+	 * @return void
 	 */
 	private function maybe_save_hash( array $variants ) {
 
@@ -342,10 +345,12 @@ class Core {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int      $post_id  Attachment ID.
-	 * @param \WP_Post $post     Post object.
+	 * @param int     $post_id  Attachment ID.
+	 * @param WP_Post $post     Post object.
+	 *
+	 * @return void
 	 */
-	public function delete_image( int $post_id, \WP_Post $post ) {
+	public function delete_image( int $post_id, WP_Post $post ) {
 
 		$id = get_post_meta( $post_id, '_cloudflare_image_id', true );
 
@@ -368,17 +373,19 @@ class Core {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array|false  $image          {
+	 * @param array|false  $image         {
 	 *     Array of image data, or boolean false if no image is available.
 	 *
-	 *     @type string $0 Image source URL.
-	 *     @type int    $1 Image width in pixels.
-	 *     @type int    $2 Image height in pixels.
-	 *     @type bool   $3 Whether the image is a resized image.
+	 *     @type string $0  Image source URL.
+	 *     @type int    $1  Image width in pixels.
+	 *     @type int    $2  Image height in pixels.
+	 *     @type bool   $3  Whether the image is a resized image.
 	 * }
 	 * @param int          $attachment_id  Image attachment ID.
 	 * @param string|int[] $size           Requested image size. Can be any registered image size name, or
 	 *                                     an array of width and height values in pixels (in that order).
+	 *
+	 * @return array
 	 */
 	public function get_attachment_image_src( $image, int $attachment_id, $size ): array {
 
@@ -419,10 +426,12 @@ class Core {
 	 * @since 1.0.0
 	 *
 	 * @param array       $response    Array of prepared attachment data. @see wp_prepare_attachment_for_js().
-	 * @param \WP_Post    $attachment  Attachment object.
+	 * @param WP_Post     $attachment  Attachment object.
 	 * @param array|false $meta        Array of attachment metadata, or false if there is none.
+	 *
+	 * @return array
 	 */
-	public function prepare_attachment_for_js( array $response, \WP_Post $attachment, $meta ): array {
+	public function prepare_attachment_for_js( array $response, WP_Post $attachment, $meta ): array {
 
 		if ( empty( $response['sizes'] ) ) {
 			return $response;
@@ -444,8 +453,9 @@ class Core {
 	 * The name of the plugin used to uniquely identify it within the context of
 	 * WordPress and to define internationalization functionality.
 	 *
-	 * @since     1.0.0
-	 * @return    string    The name of the plugin.
+	 * @since 1.0.0
+	 *
+	 * @return string  The name of the plugin.
 	 */
 	public function get_plugin_name(): string {
 		return $this->plugin_name;
@@ -454,8 +464,9 @@ class Core {
 	/**
 	 * Retrieve the version number of the plugin.
 	 *
-	 * @since     1.0.0
-	 * @return    string    The version number of the plugin.
+	 * @since 1.0.0
+	 *
+	 * @return string  The version number of the plugin.
 	 */
 	public function get_version(): string {
 		return $this->version;
@@ -464,8 +475,9 @@ class Core {
 	/**
 	 * Retrieve the admin instance.
 	 *
-	 * @since     1.0.0
-	 * @return    Admin     The admin instance of the plugin.
+	 * @since 1.0.0
+	 *
+	 * @return Admin  The admin instance of the plugin.
 	 */
 	public function get_admin(): Admin {
 		return $this->admin;

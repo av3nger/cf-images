@@ -1,14 +1,15 @@
 <?php
 /**
- * The file that defines the plugin settings.
+ * The file that defines the plugin settings
  *
  * Plugin settings, based on the WordPress Settings API.
  *
- * @link       https://vcore.ru
- * @since      1.0.0
+ * @link https://vcore.ru
  *
- * @package    CF_Images
+ * @package CF_Images
  * @subpackage CF_Images/App
+ * @author Anton Vanyukov <a.vanyukov@vcore.ru>
+ * @since 1.0.0
  */
 
 namespace CF_Images\App;
@@ -20,10 +21,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * The settings plugin class.
  *
- * @since      1.0.0
- * @package    CF_Images
- * @subpackage CF_Images/App
- * @author     Anton Vanyukov <a.vanyukov@vcore.ru>
+ * @since 1.0.0
  */
 class Settings {
 
@@ -35,9 +33,7 @@ class Settings {
 	 * @since 1.0.0
 	 */
 	public function __construct() {
-
 		add_action( 'admin_init', array( $this, 'register' ) );
-
 	}
 
 	/**

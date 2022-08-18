@@ -2,13 +2,14 @@
 /**
  * The file that defines the admin plugin class
  *
- * Admin-facing functionality.
+ * This is used to define admin-specific functionality and UI elements.
  *
- * @link       https://vcore.ru
- * @since      1.0.0
+ * @link https://vcore.ru
  *
- * @package    CF_Images
+ * @package CF_Images
  * @subpackage CF_Images/App
+ * @author Anton Vanyukov <a.vanyukov@vcore.ru>
+ * @since 1.0.0
  */
 
 namespace CF_Images\App;
@@ -20,12 +21,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * The core plugin class.
  *
- * This is used to define admin-specific functionality and UI elements.
- *
- * @since      1.0.0
- * @package    CF_Images
- * @subpackage CF_Images/App
- * @author     Anton Vanyukov <a.vanyukov@vcore.ru>
+ * @since 1.0.0
  */
 class Admin {
 
@@ -39,9 +35,7 @@ class Admin {
 	 * @since 1.0.0
 	 */
 	public function __construct() {
-
 		add_action( 'admin_menu', array( $this, 'register_menu' ) );
-
 	}
 
 	/**
@@ -72,9 +66,7 @@ class Admin {
 	 * @return void
 	 */
 	public function render_page() {
-
 		$this->view( 'Settings' );
-
 	}
 
 	/**

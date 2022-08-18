@@ -1,12 +1,15 @@
 <?php
 /**
- * Cloudflare API class that handles images manipulations.
+ * Cloudflare API class that handles images manipulations
  *
- * @link       https://vcore.ru
- * @since      1.0.0
+ * This class defines all code necessary to communicate with the Cloudflare API.
  *
- * @package    CF_Images
+ * @link https://vcore.ru
+ *
+ * @package CF_Images
  * @subpackage CF_Images/App/Api
+ * @author Anton Vanyukov <a.vanyukov@vcore.ru>
+ * @since 1.0.0
  */
 
 namespace CF_Images\App\Api;
@@ -21,12 +24,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Cloudflare API class that handles images manipulations.
  *
- * This class defines all code necessary to communicate with the Cloudflare API.
- *
- * @since      1.0.0
- * @package    CF_Images
- * @subpackage CF_Images/App/Api
- * @author     Anton Vanyukov <a.vanyukov@vcore.ru>
+ * @since 1.0.0
  */
 class Image extends Api {
 

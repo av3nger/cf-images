@@ -6,8 +6,9 @@
  * Author: 10up, Eric Mann, Luke Gedeon, John P. Bloch
  * License: MIT
  *
- * @package    CF_Images
+ * @package CF_Images
  * @subpackage CF_Images/Async/Task
+ * @since 1.0.0
  */
 
 namespace CF_Images\App\Async;
