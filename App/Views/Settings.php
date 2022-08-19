@@ -21,5 +21,5 @@ if ( ! defined( 'WPINC' ) ) {
 ?>
 
 <div class="wrap">
-	<h1><?php esc_html_e( 'Offload Images to Cloudflare', 'cf-images' ); ?></h1>
+	<h1><?php esc_html_e( 'Offload Images to Cloudflare Settings', 'cf-images' ); ?></h1>
 </div>
