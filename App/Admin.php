@@ -66,7 +66,14 @@ class Admin {
 	 * @return void
 	 */
 	public function render_page() {
+
+		if ( ! defined( 'CF_IMAGES_ACCOUNT_ID' ) || ! defined( 'CF_IMAGES_KEY_TOKEN' ) ) {
+			$this->view( 'Setup' );
+			return;
+		}
+
 		$this->view( 'Settings' );
+
 	}
 
 	/**
