@@ -36,8 +36,40 @@ class Admin {
 	 */
 	public function __construct() {
 
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+
 		add_action( 'admin_menu', array( $this, 'register_menu' ) );
 		add_filter( 'plugin_action_links_cf-images/cf-images.php', array( $this, 'settings_link' ) );
+
+		if ( wp_doing_ajax() ) {
+			add_action( 'wp_ajax_cf_images_save_settings', array( $this, 'ajax_save_settings' ) );
+		}
+
+	}
+
+	/**
+	 * Load plugin scripts.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $hook  The current admin page.
+	 *
+	 * @return void
+	 */
+	public function enqueue_scripts( string $hook ) {
+
+		// Run only on plugin pages.
+		if ( 'media_page_cf-images' !== $hook ) {
+			return;
+		}
+
+		wp_enqueue_script(
+			$this->get_slug(),
+			CF_IMAGES_DIR_URL . 'assets/js/cf-images.min.js',
+			array(),
+			$this->get_version(),
+			true
+		);
 
 	}
 
@@ -50,7 +82,7 @@ class Admin {
 	 *
 	 * @return array
 	 */
-	public function settings_link( $actions ): array {
+	public function settings_link( array $actions ): array {
 
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return $actions;
@@ -117,6 +149,25 @@ class Admin {
 		ob_start();
 		include $view;
 		echo ob_get_clean(); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped */
+
+	}
+
+	/**
+	 * Save settings.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return void
+	 */
+	public function ajax_save_settings() {
+
+		check_ajax_referer( 'cf-images-nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			die();
+		}
+
+		wp_send_json_success();
 
 	}
 

@@ -1,14 +1,17 @@
 const path = require( 'path' );
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
 
 module.exports = {
 	mode: 'production',
 
 	entry: {
-		'perf-app': path.resolve( __dirname, 'assets/_src/js/app.js' ),
+		'cf-images': path.resolve( __dirname, 'assets/_src/js/app.js' ),
 	},
 
 	output: {
+		clean: {
+			keep: /images/,
+		},
 		filename: '[name].min.js',
 		path: path.resolve( __dirname, 'assets/js' ),
 	},
@@ -34,11 +37,11 @@ module.exports = {
 	},
 
 	plugins: [
-		new MiniCssExtractPlugin({
+		new MiniCssExtractPlugin( {
 			// Options similar to the same options in webpackOptions.output
 			// both options are optional
 			filename: '../css/[name].min.css',
 			chunkFilename: '[id].min.css',
-		}),
+		} ),
 	],
 };

@@ -10,12 +10,13 @@
     "optimization"
   ],
   "devDependencies": {
-    "css-loader": "^6.4.0",
-    "mini-css-extract-plugin": "^2.4.2",
-    "sass": "^1.43.2",
-    "sass-loader": "^12.2.0",
-    "webpack": "^5.58.2",
-    "webpack-cli": "^4.9.0"
+    "@wordpress/eslint-plugin": "^12.9.0",
+    "css-loader": "^6.7.1",
+    "mini-css-extract-plugin": "^2.6.1",
+    "sass": "^1.54.4",
+    "sass-loader": "^13.0.2",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0"
   },
   "scripts": {
     "watch": "webpack --watch",

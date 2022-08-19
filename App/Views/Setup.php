@@ -150,4 +150,9 @@ if ( ! defined( 'WPINC' ) ) {
 		</tbody>
 	</table>
 
+	<p class="submit">
+		<?php wp_nonce_field( 'cf-images-nonce' ); ?>
+		<input type="submit" name="submit" id="cf-images-settings-submit" class="button button-primary" value="<?php esc_attr_e( 'Save Changes', 'cf-images' ); ?>">
+	</p>
+
 </div>
