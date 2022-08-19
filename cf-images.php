@@ -48,7 +48,8 @@ register_deactivation_hook( __FILE__, array( 'CF_Images\App\Activator', 'deactiv
  */
 function run_cf_images() {
 
-	require_once 'App/Core.php';
+	require_once __DIR__ . '/App/Traits/Helpers.php';
+	require_once __DIR__ . '/App/Core.php';
 	App\Core::get_instance();
 
 }

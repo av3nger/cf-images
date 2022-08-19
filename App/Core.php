@@ -15,6 +15,7 @@
  * @author Anton Vanyukov <a.vanyukov@vcore.ru>
  * @since 1.0.0
  */
+
 namespace CF_Images\App;
 
 use Exception;
@@ -31,6 +32,8 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.0.0
  */
 class Core {
+
+	use Traits\Helpers;
 
 	/**
 	 * Plugin instance.
@@ -113,12 +116,17 @@ class Core {
 		$this->plugin_name = 'cf-images';
 
 		$this->load_libs();
-		add_action( 'admin_init', array( $this, 'register_image_sizes' ) );
-		add_action( 'admin_notices', array( $this, 'error_notice' ) );
 
 		if ( is_admin() ) {
 			$this->admin = new Admin();
 		}
+
+		if ( ! $this->is_set_up() ) {
+			return;
+		}
+
+		add_action( 'admin_init', array( $this, 'register_image_sizes' ) );
+		add_action( 'admin_notices', array( $this, 'error_notice' ) );
 
 		// Disable generation of image sizes.
 		add_filter( 'wp_image_editors', '__return_empty_array' );
@@ -154,7 +162,6 @@ class Core {
 	 */
 	private function load_libs() {
 
-		require_once __DIR__ . '/Traits/Helpers.php';
 		require_once __DIR__ . '/Admin.php';
 
 		require_once __DIR__ . '/Api/Api.php';

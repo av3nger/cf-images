@@ -67,7 +67,7 @@ class Admin {
 	 */
 	public function render_page() {
 
-		if ( ! defined( 'CF_IMAGES_ACCOUNT_ID' ) || ! defined( 'CF_IMAGES_KEY_TOKEN' ) ) {
+		if ( ! $this->is_set_up() ) {
 			$this->view( 'Setup' );
 			return;
 		}

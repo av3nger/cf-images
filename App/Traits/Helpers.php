@@ -36,4 +36,15 @@ trait Helpers {
 		return Core::get_instance()->get_plugin_name();
 	}
 
+	/**
+	 * Check if the required settings are present.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool
+	 */
+	public function is_set_up(): bool {
+		return defined( 'CF_IMAGES_ACCOUNT_ID' ) && defined( 'CF_IMAGES_KEY_TOKEN' );
+	}
+
 }
