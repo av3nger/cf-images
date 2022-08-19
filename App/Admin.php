@@ -35,7 +35,30 @@ class Admin {
 	 * @since 1.0.0
 	 */
 	public function __construct() {
+
 		add_action( 'admin_menu', array( $this, 'register_menu' ) );
+		add_filter( 'plugin_action_links_cf-images/cf-images.php', array( $this, 'settings_link' ) );
+
+	}
+
+	/**
+	 * Add `Settings` link on the `Plugins` page.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $actions  Actions array.
+	 *
+	 * @return array
+	 */
+	public function settings_link( $actions ): array {
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return $actions;
+		}
+
+		$actions['cf-images-settings'] = '<a href="' . admin_url( 'upload.php?page=cf-images' ) . '" aria-label="' . esc_attr( __( 'Settings', 'cf-images' ) ) . '">' . esc_html__( 'Settings', 'cf-images' ) . '</a>';
+		return $actions;
+
 	}
 
 	/**
@@ -93,7 +116,7 @@ class Admin {
 
 		ob_start();
 		include $view;
-		echo ob_get_clean();
+		echo wp_kses_post( ob_get_clean() );
 
 	}
 
