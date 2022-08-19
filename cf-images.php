@@ -1,6 +1,6 @@
 <?php
 /**
- * The plugin bootstrap file
+ * Cloudflare Images plugin
  *
  * This file is read by WordPress to generate the plugin information in the plugin
  * Admin area. This file also App all the dependencies used by the plugin, registers
@@ -32,8 +32,6 @@ if ( ! defined( 'WPINC' ) ) {
 
 define( 'CF_IMAGES_VERSION', '1.0.0' );
 define( 'CF_IMAGES_DIR_URL', plugin_dir_url( __FILE__ ) );
-//define( 'CF_IMAGES_ACCOUNT_ID', '457c5eaeaae69e45675a80889d2eb6ec' );
-//define( 'CF_IMAGES_KEY_TOKEN', 'KIWSJZB_6CMgrjv4n3jX4pnZ3B-IkHsH4U3kQ7OU' );
 
 require_once 'App/Activator.php';
 register_activation_hook( __FILE__, array( 'CF_Images\App\Activator', 'activate' ) );
