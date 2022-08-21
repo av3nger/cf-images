@@ -18,6 +18,7 @@ import '../css/app.scss';
 		const data = {
 			action: 'cf_images_save_settings',
 			_ajax_nonce: $( '#_wpnonce' ).val(),
+			form: $( 'form#cf-images-setup' ).serialize()
 		};
 
 		$.post( ajaxurl, data, function( response ) {

@@ -163,9 +163,20 @@ class Admin {
 
 		check_ajax_referer( 'cf-images-nonce' );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
-			die();
+		if ( ! current_user_can( 'manage_options' ) || ! isset( $_POST['form'] ) ) {
+			wp_die();
 		}
+
+		// Data sanitized later in code.
+		parse_str( wp_unslash( $_POST['form'] ), $form ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+
+		if ( ! isset( $form['account-id'] ) || ! isset( $form['api-key'] ) ) {
+			wp_die();
+		}
+
+		$settings = new Settings();
+		$settings->write_config( 'CF_IMAGES_ACCOUNT_ID', sanitize_text_field( $form['account-id'] ) );
+		$settings->write_config( 'CF_IMAGES_KEY_TOKEN', sanitize_text_field( $form['api-key'] ) );
 
 		wp_send_json_success();
 

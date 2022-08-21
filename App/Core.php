@@ -163,6 +163,7 @@ class Core {
 	private function load_libs() {
 
 		require_once __DIR__ . '/Admin.php';
+		require_once __DIR__ . '/Settings.php';
 
 		require_once __DIR__ . '/Api/Api.php';
 		require_once __DIR__ . '/Api/Image.php';
