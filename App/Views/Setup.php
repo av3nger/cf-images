@@ -23,6 +23,20 @@ if ( ! defined( 'WPINC' ) ) {
 <div class="wrap">
 	<h1><?php esc_html_e( 'Offload Images to Cloudflare Setup', 'cf-images' ); ?></h1>
 
+	<p><?php esc_html_e( 'For proper functionality, the plugin requires access to Cloudflare Images API.', 'cf-images' ); ?></p>
+
+	<p>
+		<?php
+		printf( /* translators: %1$s - opening <code> tag, %2$s - closing </code> tag */
+			esc_html__( "To do this, either set %1\$sdefine( 'CF_IMAGES_ACCOUNT_ID', '<ACCOUNT ID>' );%2\$s and %1\$sdefine( 'CF_IMAGES_KEY_TOKEN', '<API KEY>' );%2\$s manually in wp-config.php file or use the form with instructions below.", 'cf-images' ),
+			'<code>',
+			'</code>'
+		);
+		?>
+	</p>
+
+	<p><?php esc_html_e( 'Note: The form will attempt to automatically set the required defines in wp-config.php file.', 'cf-images' ); ?></p>
+
 	<form id="cf-images-setup">
 		<table class="form-table" role="presentation">
 			<tbody>
