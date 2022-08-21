@@ -44,7 +44,7 @@ class Activator {
 	 * @since 1.0.0
 	 */
 	public static function deactivate() {
-
+		// TODO: remove defines from wp-config.php
 	}
 
 }

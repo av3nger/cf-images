@@ -125,7 +125,10 @@ class Core {
 			return;
 		}
 
-		add_action( 'admin_init', array( $this, 'register_image_sizes' ) );
+		if ( wp_doing_ajax() ) {
+			add_action( 'wp_ajax_cf_images_sync_image_sizes', array( $this, 'cf_images_sync_image_sizes' ) );
+		}
+
 		add_action( 'admin_notices', array( $this, 'error_notice' ) );
 
 		// Disable generation of image sizes.
@@ -205,8 +208,16 @@ class Core {
 	 * Make sure all image sizes, registered in WordPress, are mapped to appropriate image variants.
 	 *
 	 * @since 1.0.0
+	 *
+	 * @return void
 	 */
-	public function register_image_sizes() {
+	public function cf_images_sync_image_sizes() {
+
+		check_ajax_referer( 'cf-images-nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die();
+		}
 
 		$variants = get_option( 'cf-images-variants', array() );
 		$sizes    = wp_get_registered_image_subsizes();
@@ -234,7 +245,8 @@ class Core {
 				$variant->create( $name, $width, $height, $fit );
 			} catch ( Exception $e ) {
 				$this->error = new WP_Error( $e->getCode(), $e->getMessage() );
-				break;
+				wp_send_json_error( $e->getMessage() );
+				wp_die();
 			}
 
 			unset( $size['crop'] );
@@ -247,6 +259,8 @@ class Core {
 		if ( $updated ) {
 			update_option( 'cf-images-variants', $variants, false );
 		}
+
+		wp_send_json_success();
 
 	}
 

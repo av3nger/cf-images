@@ -65,6 +65,15 @@ class Api {
 	private $method = 'POST';
 
 	/**
+	 * Request timeout (in seconds).
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 * @var int
+	 */
+	private $timeout = 5;
+
+	/**
 	 * Setter for $endpoint.
 	 *
 	 * @since 1.0.0
@@ -104,6 +113,19 @@ class Api {
 	}
 
 	/**
+	 * Setter for $timeout.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int $timeout  Timeout.
+	 *
+	 * @return void
+	 */
+	protected function set_timeout( int $timeout ) {
+		$this->timeout = $timeout;
+	}
+
+	/**
 	 * Get arguments for request.
 	 *
 	 * @since 1.0.0
@@ -114,6 +136,7 @@ class Api {
 
 		$args = array(
 			'method'  => $this->method,
+			'timeout' => $this->timeout,
 			'headers' => array(
 				'Authorization' => 'Bearer ' . CF_IMAGES_KEY_TOKEN,
 			),
@@ -160,7 +183,7 @@ class Api {
 
 		$code = wp_remote_retrieve_response_code( $response );
 		if ( is_wp_error( $response ) ) {
-			throw new Exception( $response, $code );
+			throw new Exception( $response->get_error_message(), (int) $code );
 		}
 
 		$body = wp_remote_retrieve_body( $response );

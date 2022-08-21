@@ -71,6 +71,14 @@ class Admin {
 			true
 		);
 
+		wp_localize_script(
+			$this->get_slug(),
+			'CFImages',
+			array(
+				'nonce' => wp_create_nonce( 'cf-images-nonce' ),
+			)
+		);
+
 	}
 
 	/**
