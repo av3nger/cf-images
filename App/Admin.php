@@ -171,12 +171,12 @@ class Admin {
 
 		check_ajax_referer( 'cf-images-nonce' );
 
-		if ( ! current_user_can( 'manage_options' ) || ! isset( $_POST['form'] ) ) {
+		if ( ! current_user_can( 'manage_options' ) || ! isset( $_POST['data'] ) ) {
 			wp_die();
 		}
 
 		// Data sanitized later in code.
-		parse_str( wp_unslash( $_POST['form'] ), $form ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		parse_str( wp_unslash( $_POST['data'] ), $form ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
 		if ( ! isset( $form['account-id'] ) || ! isset( $form['api-key'] ) ) {
 			wp_die();

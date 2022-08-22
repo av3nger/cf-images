@@ -21,20 +21,17 @@ import '../css/app.scss';
 	$( '#cf-images-settings-submit' ).on( 'click', function( e ) {
 		e.preventDefault();
 
-		const data = {
-			action: 'cf_images_save_settings',
-			_ajax_nonce: CFImages.nonce,
-			form: $( 'form#cf-images-setup' ).serialize()
-		};
+		const data = $( 'form#cf-images-setup' ).serialize();
+		post( 'cf_images_save_settings', data )
+			.then( ( response ) => {
+				if ( ! response.success ) {
+					window.console.log( response );
+					return;
+				}
 
-		$.post( ajaxurl, data, function( response ) {
-			if ( ! response.success ) {
-				console.log( response );
-				return;
-			}
-
-			location.reload();
-		} );
+				location.reload();
+			} )
+			.catch( window.console.log );
 	} );
 
 	/**
@@ -45,18 +42,40 @@ import '../css/app.scss';
 	$( '#cf-images-sync-image-sizes' ).on( 'click', function( e ) {
 		e.preventDefault();
 
-		const data = {
-			action: 'cf_images_sync_image_sizes',
-			_ajax_nonce: CFImages.nonce,
-		};
+		post( 'cf_images_sync_image_sizes' )
+			.then( ( response ) => {
+				if ( ! response.success ) {
+					window.console.log( response );
+					return;
+				}
 
-		$.post( ajaxurl, data, function( response ) {
-			if ( ! response.success ) {
-				console.log( response );
-				return;
-			}
-
-			location.reload();
-		} );
+				location.reload();
+			} )
+			.catch( window.console.log );
 	} );
+
+	/**
+	 * Do AJAX request to WordPress.
+	 *
+	 * @since 1.0.0
+	 * @param {string} action Registered AJAX action.
+	 * @param {Object} data   Additional data that needs to be passed in POST request.
+	 * @return {Promise<unknown>} Return data.
+	 */
+	const post = function( action, data = {} ) {
+		data = { _ajax_nonce: CFImages.nonce, action, data };
+		return new Promise( ( resolve, reject ) => {
+			$.ajax( {
+				url: ajaxurl,
+				type: 'POST',
+				data,
+				success( response ) {
+					resolve( response );
+				},
+				error( error ) {
+					reject( error );
+				},
+			} );
+		} );
+	};
 }( jQuery ) );
