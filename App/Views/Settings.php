@@ -23,18 +23,14 @@ $variants = get_option( 'cf-images-variants', array() );
 ?>
 
 <div class="wrap">
-	<h1><?php esc_html_e( 'Offload Images to Cloudflare Options', 'cf-images' ); ?></h1>
+	<h1><?php esc_html_e( 'Offload Images to Cloudflare', 'cf-images' ); ?></h1>
 
 	<h2><?php esc_html_e( 'Image variants', 'cf-images' ); ?></h2>
 	<p><?php esc_html_e( 'Syncing up image sizes is required to make sure Cloudflare Images have all the WordPress registered image sizes.', 'cf-images' ); ?></p>
 	<p><?php esc_html_e( 'This action is only required once.', 'cf-images' ); ?></p>
 
-	<p>
-		<input class="button" type="button" value="<?php esc_attr_e( 'Sync image sizes', 'cf-images' ); ?>" id="cf-images-sync-image-sizes" />
-	</p>
-
 	<h4><?php esc_html_e( 'Synced image sizes:', 'cf-images' ); ?></h4>
-	<table class="widefat fixed">
+	<table class="widefat">
 		<thead>
 		<tr>
 			<th><?php esc_html_e( 'WordPress image size ID', 'cf-images' ); ?></th>
@@ -43,7 +39,7 @@ $variants = get_option( 'cf-images-variants', array() );
 		</thead>
 		<tbody>
 		<?php foreach ( $wp_sizes as $registered_size ) : ?>
-			<tr>
+			<tr data-id="<?php echo esc_attr( $registered_size ); ?>">
 				<td><?php echo esc_html( $registered_size ); ?></td>
 				<td>
 					<?php
@@ -58,4 +54,9 @@ $variants = get_option( 'cf-images-variants', array() );
 		<?php endforeach; ?>
 		</tbody>
 	</table>
+
+	<p>
+		<input class="button" type="button" value="<?php esc_attr_e( 'Sync image sizes', 'cf-images' ); ?>" id="cf-images-sync-image-sizes" />
+		<span class="spinner"></span>
+	</p>
 </div>

@@ -36,6 +36,7 @@ class Admin {
 	 */
 	public function __construct() {
 
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
 		add_action( 'admin_menu', array( $this, 'register_menu' ) );
@@ -44,6 +45,31 @@ class Admin {
 		if ( wp_doing_ajax() ) {
 			add_action( 'wp_ajax_cf_images_save_settings', array( $this, 'ajax_save_settings' ) );
 		}
+
+	}
+
+	/**
+	 * Load plugin styles.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $hook  The current admin page.
+	 *
+	 * @return void
+	 */
+	public function enqueue_styles( string $hook ) {
+
+		// Run only on plugin pages.
+		if ( 'media_page_cf-images' !== $hook ) {
+			return;
+		}
+
+		wp_enqueue_style(
+			$this->get_slug(),
+			CF_IMAGES_DIR_URL . 'assets/css/cf-images.min.css',
+			array(),
+			$this->get_version()
+		);
 
 	}
 

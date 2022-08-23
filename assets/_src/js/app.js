@@ -21,10 +21,14 @@ import '../css/app.scss';
 	$( '#cf-images-settings-submit' ).on( 'click', function( e ) {
 		e.preventDefault();
 
+		const spinner = $( this ).next( '.spinner' );
+		spinner.toggleClass( 'is-active' );
+
 		const data = $( 'form#cf-images-setup' ).serialize();
 		post( 'cf_images_save_settings', data )
 			.then( ( response ) => {
 				if ( ! response.success ) {
+					spinner.toggleClass( 'is-active' );
 					window.console.log( response );
 					return;
 				}
@@ -42,9 +46,13 @@ import '../css/app.scss';
 	$( '#cf-images-sync-image-sizes' ).on( 'click', function( e ) {
 		e.preventDefault();
 
+		const spinner = $( this ).next( '.spinner' );
+		spinner.toggleClass( 'is-active' );
+
 		post( 'cf_images_sync_image_sizes' )
 			.then( ( response ) => {
 				if ( ! response.success ) {
+					spinner.toggleClass( 'is-active' );
 					window.console.log( response );
 					return;
 				}

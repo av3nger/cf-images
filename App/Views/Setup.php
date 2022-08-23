@@ -167,6 +167,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 		<p class="submit">
 			<input type="submit" name="submit" id="cf-images-settings-submit" class="button button-primary" value="<?php esc_attr_e( 'Save Changes', 'cf-images' ); ?>">
+			<span class="spinner"></span>
 		</p>
 	</form>
 
