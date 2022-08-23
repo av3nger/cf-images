@@ -129,8 +129,6 @@ class Core {
 			add_action( 'wp_ajax_cf_images_sync_image_sizes', array( $this, 'cf_images_sync_image_sizes' ) );
 		}
 
-		add_action( 'admin_notices', array( $this, 'error_notice' ) );
-
 		// Disable generation of image sizes.
 		add_filter( 'wp_image_editors', '__return_empty_array' );
 		add_filter( 'big_image_size_threshold', '__return_false' );
@@ -179,32 +177,6 @@ class Core {
 	}
 
 	/**
-	 * Show error notice.
-	 *
-	 * @since 1.0.0
-	 */
-	public function error_notice() {
-
-		if ( false === $this->error ) {
-			return;
-		}
-		?>
-		<div class="notice notice-error">
-			<p>
-				<?php
-				printf( /* translators: %1$s - error message, %2$d - error code */
-					esc_html__( '%1$s (code: %2$d)', 'cf-images' ),
-					esc_html( $this->error->get_error_message() ),
-					(int) $this->error->get_error_code()
-				);
-				?>
-			</p>
-		</div>
-		<?php
-
-	}
-
-	/**
 	 * Make sure all image sizes, registered in WordPress, are mapped to appropriate image variants.
 	 *
 	 * @since 1.0.0
@@ -238,7 +210,7 @@ class Core {
 			$width  = 0 === $size['width'] ? 9999 : $size['width'];
 			$height = 0 === $size['height'] ? 9999 : $size['height'];
 
-			$name = "{$width}x$height";
+			$name = "{$width}x$height"; // TODO: maybe, we should use the WordPress image size ID?
 
 			// Register size.
 			try {
@@ -503,6 +475,17 @@ class Core {
 	 */
 	public function get_admin(): Admin {
 		return $this->admin;
+	}
+
+	/**
+	 * Retrieve stored error.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool|WP_Error
+	 */
+	public function get_error() {
+		return $this->error;
 	}
 
 }

@@ -14,6 +14,15 @@ import '../css/app.scss';
 	'use strict';
 
 	/**
+	 * Auto hide any pending notices.
+	 *
+	 * @since 1.0.0
+	 */
+	$( document ).ready( function() {
+		setTimeout( () => $( '#cf-images-notice' ).slideUp( 'slow' ), 5000 );
+	} );
+
+	/**
 	 * Process setup form.
 	 *
 	 * @since 1.0.0
@@ -33,7 +42,7 @@ import '../css/app.scss';
 					return;
 				}
 
-				location.reload();
+				window.location.search += '&saved=true';
 			} )
 			.catch( window.console.log );
 	} );
@@ -53,11 +62,12 @@ import '../css/app.scss';
 			.then( ( response ) => {
 				if ( ! response.success ) {
 					spinner.toggleClass( 'is-active' );
+					showNotice( response.data, 'error' );
 					window.console.log( response );
 					return;
 				}
 
-				location.reload();
+				window.location.search += '&updated=true';
 			} )
 			.catch( window.console.log );
 	} );
@@ -84,6 +94,28 @@ import '../css/app.scss';
 					reject( error );
 				},
 			} );
+		} );
+	};
+
+	/**
+	 * Show a notice.
+	 *
+	 * @since 1.0.0
+	 * @param {string} message Message text.
+	 * @param {string} type    Notice type.
+	 */
+	const showNotice = function( message, type = 'success' ) {
+		const notice = $( '#cf-images-ajax-notice' );
+
+		notice.addClass( 'notice-' + type );
+		notice.find( 'p' ).html( message );
+
+		notice.slideDown().delay( 5000 ).queue( function() {
+			$( this ).slideUp( 'slow', function() {
+				$( this ).removeClass( 'notice-' + type );
+				$( this ).find( 'p' ).html( '' );
+			} );
+			$.dequeue( this );
 		} );
 	};
 }( jQuery ) );

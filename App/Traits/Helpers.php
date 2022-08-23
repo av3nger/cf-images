@@ -13,6 +13,7 @@
 namespace CF_Images\App\Traits;
 
 use CF_images\App\Core;
+use WP_Error;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -56,6 +57,17 @@ trait Helpers {
 	 */
 	public function is_set_up(): bool {
 		return defined( 'CF_IMAGES_ACCOUNT_ID' ) && defined( 'CF_IMAGES_KEY_TOKEN' );
+	}
+
+	/**
+	 * Return error (if set).
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool|WP_Error
+	 */
+	public function get_error() {
+		return Core::get_instance()->get_error();
 	}
 
 }
