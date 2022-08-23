@@ -164,8 +164,8 @@ class Admin {
 		if ( false !== $this->get_error() ) {
 			$message = sprintf( /* translators: %1$s - error message, %2$d - error code */
 				esc_html__( '%1$s (code: %2$d)', 'cf-images' ),
-				esc_html( $this->error->get_error_message() ),
-				(int) $this->error->get_error_code()
+				esc_html( $this->get_error()->get_error_message() ),
+				(int) $this->get_error()->get_error_code()
 			);
 
 			$this->render_notice( $message, 'error' );
