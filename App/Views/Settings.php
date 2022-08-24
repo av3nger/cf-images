@@ -62,7 +62,7 @@ $variants = get_option( 'cf-images-variants', array() );
 
 	<h2><?php esc_html_e( 'Misc options', 'cf-images' ); ?></h2>
 
-	<form id="cf-images-setup">
+	<form id="cf-images-settings">
 		<table class="form-table" role="presentation">
 			<tbody>
 			<tr>

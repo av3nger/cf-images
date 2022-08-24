@@ -48,6 +48,31 @@ import '../css/app.scss';
 	} );
 
 	/**
+	 * Process settings updates.
+	 *
+	 * @since 1.0.0
+	 */
+	$( '#cf-images-settings-submit' ).on( 'click', function( e ) {
+		e.preventDefault();
+
+		const spinner = $( this ).next( '.spinner' );
+		spinner.toggleClass( 'is-active' );
+
+		const data = $( 'form#cf-images-settings' ).serialize();
+		post( 'cf_images_save_settings', data )
+			.then( ( response ) => {
+				if ( ! response.success ) {
+					spinner.toggleClass( 'is-active' );
+					window.console.log( response );
+					return;
+				}
+
+				window.location.search += '&saved=true';
+			} )
+			.catch( window.console.log );
+	} );
+
+	/**
 	 * "Sync image sizes" button click.
 	 *
 	 * @since 1.0.0
