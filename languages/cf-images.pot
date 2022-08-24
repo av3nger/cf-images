@@ -1,0 +1,196 @@
+# Copyright (C) 2022 Anton Vanyukov
+# This file is distributed under the GPL-2.0+.
+msgid ""
+msgstr ""
+"Project-Id-Version: Cloudflare Images 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/cloudflare-images\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2022-08-24T23:08:40+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.6.0\n"
+"X-Domain: cf-images\n"
+
+#. Plugin Name of the plugin
+msgid "Cloudflare Images"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://vcore.ru"
+msgstr ""
+
+#. Description of the plugin
+msgid "Offload media library images to the `Cloudflare Images` service."
+msgstr ""
+
+#. Author of the plugin
+msgid "Anton Vanyukov"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://vanyukov.su"
+msgstr ""
+
+#: App/Admin.php:130
+msgid "Settings"
+msgstr ""
+
+#: App/Admin.php:146
+#: App/Views/Settings.php:26
+msgid "Offload Images to Cloudflare"
+msgstr ""
+
+#: App/Admin.php:147
+msgid "Offload Settings"
+msgstr ""
+
+#. translators: %1$s - error message, %2$d - error code
+#: App/Admin.php:166
+msgid "%1$s (code: %2$d)"
+msgstr ""
+
+#: App/Admin.php:177
+msgid "Settings saved."
+msgstr ""
+
+#: App/Admin.php:182
+msgid "Images sizes have been synced."
+msgstr ""
+
+#: App/Api/Api.php:181
+msgid "Unsupported API call method"
+msgstr ""
+
+#: App/Views/Settings.php:28
+msgid "Image variants"
+msgstr ""
+
+#: App/Views/Settings.php:29
+msgid "Syncing up image sizes is required to make sure Cloudflare Images have all the WordPress registered image sizes."
+msgstr ""
+
+#: App/Views/Settings.php:30
+msgid "This action is only required once."
+msgstr ""
+
+#: App/Views/Settings.php:32
+msgid "Synced image sizes:"
+msgstr ""
+
+#: App/Views/Settings.php:36
+msgid "WordPress image size ID"
+msgstr ""
+
+#: App/Views/Settings.php:37
+msgid "Cloudflare Images variant"
+msgstr ""
+
+#: App/Views/Settings.php:49
+msgid "Unregistered size"
+msgstr ""
+
+#: App/Views/Settings.php:59
+msgid "Sync image sizes"
+msgstr ""
+
+#: App/Views/Setup.php:24
+msgid "Offload Images to Cloudflare Setup"
+msgstr ""
+
+#: App/Views/Setup.php:26
+msgid "For proper functionality, the plugin requires access to Cloudflare Images API."
+msgstr ""
+
+#. translators: %1$s - opening <code> tag, %2$s - closing </code> tag
+#: App/Views/Setup.php:31
+msgid "To do this, either set %1$sdefine( 'CF_IMAGES_ACCOUNT_ID', '<ACCOUNT ID>' );%2$s and %1$sdefine( 'CF_IMAGES_KEY_TOKEN', '<API KEY>' );%2$s manually in wp-config.php file or use the form with instructions below."
+msgstr ""
+
+#: App/Views/Setup.php:38
+msgid "Note: The form will attempt to automatically set the required defines in wp-config.php file."
+msgstr ""
+
+#: App/Views/Setup.php:46
+msgid "Cloudflare Account ID"
+msgstr ""
+
+#: App/Views/Setup.php:50
+msgid "Paste your Cloudflare ID here"
+msgstr ""
+
+#. translators: %1$s - opening <a> tag, %2$s - closing </a> tag
+#: App/Views/Setup.php:54
+msgid "Log in to the %1$sCloudflare dashboard%2$s, and select your account and website."
+msgstr ""
+
+#. translators: %1$s - opening <strong> tag, %2$s - closing </strong> tag
+#: App/Views/Setup.php:63
+msgid "In %1$sOverview%2$s, scroll down to find your Account ID."
+msgstr ""
+
+#: App/Views/Setup.php:75
+msgid "Cloudflare API Token"
+msgstr ""
+
+#: App/Views/Setup.php:79
+msgid "Paste your Cloudflare API key here"
+msgstr ""
+
+#. translators: %1$s - opening <code> tag, %2$s - closing </code> tag
+#: App/Views/Setup.php:83
+msgid "To use Cloudflare Images you need to create a custom token with the correct %1$sRead%2$s and %1$sUpdate%2$s permissions:"
+msgstr ""
+
+#. translators: %1$s - opening <a> tag, %2$s - closing </a> tag, %3$s - opening <strong> tag, %4$s - closing </strong> tag
+#: App/Views/Setup.php:92
+msgid "In the Cloudflare dashboard, locate %1$sAPI Tokens%2$s under %3$sMy Profile > API Tokens%4$s."
+msgstr ""
+
+#. translators: %1$s - opening <strong> tag, %2$s - closing </strong> tag
+#: App/Views/Setup.php:103
+msgid "Select %1$sCreate Token%2$s."
+msgstr ""
+
+#. translators: %1$s - opening <strong> tag, %2$s - closing </strong> tag
+#: App/Views/Setup.php:112
+msgid "In Custom token, select %1$sGet started%2$s."
+msgstr ""
+
+#: App/Views/Setup.php:119
+msgid "Give your custom token a name."
+msgstr ""
+
+#. translators: %1$s - opening <strong> tag, %2$s - closing </strong> tag
+#: App/Views/Setup.php:124
+msgid "Scroll to %1$sPermissions%2$s."
+msgstr ""
+
+#. translators: %1$s - opening <em> tag, %2$s - closing </em> tag
+#: App/Views/Setup.php:133
+msgid "On the %1$sSelect item…%2$s drop-down menu, choose %1$sCloudflare Images%2$s."
+msgstr ""
+
+#. translators: %1$s - opening <em> tag, %2$s - closing </em> tag
+#: App/Views/Setup.php:142
+msgid "In the next drop-down menu, choose %1$sEdit%2$s."
+msgstr ""
+
+#: App/Views/Setup.php:149
+msgid "How to create a custom token for Cloudflare images"
+msgstr ""
+
+#. translators: %1$s - opening <strong> tag, %2$s - closing </strong> tag
+#: App/Views/Setup.php:154
+msgid "Select %1$sContinue to summary > Create Token%2$s."
+msgstr ""
+
+#: App/Views/Setup.php:161
+msgid "Your token for Cloudflare Images is now created."
+msgstr ""
+
+#: App/Views/Setup.php:169
+msgid "Save Changes"
+msgstr ""

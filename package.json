@@ -20,6 +20,7 @@
   },
   "scripts": {
     "watch": "webpack --watch",
-    "build": "webpack --progress"
+    "build": "webpack --progress",
+    "translate": "wp i18n make-pot . languages/cf-images.pot"
   }
 }
