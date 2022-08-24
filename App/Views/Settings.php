@@ -56,7 +56,44 @@ $variants = get_option( 'cf-images-variants', array() );
 	</table>
 
 	<p>
-		<input class="button" type="button" value="<?php esc_attr_e( 'Sync image sizes', 'cf-images' ); ?>" id="cf-images-sync-image-sizes" />
+		<input class="button" type="button" value="<?php esc_attr_e( 'Sync Image Sizes', 'cf-images' ); ?>" id="cf-images-sync-image-sizes" />
 		<span class="spinner"></span>
 	</p>
+
+	<h2><?php esc_html_e( 'Misc options', 'cf-images' ); ?></h2>
+
+	<form id="cf-images-setup">
+		<table class="form-table" role="presentation">
+			<tbody>
+			<tr>
+				<th scope="row">
+					<?php esc_html_e( 'Generate WordPress image sizes', 'cf-images' ); ?>
+				</th>
+				<td>
+					<fieldset>
+						<legend class="screen-reader-text">
+							<span><?php esc_html_e( 'Generate WordPress image sizes', 'cf-images' ); ?></span>
+						</legend>
+						<label for="disable_sizes">
+							<input name="disable-sizes" type="checkbox" id="disable_sizes" value="1" <?php checked( get_option( 'cf-images-disable-generation', false ) ); ?>>
+							<?php esc_html_e( 'Disable', 'cf-images' ); ?>
+						</label>
+					</fieldset>
+					<p class="description">
+						<?php esc_html_e( 'Setting this option will disable generation of `-scaled` images and other image sizes. Only the original image will be stored in the media library.', 'cf-images' ); ?>
+					</p>
+					<p class="description">
+						<?php esc_html_e( 'Note: Already generated attachment sizes will not be affected.', 'cf-images' ); ?>
+					</p>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+
+		<p class="submit">
+			<input type="submit" name="submit" id="cf-images-settings-submit" class="button button-primary" value="<?php esc_attr_e( 'Save Changes', 'cf-images' ); ?>">
+			<span class="spinner"></span>
+		</p>
+	</form>
+
 </div>

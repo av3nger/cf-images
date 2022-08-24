@@ -42,12 +42,12 @@ if ( ! defined( 'WPINC' ) ) {
 			<tbody>
 			<tr>
 				<th scope="row">
-					<label for="account-id">
+					<label for="account_id">
 						<?php esc_html_e( 'Cloudflare Account ID', 'cf-images' ); ?>
 					</label>
 				</th>
 				<td>
-					<input name="account-id" type="text" id="account-id" value="" placeholder="<?php esc_attr_e( 'Paste your Cloudflare ID here', 'cf-images' ); ?>" class="regular-text">
+					<input name="account-id" type="text" id="account_id" value="" placeholder="<?php esc_attr_e( 'Paste your Cloudflare ID here', 'cf-images' ); ?>" class="regular-text">
 					<p class="description">1.&nbsp;
 						<?php
 						printf( /* translators: %1$s - opening <a> tag, %2$s - closing </a> tag */
@@ -71,12 +71,12 @@ if ( ! defined( 'WPINC' ) ) {
 
 			<tr>
 				<th scope="row">
-					<label for="api-key">
+					<label for="api_key">
 						<?php esc_html_e( 'Cloudflare API Token', 'cf-images' ); ?>
 					</label>
 				</th>
 				<td>
-					<input name="api-key" type="text" id="api-key" value="" placeholder="<?php esc_attr_e( 'Paste your Cloudflare API key here', 'cf-images' ); ?>" class="regular-text">
+					<input name="api-key" type="text" id="api_key" value="" placeholder="<?php esc_attr_e( 'Paste your Cloudflare API key here', 'cf-images' ); ?>" class="regular-text">
 					<p class="description">
 						<?php
 						printf( /* translators: %1$s - opening <code> tag, %2$s - closing </code> tag */
@@ -166,7 +166,7 @@ if ( ! defined( 'WPINC' ) ) {
 		</table>
 
 		<p class="submit">
-			<input type="submit" name="submit" id="cf-images-settings-submit" class="button button-primary" value="<?php esc_attr_e( 'Save Changes', 'cf-images' ); ?>">
+			<input type="submit" name="submit" id="cf-images-setup-submit" class="button button-primary" value="<?php esc_attr_e( 'Save Changes', 'cf-images' ); ?>">
 			<span class="spinner"></span>
 		</p>
 	</form>

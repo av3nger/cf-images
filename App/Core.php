@@ -130,9 +130,11 @@ class Core {
 		}
 
 		// Disable generation of image sizes.
-		add_filter( 'wp_image_editors', '__return_empty_array' );
-		add_filter( 'big_image_size_threshold', '__return_false' );
-		add_filter( 'intermediate_image_sizes_advanced', '__return_empty_array' );
+		if ( get_option( 'cf-images-disable-generation', false ) ) {
+			add_filter( 'wp_image_editors', '__return_empty_array' );
+			add_filter( 'big_image_size_threshold', '__return_false' );
+			add_filter( 'intermediate_image_sizes_advanced', '__return_empty_array' );
+		}
 
 		// Image actions.
 		add_filter( 'wp_async_wp_generate_attachment_metadata', array( $this, 'upload_image' ), 10, 3 );

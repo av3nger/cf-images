@@ -27,14 +27,14 @@ import '../css/app.scss';
 	 *
 	 * @since 1.0.0
 	 */
-	$( '#cf-images-settings-submit' ).on( 'click', function( e ) {
+	$( '#cf-images-setup-submit' ).on( 'click', function( e ) {
 		e.preventDefault();
 
 		const spinner = $( this ).next( '.spinner' );
 		spinner.toggleClass( 'is-active' );
 
 		const data = $( 'form#cf-images-setup' ).serialize();
-		post( 'cf_images_save_settings', data )
+		post( 'cf_images_do_setup', data )
 			.then( ( response ) => {
 				if ( ! response.success ) {
 					spinner.toggleClass( 'is-active' );

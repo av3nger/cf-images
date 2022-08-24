@@ -26,6 +26,63 @@ if ( ! defined( 'WPINC' ) ) {
 class Settings {
 
 	/**
+	 * Do initial setup by storing user provided Cloudflare account ID and API key in wp-config.php file.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return void
+	 */
+	public function ajax_do_setup() {
+
+		check_ajax_referer( 'cf-images-nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) || ! isset( $_POST['data'] ) ) {
+			wp_die();
+		}
+
+		// Data sanitized later in code.
+		parse_str( wp_unslash( $_POST['data'] ), $form ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+
+		if ( ! isset( $form['account-id'] ) || ! isset( $form['api-key'] ) ) {
+			wp_die();
+		}
+
+		$this->write_config( 'CF_IMAGES_ACCOUNT_ID', sanitize_text_field( $form['account-id'] ) );
+		$this->write_config( 'CF_IMAGES_KEY_TOKEN', sanitize_text_field( $form['api-key'] ) );
+
+		wp_send_json_success();
+
+	}
+
+	/**
+	 * Save settings.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return void
+	 */
+	public function ajax_save_settings() {
+
+		check_ajax_referer( 'cf-images-nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) || ! isset( $_POST['data'] ) ) {
+			wp_die();
+		}
+
+		// Data sanitized later in code.
+		parse_str( wp_unslash( $_POST['data'] ), $form ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+
+		if ( ! isset( $form['disable-sizes'] ) ) {
+			delete_option( 'cf-images-disable-generation' );
+		} else {
+			update_option( 'cf-images-disable-generation', (bool) $form['disable-sizes'] );
+		}
+
+		wp_send_json_success();
+
+	}
+
+	/**
 	 * Write key/value pair to wp-config.php.
 	 *
 	 * @since 1.0.0
@@ -68,6 +125,12 @@ class Settings {
 		}
 
 		chmod( $path_to_wp_config, FS_CHMOD_FILE );
+
+	}
+
+	public function is_image_sizes_disabled() {
+
+
 
 	}
 

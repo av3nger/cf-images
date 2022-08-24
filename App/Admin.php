@@ -14,6 +14,8 @@
 
 namespace CF_Images\App;
 
+use Cassandra\Set;
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -48,7 +50,9 @@ class Admin {
 		add_filter( 'plugin_action_links_cf-images/cf-images.php', array( $this, 'settings_link' ) );
 
 		if ( wp_doing_ajax() ) {
-			add_action( 'wp_ajax_cf_images_save_settings', array( $this, 'ajax_save_settings' ) );
+			$settings = new Settings();
+			add_action( 'wp_ajax_cf_images_do_setup', array( $settings, 'ajax_do_setup' ) );
+			add_action( 'wp_ajax_cf_images_save_settings', array( $settings, 'ajax_save_settings' ) );
 		}
 
 	}
@@ -244,36 +248,5 @@ class Admin {
 		echo ob_get_clean(); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped */
 
 	}
-
-	/**
-	 * Save settings.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return void
-	 */
-	public function ajax_save_settings() {
-
-		check_ajax_referer( 'cf-images-nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) || ! isset( $_POST['data'] ) ) {
-			wp_die();
-		}
-
-		// Data sanitized later in code.
-		parse_str( wp_unslash( $_POST['data'] ), $form ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-
-		if ( ! isset( $form['account-id'] ) || ! isset( $form['api-key'] ) ) {
-			wp_die();
-		}
-
-		$settings = new Settings();
-		$settings->write_config( 'CF_IMAGES_ACCOUNT_ID', sanitize_text_field( $form['account-id'] ) );
-		$settings->write_config( 'CF_IMAGES_KEY_TOKEN', sanitize_text_field( $form['api-key'] ) );
-
-		wp_send_json_success();
-
-	}
-
 
 }
