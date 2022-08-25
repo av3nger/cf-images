@@ -51,7 +51,7 @@ class Core {
 	 * @access protected
 	 * @var string $plugin_name  The string used to uniquely identify this plugin.
 	 */
-	protected $plugin_name;
+	protected $plugin_name = 'cf-images';
 
 	/**
 	 * The current version of the plugin.
@@ -60,7 +60,7 @@ class Core {
 	 * @access protected
 	 * @var string $version  The current version of the plugin.
 	 */
-	protected $version;
+	protected $version = '1.0.0';
 
 	/**
 	 * Error status.
@@ -110,10 +110,7 @@ class Core {
 
 		if ( defined( 'CF_IMAGES_VERSION' ) ) {
 			$this->version = CF_IMAGES_VERSION;
-		} else {
-			$this->version = '1.0.0';
 		}
-		$this->plugin_name = 'cf-images';
 
 		$this->load_libs();
 
