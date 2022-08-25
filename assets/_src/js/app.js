@@ -13,6 +13,14 @@ import '../css/app.scss';
 ( function( $ ) {
 	'use strict';
 
+	/**
+	 * Available forms.
+	 *
+	 * Form ID corresponds to `data-type` value on a form, value is the AJAX callback.
+	 *
+	 * @since 1.0.0
+	 * @type {{settings: string, setup: string}}
+	 */
 	const forms = {
 		settings: 'cf_images_save_settings',
 		setup: 'cf_images_do_setup'
