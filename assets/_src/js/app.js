@@ -92,6 +92,30 @@ import '../css/app.scss';
 	} );
 
 	/**
+	 * Process offloading from media library.
+	 *
+	 * @since 1.0.0
+	 */
+	$( '.cf-images-offload' ).on( 'click', function( e ) {
+		e.preventDefault();
+
+		const divStatus = $( this ).parent();
+		divStatus.html( CFImages.strings.inProgress + '<span class="spinner is-active"></span>' );
+
+		post( 'cf_images_offload_image', $( this ).data( 'id' ) )
+			.then( ( response ) => {
+				if ( ! response.success ) {
+					divStatus.html( CFImages.strings.offloadError );
+					window.console.log( response );
+					return;
+				}
+
+				divStatus.html( '<span class="dashicons dashicons-cloud-saved"></span>' + CFImages.strings.offloaded );
+			} )
+			.catch( window.console.log );
+	} );
+
+	/**
 	 * Do AJAX request to WordPress.
 	 *
 	 * @since 1.0.0

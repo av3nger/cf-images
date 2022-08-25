@@ -14,8 +14,6 @@
 
 namespace CF_Images\App;
 
-use Cassandra\Set;
-
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -99,7 +97,7 @@ class Admin {
 	public function enqueue_scripts( string $hook ) {
 
 		// Run only on plugin pages.
-		if ( 'media_page_cf-images' !== $hook ) {
+		if ( 'media_page_cf-images' !== $hook && 'upload.php' !== $hook ) {
 			return;
 		}
 
@@ -115,7 +113,12 @@ class Admin {
 			$this->get_slug(),
 			'CFImages',
 			array(
-				'nonce' => wp_create_nonce( 'cf-images-nonce' ),
+				'nonce'   => wp_create_nonce( 'cf-images-nonce' ),
+				'strings' => array(
+					'inProgress'   => esc_html__( 'Processing', 'cf-images' ),
+					'offloadError' => esc_html__( 'Error during offload', 'cf-images' ),
+					'offloaded'    => esc_html__( 'Offloaded', 'cf-images' ),
+				),
 			)
 		);
 
@@ -294,7 +297,7 @@ class Admin {
 
 		printf( /* translators: %1$s - opening <a> tag, %2$s - closing </a> tag */
 			esc_html__( '%1$sOffload%2$s', 'cf-images' ),
-			'<a href="#" id="cf-images-offload" data-id="' . (int) $post_id . '">',
+			'<a href="#" class="cf-images-offload" data-id="' . (int) $post_id . '">',
 			'</a>'
 		);
 

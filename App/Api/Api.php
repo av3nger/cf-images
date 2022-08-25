@@ -170,9 +170,15 @@ class Api {
 			/**
 			 * Not using post_request(), because it uses wp_remote_post(), which does not allow file uploads.
 			 *
+			 * We also need to set a few defaults to avoid PHP warnings and errors.
+			 *
 			 * @see https://core.trac.wordpress.org/ticket/41608
 			 */
-			$args['method'] = 'POST';
+			$args['method']     = 'POST';
+			$args['user-agent'] = apply_filters( 'http_headers_useragent', 'WordPress/' . get_bloginfo( 'version' ) . '; ' . get_bloginfo( 'url' ), $url );
+			$args['decompress'] = true;
+			$args['stream']     = false;
+			$args['filename']   = null;
 
 			$curl = new \WP_Http_Curl();
 

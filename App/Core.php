@@ -123,7 +123,8 @@ class Core {
 		}
 
 		if ( wp_doing_ajax() ) {
-			add_action( 'wp_ajax_cf_images_sync_image_sizes', array( $this, 'cf_images_sync_image_sizes' ) );
+			add_action( 'wp_ajax_cf_images_sync_image_sizes', array( $this, 'ajax_sync_image_sizes' ) );
+			add_action( 'wp_ajax_cf_images_offload_image', array( $this, 'ajax_offload_image' ) );
 		}
 
 		// Disable generation of image sizes.
@@ -182,7 +183,7 @@ class Core {
 	 *
 	 * @return void
 	 */
-	public function cf_images_sync_image_sizes() {
+	public function ajax_sync_image_sizes() {
 
 		check_ajax_referer( 'cf-images-nonce' );
 
@@ -229,6 +230,32 @@ class Core {
 
 		if ( $updated ) {
 			update_option( 'cf-images-variants', $variants, false );
+		}
+
+		wp_send_json_success();
+
+	}
+
+	/**
+	 * Offload selected image to Cloudflare Images.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return void
+	 */
+	public function ajax_offload_image() {
+
+		check_ajax_referer( 'cf-images-nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) || ! isset( $_POST['data'] ) ) {
+			wp_die();
+		}
+
+		$attachment_id = (int) filter_input( INPUT_POST, 'data', FILTER_SANITIZE_NUMBER_INT );
+		$this->upload_image( wp_get_attachment_metadata( $attachment_id ), $attachment_id, 'single' );
+
+		if ( is_wp_error( $this->error ) ) {
+			wp_send_json_error( $this->error->get_error_message() );
 		}
 
 		wp_send_json_success();
