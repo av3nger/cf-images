@@ -37,7 +37,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 	<p><?php esc_html_e( 'Note: The form will attempt to automatically set the required defines in wp-config.php file.', 'cf-images' ); ?></p>
 
-	<form id="cf-images-setup">
+	<form id="cf-images-form" data-type="setup">
 		<table class="form-table" role="presentation">
 			<tbody>
 			<tr>
@@ -166,7 +166,7 @@ if ( ! defined( 'WPINC' ) ) {
 		</table>
 
 		<p class="submit">
-			<input type="submit" name="submit" id="cf-images-setup-submit" class="button button-primary" value="<?php esc_attr_e( 'Save Changes', 'cf-images' ); ?>">
+			<input type="submit" name="submit" class="button button-primary" value="<?php esc_attr_e( 'Save Changes', 'cf-images' ); ?>">
 			<span class="spinner"></span>
 		</p>
 	</form>

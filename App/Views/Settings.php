@@ -62,7 +62,7 @@ $variants = get_option( 'cf-images-variants', array() );
 
 	<h2><?php esc_html_e( 'Misc options', 'cf-images' ); ?></h2>
 
-	<form id="cf-images-settings">
+	<form id="cf-images-form" data-type="settings">
 		<table class="form-table" role="presentation">
 			<tbody>
 			<tr>
@@ -91,7 +91,7 @@ $variants = get_option( 'cf-images-variants', array() );
 		</table>
 
 		<p class="submit">
-			<input type="submit" name="submit" id="cf-images-settings-submit" class="button button-primary" value="<?php esc_attr_e( 'Save Changes', 'cf-images' ); ?>">
+			<input type="submit" name="submit" class="button button-primary" value="<?php esc_attr_e( 'Save Changes', 'cf-images' ); ?>">
 			<span class="spinner"></span>
 		</p>
 	</form>

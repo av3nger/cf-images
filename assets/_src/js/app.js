@@ -13,6 +13,11 @@ import '../css/app.scss';
 ( function( $ ) {
 	'use strict';
 
+	const forms = {
+		settings: 'cf_images_save_settings',
+		setup: 'cf_images_do_setup'
+	};
+
 	/**
 	 * Auto hide any pending notices.
 	 *
@@ -23,43 +28,24 @@ import '../css/app.scss';
 	} );
 
 	/**
-	 * Process setup form.
+	 * Process form submits.
+	 *
+	 * Currently, processes the setup and settings forms.
 	 *
 	 * @since 1.0.0
 	 */
-	$( '#cf-images-setup-submit' ).on( 'click', function( e ) {
+	$( 'form#cf-images-form' ).on( 'submit', function( e ) {
 		e.preventDefault();
+
+		const action = forms[ $( this ).data( 'type' ) ];
+		if ( undefined === action ) {
+			return;
+		}
 
 		const spinner = $( this ).next( '.spinner' );
 		spinner.toggleClass( 'is-active' );
 
-		const data = $( 'form#cf-images-setup' ).serialize();
-		post( 'cf_images_do_setup', data )
-			.then( ( response ) => {
-				if ( ! response.success ) {
-					spinner.toggleClass( 'is-active' );
-					window.console.log( response );
-					return;
-				}
-
-				window.location.search += '&saved=true';
-			} )
-			.catch( window.console.log );
-	} );
-
-	/**
-	 * Process settings updates.
-	 *
-	 * @since 1.0.0
-	 */
-	$( '#cf-images-settings-submit' ).on( 'click', function( e ) {
-		e.preventDefault();
-
-		const spinner = $( this ).next( '.spinner' );
-		spinner.toggleClass( 'is-active' );
-
-		const data = $( 'form#cf-images-settings' ).serialize();
-		post( 'cf_images_save_settings', data )
+		post( action, $( this ).serialize() )
 			.then( ( response ) => {
 				if ( ! response.success ) {
 					spinner.toggleClass( 'is-active' );
