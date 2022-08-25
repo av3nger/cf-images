@@ -107,6 +107,7 @@ import '../css/app.scss';
 	 */
 	const post = function( action, data = {} ) {
 		data = { _ajax_nonce: CFImages.nonce, action, data };
+
 		return new Promise( ( resolve, reject ) => {
 			$.ajax( {
 				url: ajaxurl,
