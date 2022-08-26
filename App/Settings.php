@@ -78,6 +78,12 @@ class Settings {
 			update_option( 'cf-images-disable-generation', (bool) $form['disable-sizes'] );
 		}
 
+		if ( ! isset( $form['custom-domain'] ) ) {
+			delete_option( 'cf-images-custom-domain' );
+		} else {
+			update_option( 'cf-images-custom-domain', (bool) $form['custom-domain'] );
+		}
+
 		wp_send_json_success();
 
 	}

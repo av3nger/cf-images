@@ -460,6 +460,11 @@ class Core {
 	 */
 	public function get_attachment_image_src( $image, int $attachment_id, $size ): array {
 
+		$domain = 'https://imagedelivery.net';
+		if ( get_option( 'cf-images-custom-domain', false ) ) {
+			$domain = get_site_url() . '/cdn-cgi/imagedelivery';
+		}
+
 		$meta = get_post_meta( $attachment_id, '_cloudflare_image_id', true );
 
 		if ( empty( $meta ) ) {
@@ -475,7 +480,7 @@ class Core {
 		$variants = get_option( 'cf-images-variants', array() );
 
 		if ( is_string( $size ) && array_key_exists( $size, $variants ) ) {
-			$image[0] = "https://imagedelivery.net/$hash/$meta/" . $variants[ $size ]['variant'];
+			$image[0] = "$domain/$hash/$meta/" . $variants[ $size ]['variant'];
 			return $image;
 		}
 
@@ -491,7 +496,7 @@ class Core {
 		*/
 
 		if ( isset( $variant_image[0] ) && in_array( $variant_image[0], $variant_ids, true ) ) {
-			$image[0] = "https://imagedelivery.net/$hash/$meta/" . $variant_image[0];
+			$image[0] = "$domain/$hash/$meta/" . $variant_image[0];
 		}
 
 		return $image;
