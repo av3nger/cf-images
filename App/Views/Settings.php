@@ -18,7 +18,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-$wp_sizes = get_intermediate_image_sizes();
+$wp_sizes = apply_filters( 'cf_images_registered_sizes', get_intermediate_image_sizes() );
 $variants = get_option( 'cf-images-variants', array() );
 ?>
 

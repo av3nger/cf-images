@@ -134,6 +134,13 @@ class Core {
 			add_filter( 'intermediate_image_sizes_advanced', '__return_empty_array' );
 		}
 
+		/**
+		 * These two functions do the same thing, the only difference is the output.
+		 * First one covers wp_get_registered_image_subsizes(), the second one - get_intermediate_image_sizes().
+		 */
+		add_filter( 'cf_images_attachment_sizes', array( $this, 'manage_image_sizes' ) );
+		add_filter( 'cf_images_registered_sizes', array( $this, 'manage_registered_sizes' ) );
+
 		// Image actions.
 		add_filter( 'wp_async_wp_generate_attachment_metadata', array( $this, 'upload_image' ), 10, 3 );
 		add_action( 'delete_attachment', array( $this, 'delete_image' ), 10, 2 );
@@ -177,6 +184,51 @@ class Core {
 	}
 
 	/**
+	 * Make sure we have all the required sizes. Add the full size image size.
+	 *
+	 * TODO: add scaled images.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $sizes  Current array of registered image sizes.
+	 *
+	 * @return array
+	 */
+	public function manage_image_sizes( array $sizes ): array {
+
+		// Add the full size image.
+		if ( ! isset( $sizes['full'] ) ) {
+			$sizes['full'] = array(
+				'crop'   => false,
+				'height' => 9999,
+				'width'  => 9999,
+			);
+		}
+
+		return $sizes;
+
+	}
+
+	/**
+	 * Make sure we have all the required sizes. Add the full size image size.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $sizes  Current array of registered image sizes.
+	 *
+	 * @return array
+	 */
+	public function manage_registered_sizes( array $sizes ): array {
+
+		if ( ! in_array( 'full', $sizes, true ) ) {
+			$sizes[] = 'full';
+		}
+
+		return $sizes;
+
+	}
+
+	/**
 	 * Make sure all image sizes, registered in WordPress, are mapped to appropriate image variants.
 	 *
 	 * @since 1.0.0
@@ -192,9 +244,7 @@ class Core {
 		}
 
 		$variants = get_option( 'cf-images-variants', array() );
-		$sizes    = wp_get_registered_image_subsizes();
-
-		// TODO: add scaled images.
+		$sizes    = apply_filters( 'cf_images_attachment_sizes', wp_get_registered_image_subsizes() );
 
 		$variant = new Api\Variant();
 
@@ -430,7 +480,7 @@ class Core {
 
 		$variant_ids = wp_list_pluck( $variants, 'variant' );
 
-		preg_match( '/[^\/]*$/', $image[0], $variant_image );
+		preg_match( '/[^\/]*$/', $image[0], $variant_image ); // TODO: the regex here might be incorrect.
 
 		if ( isset( $variant_image[0] ) && in_array( $variant_image[0], $variant_ids, true ) ) {
 			$image[0] = "https://imagedelivery.net/$hash/$meta/" . $variant_image[0];

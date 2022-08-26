@@ -60,7 +60,7 @@ class Variant extends Api {
 		);
 
 		$this->set_method( 'POST' );
-		$this->set_timeout( 1 );
+		$this->set_timeout( 2 );
 		$this->set_endpoint( '/variants' );
 		$this->set_body( wp_json_encode( $data ) );
 
