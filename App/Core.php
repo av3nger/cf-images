@@ -148,6 +148,7 @@ class Core {
 		// Replace images.
 		add_filter( 'wp_get_attachment_image_src', array( $this, 'get_attachment_image_src' ), 10, 3 );
 		add_filter( 'wp_prepare_attachment_for_js', array( $this, 'prepare_attachment_for_js' ), 10, 3 );
+		add_filter( 'wp_calculate_image_srcset', array( $this, 'calculate_image_srcset' ), 10, 5 );
 
 		/**
 		 * Filters the attachment URL.
@@ -333,7 +334,7 @@ class Core {
 		try {
 			$results = $image->upload( $path, $attachment_id, $metadata['file'] );
 			update_post_meta( $attachment_id, '_cloudflare_image_id', $results->id );
-			$this->update_image_meta( $attachment_id, $path );
+			//$this->update_image_meta( $attachment_id, $path );
 			$this->maybe_save_hash( $results->variants );
 		} catch ( Exception $e ) {
 			$this->error = new WP_Error( $e->getCode(), $e->getMessage() );
@@ -481,6 +482,13 @@ class Core {
 		$variant_ids = wp_list_pluck( $variants, 'variant' );
 
 		preg_match( '/[^\/]*$/', $image[0], $variant_image ); // TODO: the regex here might be incorrect.
+		/*
+		preg_match( '/-(\d+)x(\d+)\.[a-zA-Z]{3,4}$/', $image[0], $variant_image );
+
+		if ( isset( $variant_image[1] ) && isset( $variant_image[2] ) ) {
+			$ldim = max( $variant_image[1], $variant_image[2] );
+		}
+		*/
 
 		if ( isset( $variant_image[0] ) && in_array( $variant_image[0], $variant_ids, true ) ) {
 			$image[0] = "https://imagedelivery.net/$hash/$meta/" . $variant_image[0];
@@ -516,6 +524,48 @@ class Core {
 		}
 
 		return $response;
+
+	}
+
+	/**
+	 * Filters an image's 'srcset' sources.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array  $sources {
+	 *     One or more arrays of source data to include in the 'srcset'.
+	 *
+	 *     @type array $width {
+	 *         @type string $url        The URL of an image source.
+	 *         @type string $descriptor The descriptor type used in the image candidate string,
+	 *                                  either 'w' or 'x'.
+	 *         @type int    $value      The source width if paired with a 'w' descriptor, or a
+	 *                                  pixel density value if paired with an 'x' descriptor.
+	 *     }
+	 * }
+	 * @param array $size_array     {
+	 *     An array of requested width and height values.
+	 *
+	 *     @type int $0 The width in pixels.
+	 *     @type int $1 The height in pixels.
+	 * }
+	 * @param string $image_src     The 'src' of the image.
+	 * @param array  $image_meta    The image meta data as returned by 'wp_get_attachment_metadata()'.
+	 * @param int    $attachment_id Image attachment ID or 0.
+	 */
+	public function calculate_image_srcset( array $sources, array $size_array, string $image_src, array $image_meta, int $attachment_id ): array {
+
+		foreach ( $sources as $id => $size ) {
+			if ( ! isset( $size['url'] ) ) {
+				continue;
+			}
+
+			$image = $this->get_attachment_image_src( array( $size['url'] ), $attachment_id, $id );
+
+			$sources[ $id ]['url'] = $image[0];
+		}
+
+		return $sources;
 
 	}
 
