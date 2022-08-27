@@ -86,26 +86,6 @@ class Settings {
 			update_option( 'cf-images-custom-domain', (bool) $form['custom-domain'] );
 		}
 
-		$update_flexible_variants  = false;
-		$flexible_variants_enabled = get_option( 'cf-images-flexible-variants', false );
-		if ( isset( $form['flexible-variants'] ) && ! $flexible_variants_enabled ) {
-			$update_flexible_variants = true;
-			update_option( 'cf-images-flexible-variants', (bool) $form['flexible-variants'] );
-		} elseif ( ! isset( $form['flexible-variants'] ) && $flexible_variants_enabled ) {
-			$update_flexible_variants = true;
-			delete_option( 'cf-images-flexible-variants' );
-		}
-
-		if ( $update_flexible_variants ) {
-			$variant = new Api\Variant();
-			$value   = isset( $form['flexible-variants'] ) && $form['flexible-variants'];
-			try {
-				$variant->toggle_flexible( $value );
-			} catch ( Exception $e ) {
-				wp_send_json_error( $e->getMessage() );
-			}
-		}
-
 		wp_send_json_success();
 
 	}

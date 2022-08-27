@@ -123,9 +123,10 @@ class Core {
 		}
 
 		if ( wp_doing_ajax() ) {
-			add_action( 'wp_ajax_cf_images_sync_image_sizes', array( $this, 'ajax_sync_image_sizes' ) );
 			add_action( 'wp_ajax_cf_images_offload_image', array( $this, 'ajax_offload_image' ) );
 		}
+
+		add_action( 'admin_init', array( $this, 'enable_flexible_variants' ) );
 
 		// Disable generation of image sizes.
 		if ( get_option( 'cf-images-disable-generation', false ) ) {
@@ -133,13 +134,6 @@ class Core {
 			add_filter( 'big_image_size_threshold', '__return_false' );
 			add_filter( 'intermediate_image_sizes_advanced', '__return_empty_array' );
 		}
-
-		/**
-		 * These two functions do the same thing, the only difference is the output.
-		 * First one covers wp_get_registered_image_subsizes(), the second one - get_intermediate_image_sizes().
-		 */
-		add_filter( 'cf_images_attachment_sizes', array( $this, 'manage_image_sizes' ) );
-		add_filter( 'cf_images_registered_sizes', array( $this, 'manage_registered_sizes' ) );
 
 		// Image actions.
 		add_filter( 'wp_async_wp_generate_attachment_metadata', array( $this, 'upload_image' ), 10, 3 );
@@ -173,109 +167,6 @@ class Core {
 	}
 
 	/**
-	 * Make sure we have all the required sizes. Add the full size image size.
-	 *
-	 * TODO: add scaled images.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array $sizes  Current array of registered image sizes.
-	 *
-	 * @return array
-	 */
-	public function manage_image_sizes( array $sizes ): array {
-
-		// Add the full size image.
-		if ( ! isset( $sizes['full'] ) ) {
-			$sizes['full'] = array(
-				'crop'   => false,
-				'height' => 9999,
-				'width'  => 9999,
-			);
-		}
-
-		return $sizes;
-
-	}
-
-	/**
-	 * Make sure we have all the required sizes. Add the full size image size.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array $sizes  Current array of registered image sizes.
-	 *
-	 * @return array
-	 */
-	public function manage_registered_sizes( array $sizes ): array {
-
-		if ( ! in_array( 'full', $sizes, true ) ) {
-			$sizes[] = 'full';
-		}
-
-		return $sizes;
-
-	}
-
-	/**
-	 * Make sure all image sizes, registered in WordPress, are mapped to appropriate image variants.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return void
-	 */
-	public function ajax_sync_image_sizes() {
-
-		check_ajax_referer( 'cf-images-nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die();
-		}
-
-		$variants = get_option( 'cf-images-variants', array() );
-		$sizes    = apply_filters( 'cf_images_attachment_sizes', wp_get_registered_image_subsizes() );
-
-		$variant = new Api\Variant();
-
-		$updated = false;
-		foreach ( $sizes as $id => $size ) {
-			// We already have that size registered.
-			if ( array_key_exists( $id, $variants ) ) {
-				continue;
-			}
-
-			$fit = isset( $size['crop'] ) && $size['crop'] ? 'crop' : 'scale-down';
-
-			$width  = 0 === $size['width'] ? 9999 : $size['width'];
-			$height = 0 === $size['height'] ? 9999 : $size['height'];
-
-			$name = "{$width}x$height"; // TODO: maybe, we should use the WordPress image size ID?
-
-			// Register size.
-			try {
-				$variant->create( $name, $width, $height, $fit );
-			} catch ( Exception $e ) {
-				$this->error = new WP_Error( $e->getCode(), $e->getMessage() );
-				wp_send_json_error( $e->getMessage() );
-				wp_die();
-			}
-
-			unset( $size['crop'] );
-
-			$updated         = true;
-			$size['variant'] = $name;
-			$variants[ $id ] = $size;
-		}
-
-		if ( $updated ) {
-			update_option( 'cf-images-variants', $variants, false );
-		}
-
-		wp_send_json_success();
-
-	}
-
-	/**
 	 * Offload selected image to Cloudflare Images.
 	 *
 	 * @since 1.0.0
@@ -302,6 +193,33 @@ class Core {
 	}
 
 	/**
+	 * Enable flexible variants, which are disabled by default.
+	 *
+	 * This action is only required once.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return void
+	 */
+	public function enable_flexible_variants() {
+
+		// Already done.
+		if ( get_option( 'cf-images-setup-done', false ) ) {
+			return;
+		}
+
+		$variant = new Api\Variant();
+
+		try {
+			$variant->toggle_flexible( true );
+			update_option( 'cf-images-setup-done', true );
+		} catch ( Exception $e ) {
+			$this->error = new WP_Error( $e->getCode(), $e->getMessage() );
+		}
+
+	}
+
+	/**
 	 * Upload to Cloudflare images.
 	 *
 	 * @since 1.0.0
@@ -322,55 +240,12 @@ class Core {
 		try {
 			$results = $image->upload( $path, $attachment_id, $metadata['file'] );
 			update_post_meta( $attachment_id, '_cloudflare_image_id', $results->id );
-			//$this->update_image_meta( $attachment_id, $path );
 			$this->maybe_save_hash( $results->variants );
 		} catch ( Exception $e ) {
 			$this->error = new WP_Error( $e->getCode(), $e->getMessage() );
 		}
 
 		return $metadata;
-
-	}
-
-	/**
-	 * Update image meta with a list of available sizes.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param int    $attachment_id  Attachment ID.
-	 * @param string $path           Full image path on server.
-	 *
-	 * @return void
-	 */
-	private function update_image_meta( int $attachment_id, string $path ) {
-
-		$registered_sizes = wp_get_registered_image_subsizes();
-
-		$variants = get_option( 'cf-images-variants', array() );
-
-		$data = get_post_meta( $attachment_id, '_wp_attachment_metadata', true );
-		$mime = wp_check_filetype_and_ext( $path, basename( $path ) );
-
-		foreach ( $registered_sizes as $id => $size ) {
-			// Already exists? Skip.
-			if ( isset( $data['sizes'][ $id ] ) ) {
-				continue;
-			}
-
-			// Do not have that image size yet as a variant.
-			if ( ! array_key_exists( $id, $variants ) ) {
-				continue;
-			}
-
-			$data['sizes'][ $id ] = array(
-				'file'      => $variants[ $id ]['variant'],
-				'width'     => $size['width'],
-				'height'    => $size['height'],
-				'mime-type' => $mime['type'],
-			);
-		}
-
-		update_post_meta( $attachment_id, '_wp_attachment_metadata', $data );
 
 	}
 
@@ -464,39 +339,6 @@ class Core {
 		if ( empty( $hash ) ) {
 			return $image;
 		}
-
-		/**
-		 * Flexible variants disabled.
-		 */
-		if ( ! get_option( 'cf-images-flexible-variants', false ) ) {
-			$variants = get_option( 'cf-images-variants', array() );
-
-			if ( is_string( $size ) && array_key_exists( $size, $variants ) ) {
-				$image[0] = "$domain/$hash/$meta/" . $variants[ $size ]['variant'];
-				return $image;
-			}
-
-			$variant_ids = wp_list_pluck( $variants, 'variant' );
-
-			preg_match( '/[^\/]*$/', $image[0], $variant_image ); // TODO: the regex here might be incorrect.
-			/*
-			preg_match( '/-(\d+)x(\d+)\.[a-zA-Z]{3,4}$/', $image[0], $variant_image );
-
-			if ( isset( $variant_image[1] ) && isset( $variant_image[2] ) ) {
-				$ldim = max( $variant_image[1], $variant_image[2] );
-			}
-			*/
-
-			if ( isset( $variant_image[0] ) && in_array( $variant_image[0], $variant_ids, true ) ) {
-				$image[0] = "$domain/$hash/$meta/" . $variant_image[0];
-			}
-
-			return $image;
-		}
-
-		/**
-		 * Flexible variants enabled.
-		 */
 
 		// Full size image with defined dimensions.
 		if ( 'full' === $size && isset( $image[1] ) && $image[1] > 0 ) {
