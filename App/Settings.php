@@ -126,6 +126,8 @@ class Settings {
 
 		$this->write( $path_to_wp_config, $new_file_content );
 
+		update_option( 'cf-images-config-written', ! empty( $value ) );
+
 	}
 
 	/**
@@ -149,7 +151,6 @@ class Settings {
 		}
 
 		chmod( $wp_config_path, FS_CHMOD_FILE );
-		sleep( 2 );
 
 	}
 

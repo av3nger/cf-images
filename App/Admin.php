@@ -233,7 +233,7 @@ class Admin {
 
 		$this->view( 'Header' );
 
-		if ( ! $this->is_set_up() ) {
+		if ( ! get_option( 'cf-images-config-written', false ) && ! $this->is_set_up() ) {
 			$this->view( 'Setup' );
 			return;
 		}
