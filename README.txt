@@ -1,4 +1,5 @@
-=== Plugin Name ===
+=== CF Images - Offload, Store, Resize & Optimize Images  ===
+Plugin Name: CF Images - Offload, Store, Resize & Optimize Images
 Contributors: vanyukov
 Tags: cdn, images, offload, cloudflare
 Donate link: https://www.paypal.com/donate/?business=JRR6QPRGTZ46N&no_recurring=0&item_name=Help+support+the+development+of+the+Cloudflare+Images+plugin+for+WordPress&currency_code=AUD
@@ -61,8 +62,8 @@ These are the maximum allowed sizes and dimensions Cloudflare Images supports:
 
 == Screenshots ==
 
-1. Setup wizard screenshot
-2. Options page screenshot
+1. Quick and easy setup wizard
+2. Various options
 
 == Changelog ==
 
