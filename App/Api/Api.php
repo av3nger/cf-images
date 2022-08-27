@@ -142,7 +142,7 @@ class Api {
 			),
 		);
 
-		if ( isset( $this->body ) && in_array( $args['method'], array( 'POST', 'UPLOAD' ), true ) ) {
+		if ( isset( $this->body ) && in_array( $args['method'], array( 'POST', 'UPLOAD', 'PATCH' ), true ) ) {
 			$args['body'] = $this->body;
 		}
 
@@ -164,7 +164,7 @@ class Api {
 		$url  = $this->url . CF_IMAGES_ACCOUNT_ID . '/images/v1' . $this->endpoint;
 		$args = $this->get_args();
 
-		if ( 'POST' === $args['method'] || 'DELETE' === $args['method'] ) {
+		if ( 'POST' === $args['method'] || 'DELETE' === $args['method'] || 'PATCH' === $args['method'] ) {
 			$response = wp_remote_post( $url, $args );
 		} elseif ( 'UPLOAD' === $args['method'] ) {
 			/**
