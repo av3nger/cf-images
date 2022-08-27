@@ -57,6 +57,9 @@ import '../css/app.scss';
 			.then( ( response ) => {
 				if ( ! response.success ) {
 					spinner.toggleClass( 'is-active' );
+					if ( undefined !== typeof response.data ) {
+						showNotice( response.data, 'error' );
+					}
 					window.console.log( response );
 					return;
 				}
