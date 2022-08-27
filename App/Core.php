@@ -300,9 +300,11 @@ class Core {
 		$image = new Api\Image();
 		$dir   = wp_get_upload_dir();
 		$path  = trailingslashit( $dir['basedir'] ) . $metadata['file'];
+		$host  = wp_parse_url( get_site_url(), PHP_URL_HOST );
+		$name  = trailingslashit( $host ) . $metadata['file'];
 
 		try {
-			$results = $image->upload( $path, $attachment_id, $metadata['file'] );
+			$results = $image->upload( $path, $attachment_id, $name );
 			update_post_meta( $attachment_id, '_cloudflare_image_id', $results->id );
 			$this->maybe_save_hash( $results->variants );
 		} catch ( Exception $e ) {
