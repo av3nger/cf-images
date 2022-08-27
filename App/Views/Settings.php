@@ -43,10 +43,10 @@ if ( ! defined( 'WPINC' ) ) {
 						</label>
 					</fieldset>
 					<p class="description">
-						<?php esc_html_e( 'Setting this option will disable generation of `-scaled` images and other image sizes. Only the original image will be stored in the media library.', 'cf-images' ); ?>
+						<?php esc_html_e( 'Setting this option will disable generation of `-scaled` images and other image sizes. Only the original image will be stored in the media library. Already generated attachment sizes will not be affected.', 'cf-images' ); ?>
 					</p>
 					<p class="description">
-						<?php esc_html_e( 'Note: Already generated attachment sizes will not be affected.', 'cf-images' ); ?>
+						<?php esc_html_e( 'Note: This feature is experimental. All the image sizes can be restored with the `Regenerate Thumbnails` plugin.', 'cf-images' ); ?>
 					</p>
 				</td>
 			</tr>
