@@ -11,7 +11,7 @@
  * @package           CF_Images
  *
  * @wordpress-plugin
- * Plugin Name:       Cloudflare Images
+ * Plugin Name:       CF Images
  * Plugin URI:        https://vcore.ru
  * Description:       Offload media library images to the `Cloudflare Images` service.
  * Version:           1.0.0
