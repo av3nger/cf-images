@@ -477,26 +477,57 @@ class Core {
 			return $image;
 		}
 
-		$variants = get_option( 'cf-images-variants', array() );
+		/**
+		 * Flexible variants disabled.
+		 */
+		if ( ! get_option( 'cf-images-flexible-variants', false ) ) {
+			$variants = get_option( 'cf-images-variants', array() );
 
-		if ( is_string( $size ) && array_key_exists( $size, $variants ) ) {
-			$image[0] = "$domain/$hash/$meta/" . $variants[ $size ]['variant'];
+			if ( is_string( $size ) && array_key_exists( $size, $variants ) ) {
+				$image[0] = "$domain/$hash/$meta/" . $variants[ $size ]['variant'];
+				return $image;
+			}
+
+			$variant_ids = wp_list_pluck( $variants, 'variant' );
+
+			preg_match( '/[^\/]*$/', $image[0], $variant_image ); // TODO: the regex here might be incorrect.
+			/*
+			preg_match( '/-(\d+)x(\d+)\.[a-zA-Z]{3,4}$/', $image[0], $variant_image );
+
+			if ( isset( $variant_image[1] ) && isset( $variant_image[2] ) ) {
+				$ldim = max( $variant_image[1], $variant_image[2] );
+			}
+			*/
+
+			if ( isset( $variant_image[0] ) && in_array( $variant_image[0], $variant_ids, true ) ) {
+				$image[0] = "$domain/$hash/$meta/" . $variant_image[0];
+			}
+
 			return $image;
 		}
 
-		$variant_ids = wp_list_pluck( $variants, 'variant' );
+		/**
+		 * Flexible variants enabled.
+		 */
 
-		preg_match( '/[^\/]*$/', $image[0], $variant_image ); // TODO: the regex here might be incorrect.
-		/*
+		// Full size image with defined dimensions.
+		if ( 'full' === $size && isset( $image[1] ) && $image[1] > 0 ) {
+			$image[0] = "$domain/$hash/$meta/w=" . $image[1];
+			return $image;
+		}
+
 		preg_match( '/-(\d+)x(\d+)\.[a-zA-Z]{3,4}$/', $image[0], $variant_image );
 
+		// Image with `-<width>x<height>` prefix, for example, image-300x125.jpg.
 		if ( isset( $variant_image[1] ) && isset( $variant_image[2] ) ) {
-			$ldim = max( $variant_image[1], $variant_image[2] );
+			$image[0] = "$domain/$hash/$meta/w=" . $variant_image[1] . ',h=' . $variant_image[2];
+			return $image;
 		}
-		*/
 
-		if ( isset( $variant_image[0] ) && in_array( $variant_image[0], $variant_ids, true ) ) {
-			$image[0] = "$domain/$hash/$meta/" . $variant_image[0];
+		// Image without size prefix and no defined sizes - use the maximum available width.
+		if ( ! $variant_image && ! isset( $image[1] ) ) {
+			$image[0] = "$domain/$hash/$meta/w=9999";
+			return $image;
 		}
 
 		return $image;
