@@ -150,18 +150,6 @@ class Core {
 		add_filter( 'wp_prepare_attachment_for_js', array( $this, 'prepare_attachment_for_js' ), 10, 3 );
 		add_filter( 'wp_calculate_image_srcset', array( $this, 'calculate_image_srcset' ), 10, 5 );
 
-		/**
-		 * Filters the attachment URL.
-		 *
-		 * @since 1.0.0
-		 *
-		 * @param string $url  URL for the given attachment.
-		 * @param int    $id   Attachment post ID.
-		 */
-		add_filter( 'wp_get_attachment_url', function ( $url, $id ) {
-			return $url;
-		}, 10, 2 );
-
 	}
 
 	/**
