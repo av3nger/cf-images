@@ -9,7 +9,7 @@ Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Offload you media library images to the Cloudflare Images service. Store, resize, optimize and deliver images in a fast and secure manner.
+Offload you media library images to the Cloudflare® Images service. Store, resize, optimize and deliver images in a fast and secure manner.
 
 == Description ==
 
@@ -19,6 +19,9 @@ best possible format to your users.
 
 Note from the developer. The plugin is a work in progress, if something is not working as expected, or you want a feature
 added to the plugin, please create a support request.
+
+Cloudflare, the Cloudflare logo, and Cloudflare Workers are trademarks and/or registered trademarks of Cloudflare, Inc.
+in the United States and other jurisdictions.
 
 == Installation ==
 

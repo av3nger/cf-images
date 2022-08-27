@@ -1,6 +1,6 @@
 <?php
 /**
- * Cloudflare Images plugin
+ * Offload media to Cloudflare Images
  *
  * This file is read by WordPress to generate the plugin information in the plugin
  * Admin area. This file also App all the dependencies used by the plugin, registers
