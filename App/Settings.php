@@ -91,7 +91,9 @@ class Settings {
 	}
 
 	/**
-	 * Write key/value pair to wp-config.php.
+	 * Write key/value pair to wp-config.php file.
+	 *
+	 * If the $value is not set, the constant will be removed.
 	 *
 	 * @since 1.0.0
 	 *
@@ -100,7 +102,7 @@ class Settings {
 	 *
 	 * @return void
 	 */
-	public function write_config( string $name, string $value ) {
+	public function write_config( string $name, string $value = '' ) {
 
 		$path_to_wp_config = ABSPATH . 'wp-config.php';
 
@@ -117,28 +119,38 @@ class Settings {
 				continue;
 			}
 
-			if ( preg_match( "/\/\* That's all, stop editing!.*/i", $line ) ) {
+			if ( ! empty( $value ) && preg_match( "/\/\* That's all, stop editing!.*/i", $line ) ) {
 				$new_file_content[] = "define( '$name', '$value' );\n";
 			}
 
 			$new_file_content[] = $line;
 		}
 
-		$handle = fopen( $path_to_wp_config, 'w' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fopen
-		fwrite( $handle, implode( '', $new_file_content ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fwrite
+		$this->write( $path_to_wp_config, $new_file_content );
+
+	}
+
+	/**
+	 * Filesystem write to wp-config.php file.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $wp_config_path  Path to wp-config.php file.
+	 * @param array  $content         Array of lines to add to the file.
+	 *
+	 * @return void
+	 */
+	private function write( string $wp_config_path, array $content ) {
+
+		$handle = fopen( $wp_config_path, 'w' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fopen
+		fwrite( $handle, implode( '', $content ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fwrite
 		fclose( $handle ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fclose
 
 		if ( ! defined( 'FS_CHMOD_FILE' ) ) {
 			define( 'FS_CHMOD_FILE', ( fileperms( ABSPATH . 'index.php' ) & 0777 | 0644 ) );
 		}
 
-		chmod( $path_to_wp_config, FS_CHMOD_FILE );
-
-	}
-
-	public function is_image_sizes_disabled() {
-
-
+		chmod( $wp_config_path, FS_CHMOD_FILE );
 
 	}
 

@@ -33,3 +33,9 @@ delete_option( 'cf-images-hash' );
 delete_option( 'cf-images-disable-generation' );
 delete_option( 'cf-images-custom-domain' );
 delete_option( 'cf-images-setup-done' );
+
+// Remove defines from wp-config.php file.
+require_once __DIR__ . '/App/Settings.php';
+$settings = new CF_Images\App\Settings();
+$settings->write_config( 'CF_IMAGES_ACCOUNT_ID' );
+$settings->write_config( 'CF_IMAGES_KEY_TOKEN' );
