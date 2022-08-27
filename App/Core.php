@@ -153,6 +153,7 @@ class Core {
 			add_action( 'wp_ajax_cf_images_offload_image', array( $this, 'ajax_offload_image' ) );
 		}
 
+		add_action( 'admin_init', array( $this, 'maybe_redirect_to_plugin_page' ) );
 		add_action( 'admin_init', array( $this, 'enable_flexible_variants' ) );
 		add_action( 'init', array( $this, 'populate_image_sizes' ) );
 
@@ -217,6 +218,25 @@ class Core {
 		}
 
 		wp_send_json_success();
+
+	}
+
+	/**
+	 * Maybe redirect to plugin page on activation.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return void
+	 */
+	public function maybe_redirect_to_plugin_page() {
+
+		if ( ! get_transient( 'cf-images-admin-redirect' ) ) {
+			return;
+		}
+
+		delete_transient( 'cf-images-admin-redirect' );
+		wp_safe_redirect( admin_url( 'upload.php?page=cf-images' ) );
+		exit;
 
 	}
 

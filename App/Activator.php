@@ -1,8 +1,8 @@
 <?php
 /**
- * Fired during plugin activation
+ * Fired during plugin activation/deactivation
  *
- * This class defines all code necessary to run during the plugin's activation.
+ * This class defines all code necessary to run during the plugin's activation and deactivation.
  *
  * @link https://vcore.ru
  *
@@ -26,25 +26,20 @@ if ( ! defined( 'WPINC' ) ) {
 class Activator {
 
 	/**
-	 * Short Description. (use period)
-	 *
-	 * Long Description.
+	 * Activation hook.
 	 *
 	 * @since 1.0.0
 	 */
 	public static function activate() {
-		// TODO: make sure on first run we remove the default variants and sync up image sizes.
+		set_transient( 'cf-images-admin-redirect', 5 * MINUTE_IN_SECONDS );
 	}
 
 	/**
-	 * Short Description. (use period)
-	 *
-	 * Long Description.
+	 * Deactivation hook.
 	 *
 	 * @since 1.0.0
 	 */
 	public static function deactivate() {
-		// TODO: remove defines from wp-config.php
 	}
 
 }
