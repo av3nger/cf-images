@@ -84,6 +84,13 @@ if ( ! defined( 'WPINC' ) ) {
 
 	<h2><?php esc_html_e( 'Bulk options', 'cf-images' ); ?></h2>
 
+	<div class="cf-images-progress">
+		<div class="cf-images-progress-bar">
+			<div class="cf-images-progress-filler" style="width: 0;"></div>
+		</div>
+		<span><?php esc_html_e( 'Initializing...', 'cf-images' ); ?></span>
+	</div>
+
 	<p><?php esc_html_e( 'You can either manually upload individual images from the media library, or bulk upload all the images using the button below.', 'cf-images' ); ?></p>
 	<p>
 		<input type="button" class="button" value="<?php esc_attr_e( 'Upload All Images to Cloudflare', 'cf-images' ); ?>" id="cf-images-upload-all">

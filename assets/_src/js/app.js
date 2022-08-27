@@ -94,6 +94,16 @@ import '../css/app.scss';
 	} );
 
 	/**
+	 * Remove all images from Cloudflare.
+	 *
+	 * @since 1.0.0
+	 */
+	$( '#cf-images-remove-all' ).on( 'click', function( e ) {
+		e.preventDefault();
+		runProgressBar( 'cf_images_remove_images' );
+	} );
+
+	/**
 	 * Do AJAX request to WordPress.
 	 *
 	 * @since 1.0.0
@@ -139,5 +149,44 @@ import '../css/app.scss';
 			} );
 			$.dequeue( this );
 		} );
+	};
+
+	/**
+	 * Run progress bar (remove or upload all images).
+	 *
+	 * @since 1.0.0
+	 * @param {string} action      AJAX action.
+	 * @param {number} currentStep Current step.
+	 * @param {number} totalSteps  Total steps.
+	 * @param {number} progress    Progress in percent.
+	 */
+	const runProgressBar = function( action, currentStep = 0, totalSteps = 0, progress = 0 ) {
+		$( '.cf-images-progress' ).show();
+		$( '.cf-images-progress-filler' ).width( progress + '%' );
+
+		const args = {
+			currentStep,
+			totalSteps
+		};
+
+		post( action, args )
+			.then( ( response ) => {
+				if ( ! response.success ) {
+					$( '.cf-images-progress' ).hide();
+					showNotice( response.data, 'error' );
+					return;
+				}
+
+				progress = Math.round( 100 / response.data.totalSteps * response.data.currentStep );
+				$( '.cf-images-progress-filler' ).width( progress + '%' );
+				$( '.cf-images-progress > span' ).html( response.data.status );
+
+				if ( response.data.currentStep < response.data.totalSteps ) {
+					runProgressBar( action, response.data.currentStep, response.data.totalSteps, progress );
+				} else {
+					window.location.search += '&deleted=true'; // All done.
+				}
+			} )
+			.catch( window.console.log );
 	};
 }( jQuery ) );

@@ -362,6 +362,7 @@ class Core {
 
 		try {
 			$image->delete( $id );
+			delete_post_meta( $post_id, '_cloudflare_image_id' );
 		} catch ( Exception $e ) {
 			$this->error = new WP_Error( $e->getCode(), $e->getMessage() );
 		}

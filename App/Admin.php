@@ -56,6 +56,7 @@ class Admin {
 			$settings = new Settings();
 			add_action( 'wp_ajax_cf_images_do_setup', array( $settings, 'ajax_do_setup' ) );
 			add_action( 'wp_ajax_cf_images_save_settings', array( $settings, 'ajax_save_settings' ) );
+			add_action( 'wp_ajax_cf_images_remove_images', array( $settings, 'ajax_remove_images' ) );
 		}
 
 	}
@@ -192,6 +193,11 @@ class Admin {
 		// Called on success after syncing image sizes.
 		if ( filter_input( INPUT_GET, 'updated', FILTER_VALIDATE_BOOLEAN ) ) {
 			$this->render_notice( __( 'Images sizes have been synced.', 'cf-images' ) );
+		}
+
+		// Called on succss after removing all images from Cloudflare.
+		if ( filter_input( INPUT_GET, 'deleted', FILTER_VALIDATE_BOOLEAN ) ) {
+			$this->render_notice( __( 'All images have been successfully removed from Cloudflare Images.', 'cf-images' ) );
 		}
 
 	}

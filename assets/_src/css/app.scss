@@ -10,6 +10,9 @@
     float: none;
   }
 
+  /**
+   * Buttons
+   */
   .cf-images-button-red {
     background-color: #DC3232;
     border-color: #DC3232;
@@ -18,6 +21,25 @@
     &:hover {
       background-color: #B32D2E;
       border-color: #B32D2E;
+    }
+  }
+
+  /**
+   * Progress bar
+   */
+  .cf-images-progress {
+    display: none;
+
+    .cf-images-progress-bar {
+      height: 20px;
+      width: 100%;
+      border: 1px solid #191E23;
+    }
+
+    .cf-images-progress-filler {
+      background: #0073AA;
+      height: 100%;
+      transition: width .2s ease-in;
     }
   }
 

@@ -194,8 +194,12 @@ class Api {
 
 		$body = wp_remote_retrieve_body( $response );
 
-		// Duplicate entry.
-		if ( 409 === (int) $code ) {
+		/**
+		 * We can skip these statuses and consider them success.
+		 * 404 - Image not found (when removing an image).
+		 * 409 - Duplicate entry (when creating a variation).
+		 */
+		if ( 409 === (int) $code || 404 === (int) $code ) {
 			return new stdClass();
 		}
 
