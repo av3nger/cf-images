@@ -359,7 +359,7 @@ class Core {
 			$height_key = array_search( (int) $variant_image[1], $heights, true );
 			$width_key  = array_search( (int) $variant_image[2], $widths, true );
 
-			if ( $width_key === $height_key && true === $image_sizes[ $width_key ]['crop'] ) {
+			if ( $width_key && $height_key && $width_key === $height_key && true === $image_sizes[ $width_key ]['crop'] ) {
 				$image[0] = "$domain/$hash/$meta/w=" . $variant_image[1] . ',h=' . $variant_image[2] . ',fit=crop';
 				return $image;
 			}
