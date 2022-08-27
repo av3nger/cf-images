@@ -10,6 +10,17 @@
     float: none;
   }
 
+  .cf-images-button-red {
+    background-color: #DC3232;
+    border-color: #DC3232;
+    color: #FFFFFF;
+
+    &:hover {
+      background-color: #B32D2E;
+      border-color: #B32D2E;
+    }
+  }
+
 }
 
 /**

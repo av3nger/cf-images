@@ -23,6 +23,8 @@ if ( ! defined( 'WPINC' ) ) {
 <div class="wrap">
 	<h1><?php esc_html_e( 'Offload Images to Cloudflare', 'cf-images' ); ?></h1>
 
+	<h2><?php esc_html_e( 'Settings', 'cf-images' ); ?></h2>
+
 	<form id="cf-images-form" data-type="settings">
 		<table class="form-table" role="presentation">
 			<tbody>
@@ -79,5 +81,18 @@ if ( ! defined( 'WPINC' ) ) {
 			<span class="spinner"></span>
 		</p>
 	</form>
+
+	<h2><?php esc_html_e( 'Bulk options', 'cf-images' ); ?></h2>
+
+	<p><?php esc_html_e( 'You can either manually upload individual images from the media library, or bulk upload all the images using the button below.', 'cf-images' ); ?></p>
+	<p>
+		<input type="button" class="button" value="<?php esc_attr_e( 'Upload All Images to Cloudflare', 'cf-images' ); ?>" id="cf-images-upload-all">
+	</p>
+
+	<p><?php esc_html_e( 'If you wish to remove all the images, stored on Cloudflare, click the button below.', 'cf-images' ); ?></p>
+	<p><?php esc_html_e( 'Note: If `Generate WordPress image sizes` option has been disabled above, you will need to regenerate all the image sizes manually.', 'cf-images' ); ?></p>
+	<p>
+		<input type="button" class="button cf-images-button-red" value="<?php esc_attr_e( 'Remove All Images from Cloudflare', 'cf-images' ); ?>" id="cf-images-remove-all">
+	</p>
 
 </div>
