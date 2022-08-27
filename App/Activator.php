@@ -31,7 +31,16 @@ class Activator {
 	 * @since 1.0.0
 	 */
 	public static function activate() {
+
+		$activate = filter_input( INPUT_POST, 'action', FILTER_UNSAFE_RAW );
+		$checked  = filter_input( INPUT_POST, 'checked', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+
+		if ( 'activate-selected' === $activate && count( $checked ) > 1 ) {
+			return; // Do not redirect if bulk activating plugins.
+		}
+
 		set_transient( 'cf-images-admin-redirect', 5 * MINUTE_IN_SECONDS );
+
 	}
 
 	/**
