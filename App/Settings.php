@@ -14,6 +14,8 @@
 
 namespace CF_Images\App;
 
+use Exception;
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }

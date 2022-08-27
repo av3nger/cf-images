@@ -30,6 +30,6 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 }
 
 delete_option( 'cf-images-hash' );
-delete_option( 'cf-images-variants' );
 delete_option( 'cf-images-disable-generation' );
 delete_option( 'cf-images-custom-domain' );
+delete_option( 'cf-images-setup-done' );

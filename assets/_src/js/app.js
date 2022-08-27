@@ -67,31 +67,6 @@ import '../css/app.scss';
 	} );
 
 	/**
-	 * "Sync image sizes" button click.
-	 *
-	 * @since 1.0.0
-	 */
-	$( '#cf-images-sync-image-sizes' ).on( 'click', function( e ) {
-		e.preventDefault();
-
-		const spinner = $( this ).next( '.spinner' );
-		spinner.toggleClass( 'is-active' );
-
-		post( 'cf_images_sync_image_sizes' )
-			.then( ( response ) => {
-				if ( ! response.success ) {
-					spinner.toggleClass( 'is-active' );
-					showNotice( response.data, 'error' );
-					window.console.log( response );
-					return;
-				}
-
-				window.location.search += '&updated=true';
-			} )
-			.catch( window.console.log );
-	} );
-
-	/**
 	 * Process offloading from media library.
 	 *
 	 * @since 1.0.0
