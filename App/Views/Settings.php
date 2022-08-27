@@ -23,8 +23,6 @@ if ( ! defined( 'WPINC' ) ) {
 <div class="wrap">
 	<h1><?php esc_html_e( 'Offload Images to Cloudflare', 'cf-images' ); ?></h1>
 
-	<h2><?php esc_html_e( 'Misc options', 'cf-images' ); ?></h2>
-
 	<form id="cf-images-form" data-type="settings">
 		<table class="form-table" role="presentation">
 			<tbody>
