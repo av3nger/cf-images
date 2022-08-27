@@ -59,7 +59,7 @@ import '../css/app.scss';
 			return;
 		}
 
-		const spinner = $( this ).next( '.spinner' );
+		const spinner = $( this ).find( '.spinner' );
 		spinner.toggleClass( 'is-active' );
 
 		post( action, $( this ).serialize() )

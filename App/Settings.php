@@ -149,6 +149,7 @@ class Settings {
 		}
 
 		chmod( $wp_config_path, FS_CHMOD_FILE );
+		sleep( 2 );
 
 	}
 
