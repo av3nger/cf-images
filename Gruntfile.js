@@ -22,7 +22,7 @@ module.exports = function( grunt ) {
 				],
 				dest: 'build/cf-images/',
 				options: {
-					noProcess: [ '**/*.{png,gif,jpg,ico,svg,eot,ttf,woff,woff2}' ],
+					noProcess: [ '**/*.{png,gif,jpg,jpeg,ico,svg,eot,ttf,woff,woff2}' ],
 					process( content, srcpath ) {
 						const pkg = grunt.file.readJSON( 'package.json' );
 						return content.replace( /\%\%VERSION\%\%/g, pkg.version );

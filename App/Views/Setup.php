@@ -146,7 +146,7 @@ if ( ! defined( 'WPINC' ) ) {
 						?>
 					</p>
 					<p class="description">
-						<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . '/assets/images/step-02-custom-token-setup.jpeg' ); ?>" alt="<?php esc_attr_e( 'How to create a custom token for Cloudflare images', 'cf-images' ); ?>" width="650" />
+						<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/step-02-custom-token-setup.jpeg' ); ?>" alt="<?php esc_attr_e( 'How to create a custom token for Cloudflare images', 'cf-images' ); ?>" width="650" />
 					</p>
 					<p class="description">8.&nbsp;
 						<?php
