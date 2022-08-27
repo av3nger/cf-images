@@ -18,8 +18,9 @@ Tired of using expensive CDN plugins that charge ridiculous amounts for somethin
 library to Cloudflare Images and let it handle everything for you - store, resize, optimize and deliver images in the
 best possible format to your users.
 
-Note from the developer. The plugin is a work in progress, if something is not working as expected, or you want a feature
-added to the plugin, please create a support request.
+Note from the developer: The plugin is a work in progress, which I created for my personal use, because I got tired with
+image optimization plugins ignoring real user needs or overcharging for services. If something is not working as expected,
+or you want a feature added to the plugin, please create a support request, and I will do my best to make it happen.
 
 Cloudflare, the Cloudflare logo, and Cloudflare Workers are trademarks and/or registered trademarks of Cloudflare, Inc.
 in the United States and other jurisdictions.
@@ -59,6 +60,11 @@ These are the maximum allowed sizes and dimensions Cloudflare Images supports:
 * Image metadata is limited to 1024 bytes.
 * Images have a 10 megabyte (MB) size limit.
 * Animated GIFs, including all frames, are limited to 100 megapixels (MP).
+
+= Why are not all images being replaced in content? =
+
+This is just a first iteration of the plugin. I have tested it over a set of projects that I deployed to my clients.
+If something is not working for you, please let me know by creating a support ticket on the plugin support forums.
 
 == Screenshots ==
 
