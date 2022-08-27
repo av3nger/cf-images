@@ -21,6 +21,7 @@ namespace CF_Images\App;
 use Exception;
 use WP_Error;
 use WP_Post;
+use WP_Query;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -151,6 +152,8 @@ class Core {
 
 		if ( wp_doing_ajax() ) {
 			add_action( 'wp_ajax_cf_images_offload_image', array( $this, 'ajax_offload_image' ) );
+			add_action( 'wp_ajax_cf_images_remove_images', array( $this, 'ajax_remove_images' ) );
+			add_action( 'wp_ajax_cf_images_upload_images', array( $this, 'ajax_upload_images' ) );
 		}
 
 		add_action( 'admin_init', array( $this, 'maybe_redirect_to_plugin_page' ) );
@@ -218,6 +221,151 @@ class Core {
 		}
 
 		wp_send_json_success();
+
+	}
+
+	/**
+	 * Remove all images from Cloudflare progress bar handler.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return void
+	 */
+	public function ajax_remove_images() {
+
+		check_ajax_referer( 'cf-images-nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) || ! isset( $_POST['data'] ) ) {
+			wp_die();
+		}
+
+		// Data sanitized later in code.
+		$progress = filter_input( INPUT_POST, 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+
+		if ( ! isset( $progress['currentStep'] ) || ! isset( $progress['totalSteps'] ) ) {
+			wp_send_json_error( esc_html__( 'No current step or total steps defined', 'cf-images' ) );
+		}
+
+		$step  = (int) $progress['currentStep'];
+		$total = (int) $progress['totalSteps'];
+
+		// Progress just started.
+		if ( 0 === $step && 0 === $total ) {
+			$args = array(
+				'post_type'   => 'attachment',
+				'post_status' => 'inherit',
+				'meta_key'    => '_cloudflare_image_id', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+			);
+
+			// Look for images that have been offloaded.
+			$images = new WP_Query( $args );
+			$total  = $images->found_posts;
+		}
+
+		$step++;
+
+		// We have some data left.
+		if ( $step <= $total ) {
+			$args = array(
+				'post_type'      => 'attachment',
+				'post_status'    => 'inherit',
+				'meta_key'       => '_cloudflare_image_id', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+				'posts_per_page' => 1,
+			);
+
+			// Look for images that have been offloaded.
+			$images = new WP_Query( $args );
+			$this->delete_image( $images->post->ID, $images->post );
+		}
+
+		$response = array(
+			'currentStep' => $step,
+			'totalSteps'  => $total,
+			'status'      => sprintf( /* translators: %1$d - current image, %2$d - total number of images */
+				esc_html__( 'Removing image %1$d from %2$d...', 'cf-images' ),
+				(int) $step,
+				$total
+			),
+		);
+
+		wp_send_json_success( $response );
+	}
+
+	/**
+	 * Upload all images to Cloudflare progress bar handler.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return void
+	 */
+	public function ajax_upload_images() {
+
+		check_ajax_referer( 'cf-images-nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) || ! isset( $_POST['data'] ) ) {
+			wp_die();
+		}
+
+		// Data sanitized later in code.
+		$progress = filter_input( INPUT_POST, 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+
+		if ( ! isset( $progress['currentStep'] ) || ! isset( $progress['totalSteps'] ) ) {
+			wp_send_json_error( esc_html__( 'No current step or total steps defined', 'cf-images' ) );
+		}
+
+		$step  = (int) $progress['currentStep'];
+		$total = (int) $progress['totalSteps'];
+
+		// Progress just started.
+		if ( 0 === $step && 0 === $total ) {
+			$args = array(
+				'post_type'   => 'attachment',
+				'post_status' => 'inherit',
+				'meta_query'  => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+					array(
+						'key'     => '_cloudflare_image_id',
+						'compare' => 'NOT EXISTS',
+					),
+				),
+			);
+
+			// Look for images that have been offloaded.
+			$images = new WP_Query( $args );
+			$total  = $images->found_posts;
+		}
+
+		$step++;
+
+		// We have some data left.
+		if ( $step <= $total ) {
+			$args = array(
+				'post_type'      => 'attachment',
+				'post_status'    => 'inherit',
+				'meta_query'     => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+					array(
+						'key'     => '_cloudflare_image_id',
+						'compare' => 'NOT EXISTS',
+					),
+				),
+				'posts_per_page' => 1,
+			);
+
+			// Look for images that have been offloaded.
+			$image = new WP_Query( $args );
+			$this->upload_image( wp_get_attachment_metadata( $image->post->ID ), $image->post->ID, 'single' );
+		}
+
+		$response = array(
+			'currentStep' => $step,
+			'totalSteps'  => $total,
+			'status'      => sprintf( /* translators: %1$d - current image, %2$d - total number of images */
+				esc_html__( 'Removing image %1$d from %2$d...', 'cf-images' ),
+				(int) $step,
+				$total
+			),
+		);
+
+		wp_send_json_success( $response );
 
 	}
 

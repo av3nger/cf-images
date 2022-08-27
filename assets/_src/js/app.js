@@ -94,6 +94,16 @@ import '../css/app.scss';
 	} );
 
 	/**
+	 * Upload all images to Cloudflare.
+	 *
+	 * @since 1.0.0
+	 */
+	$( '#cf-images-upload-all' ).on( 'click', function( e ) {
+		e.preventDefault();
+		runProgressBar( 'cf_images_upload_images' );
+	} );
+
+	/**
 	 * Remove all images from Cloudflare.
 	 *
 	 * @since 1.0.0
@@ -183,8 +193,10 @@ import '../css/app.scss';
 
 				if ( response.data.currentStep < response.data.totalSteps ) {
 					runProgressBar( action, response.data.currentStep, response.data.totalSteps, progress );
+				} else if ( 'cf_images_upload_images' === action ) {
+					window.location.search += '&deleted=updated';
 				} else {
-					window.location.search += '&deleted=true'; // All done.
+					window.location.search += '&deleted=true';
 				}
 			} )
 			.catch( window.console.log );
