@@ -350,6 +350,21 @@ class Core {
 
 		// Image with `-<width>x<height>` prefix, for example, image-300x125.jpg.
 		if ( isset( $variant_image[1] ) && isset( $variant_image[2] ) ) {
+			// Check if the image is a cropped version.
+			// TODO: Move this out to improve performance.
+			$image_sizes = wp_get_registered_image_subsizes();
+			$heights     = wp_list_pluck( $image_sizes, 'height' );
+			$widths      = wp_list_pluck( $image_sizes, 'width' );
+
+			$height_key = array_search( (int) $variant_image[1], $heights, true );
+			$width_key  = array_search( (int) $variant_image[2], $widths, true );
+
+			if ( $width_key === $height_key && true === $image_sizes[ $width_key ]['crop'] ) {
+				$image[0] = "$domain/$hash/$meta/w=" . $variant_image[1] . ',h=' . $variant_image[2] . ',fit=crop';
+				return $image;
+			}
+
+			// Not a cropped image.
 			$image[0] = "$domain/$hash/$meta/w=" . $variant_image[1] . ',h=' . $variant_image[2];
 			return $image;
 		}
