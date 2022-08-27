@@ -81,6 +81,33 @@ class Core {
 	private $admin;
 
 	/**
+	 * Registered image sizes in WordPress.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 * @var array $registered_sizes
+	 */
+	private $registered_sizes;
+
+	/**
+	 * Widths from the $registered_sizes array.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 * @var array $widths
+	 */
+	private $widths;
+
+	/**
+	 * Heights from the $registered_sizes array.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 * @var array $heights
+	 */
+	private $heights;
+
+	/**
 	 * Get plugin instance.
 	 *
 	 * @since 1.0.0
@@ -127,6 +154,7 @@ class Core {
 		}
 
 		add_action( 'admin_init', array( $this, 'enable_flexible_variants' ) );
+		add_action( 'init', array( $this, 'populate_image_sizes' ) );
 
 		// Disable generation of image sizes.
 		if ( get_option( 'cf-images-disable-generation', false ) ) {
@@ -216,6 +244,22 @@ class Core {
 		} catch ( Exception $e ) {
 			$this->error = new WP_Error( $e->getCode(), $e->getMessage() );
 		}
+
+	}
+
+	/**
+	 * Save all required data for faster access later on.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return void
+	 */
+	public function populate_image_sizes() {
+
+		$this->registered_sizes = wp_get_registered_image_subsizes();
+
+		$this->heights = wp_list_pluck( $this->registered_sizes, 'height' );
+		$this->widths  = wp_list_pluck( $this->registered_sizes, 'width' );
 
 	}
 
@@ -351,15 +395,10 @@ class Core {
 		// Image with `-<width>x<height>` prefix, for example, image-300x125.jpg.
 		if ( isset( $variant_image[1] ) && isset( $variant_image[2] ) ) {
 			// Check if the image is a cropped version.
-			// TODO: Move this out to improve performance.
-			$image_sizes = wp_get_registered_image_subsizes();
-			$heights     = wp_list_pluck( $image_sizes, 'height' );
-			$widths      = wp_list_pluck( $image_sizes, 'width' );
+			$height_key = array_search( (int) $variant_image[1], $this->heights, true );
+			$width_key  = array_search( (int) $variant_image[2], $this->widths, true );
 
-			$height_key = array_search( (int) $variant_image[1], $heights, true );
-			$width_key  = array_search( (int) $variant_image[2], $widths, true );
-
-			if ( $width_key && $height_key && $width_key === $height_key && true === $image_sizes[ $width_key ]['crop'] ) {
+			if ( $width_key && $height_key && $width_key === $height_key && true === $this->registered_sizes[ $width_key ]['crop'] ) {
 				$image[0] = "$domain/$hash/$meta/w=" . $variant_image[1] . ',h=' . $variant_image[2] . ',fit=crop';
 				return $image;
 			}
