@@ -13,7 +13,7 @@ module.exports = function( grunt ) {
 				src: [
 					'App/**',
 					'assets/**',
-					'!assets/svn',
+					'!assets/svn/**',
 					'languages/**',
 					'README.txt',
 					'index.php',
