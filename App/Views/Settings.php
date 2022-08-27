@@ -30,29 +30,6 @@ if ( ! defined( 'WPINC' ) ) {
 			<tbody>
 			<tr>
 				<th scope="row">
-					<?php esc_html_e( 'Generate WordPress image sizes', 'cf-images' ); ?>
-				</th>
-				<td>
-					<fieldset>
-						<legend class="screen-reader-text">
-							<span><?php esc_html_e( 'Generate WordPress image sizes', 'cf-images' ); ?></span>
-						</legend>
-						<label for="disable_sizes">
-							<input name="disable-sizes" type="checkbox" id="disable_sizes" value="1" <?php checked( get_option( 'cf-images-disable-generation', false ) ); ?>>
-							<?php esc_html_e( 'Disable', 'cf-images' ); ?>
-						</label>
-					</fieldset>
-					<p class="description">
-						<?php esc_html_e( 'Setting this option will disable generation of `-scaled` images and other image sizes. Only the original image will be stored in the media library. Already generated attachment sizes will not be affected.', 'cf-images' ); ?>
-					</p>
-					<p class="description">
-						<?php esc_html_e( 'Note: This feature is experimental. All the image sizes can be restored with the `Regenerate Thumbnails` plugin.', 'cf-images' ); ?>
-					</p>
-				</td>
-			</tr>
-
-			<tr>
-				<th scope="row">
 					<?php esc_html_e( 'Serve from custom domain', 'cf-images' ); ?>
 				</th>
 				<td>
@@ -73,6 +50,29 @@ if ( ! defined( 'WPINC' ) ) {
 					</p>
 				</td>
 			</tr>
+
+			<tr>
+				<th scope="row">
+					<?php esc_html_e( 'Disable WordPress image sizes', 'cf-images' ); ?>
+				</th>
+				<td>
+					<fieldset>
+						<legend class="screen-reader-text">
+							<span><?php esc_html_e( 'Disable WordPress image sizes', 'cf-images' ); ?></span>
+						</legend>
+						<label for="disable_sizes">
+							<input name="disable-sizes" type="checkbox" id="disable_sizes" value="1" <?php checked( get_option( 'cf-images-disable-generation', false ) ); ?>>
+							<?php esc_html_e( 'Enable', 'cf-images' ); ?>
+						</label>
+					</fieldset>
+					<p class="description">
+						<?php esc_html_e( 'Setting this option will disable generation of `-scaled` images and other image sizes. Only the original image will be stored in the media library. Already generated attachment sizes will not be affected.', 'cf-images' ); ?>
+					</p>
+					<p class="description">
+						<?php esc_html_e( 'Note: This feature is experimental. All the image sizes can be restored with the `Regenerate Thumbnails` plugin.', 'cf-images' ); ?>
+					</p>
+				</td>
+			</tr>
 			</tbody>
 		</table>
 
@@ -90,7 +90,7 @@ if ( ! defined( 'WPINC' ) ) {
 	</p>
 
 	<p><?php esc_html_e( 'If you wish to remove all the images, stored on Cloudflare, click the button below.', 'cf-images' ); ?></p>
-	<p><?php esc_html_e( 'Note: If `Generate WordPress image sizes` option has been disabled above, you will need to regenerate all the image sizes manually.', 'cf-images' ); ?></p>
+	<p><?php esc_html_e( 'Note: If `Disable WordPress image sizes` option has been selected above, you will need to regenerate all the image sizes manually.', 'cf-images' ); ?></p>
 	<p>
 		<input type="button" class="button cf-images-button-red" value="<?php esc_attr_e( 'Remove All Images from Cloudflare', 'cf-images' ); ?>" id="cf-images-remove-all">
 	</p>
