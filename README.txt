@@ -73,6 +73,10 @@ If something is not working for you, please let me know by creating a support ti
 
 == Changelog ==
 
+= 1.0.1 =
+
+* Fix: PHP fatal error with Spectra plugin
+
 = 1.0.0 =
 First release
 * New: Offload images to Cloudflare Images

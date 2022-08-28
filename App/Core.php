@@ -534,9 +534,9 @@ class Core {
 	 * @param string|int[] $size           Requested image size. Can be any registered image size name, or
 	 *                                     an array of width and height values in pixels (in that order).
 	 *
-	 * @return array
+	 * @return array|false
 	 */
-	public function get_attachment_image_src( $image, int $attachment_id, $size ): array {
+	public function get_attachment_image_src( $image, int $attachment_id, $size ) {
 
 		$domain = 'https://imagedelivery.net';
 		if ( get_option( 'cf-images-custom-domain', false ) ) {
