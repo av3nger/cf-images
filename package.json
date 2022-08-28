@@ -1,6 +1,6 @@
 {
-  "name": "cf-images-plugin",
-  "description": "Cloudflare Images",
+  "name": "cf-images",
+  "description": "CF Images - Offload, Store, Resize & Optimize Images",
   "version": "1.0.0",
   "main": "cf-images.php",
   "author": "Anton Vanyukov",
