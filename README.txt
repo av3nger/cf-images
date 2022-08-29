@@ -75,6 +75,7 @@ If something is not working for you, please let me know by creating a support ti
 
 = 1.0.1 =
 
+* New: Add image statistics
 * Enhance: Better handling of unsupported media types
 * Enhance: Improve UI and UX
 * Fix: Failed bulk offload if an image path is not defined in metadata

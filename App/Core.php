@@ -456,6 +456,7 @@ class Core {
 
 		try {
 			$results = $image->upload( $path, $attachment_id, $name );
+			$this->update_stats( 1 );
 			update_post_meta( $attachment_id, '_cloudflare_image_id', $results->id );
 			$this->maybe_save_hash( $results->variants );
 		} catch ( Exception $e ) {
@@ -463,6 +464,29 @@ class Core {
 		}
 
 		return $metadata;
+
+	}
+
+	/**
+	 * Update image stats.
+	 *
+	 * @since 1.0.1
+	 *
+	 * @param int $count  Add or subtract number from `synced` image count.
+	 *
+	 * @return void
+	 */
+	private function update_stats( int $count ) {
+
+		$default = array(
+			'synced' => 0,
+		);
+
+		$stats = get_option( 'cf-images-stats', $default );
+
+		$stats['synced'] += $count;
+
+		update_option( 'cf-images-stats', $stats );
 
 	}
 
@@ -513,6 +537,7 @@ class Core {
 
 		try {
 			$image->delete( $id );
+			$this->update_stats( -1 );
 			delete_post_meta( $post_id, '_cloudflare_image_id' );
 			delete_post_meta( $post_id, '_cloudflare_image_skip' );
 		} catch ( Exception $e ) {
