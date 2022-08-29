@@ -308,6 +308,18 @@ class Admin {
 			return;
 		}
 
+		// This image was skipped because of some error during bulk upload.
+		if ( get_post_meta( $post_id, '_cloudflare_image_skip', true ) ) {
+			esc_html_e( 'Skipped from processing', 'cf-images' );
+			echo '<br />';
+			printf( /* translators: %1$s - opening <a> tag, %2$s - closing </a> tag */
+				esc_html__( '%1$sRetry offload%2$s', 'cf-images' ),
+				'<a href="#" class="cf-images-offload" data-id="' . esc_attr( $post_id ) . '">',
+				'</a>'
+			);
+			return;
+		}
+
 		printf( /* translators: %1$s - opening <a> tag, %2$s - closing </a> tag */
 			esc_html__( '%1$sOffload%2$s', 'cf-images' ),
 			'<a href="#" class="cf-images-offload" data-id="' . esc_attr( $post_id ) . '">',

@@ -316,19 +316,23 @@ class Core {
 		$step  = (int) $progress['currentStep'];
 		$total = (int) $progress['totalSteps'];
 
+		$args = array(
+			'post_type'   => 'attachment',
+			'post_status' => 'inherit',
+			'meta_query'  => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+				array(
+					'key'     => '_cloudflare_image_id',
+					'compare' => 'NOT EXISTS',
+				),
+				array(
+					'key'     => '_cloudflare_image_skip',
+					'compare' => 'NOT EXISTS',
+				),
+			),
+		);
+
 		// Progress just started.
 		if ( 0 === $step && 0 === $total ) {
-			$args = array(
-				'post_type'   => 'attachment',
-				'post_status' => 'inherit',
-				'meta_query'  => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
-					array(
-						'key'     => '_cloudflare_image_id',
-						'compare' => 'NOT EXISTS',
-					),
-				),
-			);
-
 			// Look for images that have been offloaded.
 			$images = new WP_Query( $args );
 			$total  = $images->found_posts;
@@ -338,28 +342,24 @@ class Core {
 
 		// We have some data left.
 		if ( $step <= $total ) {
-			$args = array(
-				'post_type'      => 'attachment',
-				'post_status'    => 'inherit',
-				'meta_query'     => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
-					array(
-						'key'     => '_cloudflare_image_id',
-						'compare' => 'NOT EXISTS',
-					),
-				),
-				'posts_per_page' => 1,
-			);
+			$args['posts_per_page'] = 1;
 
 			// Look for images that have been offloaded.
 			$image = new WP_Query( $args );
 			$this->upload_image( wp_get_attachment_metadata( $image->post->ID ), $image->post->ID, 'single' );
+
+			// If there's an error with offloading, we need to mark such an image as skipped.
+			if ( is_wp_error( $this->error ) ) {
+				update_post_meta( $image->post->ID, '_cloudflare_image_skip', true );
+				$this->error = false; // Reset the error.
+			}
 		}
 
 		$response = array(
 			'currentStep' => $step,
 			'totalSteps'  => $total,
 			'status'      => sprintf( /* translators: %1$d - current image, %2$d - total number of images */
-				esc_html__( 'Removing image %1$d from %2$d...', 'cf-images' ),
+				esc_html__( 'Uploading image %1$d from %2$d...', 'cf-images' ),
 				(int) $step,
 				$total
 			),
@@ -445,6 +445,16 @@ class Core {
 	 */
 	public function upload_image( array $metadata, int $attachment_id, string $context ): array {
 
+		if ( ! isset( $metadata['file'] ) ) {
+			$this->error = new WP_Error( 404, __( 'Media file not found', 'cf-images' ) );
+			return $metadata;
+		}
+
+		if ( ! wp_attachment_is_image( $attachment_id ) ) {
+			$this->error = new WP_Error( 415, __( 'Unsupported media type', 'cf-images' ) );
+			return $metadata;
+		}
+
 		$image = new Api\Image();
 		$dir   = wp_get_upload_dir();
 		$path  = trailingslashit( $dir['basedir'] ) . $metadata['file'];
@@ -511,6 +521,7 @@ class Core {
 		try {
 			$image->delete( $id );
 			delete_post_meta( $post_id, '_cloudflare_image_id' );
+			delete_post_meta( $post_id, '_cloudflare_image_skip' );
 		} catch ( Exception $e ) {
 			$this->error = new WP_Error( $e->getCode(), $e->getMessage() );
 		}
