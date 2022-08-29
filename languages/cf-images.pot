@@ -2,20 +2,24 @@
 # This file is distributed under the GPL-2.0+.
 msgid ""
 msgstr ""
-"Project-Id-Version: CF Images 1.0.1-beta.1\n"
+"Project-Id-Version: Offload Images to Cloudflare 1.0.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/cloudflare-images\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-08-29T03:52:34+00:00\n"
+"POT-Creation-Date: 2022-08-29T23:20:10+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: cf-images\n"
 
 #. Plugin Name of the plugin
-msgid "CF Images"
+#: App/Admin.php:159
+#: App/Views/Settings.php:26
+#: build/cf-images/App/Admin.php:159
+#: build/cf-images/App/Views/Settings.php:24
+msgid "Offload Images to Cloudflare"
 msgstr ""
 
 #. Plugin URI of the plugin
@@ -52,17 +56,10 @@ msgid "Offloaded"
 msgstr ""
 
 #: App/Admin.php:143
-#: App/Views/Settings.php:26
+#: App/Views/Settings.php:32
 #: build/cf-images/App/Admin.php:143
 #: build/cf-images/App/Views/Settings.php:26
 msgid "Settings"
-msgstr ""
-
-#: App/Admin.php:159
-#: App/Views/Settings.php:24
-#: build/cf-images/App/Admin.php:159
-#: build/cf-images/App/Views/Settings.php:24
-msgid "Offload Images to Cloudflare"
 msgstr ""
 
 #: App/Admin.php:160
@@ -97,21 +94,24 @@ msgid "Offload status"
 msgstr ""
 
 #: App/Admin.php:307
+#: build/cf-images/App/Admin.php:307
 msgid "Unsupported format"
 msgstr ""
 
 #: App/Admin.php:313
+#: build/cf-images/App/Admin.php:313
 msgid "Skipped from processing"
 msgstr ""
 
 #. translators: %1$s - opening <a> tag, %2$s - closing </a> tag
 #: App/Admin.php:316
+#: build/cf-images/App/Admin.php:316
 msgid "%1$sRetry offload%2$s"
 msgstr ""
 
 #. translators: %1$s - opening <a> tag, %2$s - closing </a> tag
 #: App/Admin.php:324
-#: build/cf-images/App/Admin.php:305
+#: build/cf-images/App/Admin.php:324
 msgid "%1$sOffload%2$s"
 msgstr ""
 
@@ -120,30 +120,40 @@ msgstr ""
 msgid "Unsupported API call method"
 msgstr ""
 
-#: App/Core.php:246
-#: App/Core.php:313
+#: App/Core.php:254
+msgid "Incorrect action call"
+msgstr ""
+
+#: App/Core.php:258
 #: build/cf-images/App/Core.php:246
 #: build/cf-images/App/Core.php:313
 msgid "No current step or total steps defined"
 msgstr ""
 
-#. translators: %1$d - current image, %2$d - total number of images
-#: App/Core.php:285
-#: build/cf-images/App/Core.php:285
-#: build/cf-images/App/Core.php:362
-msgid "Removing image %1$d from %2$d..."
+#: App/Core.php:267
+msgid "Unsupported action"
+msgstr ""
+
+#: App/Core.php:279
+msgid "No images found"
+msgstr ""
+
+#: App/Core.php:289
+msgid "Step error"
 msgstr ""
 
 #. translators: %1$d - current image, %2$d - total number of images
-#: App/Core.php:362
-msgid "Uploading image %1$d from %2$d..."
+#: App/Core.php:313
+msgid "Processing image %1$d out of %2$d..."
 msgstr ""
 
-#: App/Core.php:449
+#: App/Core.php:442
+#: build/cf-images/App/Core.php:449
 msgid "Media file not found"
 msgstr ""
 
-#: App/Core.php:454
+#: App/Core.php:447
+#: build/cf-images/App/Core.php:454
 msgid "Unsupported media type"
 msgstr ""
 
@@ -152,90 +162,91 @@ msgstr ""
 msgid "Thank you for installing the plugin. This is the first release, not all plugins/themes might be supported. Please report all issues on the wp.org support forums for the plugin, and I will try to fix everything ASAP."
 msgstr ""
 
-#: App/Views/Settings.php:33
+#: App/Views/Settings.php:39
 #: build/cf-images/App/Views/Settings.php:33
 msgid "Serve from custom domain"
 msgstr ""
 
-#: App/Views/Settings.php:38
+#: App/Views/Settings.php:44
 #: build/cf-images/App/Views/Settings.php:38
 msgid "Serve images from custom domains"
 msgstr ""
 
-#: App/Views/Settings.php:42
-#: App/Views/Settings.php:65
+#: App/Views/Settings.php:48
+#: App/Views/Settings.php:71
 #: build/cf-images/App/Views/Settings.php:42
 #: build/cf-images/App/Views/Settings.php:65
 msgid "Enable"
 msgstr ""
 
-#: App/Views/Settings.php:46
+#: App/Views/Settings.php:52
 #: build/cf-images/App/Views/Settings.php:46
 msgid "Use the current site domain instead of `imagedelivery.net`."
 msgstr ""
 
-#: App/Views/Settings.php:49
+#: App/Views/Settings.php:55
 #: build/cf-images/App/Views/Settings.php:49
 msgid "Note: Image delivery is supported from all customer domains under the same Cloudflare account."
 msgstr ""
 
-#: App/Views/Settings.php:56
-#: App/Views/Settings.php:61
+#: App/Views/Settings.php:62
+#: App/Views/Settings.php:67
 #: build/cf-images/App/Views/Settings.php:56
 #: build/cf-images/App/Views/Settings.php:61
 msgid "Disable WordPress image sizes"
 msgstr ""
 
-#: App/Views/Settings.php:69
+#: App/Views/Settings.php:75
 #: build/cf-images/App/Views/Settings.php:69
 msgid "Setting this option will disable generation of `-scaled` images and other image sizes. Only the original image will be stored in the media library. Only for newly uploaded files, current images will not be affected."
 msgstr ""
 
-#: App/Views/Settings.php:72
+#: App/Views/Settings.php:78
 #: build/cf-images/App/Views/Settings.php:72
 msgid "Note: This feature is experimental. All the image sizes can be restored with the `Regenerate Thumbnails` plugin."
 msgstr ""
 
-#: App/Views/Settings.php:80
+#: App/Views/Settings.php:86
 #: App/Views/Setup.php:169
 #: build/cf-images/App/Views/Settings.php:80
 #: build/cf-images/App/Views/Setup.php:169
 msgid "Save Changes"
 msgstr ""
 
-#: App/Views/Settings.php:85
+#: App/Views/Settings.php:95
+msgid "Stats"
+msgstr ""
+
+#. translators: %d - number of offloaded images
+#: App/Views/Settings.php:100
+msgid "Offloaded images: %d"
+msgstr ""
+
+#: App/Views/Settings.php:106
 #: build/cf-images/App/Views/Settings.php:85
 msgid "Bulk options"
 msgstr ""
 
-#: App/Views/Settings.php:91
+#: App/Views/Settings.php:113
 #: build/cf-images/App/Views/Settings.php:91
 msgid "Initializing..."
 msgstr ""
 
-#: App/Views/Settings.php:94
-#: build/cf-images/App/Views/Settings.php:94
-msgid "You can either manually upload individual images from the media library, or bulk upload all the images using the button below."
+#: App/Views/Settings.php:116
+msgid "You can either manually upload individual images from the media library, or bulk upload/remove all the images using the buttons below."
 msgstr ""
 
-#: App/Views/Settings.php:96
-#: build/cf-images/App/Views/Settings.php:96
-msgid "Upload All Images to Cloudflare"
-msgstr ""
-
-#: App/Views/Settings.php:99
-#: build/cf-images/App/Views/Settings.php:99
-msgid "If you wish to remove all the images, stored on Cloudflare, click the button below."
-msgstr ""
-
-#: App/Views/Settings.php:100
+#: App/Views/Settings.php:118
 #: build/cf-images/App/Views/Settings.php:100
 msgid "Note: If `Disable WordPress image sizes` option has been selected above, you will need to regenerate all the image sizes manually."
 msgstr ""
 
-#: App/Views/Settings.php:102
-#: build/cf-images/App/Views/Settings.php:102
-msgid "Remove All Images from Cloudflare"
+#: App/Views/Settings.php:120
+msgid "Upload"
+msgstr ""
+
+#: App/Views/Settings.php:121
+msgid "Remove"
 msgstr ""
 
 #: App/Views/Setup.php:24
@@ -352,4 +363,30 @@ msgstr ""
 #: App/Views/Setup.php:161
 #: build/cf-images/App/Views/Setup.php:161
 msgid "Your token for Cloudflare Images is now created."
+msgstr ""
+
+#. translators: %1$d - current image, %2$d - total number of images
+#: build/cf-images/App/Core.php:285
+msgid "Removing image %1$d from %2$d..."
+msgstr ""
+
+#. translators: %1$d - current image, %2$d - total number of images
+#: build/cf-images/App/Core.php:362
+msgid "Uploading image %1$d from %2$d..."
+msgstr ""
+
+#: build/cf-images/App/Views/Settings.php:94
+msgid "You can either manually upload individual images from the media library, or bulk upload all the images using the button below."
+msgstr ""
+
+#: build/cf-images/App/Views/Settings.php:96
+msgid "Upload All Images to Cloudflare"
+msgstr ""
+
+#: build/cf-images/App/Views/Settings.php:99
+msgid "If you wish to remove all the images, stored on Cloudflare, click the button below."
+msgstr ""
+
+#: build/cf-images/App/Views/Settings.php:102
+msgid "Remove All Images from Cloudflare"
 msgstr ""
