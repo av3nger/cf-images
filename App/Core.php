@@ -273,7 +273,13 @@ class Core {
 
 			// Look for images that have been offloaded.
 			$images = new WP_Query( $args );
-			$total  = $images->found_posts;
+
+			// No available images found.
+			if ( 0 === $images->found_posts ) {
+				wp_send_json_error( __( 'No images found', 'cf-images' ) );
+			}
+
+			$total = $images->found_posts;
 		}
 
 		$step++;

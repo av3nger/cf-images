@@ -200,7 +200,7 @@ import '../css/app.scss';
 			.then( ( response ) => {
 				if ( ! response.success ) {
 					$( '.cf-images-progress' ).hide();
-					$( '.media_page_cf-images input.button' ).prop( 'disabled', true );
+					$( '.media_page_cf-images input.button' ).prop( 'disabled', false );
 					showNotice( response.data, 'error' );
 					return;
 				}
@@ -211,8 +211,8 @@ import '../css/app.scss';
 
 				if ( response.data.currentStep < response.data.totalSteps ) {
 					runProgressBar( action, response.data.currentStep, response.data.totalSteps, progress );
-				} else if ( 'cf_images_upload_images' === action ) {
-					window.location.search += '&deleted=updated';
+				} else if ( 'upload' === action ) {
+					window.location.search += '&updated=true';
 				} else {
 					window.location.search += '&deleted=true';
 				}
