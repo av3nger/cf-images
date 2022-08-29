@@ -152,8 +152,7 @@ class Core {
 
 		if ( wp_doing_ajax() ) {
 			add_action( 'wp_ajax_cf_images_offload_image', array( $this, 'ajax_offload_image' ) );
-			add_action( 'wp_ajax_cf_images_remove_images', array( $this, 'ajax_remove_images' ) );
-			add_action( 'wp_ajax_cf_images_upload_images', array( $this, 'ajax_upload_images' ) );
+			add_action( 'wp_ajax_cf_images_bulk_process', array( $this, 'ajax_bulk_process' ) );
 		}
 
 		add_action( 'admin_init', array( $this, 'maybe_redirect_to_plugin_page' ) );
@@ -199,6 +198,23 @@ class Core {
 	}
 
 	/**
+	 * Check if this is a valid AJAX request coming from the user.
+	 *
+	 * @since 1.0.1
+	 *
+	 * @return void
+	 */
+	private function check_ajax_request() {
+
+		check_ajax_referer( 'cf-images-nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) || ! isset( $_POST['data'] ) ) {
+			wp_die();
+		}
+
+	}
+
+	/**
 	 * Offload selected image to Cloudflare Images.
 	 *
 	 * @since 1.0.0
@@ -207,11 +223,7 @@ class Core {
 	 */
 	public function ajax_offload_image() {
 
-		check_ajax_referer( 'cf-images-nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) || ! isset( $_POST['data'] ) ) {
-			wp_die();
-		}
+		$this->check_ajax_request();
 
 		$attachment_id = (int) filter_input( INPUT_POST, 'data', FILTER_SANITIZE_NUMBER_INT );
 		$this->upload_image( wp_get_attachment_metadata( $attachment_id ), $attachment_id, 'single' );
@@ -225,22 +237,22 @@ class Core {
 	}
 
 	/**
-	 * Remove all images from Cloudflare progress bar handler.
+	 * Bulk upload or bulk remove images progress bar handler.
 	 *
-	 * @since 1.0.0
+	 * @since 1.0.1  Combined from ajax_remove_images() and ajax_upload_images().
 	 *
 	 * @return void
 	 */
-	public function ajax_remove_images() {
+	public function ajax_bulk_process() {
 
-		check_ajax_referer( 'cf-images-nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) || ! isset( $_POST['data'] ) ) {
-			wp_die();
-		}
+		$this->check_ajax_request();
 
 		// Data sanitized later in code.
 		$progress = filter_input( INPUT_POST, 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+
+		if ( ! isset( $progress['action'] ) ) {
+			wp_send_json_error( esc_html__( 'Incorrect action call', 'cf-images' ) );
+		}
 
 		if ( ! isset( $progress['currentStep'] ) || ! isset( $progress['totalSteps'] ) ) {
 			wp_send_json_error( esc_html__( 'No current step or total steps defined', 'cf-images' ) );
@@ -249,13 +261,15 @@ class Core {
 		$step  = (int) $progress['currentStep'];
 		$total = (int) $progress['totalSteps'];
 
+		$action = sanitize_text_field( $progress['action'] );
+
+		if ( ! in_array( $action, array( 'upload', 'remove' ), true ) ) {
+			wp_send_json_error( esc_html__( 'Unsupported action', 'cf-images' ) );
+		}
+
 		// Progress just started.
 		if ( 0 === $step && 0 === $total ) {
-			$args = array(
-				'post_type'   => 'attachment',
-				'post_status' => 'inherit',
-				'meta_key'    => '_cloudflare_image_id', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
-			);
+			$args = $this->get_wp_query_args( $action );
 
 			// Look for images that have been offloaded.
 			$images = new WP_Query( $args );
@@ -264,62 +278,65 @@ class Core {
 
 		$step++;
 
-		// We have some data left.
-		if ( $step <= $total ) {
-			$args = array(
-				'post_type'      => 'attachment',
-				'post_status'    => 'inherit',
-				'meta_key'       => '_cloudflare_image_id', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
-				'posts_per_page' => 1,
-			);
+		// Something is wrong with the steps count.
+		if ( $step > $total ) {
+			wp_send_json_error( esc_html__( 'Step error', 'cf-images' ) );
+		}
 
-			// Look for images that have been offloaded.
-			$images = new WP_Query( $args );
-			$this->delete_image( $images->post->ID, $images->post );
+		$args = $this->get_wp_query_args( $action, true );
+
+		// Look for images that have been offloaded.
+		$image = new WP_Query( $args );
+
+		if ( 'upload' === $action ) {
+			$this->upload_image( wp_get_attachment_metadata( $image->post->ID ), $image->post->ID, 'single' );
+
+			// If there's an error with offloading, we need to mark such an image as skipped.
+			if ( is_wp_error( $this->error ) ) {
+				update_post_meta( $image->post->ID, '_cloudflare_image_skip', true );
+				$this->error = false; // Reset the error.
+			}
+		} else {
+			$this->delete_image( $image->post->ID, $image->post );
 		}
 
 		$response = array(
 			'currentStep' => $step,
 			'totalSteps'  => $total,
 			'status'      => sprintf( /* translators: %1$d - current image, %2$d - total number of images */
-				esc_html__( 'Removing image %1$d from %2$d...', 'cf-images' ),
+				esc_html__( 'Processing image %1$d out of %2$d...', 'cf-images' ),
 				(int) $step,
 				$total
 			),
 		);
 
 		wp_send_json_success( $response );
+
 	}
 
 	/**
-	 * Upload all images to Cloudflare progress bar handler.
+	 * Get arguments for WP_Query call.
 	 *
-	 * @since 1.0.0
+	 * @since 1.0.1
 	 *
-	 * @return void
+	 * @param string $action  Action name. Accepts: upload|remove.
+	 * @param bool   $single  Fetch single entry? Default: fetch all.
+	 *
+	 * @return string[]
 	 */
-	public function ajax_upload_images() {
-
-		check_ajax_referer( 'cf-images-nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) || ! isset( $_POST['data'] ) ) {
-			wp_die();
-		}
-
-		// Data sanitized later in code.
-		$progress = filter_input( INPUT_POST, 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
-
-		if ( ! isset( $progress['currentStep'] ) || ! isset( $progress['totalSteps'] ) ) {
-			wp_send_json_error( esc_html__( 'No current step or total steps defined', 'cf-images' ) );
-		}
-
-		$step  = (int) $progress['currentStep'];
-		$total = (int) $progress['totalSteps'];
+	private function get_wp_query_args( string $action, bool $single = false ): array {
 
 		$args = array(
 			'post_type'   => 'attachment',
 			'post_status' => 'inherit',
-			'meta_query'  => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+		);
+
+		if ( $single ) {
+			$args['posts_per_page'] = 1;
+		}
+
+		if ( 'upload' === $action ) {
+			$args['meta_query'] = array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 				array(
 					'key'     => '_cloudflare_image_id',
 					'compare' => 'NOT EXISTS',
@@ -328,44 +345,14 @@ class Core {
 					'key'     => '_cloudflare_image_skip',
 					'compare' => 'NOT EXISTS',
 				),
-			),
-		);
-
-		// Progress just started.
-		if ( 0 === $step && 0 === $total ) {
-			// Look for images that have been offloaded.
-			$images = new WP_Query( $args );
-			$total  = $images->found_posts;
+			);
 		}
 
-		$step++;
-
-		// We have some data left.
-		if ( $step <= $total ) {
-			$args['posts_per_page'] = 1;
-
-			// Look for images that have been offloaded.
-			$image = new WP_Query( $args );
-			$this->upload_image( wp_get_attachment_metadata( $image->post->ID ), $image->post->ID, 'single' );
-
-			// If there's an error with offloading, we need to mark such an image as skipped.
-			if ( is_wp_error( $this->error ) ) {
-				update_post_meta( $image->post->ID, '_cloudflare_image_skip', true );
-				$this->error = false; // Reset the error.
-			}
+		if ( 'remove' === $action ) {
+			$args['meta_key'] = '_cloudflare_image_id'; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 		}
 
-		$response = array(
-			'currentStep' => $step,
-			'totalSteps'  => $total,
-			'status'      => sprintf( /* translators: %1$d - current image, %2$d - total number of images */
-				esc_html__( 'Uploading image %1$d from %2$d...', 'cf-images' ),
-				(int) $step,
-				$total
-			),
-		);
-
-		wp_send_json_success( $response );
+		return $args;
 
 	}
 

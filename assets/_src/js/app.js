@@ -114,7 +114,7 @@ import '../css/app.scss';
 		e.preventDefault();
 
 		$( '.media_page_cf-images input.button' ).prop( 'disabled', true );
-		runProgressBar( 'cf_images_upload_images' );
+		runProgressBar( 'upload' );
 	} );
 
 	/**
@@ -126,7 +126,7 @@ import '../css/app.scss';
 		e.preventDefault();
 
 		$( '.media_page_cf-images input.button' ).prop( 'disabled', true );
-		runProgressBar( 'cf_images_remove_images' );
+		runProgressBar( 'remove' );
 	} );
 
 	/**
@@ -192,10 +192,11 @@ import '../css/app.scss';
 
 		const args = {
 			currentStep,
-			totalSteps
+			totalSteps,
+			action
 		};
 
-		post( action, args )
+		post( 'cf_images_bulk_process', args )
 			.then( ( response ) => {
 				if ( ! response.success ) {
 					$( '.cf-images-progress' ).hide();
