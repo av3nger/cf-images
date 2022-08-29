@@ -301,9 +301,16 @@ class Admin {
 			return;
 		}
 
+		$supported_mimes = array( 'image/jpeg', 'image/png', 'image/gif', 'image/webp' );
+
+		if ( ! in_array( get_post_mime_type( $post_id ), $supported_mimes, true ) ) {
+			esc_html_e( 'Unsupported format', 'cf-images' );
+			return;
+		}
+
 		printf( /* translators: %1$s - opening <a> tag, %2$s - closing </a> tag */
 			esc_html__( '%1$sOffload%2$s', 'cf-images' ),
-			'<a href="#" class="cf-images-offload" data-id="' . (int) $post_id . '">',
+			'<a href="#" class="cf-images-offload" data-id="' . esc_attr( $post_id ) . '">',
 			'</a>'
 		);
 

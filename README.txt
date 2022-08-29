@@ -76,6 +76,7 @@ If something is not working for you, please let me know by creating a support ti
 = 1.0.1 =
 
 * Fix: PHP fatal error with Spectra plugin
+* Enhance: Better handling of unsupported media types
 
 = 1.0.0 =
 First release
