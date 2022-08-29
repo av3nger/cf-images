@@ -75,13 +75,13 @@ class Settings {
 		if ( ! isset( $form['disable-sizes'] ) ) {
 			delete_option( 'cf-images-disable-generation' );
 		} else {
-			update_option( 'cf-images-disable-generation', (bool) $form['disable-sizes'] );
+			update_option( 'cf-images-disable-generation', (bool) $form['disable-sizes'], false );
 		}
 
 		if ( ! isset( $form['custom-domain'] ) ) {
 			delete_option( 'cf-images-custom-domain' );
 		} else {
-			update_option( 'cf-images-custom-domain', (bool) $form['custom-domain'] );
+			update_option( 'cf-images-custom-domain', (bool) $form['custom-domain'], false );
 		}
 
 		wp_send_json_success();
@@ -126,7 +126,7 @@ class Settings {
 
 		$this->write( $path_to_wp_config, $new_file_content );
 
-		update_option( 'cf-images-config-written', ! empty( $value ) );
+		update_option( 'cf-images-config-written', ! empty( $value ), false );
 
 	}
 

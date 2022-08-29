@@ -401,7 +401,7 @@ class Core {
 
 		try {
 			$variant->toggle_flexible( true );
-			update_option( 'cf-images-setup-done', true );
+			update_option( 'cf-images-setup-done', true, false );
 		} catch ( Exception $e ) {
 			$this->error = new WP_Error( $e->getCode(), $e->getMessage() );
 		}
@@ -486,7 +486,7 @@ class Core {
 
 		$stats['synced'] += $count;
 
-		update_option( 'cf-images-stats', $stats );
+		update_option( 'cf-images-stats', $stats, false );
 
 	}
 

@@ -32,7 +32,7 @@ class Activator {
 	 */
 	public static function activate() {
 
-		update_option( 'cf-images-install-notice', true );
+		update_option( 'cf-images-install-notice', true, false );
 
 		$activate = filter_input( INPUT_POST, 'action', FILTER_UNSAFE_RAW );
 		$checked  = filter_input( INPUT_POST, 'checked', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
