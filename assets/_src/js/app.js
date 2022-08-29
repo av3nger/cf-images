@@ -59,12 +59,15 @@ import '../css/app.scss';
 			return;
 		}
 
+		$( '.media_page_cf-images input.button' ).prop( 'disabled', true );
+
 		const spinner = $( this ).find( '.spinner' );
 		spinner.toggleClass( 'is-active' );
 
 		post( action, $( this ).serialize() )
 			.then( ( response ) => {
 				if ( ! response.success ) {
+					$( '.media_page_cf-images input.button' ).prop( 'disabled', false );
 					spinner.toggleClass( 'is-active' );
 					if ( 'undefined' !== typeof response.data ) {
 						showNotice( response.data, 'error' );
@@ -109,7 +112,9 @@ import '../css/app.scss';
 	 */
 	$( '#cf-images-upload-all' ).on( 'click', function( e ) {
 		e.preventDefault();
-		runProgressBar( 'cf_images_upload_images' );
+
+		$( '.media_page_cf-images input.button' ).prop( 'disabled', true );
+		runProgressBar( 'upload' );
 	} );
 
 	/**
@@ -119,7 +124,9 @@ import '../css/app.scss';
 	 */
 	$( '#cf-images-remove-all' ).on( 'click', function( e ) {
 		e.preventDefault();
-		runProgressBar( 'cf_images_remove_images' );
+
+		$( '.media_page_cf-images input.button' ).prop( 'disabled', true );
+		runProgressBar( 'remove' );
 	} );
 
 	/**
@@ -185,13 +192,15 @@ import '../css/app.scss';
 
 		const args = {
 			currentStep,
-			totalSteps
+			totalSteps,
+			action
 		};
 
-		post( action, args )
+		post( 'cf_images_bulk_process', args )
 			.then( ( response ) => {
 				if ( ! response.success ) {
 					$( '.cf-images-progress' ).hide();
+					$( '.media_page_cf-images input.button' ).prop( 'disabled', false );
 					showNotice( response.data, 'error' );
 					return;
 				}
@@ -202,8 +211,8 @@ import '../css/app.scss';
 
 				if ( response.data.currentStep < response.data.totalSteps ) {
 					runProgressBar( action, response.data.currentStep, response.data.totalSteps, progress );
-				} else if ( 'cf_images_upload_images' === action ) {
-					window.location.search += '&deleted=updated';
+				} else if ( 'upload' === action ) {
+					window.location.search += '&updated=true';
 				} else {
 					window.location.search += '&deleted=true';
 				}

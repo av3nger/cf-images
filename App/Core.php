@@ -152,8 +152,7 @@ class Core {
 
 		if ( wp_doing_ajax() ) {
 			add_action( 'wp_ajax_cf_images_offload_image', array( $this, 'ajax_offload_image' ) );
-			add_action( 'wp_ajax_cf_images_remove_images', array( $this, 'ajax_remove_images' ) );
-			add_action( 'wp_ajax_cf_images_upload_images', array( $this, 'ajax_upload_images' ) );
+			add_action( 'wp_ajax_cf_images_bulk_process', array( $this, 'ajax_bulk_process' ) );
 		}
 
 		add_action( 'admin_init', array( $this, 'maybe_redirect_to_plugin_page' ) );
@@ -199,6 +198,23 @@ class Core {
 	}
 
 	/**
+	 * Check if this is a valid AJAX request coming from the user.
+	 *
+	 * @since 1.0.1
+	 *
+	 * @return void
+	 */
+	private function check_ajax_request() {
+
+		check_ajax_referer( 'cf-images-nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) || ! isset( $_POST['data'] ) ) {
+			wp_die();
+		}
+
+	}
+
+	/**
 	 * Offload selected image to Cloudflare Images.
 	 *
 	 * @since 1.0.0
@@ -207,11 +223,7 @@ class Core {
 	 */
 	public function ajax_offload_image() {
 
-		check_ajax_referer( 'cf-images-nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) || ! isset( $_POST['data'] ) ) {
-			wp_die();
-		}
+		$this->check_ajax_request();
 
 		$attachment_id = (int) filter_input( INPUT_POST, 'data', FILTER_SANITIZE_NUMBER_INT );
 		$this->upload_image( wp_get_attachment_metadata( $attachment_id ), $attachment_id, 'single' );
@@ -225,22 +237,22 @@ class Core {
 	}
 
 	/**
-	 * Remove all images from Cloudflare progress bar handler.
+	 * Bulk upload or bulk remove images progress bar handler.
 	 *
-	 * @since 1.0.0
+	 * @since 1.0.1  Combined from ajax_remove_images() and ajax_upload_images().
 	 *
 	 * @return void
 	 */
-	public function ajax_remove_images() {
+	public function ajax_bulk_process() {
 
-		check_ajax_referer( 'cf-images-nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) || ! isset( $_POST['data'] ) ) {
-			wp_die();
-		}
+		$this->check_ajax_request();
 
 		// Data sanitized later in code.
 		$progress = filter_input( INPUT_POST, 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+
+		if ( ! isset( $progress['action'] ) ) {
+			wp_send_json_error( esc_html__( 'Incorrect action call', 'cf-images' ) );
+		}
 
 		if ( ! isset( $progress['currentStep'] ) || ! isset( $progress['totalSteps'] ) ) {
 			wp_send_json_error( esc_html__( 'No current step or total steps defined', 'cf-images' ) );
@@ -249,123 +261,104 @@ class Core {
 		$step  = (int) $progress['currentStep'];
 		$total = (int) $progress['totalSteps'];
 
+		$action = sanitize_text_field( $progress['action'] );
+
+		if ( ! in_array( $action, array( 'upload', 'remove' ), true ) ) {
+			wp_send_json_error( esc_html__( 'Unsupported action', 'cf-images' ) );
+		}
+
 		// Progress just started.
 		if ( 0 === $step && 0 === $total ) {
-			$args = array(
-				'post_type'   => 'attachment',
-				'post_status' => 'inherit',
-				'meta_key'    => '_cloudflare_image_id', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
-			);
+			$args = $this->get_wp_query_args( $action );
 
 			// Look for images that have been offloaded.
 			$images = new WP_Query( $args );
-			$total  = $images->found_posts;
+
+			// No available images found.
+			if ( 0 === $images->found_posts ) {
+				wp_send_json_error( __( 'No images found', 'cf-images' ) );
+			}
+
+			$total = $images->found_posts;
 		}
 
 		$step++;
 
-		// We have some data left.
-		if ( $step <= $total ) {
-			$args = array(
-				'post_type'      => 'attachment',
-				'post_status'    => 'inherit',
-				'meta_key'       => '_cloudflare_image_id', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
-				'posts_per_page' => 1,
-			);
+		// Something is wrong with the steps count.
+		if ( $step > $total ) {
+			wp_send_json_error( esc_html__( 'Step error', 'cf-images' ) );
+		}
 
-			// Look for images that have been offloaded.
-			$images = new WP_Query( $args );
-			$this->delete_image( $images->post->ID, $images->post );
+		$args = $this->get_wp_query_args( $action, true );
+
+		// Look for images that have been offloaded.
+		$image = new WP_Query( $args );
+
+		if ( 'upload' === $action ) {
+			$this->upload_image( wp_get_attachment_metadata( $image->post->ID ), $image->post->ID, 'single' );
+
+			// If there's an error with offloading, we need to mark such an image as skipped.
+			if ( is_wp_error( $this->error ) ) {
+				update_post_meta( $image->post->ID, '_cloudflare_image_skip', true );
+				$this->error = false; // Reset the error.
+			}
+		} else {
+			$this->delete_image( $image->post->ID, $image->post );
 		}
 
 		$response = array(
 			'currentStep' => $step,
 			'totalSteps'  => $total,
 			'status'      => sprintf( /* translators: %1$d - current image, %2$d - total number of images */
-				esc_html__( 'Removing image %1$d from %2$d...', 'cf-images' ),
+				esc_html__( 'Processing image %1$d out of %2$d...', 'cf-images' ),
 				(int) $step,
 				$total
 			),
 		);
 
 		wp_send_json_success( $response );
+
 	}
 
 	/**
-	 * Upload all images to Cloudflare progress bar handler.
+	 * Get arguments for WP_Query call.
 	 *
-	 * @since 1.0.0
+	 * @since 1.0.1
 	 *
-	 * @return void
+	 * @param string $action  Action name. Accepts: upload|remove.
+	 * @param bool   $single  Fetch single entry? Default: fetch all.
+	 *
+	 * @return string[]
 	 */
-	public function ajax_upload_images() {
+	private function get_wp_query_args( string $action, bool $single = false ): array {
 
-		check_ajax_referer( 'cf-images-nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) || ! isset( $_POST['data'] ) ) {
-			wp_die();
-		}
-
-		// Data sanitized later in code.
-		$progress = filter_input( INPUT_POST, 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
-
-		if ( ! isset( $progress['currentStep'] ) || ! isset( $progress['totalSteps'] ) ) {
-			wp_send_json_error( esc_html__( 'No current step or total steps defined', 'cf-images' ) );
-		}
-
-		$step  = (int) $progress['currentStep'];
-		$total = (int) $progress['totalSteps'];
-
-		// Progress just started.
-		if ( 0 === $step && 0 === $total ) {
-			$args = array(
-				'post_type'   => 'attachment',
-				'post_status' => 'inherit',
-				'meta_query'  => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
-					array(
-						'key'     => '_cloudflare_image_id',
-						'compare' => 'NOT EXISTS',
-					),
-				),
-			);
-
-			// Look for images that have been offloaded.
-			$images = new WP_Query( $args );
-			$total  = $images->found_posts;
-		}
-
-		$step++;
-
-		// We have some data left.
-		if ( $step <= $total ) {
-			$args = array(
-				'post_type'      => 'attachment',
-				'post_status'    => 'inherit',
-				'meta_query'     => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
-					array(
-						'key'     => '_cloudflare_image_id',
-						'compare' => 'NOT EXISTS',
-					),
-				),
-				'posts_per_page' => 1,
-			);
-
-			// Look for images that have been offloaded.
-			$image = new WP_Query( $args );
-			$this->upload_image( wp_get_attachment_metadata( $image->post->ID ), $image->post->ID, 'single' );
-		}
-
-		$response = array(
-			'currentStep' => $step,
-			'totalSteps'  => $total,
-			'status'      => sprintf( /* translators: %1$d - current image, %2$d - total number of images */
-				esc_html__( 'Removing image %1$d from %2$d...', 'cf-images' ),
-				(int) $step,
-				$total
-			),
+		$args = array(
+			'post_type'   => 'attachment',
+			'post_status' => 'inherit',
 		);
 
-		wp_send_json_success( $response );
+		if ( $single ) {
+			$args['posts_per_page'] = 1;
+		}
+
+		if ( 'upload' === $action ) {
+			$args['meta_query'] = array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+				array(
+					'key'     => '_cloudflare_image_id',
+					'compare' => 'NOT EXISTS',
+				),
+				array(
+					'key'     => '_cloudflare_image_skip',
+					'compare' => 'NOT EXISTS',
+				),
+			);
+		}
+
+		if ( 'remove' === $action ) {
+			$args['meta_key'] = '_cloudflare_image_id'; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+		}
+
+		return $args;
 
 	}
 
@@ -408,7 +401,7 @@ class Core {
 
 		try {
 			$variant->toggle_flexible( true );
-			update_option( 'cf-images-setup-done', true );
+			update_option( 'cf-images-setup-done', true, false );
 		} catch ( Exception $e ) {
 			$this->error = new WP_Error( $e->getCode(), $e->getMessage() );
 		}
@@ -445,6 +438,16 @@ class Core {
 	 */
 	public function upload_image( array $metadata, int $attachment_id, string $context ): array {
 
+		if ( ! isset( $metadata['file'] ) ) {
+			$this->error = new WP_Error( 404, __( 'Media file not found', 'cf-images' ) );
+			return $metadata;
+		}
+
+		if ( ! wp_attachment_is_image( $attachment_id ) ) {
+			$this->error = new WP_Error( 415, __( 'Unsupported media type', 'cf-images' ) );
+			return $metadata;
+		}
+
 		$image = new Api\Image();
 		$dir   = wp_get_upload_dir();
 		$path  = trailingslashit( $dir['basedir'] ) . $metadata['file'];
@@ -453,6 +456,7 @@ class Core {
 
 		try {
 			$results = $image->upload( $path, $attachment_id, $name );
+			$this->update_stats( 1 );
 			update_post_meta( $attachment_id, '_cloudflare_image_id', $results->id );
 			$this->maybe_save_hash( $results->variants );
 		} catch ( Exception $e ) {
@@ -460,6 +464,29 @@ class Core {
 		}
 
 		return $metadata;
+
+	}
+
+	/**
+	 * Update image stats.
+	 *
+	 * @since 1.0.1
+	 *
+	 * @param int $count  Add or subtract number from `synced` image count.
+	 *
+	 * @return void
+	 */
+	private function update_stats( int $count ) {
+
+		$default = array(
+			'synced' => 0,
+		);
+
+		$stats = get_option( 'cf-images-stats', $default );
+
+		$stats['synced'] += $count;
+
+		update_option( 'cf-images-stats', $stats, false );
 
 	}
 
@@ -510,7 +537,9 @@ class Core {
 
 		try {
 			$image->delete( $id );
+			$this->update_stats( -1 );
 			delete_post_meta( $post_id, '_cloudflare_image_id' );
+			delete_post_meta( $post_id, '_cloudflare_image_skip' );
 		} catch ( Exception $e ) {
 			$this->error = new WP_Error( $e->getCode(), $e->getMessage() );
 		}
@@ -534,9 +563,9 @@ class Core {
 	 * @param string|int[] $size           Requested image size. Can be any registered image size name, or
 	 *                                     an array of width and height values in pixels (in that order).
 	 *
-	 * @return array
+	 * @return array|false
 	 */
-	public function get_attachment_image_src( $image, int $attachment_id, $size ): array {
+	public function get_attachment_image_src( $image, int $attachment_id, $size ) {
 
 		$domain = 'https://imagedelivery.net';
 		if ( get_option( 'cf-images-custom-domain', false ) ) {

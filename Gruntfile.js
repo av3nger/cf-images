@@ -34,12 +34,12 @@ module.exports = function( grunt ) {
 		compress: {
 			main: {
 				options: {
-					archive: './build/cf-images-<%= pkg.version %>.zip'
+					archive: './build/<%= pkg.name %>-<%= pkg.version %>.zip'
 				},
 				expand: true,
-				cwd: 'build/cf-images/',
+				cwd: 'build/<%= pkg.name %>/',
 				src: [ '**/*' ],
-				dest: 'cf-images/',
+				dest: '<%= pkg.name %>/',
 			},
 		},
 	} );

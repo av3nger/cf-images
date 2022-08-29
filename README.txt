@@ -1,5 +1,5 @@
-=== CF Images - Offload, Store, Resize & Optimize Images  ===
-Plugin Name: CF Images - Offload, Store, Resize & Optimize Images
+=== Offload, Store, Resize & Optimize Images with CloudFlare  ===
+Plugin Name: Offload, Store, Resize & Optimize Images with CloudFlare
 Contributors: vanyukov
 Tags: cdn, images, offload, cloudflare
 Donate link: https://www.paypal.com/donate/?business=JRR6QPRGTZ46N&no_recurring=0&item_name=Help+support+the+development+of+the+Cloudflare+Images+plugin+for+WordPress&currency_code=AUD
@@ -72,6 +72,15 @@ If something is not working for you, please let me know by creating a support ti
 2. Various options
 
 == Changelog ==
+
+= 1.0.1 =
+
+* New: Add image statistics
+* Enhance: Better handling of unsupported media types
+* Enhance: Improve UI and UX
+* Fix: Failed bulk offload if an image path is not defined in metadata
+* Fix: PHP fatal error with Spectra plugin
+* Fix: Incorrect status during bulk offload
 
 = 1.0.0 =
 First release
