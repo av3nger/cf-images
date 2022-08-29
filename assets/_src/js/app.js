@@ -59,12 +59,15 @@ import '../css/app.scss';
 			return;
 		}
 
+		$( '.media_page_cf-images input.button' ).prop( 'disabled', true );
+
 		const spinner = $( this ).find( '.spinner' );
 		spinner.toggleClass( 'is-active' );
 
 		post( action, $( this ).serialize() )
 			.then( ( response ) => {
 				if ( ! response.success ) {
+					$( '.media_page_cf-images input.button' ).prop( 'disabled', false );
 					spinner.toggleClass( 'is-active' );
 					if ( 'undefined' !== typeof response.data ) {
 						showNotice( response.data, 'error' );
@@ -109,6 +112,8 @@ import '../css/app.scss';
 	 */
 	$( '#cf-images-upload-all' ).on( 'click', function( e ) {
 		e.preventDefault();
+
+		$( '.media_page_cf-images input.button' ).prop( 'disabled', true );
 		runProgressBar( 'cf_images_upload_images' );
 	} );
 
@@ -119,6 +124,8 @@ import '../css/app.scss';
 	 */
 	$( '#cf-images-remove-all' ).on( 'click', function( e ) {
 		e.preventDefault();
+
+		$( '.media_page_cf-images input.button' ).prop( 'disabled', true );
 		runProgressBar( 'cf_images_remove_images' );
 	} );
 
@@ -192,6 +199,7 @@ import '../css/app.scss';
 			.then( ( response ) => {
 				if ( ! response.success ) {
 					$( '.cf-images-progress' ).hide();
+					$( '.media_page_cf-images input.button' ).prop( 'disabled', true );
 					showNotice( response.data, 'error' );
 					return;
 				}
