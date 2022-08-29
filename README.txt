@@ -1,5 +1,5 @@
-=== CF Images - Offload, Store, Resize & Optimize Images  ===
-Plugin Name: CF Images - Offload, Store, Resize & Optimize Images
+=== Offload, Store, Resize & Optimize Images with CloudFlare  ===
+Plugin Name: Offload, Store, Resize & Optimize Images with CloudFlare
 Contributors: vanyukov
 Tags: cdn, images, offload, cloudflare
 Donate link: https://www.paypal.com/donate/?business=JRR6QPRGTZ46N&no_recurring=0&item_name=Help+support+the+development+of+the+Cloudflare+Images+plugin+for+WordPress&currency_code=AUD

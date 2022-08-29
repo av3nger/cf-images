@@ -1,6 +1,6 @@
 <?php
 /**
- * Offload media to Cloudflare Images
+ * Offload, Store, Resize & Optimize Images with CloudFlare
  *
  * This file is read by WordPress to generate the plugin information in the plugin
  * Admin area. This file also App all the dependencies used by the plugin, registers
@@ -11,7 +11,7 @@
  * @package           CF_Images
  *
  * @wordpress-plugin
- * Plugin Name:       CF Images
+ * Plugin Name:       Offload Images to Cloudflare
  * Plugin URI:        https://vcore.ru
  * Description:       Offload media library images to the `Cloudflare Images` service.
  * Version:           1.0.1-beta.1
