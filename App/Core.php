@@ -172,7 +172,7 @@ class Core {
 
 		// Replace images.
 		add_filter( 'wp_get_attachment_image_src', array( $this, 'get_attachment_image_src' ), 10, 3 );
-		add_filter( 'wp_prepare_attachment_for_js', array( $this, 'prepare_attachment_for_js' ), 10, 3 );
+		add_filter( 'wp_prepare_attachment_for_js', array( $this, 'prepare_attachment_for_js' ), 10, 2 );
 		add_filter( 'wp_calculate_image_srcset', array( $this, 'calculate_image_srcset' ), 10, 5 );
 
 	}
@@ -621,13 +621,12 @@ class Core {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array       $response    Array of prepared attachment data. @see wp_prepare_attachment_for_js().
-	 * @param WP_Post     $attachment  Attachment object.
-	 * @param array|false $meta        Array of attachment metadata, or false if there is none.
+	 * @param array   $response    Array of prepared attachment data. @see wp_prepare_attachment_for_js().
+	 * @param WP_Post $attachment  Attachment object.
 	 *
 	 * @return array
 	 */
-	public function prepare_attachment_for_js( array $response, WP_Post $attachment, $meta ): array {
+	public function prepare_attachment_for_js( array $response, WP_Post $attachment ): array {
 
 		if ( empty( $response['sizes'] ) ) {
 			return $response;
