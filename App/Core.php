@@ -167,7 +167,7 @@ class Core {
 		}
 
 		// Image actions.
-		add_filter( 'wp_async_wp_generate_attachment_metadata', array( $this, 'upload_image' ), 10, 3 );
+		add_filter( 'wp_async_wp_generate_attachment_metadata', array( $this, 'upload_image' ), 10, 2 );
 		add_action( 'delete_attachment', array( $this, 'delete_image' ), 10, 2 );
 
 		// Replace images.
@@ -226,7 +226,7 @@ class Core {
 		$this->check_ajax_request();
 
 		$attachment_id = (int) filter_input( INPUT_POST, 'data', FILTER_SANITIZE_NUMBER_INT );
-		$this->upload_image( wp_get_attachment_metadata( $attachment_id ), $attachment_id, 'single' );
+		$this->upload_image( wp_get_attachment_metadata( $attachment_id ), $attachment_id );
 
 		if ( is_wp_error( $this->error ) ) {
 			wp_send_json_error( $this->error->get_error_message() );
@@ -295,7 +295,7 @@ class Core {
 		$image = new WP_Query( $args );
 
 		if ( 'upload' === $action ) {
-			$this->upload_image( wp_get_attachment_metadata( $image->post->ID ), $image->post->ID, 'single' );
+			$this->upload_image( wp_get_attachment_metadata( $image->post->ID ), $image->post->ID );
 
 			// If there's an error with offloading, we need to mark such an image as skipped.
 			if ( is_wp_error( $this->error ) ) {
@@ -429,14 +429,12 @@ class Core {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array  $metadata       An array of attachment meta data.
-	 * @param int    $attachment_id  Current attachment ID.
-	 * @param string $context        Additional context. Can be 'create' when metadata was initially created for new attachment
-	 *                               or 'update' when the metadata was updated.
+	 * @param array $metadata       An array of attachment meta data.
+	 * @param int   $attachment_id  Current attachment ID.
 	 *
 	 * @return array
 	 */
-	public function upload_image( array $metadata, int $attachment_id, string $context ): array {
+	public function upload_image( array $metadata, int $attachment_id ): array {
 
 		if ( ! isset( $metadata['file'] ) ) {
 			$this->error = new WP_Error( 404, __( 'Media file not found', 'cf-images' ) );
