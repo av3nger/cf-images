@@ -35,7 +35,7 @@ class Api {
 	 * @access protected
 	 * @var string
 	 */
-	protected $url = 'https://api.cloudflare.com/client/v4/accounts/';
+	protected $api_url = 'https://api.cloudflare.com/client/v4/accounts/';
 
 	/**
 	 * Endpoint for API call.
@@ -53,7 +53,7 @@ class Api {
 	 * @access private
 	 * @var null|string|array
 	 */
-	private $body = null;
+	private $request_body = null;
 
 	/**
 	 * Method used to do API call.
@@ -95,8 +95,8 @@ class Api {
 	 *
 	 * @return void
 	 */
-	protected function set_body( $data ) {
-		$this->body = $data;
+	protected function set_request_body( $data ) {
+		$this->request_body = $data;
 	}
 
 	/**
@@ -142,8 +142,8 @@ class Api {
 			),
 		);
 
-		if ( isset( $this->body ) && in_array( $args['method'], array( 'POST', 'UPLOAD', 'PATCH' ), true ) ) {
-			$args['body'] = $this->body;
+		if ( isset( $this->request_body ) && in_array( $args['method'], array( 'POST', 'UPLOAD', 'PATCH' ), true ) ) {
+			$args['body'] = $this->request_body;
 		}
 
 		return $args;
@@ -161,7 +161,7 @@ class Api {
 	 */
 	protected function request(): stdClass {
 
-		$url  = $this->url . CF_IMAGES_ACCOUNT_ID . '/images/v1' . $this->endpoint;
+		$url  = $this->api_url . CF_IMAGES_ACCOUNT_ID . '/images/v1' . $this->endpoint;
 		$args = $this->get_args();
 
 		if ( 'POST' === $args['method'] || 'DELETE' === $args['method'] || 'PATCH' === $args['method'] ) {

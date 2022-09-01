@@ -33,6 +33,7 @@ $stats = get_option( 'cf-images-stats', array( 'synced' => 0 ) );
 
 					<form class="inside" id="cf-images-form" data-type="settings">
 						<table class="form-table">
+							<caption class="screen-reader-text"><?php esc_html_e( 'Settings table', 'cf-images' ); ?></caption>
 							<tbody>
 							<tr>
 								<th scope="row">

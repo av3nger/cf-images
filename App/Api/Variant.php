@@ -52,7 +52,7 @@ class Variant extends Api {
 		$this->set_method( 'PATCH' );
 		$this->set_timeout( 2 );
 		$this->set_endpoint( '/config' );
-		$this->set_body( wp_json_encode( $data ) );
+		$this->set_request_body( wp_json_encode( $data ) );
 
 		return $this->request();
 

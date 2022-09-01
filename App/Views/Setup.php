@@ -39,6 +39,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 	<form id="cf-images-form" data-type="setup">
 		<table class="form-table">
+			<caption class="screen-reader-text"><?php esc_html_e( 'Setup table', 'cf-images' ); ?></caption>
 			<tbody>
 			<tr>
 				<th scope="row">
