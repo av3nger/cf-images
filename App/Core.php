@@ -168,7 +168,7 @@ class Core {
 
 		// Image actions.
 		add_filter( 'wp_async_wp_generate_attachment_metadata', array( $this, 'upload_image' ), 10, 2 );
-		add_action( 'delete_attachment', array( $this, 'delete_image' ), 10, 2 );
+		add_action( 'delete_attachment', array( $this, 'delete_image' ) );
 
 		// Replace images.
 		add_filter( 'wp_get_attachment_image_src', array( $this, 'get_attachment_image_src' ), 10, 3 );
@@ -303,7 +303,7 @@ class Core {
 				$this->error = false; // Reset the error.
 			}
 		} else {
-			$this->delete_image( $image->post->ID, $image->post );
+			$this->delete_image( $image->post->ID );
 		}
 
 		$response = array(
@@ -518,12 +518,11 @@ class Core {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int     $post_id  Attachment ID.
-	 * @param WP_Post $post     Post object.
+	 * @param int $post_id  Attachment ID.
 	 *
 	 * @return void
 	 */
-	public function delete_image( int $post_id, WP_Post $post ) {
+	public function delete_image( int $post_id ) {
 
 		$id = get_post_meta( $post_id, '_cloudflare_image_id', true );
 
