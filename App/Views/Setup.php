@@ -38,7 +38,7 @@ if ( ! defined( 'WPINC' ) ) {
 	<p><?php esc_html_e( 'Note: The form will attempt to automatically set the required defines in wp-config.php file.', 'cf-images' ); ?></p>
 
 	<form id="cf-images-form" data-type="setup">
-		<table class="form-table" role="presentation">
+		<table class="form-table">
 			<tbody>
 			<tr>
 				<th scope="row">

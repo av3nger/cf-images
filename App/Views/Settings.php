@@ -32,7 +32,7 @@ $stats = get_option( 'cf-images-stats', array( 'synced' => 0 ) );
 					<h2><?php esc_html_e( 'Settings', 'cf-images' ); ?></h2>
 
 					<form class="inside" id="cf-images-form" data-type="settings">
-						<table class="form-table" role="presentation">
+						<table class="form-table">
 							<tbody>
 							<tr>
 								<th scope="row">
