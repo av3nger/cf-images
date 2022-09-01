@@ -73,6 +73,10 @@ If something is not working for you, please let me know by creating a support ti
 
 == Changelog ==
 
+= 1.0.2 =
+
+Enhance: Code quality
+
 = 1.0.1 =
 
 * New: Add image statistics
