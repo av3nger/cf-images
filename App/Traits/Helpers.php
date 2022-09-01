@@ -56,7 +56,16 @@ trait Helpers {
 	 * @return bool
 	 */
 	public function is_set_up(): bool {
-		return defined( 'CF_IMAGES_ACCOUNT_ID' ) && defined( 'CF_IMAGES_KEY_TOKEN' );
+
+		if ( get_option( 'cf-images-auth-error', false ) ) {
+			return false;
+		}
+
+		$config_written = get_option( 'cf-images-config-written', false );
+		$defines_found  = defined( 'CF_IMAGES_ACCOUNT_ID' ) && defined( 'CF_IMAGES_KEY_TOKEN' );
+
+		return $config_written || $defines_found;
+
 	}
 
 	/**
@@ -67,7 +76,13 @@ trait Helpers {
 	 * @return bool|WP_Error
 	 */
 	public function get_error() {
+
+		if ( get_option( 'cf-images-auth-error', false ) ) {
+			return new WP_Error( 401, esc_html__( 'Authentication error. Check and update Cloudflare API key.', 'cf-images' ) );
+		}
+
 		return Core::get_instance()->get_error();
+
 	}
 
 }

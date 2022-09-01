@@ -75,6 +75,7 @@ If something is not working for you, please let me know by creating a support ti
 
 = 1.0.2 =
 
+New: Detect API key changes or other auth issues
 Enhance: Code quality
 
 = 1.0.1 =

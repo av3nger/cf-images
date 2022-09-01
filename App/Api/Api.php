@@ -203,6 +203,11 @@ class Api {
 			return new stdClass();
 		}
 
+		// Authentication error.
+		if ( 401 === (int) $code ) {
+			update_option( 'cf-images-auth-error', true, false );
+		}
+
 		if ( 200 !== (int) $code ) {
 			throw new Exception( $body, $code );
 		}

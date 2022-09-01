@@ -37,6 +37,14 @@ if ( ! defined( 'WPINC' ) ) {
 
 	<p><?php esc_html_e( 'Note: The form will attempt to automatically set the required defines in wp-config.php file.', 'cf-images' ); ?></p>
 
+	<?php if ( get_option( 'cf-images-config-written', false ) ) : ?>
+		<div class="notice notice-warning inline">
+			<p>
+				<?php esc_html_e( 'It appears there is something wrong with the API token, and the plugin is not able to authenticate on the Cloudflare API. Please check the details below and update the API token and/or account ID.', 'cf-images' ); ?>
+			</p>
+		</div>
+	<?php endif; ?>
+
 	<form id="cf-images-form" data-type="setup">
 		<table class="form-table">
 			<caption class="screen-reader-text"><?php esc_html_e( 'Setup table', 'cf-images' ); ?></caption>
@@ -48,7 +56,7 @@ if ( ! defined( 'WPINC' ) ) {
 					</label>
 				</th>
 				<td>
-					<input name="account-id" type="text" id="account_id" value="" placeholder="<?php esc_attr_e( 'Paste your Cloudflare ID here', 'cf-images' ); ?>" class="regular-text">
+					<input name="account-id" type="text" id="account_id" value="<?php echo defined( 'CF_IMAGES_ACCOUNT_ID' ) ? esc_attr( CF_IMAGES_ACCOUNT_ID ) : ''; ?>" placeholder="<?php esc_attr_e( 'Paste your Cloudflare ID here', 'cf-images' ); ?>" class="regular-text">
 					<p class="description">1.&nbsp;
 						<?php
 						printf( /* translators: %1$s - opening <a> tag, %2$s - closing </a> tag */
