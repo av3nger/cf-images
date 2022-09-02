@@ -180,9 +180,8 @@ class Core {
 			// This filter is available on WordPress 6.0 or above.
 			if ( version_compare( $wp_version, '6.0.0', '>=' ) ) {
 				add_filter( 'wp_content_img_tag', array( $this, 'content_img_tag' ), 10, 3 );
-			} else {
-				// TODO: find another way to process images.
 			}
+			// TODO: add content filtering.
 		}
 
 	}
