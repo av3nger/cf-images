@@ -175,6 +175,14 @@ class Core {
 			add_filter( 'wp_get_attachment_image_src', array( $this, 'get_attachment_image_src' ), 10, 3 );
 			add_filter( 'wp_prepare_attachment_for_js', array( $this, 'prepare_attachment_for_js' ), 10, 2 );
 			add_filter( 'wp_calculate_image_srcset', array( $this, 'calculate_image_srcset' ), 10, 5 );
+
+			global $wp_version;
+			// This filter is available on WordPress 6.0 or above.
+			if ( version_compare( $wp_version, '6.0.0', '>=' ) ) {
+				add_filter( 'wp_content_img_tag', array( $this, 'content_img_tag' ), 10, 3 );
+			} else {
+				// TODO: find another way to process images.
+			}
 		}
 
 	}
@@ -319,6 +327,24 @@ class Core {
 		);
 
 		wp_send_json_success( $response );
+
+	}
+
+	/**
+	 * Get Cloudflare CDN domain.
+	 *
+	 * @since 1.0.2
+	 *
+	 * @return string
+	 */
+	private function get_cdn_domain(): string {
+
+		$domain = 'https://imagedelivery.net';
+		if ( get_option( 'cf-images-custom-domain', false ) ) {
+			$domain = get_site_url() . '/cdn-cgi/imagedelivery';
+		}
+
+		return $domain;
 
 	}
 
@@ -566,11 +592,6 @@ class Core {
 	 */
 	public function get_attachment_image_src( $image, int $attachment_id, $size ) {
 
-		$domain = 'https://imagedelivery.net';
-		if ( get_option( 'cf-images-custom-domain', false ) ) {
-			$domain = get_site_url() . '/cdn-cgi/imagedelivery';
-		}
-
 		$meta = get_post_meta( $attachment_id, '_cloudflare_image_id', true );
 
 		if ( empty( $meta ) ) {
@@ -583,11 +604,15 @@ class Core {
 			return $image;
 		}
 
+		$domain = $this->get_cdn_domain();
+
 		// Full size image with defined dimensions.
 		if ( 'full' === $size && isset( $image[1] ) && $image[1] > 0 ) {
 			$image[0] = "$domain/$hash/$meta/w=" . $image[1];
 			return $image;
 		}
+
+		// TODO: scaled image is not properly detected.
 
 		preg_match( '/-(\d+)x(\d+)\.[a-zA-Z]{3,4}$/', $image[0], $variant_image );
 
@@ -684,6 +709,53 @@ class Core {
 		}
 
 		return $sources;
+
+	}
+
+	/**
+	 * Filters an <img> tag within the content for a given context.
+	 *
+	 * Sometimes users or editors will add an <img> tag to the content. And such content will not be processed through
+	 * other hooks. Instead of processing all content, we will only focus on filtering <img> elements on the page.
+	 *
+	 * This hook requires WordPress 6.0 or above.
+	 *
+	 * @since 1.0.2
+	 *
+	 * @param string      $filtered_image  Full img tag with attributes that will replace the source img tag.
+	 * @param string|bool $context         Additional context, like the current filter name or the function name from where this was called.
+	 * @param int         $attachment_id   The image attachment ID. May be 0 in case the image is not an attachment.
+	 *
+	 * @return string
+	 */
+	public function content_img_tag( string $filtered_image, $context, int $attachment_id ): string {
+
+		// Find `src` attribute in an image.
+		preg_match( '/src=[\'"]([^\'"]+)/i', $filtered_image, $src );
+
+		if ( ! isset( $src[1] ) ) {
+			return $filtered_image;
+		}
+
+		$domain = $this->get_cdn_domain();
+		if ( false !== strpos( $src[1], $domain ) ) {
+			// Image is already served via Cloudflare.
+			return $filtered_image;
+		}
+
+		// Find `width` attributes in an image.
+		preg_match( '/width=[\'"]([^\'"]+)/i', $filtered_image, $size );
+
+		// We will try to find the best possible match based on the `width` attribute.
+		$width = isset( $size[1] ) ? (int) $size[1] : 'full';
+		$image = $this->get_attachment_image_src( array( $src[1] ), $attachment_id, $width );
+
+		if ( isset( $image[0] ) && $image[0] !== $src[1] ) {
+			// Replace the image with a Cloudflare alternative.
+			$filtered_image = str_replace( $src[1], $image[0], $filtered_image );
+		}
+
+		return $filtered_image;
 
 	}
 
