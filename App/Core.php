@@ -612,7 +612,11 @@ class Core {
 			return $image;
 		}
 
-		// TODO: scaled image is not properly detected.
+		// Handle `scaled` images.
+		if ( false !== strpos( $image[0], '-scaled' ) && apply_filters( 'big_image_size_threshold', 2560 ) === $size ) {
+			$image[0] = "$domain/$hash/$meta/w=" . $size;
+			return $image;
+		}
 
 		preg_match( '/-(\d+)x(\d+)\.[a-zA-Z]{3,4}$/', $image[0], $variant_image );
 
