@@ -1,7 +1,7 @@
 {
   "name": "cf-images",
   "description": "CF Images - Offload, Store, Resize & Optimize Images",
-  "version": "1.0.2",
+  "version": "1.0.2-beta.1",
   "main": "cf-images.php",
   "author": "Anton Vanyukov",
   "license": "GPL-2.0-or-later",
