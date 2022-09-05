@@ -73,6 +73,10 @@ If something is not working for you, please let me know by creating a support ti
 
 == Changelog ==
 
+= 1.0.3 =
+
+* Fix: Fatal error in rare cases
+
 = 1.0.2 =
 
 * New: Support for scaled images

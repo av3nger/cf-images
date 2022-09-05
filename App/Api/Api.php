@@ -161,6 +161,10 @@ class Api {
 	 */
 	protected function request(): stdClass {
 
+		if ( ! defined( 'CF_IMAGES_ACCOUNT_ID' ) ) {
+			return new stdClass();
+		}
+
 		$url  = $this->api_url . CF_IMAGES_ACCOUNT_ID . '/images/v1' . $this->endpoint;
 		$args = $this->get_args();
 
