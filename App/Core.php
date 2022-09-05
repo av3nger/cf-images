@@ -167,13 +167,22 @@ class Core {
 		}
 
 		// Image actions.
-		add_filter( 'wp_async_wp_generate_attachment_metadata', array( $this, 'upload_image' ), 10, 3 );
-		add_action( 'delete_attachment', array( $this, 'delete_image' ), 10, 2 );
+		add_filter( 'wp_async_wp_generate_attachment_metadata', array( $this, 'upload_image' ), 10, 2 );
+		add_action( 'delete_attachment', array( $this, 'delete_image' ) );
 
-		// Replace images.
-		add_filter( 'wp_get_attachment_image_src', array( $this, 'get_attachment_image_src' ), 10, 3 );
-		add_filter( 'wp_prepare_attachment_for_js', array( $this, 'prepare_attachment_for_js' ), 10, 3 );
-		add_filter( 'wp_calculate_image_srcset', array( $this, 'calculate_image_srcset' ), 10, 5 );
+		if ( ! is_admin() ) {
+			// Replace images only on front-end.
+			add_filter( 'wp_get_attachment_image_src', array( $this, 'get_attachment_image_src' ), 10, 3 );
+			add_filter( 'wp_prepare_attachment_for_js', array( $this, 'prepare_attachment_for_js' ), 10, 2 );
+			add_filter( 'wp_calculate_image_srcset', array( $this, 'calculate_image_srcset' ), 10, 5 );
+
+			global $wp_version;
+			// This filter is available on WordPress 6.0 or above.
+			if ( version_compare( $wp_version, '6.0.0', '>=' ) ) {
+				add_filter( 'wp_content_img_tag', array( $this, 'content_img_tag' ), 10, 3 );
+			}
+			// TODO: add content filtering.
+		}
 
 	}
 
@@ -226,7 +235,7 @@ class Core {
 		$this->check_ajax_request();
 
 		$attachment_id = (int) filter_input( INPUT_POST, 'data', FILTER_SANITIZE_NUMBER_INT );
-		$this->upload_image( wp_get_attachment_metadata( $attachment_id ), $attachment_id, 'single' );
+		$this->upload_image( wp_get_attachment_metadata( $attachment_id ), $attachment_id );
 
 		if ( is_wp_error( $this->error ) ) {
 			wp_send_json_error( $this->error->get_error_message() );
@@ -295,7 +304,7 @@ class Core {
 		$image = new WP_Query( $args );
 
 		if ( 'upload' === $action ) {
-			$this->upload_image( wp_get_attachment_metadata( $image->post->ID ), $image->post->ID, 'single' );
+			$this->upload_image( wp_get_attachment_metadata( $image->post->ID ), $image->post->ID );
 
 			// If there's an error with offloading, we need to mark such an image as skipped.
 			if ( is_wp_error( $this->error ) ) {
@@ -303,7 +312,7 @@ class Core {
 				$this->error = false; // Reset the error.
 			}
 		} else {
-			$this->delete_image( $image->post->ID, $image->post );
+			$this->delete_image( $image->post->ID );
 		}
 
 		$response = array(
@@ -317,6 +326,24 @@ class Core {
 		);
 
 		wp_send_json_success( $response );
+
+	}
+
+	/**
+	 * Get Cloudflare CDN domain.
+	 *
+	 * @since 1.0.2
+	 *
+	 * @return string
+	 */
+	private function get_cdn_domain(): string {
+
+		$domain = 'https://imagedelivery.net';
+		if ( get_option( 'cf-images-custom-domain', false ) ) {
+			$domain = get_site_url() . '/cdn-cgi/imagedelivery';
+		}
+
+		return $domain;
 
 	}
 
@@ -429,14 +456,12 @@ class Core {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array  $metadata       An array of attachment meta data.
-	 * @param int    $attachment_id  Current attachment ID.
-	 * @param string $context        Additional context. Can be 'create' when metadata was initially created for new attachment
-	 *                               or 'update' when the metadata was updated.
+	 * @param array $metadata       An array of attachment meta data.
+	 * @param int   $attachment_id  Current attachment ID.
 	 *
 	 * @return array
 	 */
-	public function upload_image( array $metadata, int $attachment_id, string $context ): array {
+	public function upload_image( array $metadata, int $attachment_id ): array {
 
 		if ( ! isset( $metadata['file'] ) ) {
 			$this->error = new WP_Error( 404, __( 'Media file not found', 'cf-images' ) );
@@ -520,12 +545,11 @@ class Core {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int     $post_id  Attachment ID.
-	 * @param WP_Post $post     Post object.
+	 * @param int $post_id  Attachment ID.
 	 *
 	 * @return void
 	 */
-	public function delete_image( int $post_id, WP_Post $post ) {
+	public function delete_image( int $post_id ) {
 
 		$id = get_post_meta( $post_id, '_cloudflare_image_id', true );
 
@@ -567,11 +591,6 @@ class Core {
 	 */
 	public function get_attachment_image_src( $image, int $attachment_id, $size ) {
 
-		$domain = 'https://imagedelivery.net';
-		if ( get_option( 'cf-images-custom-domain', false ) ) {
-			$domain = get_site_url() . '/cdn-cgi/imagedelivery';
-		}
-
 		$meta = get_post_meta( $attachment_id, '_cloudflare_image_id', true );
 
 		if ( empty( $meta ) ) {
@@ -584,9 +603,17 @@ class Core {
 			return $image;
 		}
 
+		$domain = $this->get_cdn_domain();
+
 		// Full size image with defined dimensions.
 		if ( 'full' === $size && isset( $image[1] ) && $image[1] > 0 ) {
 			$image[0] = "$domain/$hash/$meta/w=" . $image[1];
+			return $image;
+		}
+
+		// Handle `scaled` images.
+		if ( false !== strpos( $image[0], '-scaled' ) && apply_filters( 'big_image_size_threshold', 2560 ) === $size ) {
+			$image[0] = "$domain/$hash/$meta/w=" . $size;
 			return $image;
 		}
 
@@ -623,13 +650,12 @@ class Core {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array       $response    Array of prepared attachment data. @see wp_prepare_attachment_for_js().
-	 * @param WP_Post     $attachment  Attachment object.
-	 * @param array|false $meta        Array of attachment metadata, or false if there is none.
+	 * @param array   $response    Array of prepared attachment data. @see wp_prepare_attachment_for_js().
+	 * @param WP_Post $attachment  Attachment object.
 	 *
 	 * @return array
 	 */
-	public function prepare_attachment_for_js( array $response, WP_Post $attachment, $meta ): array {
+	public function prepare_attachment_for_js( array $response, WP_Post $attachment ): array {
 
 		if ( empty( $response['sizes'] ) ) {
 			return $response;
@@ -686,6 +712,53 @@ class Core {
 		}
 
 		return $sources;
+
+	}
+
+	/**
+	 * Filters an <img> tag within the content for a given context.
+	 *
+	 * Sometimes users or editors will add an <img> tag to the content. And such content will not be processed through
+	 * other hooks. Instead of processing all content, we will only focus on filtering <img> elements on the page.
+	 *
+	 * This hook requires WordPress 6.0 or above.
+	 *
+	 * @since 1.0.2
+	 *
+	 * @param string      $filtered_image  Full img tag with attributes that will replace the source img tag.
+	 * @param string|bool $context         Additional context, like the current filter name or the function name from where this was called.
+	 * @param int         $attachment_id   The image attachment ID. May be 0 in case the image is not an attachment.
+	 *
+	 * @return string
+	 */
+	public function content_img_tag( string $filtered_image, $context, int $attachment_id ): string {
+
+		// Find `src` attribute in an image.
+		preg_match( '/src=[\'"]([^\'"]+)/i', $filtered_image, $src );
+
+		if ( ! isset( $src[1] ) ) {
+			return $filtered_image;
+		}
+
+		$domain = $this->get_cdn_domain();
+		if ( false !== strpos( $src[1], $domain ) ) {
+			// Image is already served via Cloudflare.
+			return $filtered_image;
+		}
+
+		// Find `width` attributes in an image.
+		preg_match( '/width=[\'"]([^\'"]+)/i', $filtered_image, $size );
+
+		// We will try to find the best possible match based on the `width` attribute.
+		$width = isset( $size[1] ) ? (int) $size[1] : 'full';
+		$image = $this->get_attachment_image_src( array( $src[1] ), $attachment_id, $width );
+
+		if ( isset( $image[0] ) && $image[0] !== $src[1] ) {
+			// Replace the image with a Cloudflare alternative.
+			$filtered_image = str_replace( $src[1], $image[0], $filtered_image );
+		}
+
+		return $filtered_image;
 
 	}
 

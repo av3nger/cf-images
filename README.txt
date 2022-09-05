@@ -73,6 +73,13 @@ If something is not working for you, please let me know by creating a support ti
 
 == Changelog ==
 
+= 1.0.2 =
+
+* New: Support for scaled images
+* New: Detect API key changes or other auth issues
+* Enhance: Code quality
+* Fix: Do not replace images on the editor
+
 = 1.0.1 =
 
 * New: Add image statistics

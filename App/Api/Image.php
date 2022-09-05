@@ -52,7 +52,7 @@ class Image extends Api {
 
 		$this->set_method( 'UPLOAD' );
 		$this->set_endpoint( '' );
-		$this->set_body( $data );
+		$this->set_request_body( $data );
 
 		$results = $this->request();
 

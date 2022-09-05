@@ -43,7 +43,7 @@ class Upload extends Task {
 	 * @access protected
 	 * @var int
 	 */
-	protected $argument_count = 3;
+	protected $argument_count = 2;
 
 	/**
 	 * Prepare any data to be passed to the asynchronous postback.
@@ -59,7 +59,6 @@ class Upload extends Task {
 		return array(
 			'metadata'      => $data[0],
 			'attachment_id' => $data[1],
-			'context'       => $data[2],
 		);
 
 	}
@@ -75,14 +74,13 @@ class Upload extends Task {
 
 		$metadata      = filter_input( INPUT_POST, 'metadata', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 		$attachment_id = filter_input( INPUT_POST, 'attachment_id', FILTER_VALIDATE_INT );
-		$context       = filter_input( INPUT_POST, 'context', FILTER_SANITIZE_STRING );
 
 		if ( ! wp_attachment_is_image( $attachment_id ) ) {
 			return;
 		}
 
 		// Allow the Asynchronous task to run.
-		do_action( "wp_async_$this->action", $metadata, $attachment_id, $context );
+		do_action( "wp_async_$this->action", $metadata, $attachment_id );
 
 	}
 

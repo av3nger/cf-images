@@ -50,6 +50,9 @@ class Settings {
 		$this->write_config( 'CF_IMAGES_ACCOUNT_ID', sanitize_text_field( $form['account-id'] ) );
 		$this->write_config( 'CF_IMAGES_KEY_TOKEN', sanitize_text_field( $form['api-key'] ) );
 
+		// Remove any auth errors.
+		delete_option( 'cf-images-auth-error' );
+
 		wp_send_json_success();
 
 	}
@@ -95,12 +98,13 @@ class Settings {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $name   Name of the constant to add.
-	 * @param string $value  Value of the constant to add.
+	 * @param string $name       Name of the constant to add.
+	 * @param string $value      Value of the constant to add.
+	 * @param bool   $overwrite  Overwrite the current value. Default: false.
 	 *
 	 * @return void
 	 */
-	public function write_config( string $name, string $value = '' ) {
+	public function write_config( string $name, string $value = '', bool $overwrite = false ) {
 
 		$path_to_wp_config = ABSPATH . 'wp-config.php';
 
@@ -113,12 +117,17 @@ class Settings {
 
 		$new_file_content = array();
 		foreach ( $config_file as $line ) {
-			if ( preg_match( "/define\(\s*'$name'/i", $line ) ) {
+			if ( preg_match( "/define\(\s*'$name'/i", $line ) && ! $overwrite ) {
 				continue;
 			}
 
 			if ( ! empty( $value ) && preg_match( "/\/\* That's all, stop editing!.*/i", $line ) ) {
 				$new_file_content[] = "define( '$name', '$value' );\n";
+
+				// Exit early, if we are overwriting.
+				if ( $overwrite ) {
+					continue;
+				}
 			}
 
 			$new_file_content[] = $line;
