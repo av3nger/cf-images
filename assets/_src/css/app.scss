@@ -19,6 +19,10 @@
     margin-top: 0;
   }
 
+  & > h1 {
+    margin: 0;
+  }
+
   .dashicons {
     float: left;
     margin-right: 10px;
@@ -36,8 +40,14 @@
     margin-bottom: 50px;
 
     input[type=checkbox],
-    a[role=button] {
+    input[type=text],
+    a[role=button],
+    {
       float: right;
+    }
+
+    input[type=text] {
+      max-width: 350px;
     }
 
     & > div {
@@ -77,6 +87,14 @@
       background-color: #B32D2E;
       border-color: #B32D2E;
     }
+  }
+
+  /**
+   * Notice overwrites
+   */
+  .notice > p {
+    font-size: 1.3em;
+    margin: 10px;
   }
 
   /**
