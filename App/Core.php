@@ -285,6 +285,7 @@ class Core {
 
 			// No available images found.
 			if ( 0 === $images->found_posts ) {
+				$this->update_stats( 0, false ); // Reset stats.
 				wp_send_json_error( __( 'No images found', 'cf-images' ) );
 			}
 
@@ -497,11 +498,12 @@ class Core {
 	 *
 	 * @since 1.0.1
 	 *
-	 * @param int $count  Add or subtract number from `synced` image count.
+	 * @param int  $count  Add or subtract number from `synced` image count.
+	 * @param bool $add    By default, we will add the required number of images. If set to false - replace the value.
 	 *
 	 * @return void
 	 */
-	private function update_stats( int $count ) {
+	private function update_stats( int $count, bool $add = true ) {
 
 		$default = array(
 			'synced' => 0,
@@ -509,7 +511,11 @@ class Core {
 
 		$stats = get_option( 'cf-images-stats', $default );
 
-		$stats['synced'] += $count;
+		if ( $add ) {
+			$stats['synced'] += $count;
+		} else {
+			$stats['synced'] = $count;
+		}
 
 		update_option( 'cf-images-stats', $stats, false );
 
