@@ -77,6 +77,7 @@ If something is not working for you, please let me know by creating a support ti
 
 Added:
 * New and improved UI
+* New plugin icon
 
 Fixed:
 * Reset image stats, when no offloaded images found in media library
