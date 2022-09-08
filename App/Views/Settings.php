@@ -63,13 +63,6 @@ $stats = get_option( 'cf-images-stats', array( 'synced' => 0 ) );
 
 			<hr>
 
-			<div class="cf-images-progress">
-				<div class="cf-images-progress-bar">
-					<div class="cf-images-progress-filler" style="width: 0;"></div>
-				</div>
-				<span><?php esc_html_e( 'Initializing...', 'cf-images' ); ?></span>
-			</div>
-
 			<span class="dashicons dashicons-cloud-upload"></span>
 			<label for="cf-images-upload-all">
 				<?php esc_html_e( 'Bulk upload images', 'cf-images' ); ?>
@@ -78,6 +71,12 @@ $stats = get_option( 'cf-images-stats', array( 'synced' => 0 ) );
 				<a href="#" role="button" class="outline" id="cf-images-upload-all">
 					<?php esc_html_e( 'Upload', 'cf-images' ); ?>
 				</a>
+
+				<div class="cf-images-progress upload">
+					<progress value="0" max="100" style="width: 80%"></progress>
+					<p><small><?php esc_html_e( 'Initializing...', 'cf-images' ); ?></small></p>
+				</div>
+
 				<p>
 					<?php esc_html_e( 'You can either manually upload individual images from the media library, or bulk upload/remove all the images using the buttons below.', 'cf-images' ); ?>
 				</p>
@@ -102,6 +101,12 @@ $stats = get_option( 'cf-images-stats', array( 'synced' => 0 ) );
 				<a href="#" role="button" class="outline cf-images-button-red" id="cf-images-remove-all">
 					<?php esc_attr_e( 'Remove', 'cf-images' ); ?>
 				</a>
+
+				<div class="cf-images-progress remove">
+					<progress value="0" max="100" style="width: 80%"></progress>
+					<p><small><?php esc_html_e( 'Initializing...', 'cf-images' ); ?></small></p>
+				</div>
+
 				<p>
 					<?php esc_html_e( 'Remove all previously uploaded images.', 'cf-images' ); ?>
 				</p>

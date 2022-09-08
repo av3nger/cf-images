@@ -117,7 +117,7 @@ import '../css/app.scss';
 	$( '#cf-images-upload-all' ).on( 'click', function( e ) {
 		e.preventDefault();
 
-		$( '.media_page_cf-images input.button' ).prop( 'disabled', true );
+		$( '.media_page_cf-images [role=button]' ).attr( 'disabled', true );
 		runProgressBar( 'upload' );
 	} );
 
@@ -129,7 +129,7 @@ import '../css/app.scss';
 	$( '#cf-images-remove-all' ).on( 'click', function( e ) {
 		e.preventDefault();
 
-		$( '.media_page_cf-images input.button' ).prop( 'disabled', true );
+		$( '.media_page_cf-images [role=button]' ).attr( 'disabled', true );
 		runProgressBar( 'remove' );
 	} );
 
@@ -191,8 +191,8 @@ import '../css/app.scss';
 	 * @param {number} progress    Progress in percent.
 	 */
 	const runProgressBar = function( action, currentStep = 0, totalSteps = 0, progress = 0 ) {
-		$( '.cf-images-progress' ).show();
-		$( '.cf-images-progress-filler' ).width( progress + '%' );
+		$( '.cf-images-progress.' + action ).show();
+		$( '.cf-images-progress.' + action + ' > progress' ).val( progress );
 
 		const args = {
 			currentStep,
@@ -203,15 +203,15 @@ import '../css/app.scss';
 		post( 'cf_images_bulk_process', args )
 			.then( ( response ) => {
 				if ( ! response.success ) {
-					$( '.cf-images-progress' ).hide();
-					$( '.media_page_cf-images input.button' ).prop( 'disabled', false );
+					$( '.cf-images-progress.' + action ).hide();
+					$( '.media_page_cf-images [role=button]' ).attr( 'disabled', false );
 					showNotice( response.data, 'error' );
 					return;
 				}
 
 				progress = Math.round( 100 / response.data.totalSteps * response.data.currentStep );
-				$( '.cf-images-progress-filler' ).width( progress + '%' );
-				$( '.cf-images-progress > span' ).html( response.data.status );
+				$( '.cf-images-progress.' + action + ' > progress' ).val( progress );
+				$( '.cf-images-progress.' + action + ' > p > small' ).html( response.data.status );
 
 				if ( response.data.currentStep < response.data.totalSteps ) {
 					runProgressBar( action, response.data.currentStep, response.data.totalSteps, progress );

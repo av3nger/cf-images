@@ -12,6 +12,7 @@
   @import "@picocss/pico/scss/content/form";
   @import "@picocss/pico/scss/content/form-checkbox-radio";
   @import "@picocss/pico/scss/components/card";
+  @import "@picocss/pico/scss/components/progress";
   @import "@picocss/pico/scss/utilities/loading";
 
   // Fix for style conflicts.
@@ -102,20 +103,8 @@
    */
   .cf-images-progress {
     display: none;
-
-    .cf-images-progress-bar {
-      height: 20px;
-      width: 100%;
-      border: 1px solid #191E23;
-    }
-
-    .cf-images-progress-filler {
-      background: #0073AA;
-      height: 100%;
-      transition: width .2s ease-in;
-    }
+    width: 80%;
   }
-
 }
 
 /**
