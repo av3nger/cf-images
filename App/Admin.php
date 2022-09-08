@@ -116,6 +116,7 @@ class Admin {
 			array(
 				'nonce'   => wp_create_nonce( 'cf-images-nonce' ),
 				'strings' => array(
+					'saveChange'   => esc_html__( 'Save Changes', 'cf-images' ),
 					'inProgress'   => esc_html__( 'Processing', 'cf-images' ),
 					'offloadError' => esc_html__( 'Error during offload', 'cf-images' ),
 					'offloaded'    => esc_html__( 'Offloaded', 'cf-images' ),

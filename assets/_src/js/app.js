@@ -51,27 +51,31 @@ import '../css/app.scss';
 	 *
 	 * @since 1.0.0
 	 */
-	$( 'form#cf-images-form' ).on( 'submit', function( e ) {
+	$( '#save-settings' ).on( 'click', function( e ) {
 		e.preventDefault();
 
-		const action = forms[ $( this ).data( 'type' ) ];
+		const form = $( 'form#cf-images-form' );
+		const action = forms[ form.data( 'type' ) ];
+
 		if ( undefined === action ) {
 			return;
 		}
 
-		$( '.media_page_cf-images input.button' ).prop( 'disabled', true );
+		$( this )
+			.attr( 'aria-busy', true )
+			.html( CFImages.strings.inProgress + '...' );
 
-		const spinner = $( this ).find( '.spinner' );
-		spinner.toggleClass( 'is-active' );
-
-		post( action, $( this ).serialize() )
+		post( action, form.serialize() )
 			.then( ( response ) => {
 				if ( ! response.success ) {
-					$( '.media_page_cf-images input.button' ).prop( 'disabled', false );
-					spinner.toggleClass( 'is-active' );
+					$( this )
+						.attr( 'aria-busy', false )
+						.html( CFImages.strings.saveChange );
+
 					if ( 'undefined' !== typeof response.data ) {
 						showNotice( response.data, 'error' );
 					}
+
 					window.console.log( response );
 					return;
 				}
