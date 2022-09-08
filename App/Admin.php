@@ -73,16 +73,24 @@ class Admin {
 	public function enqueue_styles( string $hook ) {
 
 		// Run only on plugin pages.
-		if ( 'media_page_cf-images' !== $hook && 'upload.php' !== $hook ) {
-			return;
+		if ( 'media_page_cf-images' === $hook ) {
+			wp_enqueue_style(
+				$this->get_slug(),
+				CF_IMAGES_DIR_URL . 'assets/css/cf-images.min.css',
+				array(),
+				$this->get_version()
+			);
 		}
 
-		wp_enqueue_style(
-			$this->get_slug(),
-			CF_IMAGES_DIR_URL . 'assets/css/cf-images.min.css',
-			array(),
-			$this->get_version()
-		);
+		// Run only on media library pages.
+		if ( 'upload.php' === $hook ) {
+			wp_enqueue_style(
+				$this->get_slug(),
+				CF_IMAGES_DIR_URL . 'assets/css/cf-images-media.min.css',
+				array(),
+				$this->get_version()
+			);
+		}
 
 	}
 
