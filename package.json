@@ -27,5 +27,8 @@
     "build": "webpack --progress",
     "translate": "wp i18n make-pot . languages/cf-images.pot",
     "release": "grunt build"
+  },
+  "dependencies": {
+    "@picocss/pico": "^1.5.3"
   }
 }

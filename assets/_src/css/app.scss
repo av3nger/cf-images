@@ -3,11 +3,77 @@
  * included in this file.
  */
 
-.media_page_cf-images div.wrap {
+@import "@picocss/pico/scss/variables";
+@import "@picocss/pico/scss/themes/default";
 
-  .spinner {
-    margin-top: -3px;
-    float: none;
+.media_page_cf-images div.wrap {
+  @import "@picocss/pico/scss/content/typography";
+  @import "@picocss/pico/scss/content/button";
+  @import "@picocss/pico/scss/content/form";
+  @import "@picocss/pico/scss/content/form-checkbox-radio";
+  @import "@picocss/pico/scss/components/card";
+  @import "@picocss/pico/scss/components/progress";
+  @import "@picocss/pico/scss/utilities/loading";
+
+  // Fix for style conflicts.
+  [type=checkbox][role=switch]:checked::before {
+    margin-top: 0;
+  }
+
+  & > h1 {
+    margin: 0;
+  }
+
+  .dashicons {
+    float: left;
+    margin-right: 10px;
+  }
+
+  article > header,
+  article > footer {
+    padding-top: 40px;
+    padding-bottom: 40px;
+    h3, button { margin: 0; }
+  }
+
+  form {
+    margin-top: 50px;
+    margin-bottom: 50px;
+
+    input[type=checkbox],
+    input[type=text],
+    a[role=button],
+    {
+      float: right;
+    }
+
+    input[type=text] {
+      max-width: 350px;
+    }
+
+    & > div {
+      margin: 10px 0 10px 30px;
+
+      p {
+        line-height: 1.5;
+        max-width: 90%;
+        font-size: 0.875em;
+        margin-bottom: 0;
+      }
+    }
+
+    & > hr {
+      margin: 30px 0;
+    }
+
+    button[type=submit] {
+      margin: 60px 0 0;
+    }
+  }
+
+  .stats {
+    font-size: 0.75em;
+    font-style: italic;
   }
 
   /**
@@ -25,31 +91,18 @@
   }
 
   /**
+   * Notice overwrites
+   */
+  .notice > p {
+    font-size: 1.3em;
+    margin: 10px;
+  }
+
+  /**
    * Progress bar
    */
   .cf-images-progress {
     display: none;
-
-    .cf-images-progress-bar {
-      height: 20px;
-      width: 100%;
-      border: 1px solid #191E23;
-    }
-
-    .cf-images-progress-filler {
-      background: #0073AA;
-      height: 100%;
-      transition: width .2s ease-in;
-    }
+    width: 80%;
   }
-
-}
-
-/**
- * Media library styles (list view).
- */
-.upload-php .fixed .column-cf-images {
-  width: 10%;
-
-  .spinner { margin: 0 10px; }
 }
