@@ -73,6 +73,11 @@ If something is not working for you, please let me know by creating a support ti
 
 == Changelog ==
 
+= 1.1.0 =
+
+Added:
+* New and improved UI
+
 = 1.0.3 - 05.09.2022 =
 
 Fixed:
