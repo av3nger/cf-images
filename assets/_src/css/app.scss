@@ -7,7 +7,6 @@
 @import "@picocss/pico/scss/themes/default";
 
 .media_page_cf-images div.wrap {
-  @import "@picocss/pico/scss/content/button";
   @import "@picocss/pico/scss/content/form";
   @import "@picocss/pico/scss/content/form-checkbox-radio";
   @import "@picocss/pico/scss/components/card";
@@ -60,21 +59,25 @@
     margin-right: 10px;
   }
 
-  article > header,
-  article > footer {
-    padding-bottom: 30px;
-    padding-top: 30px;
-    h3, button { margin: 0; }
-  }
+  article {
+    @import "@picocss/pico/scss/content/button";
 
-  article > header > nav {
-    ul {
-      margin: 0;
+    & > header,
+    & > footer {
+      padding-bottom: 30px;
+      padding-top: 30px;
+      h3, button { margin: 0; }
     }
 
-    ul > li {
-      padding-top: 0;
-      padding-bottom: 0;
+    & > header > nav {
+      ul {
+        margin: 0;
+      }
+
+      ul > li {
+        padding-top: 0;
+        padding-bottom: 0;
+      }
     }
   }
 
