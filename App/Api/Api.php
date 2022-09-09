@@ -168,7 +168,9 @@ class Api {
 		$url  = $this->api_url . CF_IMAGES_ACCOUNT_ID . '/images/v1' . $this->endpoint;
 		$args = $this->get_args();
 
-		if ( 'POST' === $args['method'] || 'DELETE' === $args['method'] || 'PATCH' === $args['method'] ) {
+		if ( 'GET' === $args['method'] ) {
+			$response = wp_remote_get( $url, $args );
+		} elseif ( 'POST' === $args['method'] || 'DELETE' === $args['method'] || 'PATCH' === $args['method'] ) {
 			$response = wp_remote_post( $url, $args );
 		} elseif ( 'UPLOAD' === $args['method'] ) {
 			/**
@@ -178,11 +180,12 @@ class Api {
 			 *
 			 * @see https://core.trac.wordpress.org/ticket/41608
 			 */
-			$args['method']     = 'POST';
-			$args['user-agent'] = apply_filters( 'http_headers_useragent', 'WordPress/' . get_bloginfo( 'version' ) . '; ' . get_bloginfo( 'url' ), $url );
-			$args['decompress'] = true;
-			$args['stream']     = false;
-			$args['filename']   = null;
+			$args['method']      = 'POST';
+			$args['user-agent']  = apply_filters( 'http_headers_useragent', 'WordPress/' . get_bloginfo( 'version' ) . '; ' . get_bloginfo( 'url' ), $url );
+			$args['decompress']  = true;
+			$args['stream']      = false;
+			$args['filename']    = null;
+			$args['httpversion'] = '1.1';
 
 			$curl = new \WP_Http_Curl();
 

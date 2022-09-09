@@ -109,6 +109,19 @@ class Core {
 	private $heights;
 
 	/**
+	 * Default stats.
+	 *
+	 * @since 1.1.0
+	 * @access private
+	 * @var int[]
+	 */
+	private $default_stats = array(
+		'synced'      => 0,
+		'api_current' => 0,
+		'api_allowed' => 100000,
+	);
+
+	/**
 	 * Get plugin instance.
 	 *
 	 * @since 1.0.0
@@ -167,7 +180,9 @@ class Core {
 		}
 
 		// Image actions.
-		add_filter( 'wp_async_wp_generate_attachment_metadata', array( $this, 'upload_image' ), 10, 2 );
+		if ( get_option( 'cf-images-auto-offload', false ) ) {
+			add_filter( 'wp_async_wp_generate_attachment_metadata', array( $this, 'upload_image' ), 10, 2 );
+		}
 		add_action( 'delete_attachment', array( $this, 'delete_image' ) );
 
 		if ( ! is_admin() ) {
@@ -241,6 +256,8 @@ class Core {
 			wp_send_json_error( $this->error->get_error_message() );
 		}
 
+		$this->fetch_stats();
+
 		wp_send_json_success();
 
 	}
@@ -285,6 +302,8 @@ class Core {
 
 			// No available images found.
 			if ( 0 === $images->found_posts ) {
+				$this->update_stats( 0, false ); // Reset stats.
+				$this->fetch_stats();
 				wp_send_json_error( __( 'No images found', 'cf-images' ) );
 			}
 
@@ -313,6 +332,11 @@ class Core {
 			}
 		} else {
 			$this->delete_image( $image->post->ID );
+		}
+
+		// On final step - update API stats.
+		if ( $step === $total ) {
+			$this->fetch_stats();
 		}
 
 		$response = array(
@@ -484,6 +508,10 @@ class Core {
 			$this->update_stats( 1 );
 			update_post_meta( $attachment_id, '_cloudflare_image_id', $results->id );
 			$this->maybe_save_hash( $results->variants );
+
+			if ( doing_filter( 'wp_async_wp_generate_attachment_metadata' ) ) {
+				$this->fetch_stats();
+			}
 		} catch ( Exception $e ) {
 			$this->error = new WP_Error( $e->getCode(), $e->getMessage() );
 		}
@@ -493,23 +521,59 @@ class Core {
 	}
 
 	/**
+	 * Fetch API stats.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @return void
+	 */
+	private function fetch_stats() {
+
+		$image = new Api\Image();
+
+		try {
+			$count = $image->stats();
+
+			$stats = get_option( 'cf-images-stats', $this->default_stats );
+
+			if ( isset( $count->current ) ) {
+				$stats['api_current'] = $count->current;
+			}
+
+			if ( isset( $count->allowed ) ) {
+				$stats['api_allowed'] = $count->allowed;
+			}
+
+			update_option( 'cf-images-stats', $stats, false );
+		} catch ( Exception $e ) {
+			$this->error = new WP_Error( $e->getCode(), $e->getMessage() );
+		}
+
+	}
+
+	/**
 	 * Update image stats.
 	 *
 	 * @since 1.0.1
 	 *
-	 * @param int $count  Add or subtract number from `synced` image count.
+	 * @param int  $count  Add or subtract number from `synced` image count.
+	 * @param bool $add    By default, we will add the required number of images. If set to false - replace the value.
 	 *
 	 * @return void
 	 */
-	private function update_stats( int $count ) {
+	private function update_stats( int $count, bool $add = true ) {
 
-		$default = array(
-			'synced' => 0,
-		);
+		$stats = get_option( 'cf-images-stats', $this->default_stats );
 
-		$stats = get_option( 'cf-images-stats', $default );
+		if ( $add ) {
+			$stats['synced'] += $count;
+		} else {
+			$stats['synced'] = $count;
+		}
 
-		$stats['synced'] += $count;
+		if ( $stats['synced'] < 0 ) {
+			$stats['synced'] = 0;
+		}
 
 		update_option( 'cf-images-stats', $stats, false );
 
@@ -564,6 +628,10 @@ class Core {
 			$this->update_stats( -1 );
 			delete_post_meta( $post_id, '_cloudflare_image_id' );
 			delete_post_meta( $post_id, '_cloudflare_image_skip' );
+
+			if ( doing_action( 'delete_attachment' ) ) {
+				$this->fetch_stats();
+			}
 		} catch ( Exception $e ) {
 			$this->error = new WP_Error( $e->getCode(), $e->getMessage() );
 		}

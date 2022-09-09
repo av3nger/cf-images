@@ -61,10 +61,11 @@ trait Helpers {
 			return false;
 		}
 
+		$saved          = filter_input( INPUT_GET, 'saved', FILTER_VALIDATE_BOOLEAN );
 		$config_written = get_option( 'cf-images-config-written', false );
 		$defines_found  = defined( 'CF_IMAGES_ACCOUNT_ID' ) && defined( 'CF_IMAGES_KEY_TOKEN' );
 
-		return $config_written || $defines_found;
+		return $config_written && ( $saved || $defines_found );
 
 	}
 

@@ -73,16 +73,24 @@ class Admin {
 	public function enqueue_styles( string $hook ) {
 
 		// Run only on plugin pages.
-		if ( 'media_page_cf-images' !== $hook && 'upload.php' !== $hook ) {
-			return;
+		if ( 'media_page_cf-images' === $hook ) {
+			wp_enqueue_style(
+				$this->get_slug(),
+				CF_IMAGES_DIR_URL . 'assets/css/cf-images.min.css',
+				array(),
+				$this->get_version()
+			);
 		}
 
-		wp_enqueue_style(
-			$this->get_slug(),
-			CF_IMAGES_DIR_URL . 'assets/css/cf-images.min.css',
-			array(),
-			$this->get_version()
-		);
+		// Run only on media library pages.
+		if ( 'upload.php' === $hook ) {
+			wp_enqueue_style(
+				$this->get_slug(),
+				CF_IMAGES_DIR_URL . 'assets/css/cf-images-media.min.css',
+				array(),
+				$this->get_version()
+			);
+		}
 
 	}
 
@@ -116,6 +124,7 @@ class Admin {
 			array(
 				'nonce'   => wp_create_nonce( 'cf-images-nonce' ),
 				'strings' => array(
+					'saveChange'   => esc_html__( 'Save Changes', 'cf-images' ),
 					'inProgress'   => esc_html__( 'Processing', 'cf-images' ),
 					'offloadError' => esc_html__( 'Error during offload', 'cf-images' ),
 					'offloaded'    => esc_html__( 'Offloaded', 'cf-images' ),

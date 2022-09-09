@@ -3,11 +3,119 @@
  * included in this file.
  */
 
-.media_page_cf-images div.wrap {
+@import "@picocss/pico/scss/variables";
+@import "@picocss/pico/scss/themes/default";
 
-  .spinner {
-    margin-top: -3px;
-    float: none;
+.media_page_cf-images div.wrap {
+  @import "@picocss/pico/scss/content/form";
+  @import "@picocss/pico/scss/content/form-checkbox-radio";
+  @import "@picocss/pico/scss/components/card";
+  @import "@picocss/pico/scss/components/progress";
+  @import "@picocss/pico/scss/components/nav";
+  @import "@picocss/pico/scss/utilities/loading";
+  @import "@picocss/pico/scss/utilities/tooltip";
+
+  & > h1 {
+    margin: 0;
+  }
+
+  h3,
+  .dashicons:before {
+    color: var(--color);
+  }
+
+  p { font-size: 14px; }
+
+  a[role=button] {
+    padding: 5px 20px;
+  }
+
+  [aria-busy=true]:not(input):not(select):not(textarea)::before {
+    width: 0.5em;
+    height: 0.5em;
+  }
+
+  [type=checkbox][role=switch] {
+    width: 3em;
+    height: 1.50em;
+
+    &:before {
+      width: calc( 1.5em - ( var( --border-width ) * 2 ) );
+    }
+
+    &:checked::before {
+      margin-top: 0; // Fix for style conflicts.
+      margin-left: calc( 1.725em - var( --border-width ) );
+      margin-inline-start: calc( 1.725em - var( --border-width ) );
+    }
+  }
+
+  .dashicons {
+    float: left;
+    margin-right: 10px;
+  }
+
+  article {
+    @import "@picocss/pico/scss/content/button";
+
+    & > header,
+    & > footer {
+      padding-bottom: 30px;
+      padding-top: 30px;
+      h3, button { margin: 0; }
+    }
+
+    & > header > nav {
+      ul {
+        margin: 0;
+      }
+
+      ul > li {
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+    }
+  }
+
+  form {
+    margin-top: 50px;
+    margin-bottom: 50px;
+
+    input[type=checkbox],
+    input[type=text],
+    a[role=button],
+    {
+      float: right;
+    }
+
+    input[type=text] {
+      max-width: 350px;
+    }
+
+    & > div {
+      margin: 10px 0 10px 30px;
+
+      p {
+        line-height: 1;
+        max-width: 90%;
+        font-size: 14px;
+        margin-bottom: 0;
+        color: var(--color);
+      }
+    }
+
+    & > hr {
+      margin: 30px 0;
+    }
+
+    button[type=submit] {
+      margin: 60px 0 0;
+    }
+  }
+
+  .stats {
+    font-style: italic;
+    color: rgba(0, 0, 0, .6);
   }
 
   /**
@@ -29,27 +137,10 @@
    */
   .cf-images-progress {
     display: none;
+    width: 80%;
 
-    .cf-images-progress-bar {
-      height: 20px;
-      width: 100%;
-      border: 1px solid #191E23;
-    }
-
-    .cf-images-progress-filler {
-      background: #0073AA;
-      height: 100%;
-      transition: width .2s ease-in;
+    & > p {
+      margin-top: 0;
     }
   }
-
-}
-
-/**
- * Media library styles (list view).
- */
-.upload-php .fixed .column-cf-images {
-  width: 10%;
-
-  .spinner { margin: 0 10px; }
 }

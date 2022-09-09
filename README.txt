@@ -1,5 +1,5 @@
-=== Offload, Store, Resize & Optimize Images with CloudFlare  ===
-Plugin Name: Offload, Store, Resize & Optimize Images with CloudFlare
+=== Offload, Store, Resize & Optimize with CloudFlare Images ===
+Plugin Name: Offload, Store, Resize & Optimize with CloudFlare Images
 Contributors: vanyukov
 Tags: cdn, cloudflare images, offload images, cloudflare, optimize
 Donate link: https://www.paypal.com/donate/?business=JRR6QPRGTZ46N&no_recurring=0&item_name=Help+support+the+development+of+the+Cloudflare+Images+plugin+for+WordPress&currency_code=AUD
@@ -10,7 +10,7 @@ Stable tag: %%VERSION%%
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Offload you media library images to the Cloudflare® Images service. Store, resize, optimize and deliver images in a fast and secure manner.
+Offload you media library images to the Cloudflare Images service. Store, resize, optimize and deliver images in a fast and secure manner.
 
 == Description ==
 
@@ -73,31 +73,56 @@ If something is not working for you, please let me know by creating a support ti
 
 == Changelog ==
 
-= 1.0.3 =
+= 1.1.0 - 09.09.2022 =
 
-* Fix: Fatal error in rare cases
+Added:
+* Global API stats
+* Option to disable auto offload
+* New and improved UI
+* New plugin icon
+
+Fixed:
+* Remove autocomplete for setup form fields
+* Incorrect stats calculations
+* Reset image stats, when no offloaded images found in media library
+* Offloading images on servers with outdated SSL libraries
+
+= 1.0.3 - 05.09.2022 =
+
+Fixed:
+* Fatal error in rare cases
 
 = 1.0.2 =
 
-* New: Support for scaled images
-* New: Detect API key changes or other auth issues
-* Enhance: Code quality
-* Fix: Do not replace images on the editor
+Added:
+* Support for scaled images
+* Detect API key changes or other auth issues
+
+Changed:
+* Improve code quality
+
+Fixed:
+* Do not replace images on the editor
 
 = 1.0.1 =
 
-* New: Add image statistics
-* Enhance: Better handling of unsupported media types
-* Enhance: Improve UI and UX
-* Fix: Failed bulk offload if an image path is not defined in metadata
-* Fix: PHP fatal error with Spectra plugin
-* Fix: Incorrect status during bulk offload
+Added:
+* Image statistics
+
+Changed:
+* Better handling of unsupported media types
+* Improve UI and UX
+
+Fixed:
+* Failed bulk offload if an image path is not defined in metadata
+* PHP fatal error with Spectra plugin
+* Incorrect status during bulk offload
 
 = 1.0.0 =
 First release
-* New: Offload images to Cloudflare Images
-* New: Option to disable WordPress image sizes
-* New: Support for custom domains
+* Offload images to Cloudflare Images
+* Option to disable WordPress image sizes
+* Support for custom domains
 
 == Upgrade Notice ==
 

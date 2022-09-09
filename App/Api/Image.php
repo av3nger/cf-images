@@ -84,4 +84,32 @@ class Image extends Api {
 
 	}
 
+	/**
+	 * Fetch usage statistics details for Cloudflare Images.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @throws Exception  Exception during API call.
+	 *
+	 * @return stdClass
+	 */
+	public function stats(): stdClass {
+
+		$this->set_method( 'GET' );
+		$this->set_endpoint( '/stats' );
+
+		$result = $this->request();
+
+		if ( ! isset( $result->result ) || ! isset( $result->result->count ) ) {
+			$count = new stdClass();
+
+			$count->allowed = 100000;
+			$count->current = 0;
+			return $count;
+		}
+
+		return $result->result->count;
+
+	}
+
 }
