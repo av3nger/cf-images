@@ -84,6 +84,7 @@ Fixed:
 * Remove autocomplete for setup form fields
 * Incorrect stats calculations
 * Reset image stats, when no offloaded images found in media library
+* Offloading images on servers with outdated SSL libraries
 
 = 1.0.3 - 05.09.2022 =
 

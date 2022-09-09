@@ -180,11 +180,12 @@ class Api {
 			 *
 			 * @see https://core.trac.wordpress.org/ticket/41608
 			 */
-			$args['method']     = 'POST';
-			$args['user-agent'] = apply_filters( 'http_headers_useragent', 'WordPress/' . get_bloginfo( 'version' ) . '; ' . get_bloginfo( 'url' ), $url );
-			$args['decompress'] = true;
-			$args['stream']     = false;
-			$args['filename']   = null;
+			$args['method']      = 'POST';
+			$args['user-agent']  = apply_filters( 'http_headers_useragent', 'WordPress/' . get_bloginfo( 'version' ) . '; ' . get_bloginfo( 'url' ), $url );
+			$args['decompress']  = true;
+			$args['stream']      = false;
+			$args['filename']    = null;
+			$args['httpversion'] = '1.1';
 
 			$curl = new \WP_Http_Curl();
 
