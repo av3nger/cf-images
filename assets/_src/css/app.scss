@@ -7,7 +7,6 @@
 @import "@picocss/pico/scss/themes/default";
 
 .media_page_cf-images div.wrap {
-  @import "@picocss/pico/scss/content/typography";
   @import "@picocss/pico/scss/content/button";
   @import "@picocss/pico/scss/content/form";
   @import "@picocss/pico/scss/content/form-checkbox-radio";
@@ -24,6 +23,34 @@
     margin: 0;
   }
 
+  h3,
+  .dashicons:before {
+    color: var(--color);
+  }
+
+  a[role=button] {
+    padding: 5px 20px;
+  }
+
+  [aria-busy=true]:not(input):not(select):not(textarea)::before {
+    width: 0.5em;
+    height: 0.5em;
+  }
+
+  [type=checkbox][role=switch] {
+    width: 3em;
+    height: 1.50em;
+
+    &:before {
+      width: calc( 1.5em - ( var( --border-width ) * 2 ) );
+    }
+
+    &:checked::before {
+      margin-left: calc( 1.725em - var( --border-width ) );
+      margin-inline-start: calc( 1.725em - var( --border-width ) );
+    }
+  }
+
   .dashicons {
     float: left;
     margin-right: 10px;
@@ -31,8 +58,8 @@
 
   article > header,
   article > footer {
-    padding-top: 40px;
-    padding-bottom: 40px;
+    padding-top: 30px;
+    padding-bottom: 30px;
     h3, button { margin: 0; }
   }
 
@@ -55,10 +82,11 @@
       margin: 10px 0 10px 30px;
 
       p {
-        line-height: 1.5;
+        line-height: 1;
         max-width: 90%;
-        font-size: 0.875em;
+        font-size: 14px;
         margin-bottom: 0;
+        color: var(--color);
       }
     }
 
@@ -72,8 +100,8 @@
   }
 
   .stats {
-    font-size: 0.75em;
     font-style: italic;
+    color: rgba(0, 0, 0, .6);
   }
 
   /**
@@ -88,14 +116,6 @@
       background-color: #B32D2E;
       border-color: #B32D2E;
     }
-  }
-
-  /**
-   * Notice overwrites
-   */
-  .notice > p {
-    font-size: 1.3em;
-    margin: 10px;
   }
 
   /**

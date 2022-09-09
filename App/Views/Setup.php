@@ -42,10 +42,10 @@ if ( ! defined( 'WPINC' ) ) {
 
 		<p>
 			<?php
-			printf( /* translators: %1$s - opening <mark> tag, %2$s - closing </mark> tag */
+			printf( /* translators: %1$s - opening <code> tag, %2$s - closing </code> tag */
 				esc_html__( "To do this, either set %1\$sdefine( 'CF_IMAGES_ACCOUNT_ID', '<ACCOUNT ID>' );%2\$s and %1\$sdefine( 'CF_IMAGES_KEY_TOKEN', '<API KEY>' );%2\$s manually in wp-config.php file or use the form with instructions below.", 'cf-images' ),
-				'<mark>',
-				'</mark>'
+				'<code>',
+				'</code>'
 			);
 			?>
 		</p>
@@ -57,7 +57,7 @@ if ( ! defined( 'WPINC' ) ) {
 		<form id="cf-images-form" data-type="setup">
 			<span class="dashicons dashicons-admin-users"></span>
 			<label for="account_id">
-				<?php esc_html_e( 'Cloudflare Account ID', 'cf-images' ); ?>
+				<h3><?php esc_html_e( 'Cloudflare Account ID', 'cf-images' ); ?></h3>
 			</label>
 			<div>
 				<input name="account-id" type="text" id="account_id" value="<?php echo defined( 'CF_IMAGES_ACCOUNT_ID' ) ? esc_attr( CF_IMAGES_ACCOUNT_ID ) : ''; ?>" placeholder="<?php esc_attr_e( 'Paste your Cloudflare ID here', 'cf-images' ); ?>">
@@ -85,20 +85,20 @@ if ( ! defined( 'WPINC' ) ) {
 
 			<span class="dashicons dashicons-admin-network"></span>
 			<label for="api_key">
-				<?php esc_html_e( 'Cloudflare API Token', 'cf-images' ); ?>
+				<h3><?php esc_html_e( 'Cloudflare API Token', 'cf-images' ); ?></h3>
 			</label>
 			<div>
 				<input name="api-key" type="text" id="api_key" value="" placeholder="<?php esc_attr_e( 'Paste your Cloudflare API key here', 'cf-images' ); ?>">
-				<p class="description">
+				<p>
 					<?php
-					printf( /* translators: %1$s - opening <mark> tag, %2$s - closing </mark> tag */
+					printf( /* translators: %1$s - opening <code> tag, %2$s - closing </code> tag */
 						esc_html__( 'To use Cloudflare Images you need to create a custom token with the correct %1$sRead%2$s and %1$sUpdate%2$s permissions:', 'cf-images' ),
-						'<mark>',
-						'</mark>'
+						'<code>',
+						'</code>'
 					);
 					?>
 				</p>
-				<p class="description">1.&nbsp;
+				<p>1.&nbsp;
 					<?php
 					printf( /* translators: %1$s - opening <a> tag, %2$s - closing </a> tag, %3$s - opening <strong> tag, %4$s - closing </strong> tag */
 						esc_html__( 'In the Cloudflare dashboard, locate %1$sAPI Tokens%2$s under %3$sMy Profile > API Tokens%4$s.', 'cf-images' ),
@@ -109,7 +109,7 @@ if ( ! defined( 'WPINC' ) ) {
 					);
 					?>
 				</p>
-				<p class="description">2.&nbsp;
+				<p>2.&nbsp;
 					<?php
 					printf( /* translators: %1$s - opening <strong> tag, %2$s - closing </strong> tag */
 						esc_html__( 'Select %1$sCreate Token%2$s.', 'cf-images' ),
@@ -118,7 +118,7 @@ if ( ! defined( 'WPINC' ) ) {
 					);
 					?>
 				</p>
-				<p class="description">3.&nbsp;
+				<p>3.&nbsp;
 					<?php
 					printf( /* translators: %1$s - opening <strong> tag, %2$s - closing </strong> tag */
 						esc_html__( 'In Custom token, select %1$sGet started%2$s.', 'cf-images' ),
@@ -127,10 +127,10 @@ if ( ! defined( 'WPINC' ) ) {
 					);
 					?>
 				</p>
-				<p class="description">4.&nbsp;
+				<p>4.&nbsp;
 					<?php esc_html_e( 'Give your custom token a name.', 'cf-images' ); ?>
 				</p>
-				<p class="description">5.&nbsp;
+				<p>5.&nbsp;
 					<?php
 					printf( /* translators: %1$s - opening <strong> tag, %2$s - closing </strong> tag */
 						esc_html__( 'Scroll to %1$sPermissions%2$s.', 'cf-images' ),
@@ -139,7 +139,7 @@ if ( ! defined( 'WPINC' ) ) {
 					);
 					?>
 				</p>
-				<p class="description">6.&nbsp;
+				<p>6.&nbsp;
 					<?php
 					printf( /* translators: %1$s - opening <em> tag, %2$s - closing </em> tag */
 						esc_html__( 'On the %1$sSelect item…%2$s drop-down menu, choose %1$sCloudflare Images%2$s.', 'cf-images' ),
@@ -148,7 +148,7 @@ if ( ! defined( 'WPINC' ) ) {
 					);
 					?>
 				</p>
-				<p class="description">7.&nbsp;
+				<p>7.&nbsp;
 					<?php
 					printf( /* translators: %1$s - opening <em> tag, %2$s - closing </em> tag */
 						esc_html__( 'In the next drop-down menu, choose %1$sEdit%2$s.', 'cf-images' ),
@@ -157,10 +157,10 @@ if ( ! defined( 'WPINC' ) ) {
 					);
 					?>
 				</p>
-				<p class="description">
+				<p>
 					<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/step-02-custom-token-setup.jpg' ); ?>" alt="<?php esc_attr_e( 'How to create a custom token for Cloudflare images', 'cf-images' ); ?>" width="800" />
 				</p>
-				<p class="description">8.&nbsp;
+				<p>8.&nbsp;
 					<?php
 					printf( /* translators: %1$s - opening <strong> tag, %2$s - closing </strong> tag */
 						esc_html__( 'Select %1$sContinue to summary > Create Token%2$s.', 'cf-images' ),
@@ -169,7 +169,7 @@ if ( ! defined( 'WPINC' ) ) {
 					);
 					?>
 				</p>
-				<p class="description">
+				<p>
 					<?php esc_html_e( 'Your token for Cloudflare Images is now created.', 'cf-images' ); ?>
 				</p>
 			</div>

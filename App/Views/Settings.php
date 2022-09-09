@@ -33,7 +33,7 @@ $stats = get_option( 'cf-images-stats', array( 'synced' => 0 ) );
 		<form id="cf-images-form" data-type="settings">
 			<span class="dashicons dashicons-admin-links"></span>
 			<label for="custom_domain">
-				<?php esc_html_e( 'Serve from custom domain', 'cf-images' ); ?>
+				<h3><?php esc_html_e( 'Serve from custom domain', 'cf-images' ); ?></h3>
 			</label>
 			<div>
 				<input name="custom-domain" type="checkbox" id="custom_domain" value="1" <?php checked( get_option( 'cf-images-custom-domain', false ) ); ?> role="switch">
@@ -49,7 +49,7 @@ $stats = get_option( 'cf-images-stats', array( 'synced' => 0 ) );
 
 			<span class="dashicons dashicons-images-alt2"></span>
 			<label for="disable_sizes">
-				<?php esc_html_e( 'Disable WordPress image sizes', 'cf-images' ); ?>
+				<h3><?php esc_html_e( 'Disable WordPress image sizes', 'cf-images' ); ?></h3>
 			</label>
 			<div>
 				<input name="disable-sizes" type="checkbox" id="disable_sizes" value="1" <?php checked( get_option( 'cf-images-disable-generation', false ) ); ?> role="switch">
@@ -65,7 +65,7 @@ $stats = get_option( 'cf-images-stats', array( 'synced' => 0 ) );
 
 			<span class="dashicons dashicons-cloud-upload"></span>
 			<label for="cf-images-upload-all">
-				<?php esc_html_e( 'Bulk upload images', 'cf-images' ); ?>
+				<h3><?php esc_html_e( 'Bulk upload images', 'cf-images' ); ?></h3>
 			</label>
 			<div>
 				<a href="#" role="button" class="outline" id="cf-images-upload-all">
@@ -95,7 +95,7 @@ $stats = get_option( 'cf-images-stats', array( 'synced' => 0 ) );
 
 			<span class="dashicons dashicons-trash"></span>
 			<label for="cf-images-remove-all">
-				<?php esc_html_e( 'Bulk remove', 'cf-images' ); ?>
+				<h3><?php esc_html_e( 'Bulk remove', 'cf-images' ); ?></h3>
 			</label>
 			<div>
 				<a href="#" role="button" class="outline cf-images-button-red" id="cf-images-remove-all">
