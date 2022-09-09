@@ -4,7 +4,7 @@
  *
  * This class defines all code necessary to run during the plugin's activation and deactivation.
  *
- * @link https://vcore.ru
+ * @link https://vcore.au
  *
  * @package CF_Images
  * @subpackage CF_Images/App

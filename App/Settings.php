@@ -4,7 +4,7 @@
  *
  * This is used to define saving settings, writing wp-config.php defines.
  *
- * @link https://vcore.ru
+ * @link https://vcore.au
  *
  * @package CF_Images
  * @subpackage CF_Images/App

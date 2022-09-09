@@ -6,13 +6,13 @@
  * Admin area. This file also App all the dependencies used by the plugin, registers
  * the activation and deactivation functions, and defines a function that starts the plugin.
  *
- * @link              https://vcore.ru
+ * @link              https://vcore.au
  * @since             1.0.0
  * @package           CF_Images
  *
  * @wordpress-plugin
  * Plugin Name:       Offload Media to Cloudflare Images
- * Plugin URI:        https://vcore.ru
+ * Plugin URI:        https://vcore.au
  * Description:       Offload media library images to the `Cloudflare Images` service.
  * Version:           1.1.0
  * Author:            Anton Vanyukov

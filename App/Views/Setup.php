@@ -4,7 +4,7 @@
  *
  * Shown, when the Cloudflare account ID or API key are not defined.
  *
- * @link https://vcore.ru
+ * @link https://vcore.au
  *
  * @package CF_Images
  * @subpackage CF_Images/App/Views

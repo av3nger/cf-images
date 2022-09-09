@@ -4,7 +4,7 @@
  *
  * Common view for all pages.
  *
- * @link https://vcore.ru
+ * @link https://vcore.au
  *
  * @package CF_Images
  * @subpackage CF_Images/App/Views

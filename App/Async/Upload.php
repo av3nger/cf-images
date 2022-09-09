@@ -4,7 +4,7 @@
  *
  * This class defines all code necessary to implement async processing of image uploads.
  *
- * @link https://vcore.ru
+ * @link https://vcore.au
  *
  * @package CF_Images
  * @subpackage CF_Images/App/Async

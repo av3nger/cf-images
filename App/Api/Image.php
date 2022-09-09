@@ -4,7 +4,7 @@
  *
  * This class defines all code necessary to communicate with the Cloudflare API.
  *
- * @link https://vcore.ru
+ * @link https://vcore.au
  *
  * @package CF_Images
  * @subpackage CF_Images/App/Api
