@@ -12,7 +12,9 @@
   @import "@picocss/pico/scss/content/form-checkbox-radio";
   @import "@picocss/pico/scss/components/card";
   @import "@picocss/pico/scss/components/progress";
+  @import "@picocss/pico/scss/components/nav";
   @import "@picocss/pico/scss/utilities/loading";
+  @import "@picocss/pico/scss/utilities/tooltip";
 
   // Fix for style conflicts.
   [type=checkbox][role=switch]:checked::before {
@@ -27,6 +29,8 @@
   .dashicons:before {
     color: var(--color);
   }
+
+  p { font-size: 14px; }
 
   a[role=button] {
     padding: 5px 20px;
@@ -58,9 +62,12 @@
 
   article > header,
   article > footer {
-    padding-top: 30px;
     padding-bottom: 30px;
     h3, button { margin: 0; }
+  }
+
+  article > footer {
+    padding-top: 30px;
   }
 
   form {
@@ -124,5 +131,9 @@
   .cf-images-progress {
     display: none;
     width: 80%;
+
+    & > p {
+      margin-top: 0;
+    }
   }
 }

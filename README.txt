@@ -76,6 +76,7 @@ If something is not working for you, please let me know by creating a support ti
 = 1.1.0 =
 
 Added:
+* Global API stats
 * New and improved UI
 * New plugin icon
 

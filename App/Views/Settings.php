@@ -20,6 +20,12 @@ if ( ! defined( 'WPINC' ) ) {
 
 $stats = get_option( 'cf-images-stats', array( 'synced' => 0 ) );
 
+$api_stats = sprintf( /* translators: %1$d - uploaded image count, %2$d - allowed image count */
+	esc_html__( 'API stats: %1$d/%2$d', 'cf-images' ),
+	$stats['api_current'] ?? absint( $stats['synced'] ),
+	$stats['api_allowed'] ?? 100000
+);
+
 ?>
 
 <div class="wrap">
@@ -27,7 +33,18 @@ $stats = get_option( 'cf-images-stats', array( 'synced' => 0 ) );
 
 	<article>
 		<header>
-			<h3><?php esc_html_e( 'Settings', 'cf-images' ); ?></h3>
+			<nav>
+				<ul>
+					<li>
+						<h3><?php esc_html_e( 'Settings', 'cf-images' ); ?></h3>
+					</li>
+				</ul>
+				<ul>
+					<li>
+						<?php esc_html_e( 'Status', 'cf-images' ); ?>: <span style="color: green"><?php esc_html_e( 'Connected', 'cf-images' ); ?></span>
+					</li>
+				</ul>
+			</nav>
 		</header>
 
 		<form id="cf-images-form" data-type="settings">
@@ -82,12 +99,7 @@ $stats = get_option( 'cf-images-stats', array( 'synced' => 0 ) );
 				</p>
 
 				<p class="stats">
-					<?php
-					printf( /* translators: %d - number of offloaded images */
-						esc_html__( 'Offloaded images: %d', 'cf-images' ),
-						absint( $stats['synced'] )
-					);
-					?>
+					<?php esc_html_e( 'Offloaded', 'cf-images' ); ?>: <em data-tooltip="<?php echo esc_attr( $api_stats ); ?>"><?php echo absint( $stats['synced'] ); ?> <?php esc_html_e( 'images', 'cf-images' ); ?></em>
 				</p>
 			</div>
 

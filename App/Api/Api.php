@@ -168,7 +168,9 @@ class Api {
 		$url  = $this->api_url . CF_IMAGES_ACCOUNT_ID . '/images/v1' . $this->endpoint;
 		$args = $this->get_args();
 
-		if ( 'POST' === $args['method'] || 'DELETE' === $args['method'] || 'PATCH' === $args['method'] ) {
+		if ( 'GET' === $args['method'] ) {
+			$response = wp_remote_get( $url, $args );
+		} elseif ( 'POST' === $args['method'] || 'DELETE' === $args['method'] || 'PATCH' === $args['method'] ) {
 			$response = wp_remote_post( $url, $args );
 		} elseif ( 'UPLOAD' === $args['method'] ) {
 			/**
