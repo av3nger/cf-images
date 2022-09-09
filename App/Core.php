@@ -569,6 +569,10 @@ class Core {
 			$stats['synced'] = $count;
 		}
 
+		if ( $stats['synced'] < 0 ) {
+			$stats['synced'] = 0;
+		}
+
 		update_option( 'cf-images-stats', $stats, false );
 
 	}

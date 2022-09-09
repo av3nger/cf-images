@@ -81,6 +81,7 @@ Added:
 * New plugin icon
 
 Fixed:
+* Incorrect stats calculations
 * Reset image stats, when no offloaded images found in media library
 
 = 1.0.3 - 05.09.2022 =
