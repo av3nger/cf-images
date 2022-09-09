@@ -67,6 +67,11 @@ If something is not working for you, please let me know by creating a support ti
 
 == Changelog ==
 
+= 1.1.1 =
+
+Changed:
+* Improved button styling
+
 = 1.1.0 - 09.09.2022 =
 
 Added:
