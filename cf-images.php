@@ -1,6 +1,6 @@
 <?php
 /**
- * Offload, Store, Resize & Optimize with CloudFlare Images
+ * Offload, Store, Resize & Optimize with Cloudflare Images
  *
  * This file is read by WordPress to generate the plugin information in the plugin
  * Admin area. This file also App all the dependencies used by the plugin, registers
