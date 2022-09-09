@@ -87,6 +87,12 @@ class Settings {
 			update_option( 'cf-images-custom-domain', (bool) $form['custom-domain'], false );
 		}
 
+		if ( ! isset( $form['auto-offload'] ) ) {
+			delete_option( 'cf-images-auto-offload' );
+		} else {
+			update_option( 'cf-images-auto-offload', (bool) $form['auto-offload'], false );
+		}
+
 		wp_send_json_success();
 
 	}

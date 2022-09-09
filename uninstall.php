@@ -37,6 +37,7 @@ delete_option( 'cf-images-install-notice' );
 delete_option( 'cf-images-config-written' );
 delete_option( 'cf-images-stats' );
 delete_option( 'cf-images-auth-error' );
+delete_option( 'cf-images-auto-offload' );
 
 // Remove defines from wp-config.php file.
 require_once __DIR__ . '/App/Settings.php';

@@ -180,7 +180,9 @@ class Core {
 		}
 
 		// Image actions.
-		add_filter( 'wp_async_wp_generate_attachment_metadata', array( $this, 'upload_image' ), 10, 2 );
+		if ( get_option( 'cf-images-auto-offload', false ) ) {
+			add_filter( 'wp_async_wp_generate_attachment_metadata', array( $this, 'upload_image' ), 10, 2 );
+		}
 		add_action( 'delete_attachment', array( $this, 'delete_image' ) );
 
 		if ( ! is_admin() ) {

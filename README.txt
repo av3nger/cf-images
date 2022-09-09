@@ -77,6 +77,7 @@ If something is not working for you, please let me know by creating a support ti
 
 Added:
 * Global API stats
+* Option to disable auto offload
 * New and improved UI
 * New plugin icon
 
