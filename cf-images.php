@@ -14,7 +14,7 @@
  * Plugin Name:       Offload Media to Cloudflare Images
  * Plugin URI:        https://vcore.au
  * Description:       Offload media library images to the `Cloudflare Images` service.
- * Version:           1.1.0
+ * Version:           1.1.1-beta.1
  * Author:            Anton Vanyukov
  * Author URI:        https://vanyukov.su
  * License:           GPL-2.0+
@@ -30,7 +30,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-define( 'CF_IMAGES_VERSION', '1.1.0' );
+define( 'CF_IMAGES_VERSION', '1.1.1-beta' );
 define( 'CF_IMAGES_DIR_URL', plugin_dir_url( __FILE__ ) );
 
 require_once 'App/Activator.php';
