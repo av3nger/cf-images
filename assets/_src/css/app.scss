@@ -63,11 +63,19 @@
   article > header,
   article > footer {
     padding-bottom: 30px;
+    padding-top: 30px;
     h3, button { margin: 0; }
   }
 
-  article > footer {
-    padding-top: 30px;
+  article > header > nav {
+    ul {
+      margin: 0;
+    }
+
+    ul > li {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
   }
 
   form {
