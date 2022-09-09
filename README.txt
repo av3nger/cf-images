@@ -14,16 +14,11 @@ Offload you media library images to the Cloudflare Images service. Store, resize
 
 == Description ==
 
-Tired of using expensive CDN plugins that charge ridiculous amounts for something that should be free? Offload your media
-library to Cloudflare Images and let it handle everything for you - store, resize, optimize and deliver images in the
-best possible format to your users.
+Tired of using expensive CDN plugins that charge ridiculous amounts for something that should be free? Offload your media library to Cloudflare Images and let it handle everything for you - store, resize, optimize and deliver images in the best possible format to your users.
 
-Note from the developer: The plugin is a work in progress, which I created for my personal use, because I got tired with
-image optimization plugins ignoring real user needs or overcharging for services. If something is not working as expected,
-or you want a feature added to the plugin, please create a support request, and I will do my best to make it happen.
+Note from the developer: The plugin is a work in progress, which I created for my personal use, because I got tired with image optimization plugins ignoring real user needs or overcharging for services. If something is not working as expected, or you want a feature added to the plugin, please create a support request, and I will do my best to make it happen.
 
-Cloudflare, the Cloudflare logo, and Cloudflare Workers are trademarks and/or registered trademarks of Cloudflare, Inc.
-in the United States and other jurisdictions.
+Cloudflare, the Cloudflare logo, and Cloudflare Workers are trademarks and/or registered trademarks of Cloudflare, Inc. in the United States and other jurisdictions.
 
 == Installation ==
 
@@ -36,8 +31,7 @@ in the United States and other jurisdictions.
 
 = How does this work? =
 
-The plugin will use the Cloudflare Images service to host all supported images and serve them with the best possible
-settings to the user.
+The plugin will use the Cloudflare Images service to host all supported images and serve them with the best possible settings to the user.
 
 = Is this free? =
 
