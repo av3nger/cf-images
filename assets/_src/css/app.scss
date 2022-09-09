@@ -15,11 +15,6 @@
   @import "@picocss/pico/scss/utilities/loading";
   @import "@picocss/pico/scss/utilities/tooltip";
 
-  // Fix for style conflicts.
-  [type=checkbox][role=switch]:checked::before {
-    margin-top: 0;
-  }
-
   & > h1 {
     margin: 0;
   }
@@ -49,6 +44,7 @@
     }
 
     &:checked::before {
+      margin-top: 0; // Fix for style conflicts.
       margin-left: calc( 1.725em - var( --border-width ) );
       margin-inline-start: calc( 1.725em - var( --border-width ) );
     }
