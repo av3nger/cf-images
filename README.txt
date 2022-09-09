@@ -1,5 +1,5 @@
-=== Offload, Store, Resize & Optimize Images with CloudFlare  ===
-Plugin Name: Offload, Store, Resize & Optimize Images with CloudFlare
+=== Offload, Store, Resize & Optimize with CloudFlare Images ===
+Plugin Name: Offload, Store, Resize & Optimize with CloudFlare Images
 Contributors: vanyukov
 Tags: cdn, cloudflare images, offload images, cloudflare, optimize
 Donate link: https://www.paypal.com/donate/?business=JRR6QPRGTZ46N&no_recurring=0&item_name=Help+support+the+development+of+the+Cloudflare+Images+plugin+for+WordPress&currency_code=AUD
@@ -10,7 +10,7 @@ Stable tag: %%VERSION%%
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Offload you media library images to the Cloudflare® Images service. Store, resize, optimize and deliver images in a fast and secure manner.
+Offload you media library images to the Cloudflare Images service. Store, resize, optimize and deliver images in a fast and secure manner.
 
 == Description ==
 
