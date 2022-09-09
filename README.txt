@@ -81,6 +81,7 @@ Added:
 * New plugin icon
 
 Fixed:
+* Remove autocomplete for setup form fields
 * Incorrect stats calculations
 * Reset image stats, when no offloaded images found in media library
 

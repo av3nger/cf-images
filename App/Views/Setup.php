@@ -60,7 +60,7 @@ if ( ! defined( 'WPINC' ) ) {
 				<h3><?php esc_html_e( 'Cloudflare Account ID', 'cf-images' ); ?></h3>
 			</label>
 			<div>
-				<input name="account-id" type="text" id="account_id" value="<?php echo defined( 'CF_IMAGES_ACCOUNT_ID' ) ? esc_attr( CF_IMAGES_ACCOUNT_ID ) : ''; ?>" placeholder="<?php esc_attr_e( 'Paste your Cloudflare ID here', 'cf-images' ); ?>">
+				<input name="account-id" type="text" id="account_id" value="<?php echo defined( 'CF_IMAGES_ACCOUNT_ID' ) ? esc_attr( CF_IMAGES_ACCOUNT_ID ) : ''; ?>" placeholder="<?php esc_attr_e( 'Paste your Cloudflare ID here', 'cf-images' ); ?>" autocomplete="off">
 				<p>1.&nbsp;
 					<?php
 					printf( /* translators: %1$s - opening <a> tag, %2$s - closing </a> tag */
@@ -88,7 +88,7 @@ if ( ! defined( 'WPINC' ) ) {
 				<h3><?php esc_html_e( 'Cloudflare API Token', 'cf-images' ); ?></h3>
 			</label>
 			<div>
-				<input name="api-key" type="text" id="api_key" value="" placeholder="<?php esc_attr_e( 'Paste your Cloudflare API key here', 'cf-images' ); ?>">
+				<input name="api-key" type="text" id="api_key" value="" placeholder="<?php esc_attr_e( 'Paste your Cloudflare API key here', 'cf-images' ); ?>" autocomplete="off">
 				<p>
 					<?php
 					printf( /* translators: %1$s - opening <code> tag, %2$s - closing </code> tag */
