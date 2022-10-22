@@ -250,7 +250,13 @@ class Core {
 		$this->check_ajax_request();
 
 		$attachment_id = (int) filter_input( INPUT_POST, 'data', FILTER_SANITIZE_NUMBER_INT );
-		$this->upload_image( wp_get_attachment_metadata( $attachment_id ), $attachment_id );
+
+		$metadata = wp_get_attachment_metadata( $attachment_id );
+		if ( false === $metadata ) {
+			wp_send_json_error( __( 'Image metadata not found.', 'cf-images' ) );
+		}
+
+		$this->upload_image( $metadata, $attachment_id );
 
 		if ( is_wp_error( $this->error ) ) {
 			wp_send_json_error( $this->error->get_error_message() );
@@ -323,7 +329,12 @@ class Core {
 		$image = new WP_Query( $args );
 
 		if ( 'upload' === $action ) {
-			$this->upload_image( wp_get_attachment_metadata( $image->post->ID ), $image->post->ID );
+			$metadata = wp_get_attachment_metadata( $image->post->ID );
+			if ( false === $metadata ) {
+				wp_send_json_error( __( 'Image metadata not found.', 'cf-images' ) );
+			}
+
+			$this->upload_image( $metadata, $image->post->ID );
 
 			// If there's an error with offloading, we need to mark such an image as skipped.
 			if ( is_wp_error( $this->error ) ) {

@@ -72,6 +72,9 @@ If something is not working for you, please let me know by creating a support ti
 Changed:
 * Improved button styling
 
+Fixed:
+* Argument #1 ($metadata) must be of type array, bool given error
+
 = 1.1.0 - 09.09.2022 =
 
 Added:
