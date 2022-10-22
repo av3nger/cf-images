@@ -71,6 +71,7 @@ If something is not working for you, please let me know by creating a support ti
 
 Changed:
 * Improved button styling
+* Allow skipping the setup wizard with CF_IMAGES_ACCOUNT_ID and CF_IMAGES_KEY_TOKEN defines
 
 Fixed:
 * Argument #1 ($metadata) must be of type array, bool given error
