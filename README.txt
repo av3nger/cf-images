@@ -67,7 +67,7 @@ If something is not working for you, please let me know by creating a support ti
 
 == Changelog ==
 
-= 1.1.1 =
+= 1.1.1 - 24.10.2022 =
 
 Changed:
 * Improved button styling
