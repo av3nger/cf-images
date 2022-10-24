@@ -67,6 +67,15 @@ If something is not working for you, please let me know by creating a support ti
 
 == Changelog ==
 
+= 1.1.1 - 24.10.2022 =
+
+Changed:
+* Improved button styling
+* Allow skipping the setup wizard with CF_IMAGES_ACCOUNT_ID and CF_IMAGES_KEY_TOKEN defines
+
+Fixed:
+* Argument #1 ($metadata) must be of type array, bool given error
+
 = 1.1.0 - 09.09.2022 =
 
 Added:

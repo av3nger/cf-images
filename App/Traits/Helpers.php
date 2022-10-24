@@ -65,7 +65,7 @@ trait Helpers {
 		$config_written = get_option( 'cf-images-config-written', false );
 		$defines_found  = defined( 'CF_IMAGES_ACCOUNT_ID' ) && defined( 'CF_IMAGES_KEY_TOKEN' );
 
-		return $config_written && ( $saved || $defines_found );
+		return ( $config_written && $saved ) || $defines_found;
 
 	}
 

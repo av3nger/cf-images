@@ -26,10 +26,6 @@
 
   p { font-size: 14px; }
 
-  a[role=button] {
-    padding: 5px 20px;
-  }
-
   [aria-busy=true]:not(input):not(select):not(textarea)::before {
     width: 0.5em;
     height: 0.5em;
@@ -57,6 +53,24 @@
 
   article {
     @import "@picocss/pico/scss/content/button";
+
+    /**
+     * Buttons
+     */
+    .cf-images-button-red {
+      background-color: #DC3232;
+      border-color: #DC3232;
+      color: #FFFFFF;
+
+      &:hover {
+        background-color: #B32D2E;
+        border-color: #B32D2E;
+      }
+    }
+
+    a[role=button] {
+      padding: 5px 20px;
+    }
 
     & > header,
     & > footer {
@@ -116,20 +130,6 @@
   .stats {
     font-style: italic;
     color: rgba(0, 0, 0, .6);
-  }
-
-  /**
-   * Buttons
-   */
-  .cf-images-button-red {
-    background-color: #DC3232;
-    border-color: #DC3232;
-    color: #FFFFFF;
-
-    &:hover {
-      background-color: #B32D2E;
-      border-color: #B32D2E;
-    }
   }
 
   /**
