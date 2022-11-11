@@ -69,6 +69,9 @@ If something is not working for you, please let me know by creating a support ti
 
 = 1.1.2 =
 
+Added:
+* Button to disconnect from Cloudflare
+
 Changed:
 * On network installs, plugin can now only be activated on the network level
 

@@ -76,7 +76,6 @@ import '../css/app.scss';
 						showNotice( response.data, 'error' );
 					}
 
-					window.console.log( response );
 					return;
 				}
 
@@ -131,6 +130,20 @@ import '../css/app.scss';
 
 		$( '.media_page_cf-images [role=button]' ).attr( 'disabled', true );
 		runProgressBar( 'remove' );
+	} );
+
+	/**
+	 * Disconnect from Cloudflare.
+	 *
+	 * @since 1.1.2
+	 */
+	$( '#cf-images-disconnect' ).on( 'click', function( e ) {
+		e.preventDefault();
+
+		$( this ).attr( 'aria-busy', true ).html( CFImages.strings.disconnecting );
+		post( 'cf_images_disconnect' )
+			.then( () => window.location.reload() )
+			.catch( window.console.log );
 	} );
 
 	/**

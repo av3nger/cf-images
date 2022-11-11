@@ -169,4 +169,26 @@ class Settings {
 
 	}
 
+	/**
+	 * Disconnect from Cloudflare.
+	 *
+	 * @since 1.1.2
+	 *
+	 * @return void
+	 */
+	public function ajax_disconnect() {
+
+		delete_option( 'cf-images-hash' );
+		delete_option( 'cf-images-setup-done' );
+		delete_option( 'cf-images-config-written' );
+		delete_option( 'cf-images-auth-error' );
+
+		// Remove defines from wp-config.php file.
+		$this->write_config( 'CF_IMAGES_ACCOUNT_ID' );
+		$this->write_config( 'CF_IMAGES_KEY_TOKEN' );
+
+		wp_send_json_success();
+
+	}
+
 }
