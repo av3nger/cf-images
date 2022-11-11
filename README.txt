@@ -67,6 +67,11 @@ If something is not working for you, please let me know by creating a support ti
 
 == Changelog ==
 
+= 1.1.2 =
+
+Changed:
+* On network installs, plugin can now only be activated on the network level
+
 = 1.1.1 - 24.10.2022 =
 
 Changed:
