@@ -70,6 +70,7 @@ If something is not working for you, please let me know by creating a support ti
 = 1.1.2 =
 
 Added:
+* Allow defining a custom domain for the Cloudflare Images service
 * Button to disconnect from Cloudflare
 
 Changed:

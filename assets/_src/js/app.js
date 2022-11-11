@@ -147,6 +147,15 @@ import '../css/app.scss';
 	} );
 
 	/**
+	 * Toggle custom domain input.
+	 *
+	 * @since 1.1.2
+	 */
+	$( '#custom_domain' ).on( 'change', function( e ) {
+		$( 'input[name="custom_domain_input"]' ).toggleClass( 'hidden', ! e.target.checked );
+	} );
+
+	/**
 	 * Do AJAX request to WordPress.
 	 *
 	 * @since 1.0.0

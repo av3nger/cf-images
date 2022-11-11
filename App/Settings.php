@@ -84,7 +84,15 @@ class Settings {
 		if ( ! isset( $form['custom-domain'] ) ) {
 			delete_option( 'cf-images-custom-domain' );
 		} else {
-			update_option( 'cf-images-custom-domain', (bool) $form['custom-domain'], false );
+			$value = (bool) $form['custom-domain'];
+			if ( isset( $form['custom_domain_input'] ) ) {
+				$url = esc_url( $form['custom_domain_input'] );
+				if ( wp_http_validate_url( $url ) ) {
+					$value = $url;
+				}
+			}
+
+			update_option( 'cf-images-custom-domain', $value, false );
 		}
 
 		if ( ! isset( $form['auto-offload'] ) ) {

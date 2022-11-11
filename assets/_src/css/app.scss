@@ -100,8 +100,9 @@
     margin-bottom: 50px;
 
     input[type=checkbox],
-    input[type=text],
     a[role=button],
+    #account_id,
+    #api_key
     {
       float: right;
     }

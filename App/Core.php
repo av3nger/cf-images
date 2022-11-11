@@ -374,8 +374,12 @@ class Core {
 	private function get_cdn_domain(): string {
 
 		$domain = 'https://imagedelivery.net';
-		if ( get_option( 'cf-images-custom-domain', false ) ) {
-			$domain = get_site_url() . '/cdn-cgi/imagedelivery';
+
+		$custom_domain = get_option( 'cf-images-custom-domain', false );
+
+		if ( $custom_domain ) {
+			$domain  = wp_http_validate_url( $custom_domain ) ? $custom_domain : get_site_url();
+			$domain .= '/cdn-cgi/imagedelivery';
 		}
 
 		return $domain;
