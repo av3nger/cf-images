@@ -76,6 +76,9 @@ Added:
 Changed:
 * On network installs, plugin can now only be activated on the network level
 
+Fixed:
+* Settings redirect to media library after saving
+
 = 1.1.1 - 24.10.2022 =
 
 Changed:

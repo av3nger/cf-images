@@ -47,7 +47,7 @@ $api_stats = sprintf( /* translators: %1$d - uploaded image count, %2$d - allowe
 			</nav>
 		</header>
 
-		<form id="cf-images-form" data-type="settings">
+		<form id="cf-images-form" data-type="settings" onsubmit="event.preventDefault()">
 			<span class="dashicons dashicons-admin-site"></span>
 			<label for="auto_offload">
 				<h3><?php esc_html_e( 'Auto offload new images', 'cf-images' ); ?></h3>
