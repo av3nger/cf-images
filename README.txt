@@ -75,6 +75,7 @@ Added:
 
 Changed:
 * On network installs, plugin can now only be activated on the network level
+* Minor UI/UX improvements
 
 Fixed:
 * Settings redirect to media library after saving
