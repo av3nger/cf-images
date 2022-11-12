@@ -76,6 +76,7 @@ Added:
 
 Changed:
 * On network installs, plugin can now only be activated on the network level
+* When bulk uploading, if no metadata is found for an image - skip the image, instead of failing the whole process
 * Minor UI/UX improvements
 
 Fixed:

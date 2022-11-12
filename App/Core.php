@@ -338,15 +338,15 @@ class Core {
 		if ( 'upload' === $action ) {
 			$metadata = wp_get_attachment_metadata( $image->post->ID );
 			if ( false === $metadata ) {
-				wp_send_json_error( __( 'Image metadata not found.', 'cf-images' ) );
-			}
-
-			$this->upload_image( $metadata, $image->post->ID );
-
-			// If there's an error with offloading, we need to mark such an image as skipped.
-			if ( is_wp_error( $this->error ) ) {
 				update_post_meta( $image->post->ID, '_cloudflare_image_skip', true );
-				$this->error = false; // Reset the error.
+			} else {
+				$this->upload_image( $metadata, $image->post->ID );
+
+				// If there's an error with offloading, we need to mark such an image as skipped.
+				if ( is_wp_error( $this->error ) ) {
+					update_post_meta( $image->post->ID, '_cloudflare_image_skip', true );
+					$this->error = false; // Reset the error.
+				}
 			}
 		} else {
 			$this->delete_image( $image->post->ID );
