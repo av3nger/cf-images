@@ -71,6 +71,7 @@ If something is not working for you, please let me know by creating a support ti
 
 Added:
 * Allow defining a custom domain for the Cloudflare Images service
+* Option to skip images in media library from offloading
 * Button to disconnect from Cloudflare
 
 Changed:

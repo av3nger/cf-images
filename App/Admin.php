@@ -130,6 +130,7 @@ class Admin {
 					'inProgress'    => esc_html__( 'Processing', 'cf-images' ),
 					'offloadError'  => esc_html__( 'Error during offload', 'cf-images' ),
 					'offloaded'     => esc_html__( 'Offloaded', 'cf-images' ),
+					'skipped'       => esc_html__( 'Skipped from processing', 'cf-images' ),
 				),
 			)
 		);

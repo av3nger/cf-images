@@ -98,8 +98,8 @@ import '../css/app.scss';
 		post( 'cf_images_offload_image', $( this ).data( 'id' ) )
 			.then( ( response ) => {
 				if ( ! response.success ) {
-					divStatus.html( CFImages.strings.offloadError );
-					window.console.log( response );
+					const message = response.data || CFImages.strings.offloadError;
+					divStatus.html( message );
 					return;
 				}
 
@@ -245,4 +245,30 @@ import '../css/app.scss';
 			} )
 			.catch( window.console.log );
 	};
+
+	/**
+	 * Skip image from processing.
+	 *
+	 * @since 1.1.2
+	 *
+	 * @param {object} el  Link element.
+	 * @param {number} imageId  Image ID.
+	 */
+	const skipImage = ( el ) => {
+		const divStatus = $( el ).parent();
+		divStatus.html( CFImages.strings.inProgress + '<span class="spinner is-active"></span>' );
+
+		post( 'cf_images_skip_image', $( el ).data( 'id' ) )
+			.then( ( response ) => {
+				if ( ! response.success ) {
+					const message = response.data || CFImages.strings.offloadError;
+					divStatus.html( message );
+					return;
+				}
+
+				divStatus.html( CFImages.strings.skipped );
+			} )
+			.catch( window.console.log );
+	};
+	window.cfSkipImage = skipImage;
 }( jQuery ) );
