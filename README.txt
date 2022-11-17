@@ -70,6 +70,7 @@ If something is not working for you, please let me know by creating a support ti
 = 1.1.2 =
 
 Added:
+* Support for WooCommerce bulk product uploads
 * Allow defining a custom domain for the Cloudflare Images service
 * Option to skip images in media library from offloading
 * Button to disconnect from Cloudflare

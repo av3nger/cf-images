@@ -135,8 +135,8 @@ abstract class Task {
 			add_action( 'shutdown', array( $this, 'launch_on_shutdown' ) );
 		}
 
-		if ( isset( $data['metadata'] ) ) {
-			return $data['metadata'];
+		if ( isset( $data['current'] ) ) {
+			return $data['current'];
 		}
 
 	}

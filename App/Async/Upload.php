@@ -56,10 +56,22 @@ class Upload extends Task {
 	 */
 	protected function prepare_data( array $data ): array {
 
-		return array(
-			'metadata'      => $data[0],
-			'attachment_id' => $data[1],
+		$out_data = array(
+			'images'   => array(),
+			'metadata' => array(),
+			'current'  => $data[0], // Current image data, sent out to WordPress in Task::launch().
 		);
+
+		if ( ! empty( $this->body_data['images'] ) ) {
+			$out_data['images']   = $this->body_data['images'];
+			$out_data['metadata'] = $this->body_data['metadata'];
+		}
+
+		// Store attachment IDs and metadata inside the body data.
+		$out_data['images'][]             = $data[1];
+		$out_data['metadata'][ $data[1] ] = $data[0];
+
+		return $out_data;
 
 	}
 
@@ -72,15 +84,21 @@ class Upload extends Task {
 	 */
 	protected function run_action() {
 
-		$metadata      = filter_input( INPUT_POST, 'metadata', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
-		$attachment_id = filter_input( INPUT_POST, 'attachment_id', FILTER_VALIDATE_INT );
+		$image_ids = wp_parse_id_list( $_POST['images'] ); // phpcs:ignore
 
-		if ( ! wp_attachment_is_image( $attachment_id ) ) {
-			return;
-		}
+		array_walk(
+			$image_ids,
+			function( $attachment_id ) {
+				if ( ! wp_attachment_is_image( $attachment_id ) ) {
+					return;
+				}
 
-		// Allow the Asynchronous task to run.
-		do_action( "wp_async_$this->action", $metadata, $attachment_id );
+				$metadata = $_POST['metadata'][ $attachment_id ]; // phpcs:ignore
+				if ( $metadata ) {
+					do_action( "wp_async_$this->action", $metadata, $attachment_id );
+				}
+			}
+		);
 
 	}
 
