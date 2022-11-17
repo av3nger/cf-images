@@ -1,7 +1,7 @@
 {
   "name": "cf-images",
   "description": "Offload, Store, Resize & Optimize with Cloudflare Images",
-  "version": "1.1.2-beta.1",
+  "version": "1.1.2-beta.2",
   "main": "cf-images.php",
   "author": "Anton Vanyukov",
   "license": "GPL-2.0-or-later",
