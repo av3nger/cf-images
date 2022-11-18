@@ -67,7 +67,7 @@ If something is not working for you, please let me know by creating a support ti
 
 == Changelog ==
 
-= 1.1.2 =
+= 1.1.2 - 19.11.2022 =
 
 Added:
 * Support for WooCommerce bulk product uploads
@@ -79,6 +79,7 @@ Changed:
 * On network installs, plugin can now only be activated on the network level
 * When bulk uploading, if no metadata is found for an image - skip the image, instead of failing the whole process
 * Minor UI/UX improvements
+* Improved compatibility with WordPress 6.1
 
 Fixed:
 * Settings redirect to media library after saving
