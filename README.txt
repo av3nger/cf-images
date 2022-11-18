@@ -5,7 +5,7 @@ Tags: cdn, cloudflare images, offload images, cloudflare, optimize
 Donate link: https://www.paypal.com/donate/?business=JRR6QPRGTZ46N&no_recurring=0&item_name=Help+support+the+development+of+the+Cloudflare+Images+plugin+for+WordPress&currency_code=AUD
 Requires at least: 5.6
 Requires PHP: 7.0
-Tested up to: 6.0
+Tested up to: 6.1
 Stable tag: %%VERSION%%
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -66,6 +66,22 @@ If something is not working for you, please let me know by creating a support ti
 2. Various options
 
 == Changelog ==
+
+= 1.1.2 =
+
+Added:
+* Support for WooCommerce bulk product uploads
+* Allow defining a custom domain for the Cloudflare Images service
+* Option to skip images in media library from offloading
+* Button to disconnect from Cloudflare
+
+Changed:
+* On network installs, plugin can now only be activated on the network level
+* When bulk uploading, if no metadata is found for an image - skip the image, instead of failing the whole process
+* Minor UI/UX improvements
+
+Fixed:
+* Settings redirect to media library after saving
 
 = 1.1.1 - 24.10.2022 =
 

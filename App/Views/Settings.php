@@ -47,7 +47,7 @@ $api_stats = sprintf( /* translators: %1$d - uploaded image count, %2$d - allowe
 			</nav>
 		</header>
 
-		<form id="cf-images-form" data-type="settings">
+		<form id="cf-images-form" data-type="settings" onsubmit="event.preventDefault()">
 			<span class="dashicons dashicons-admin-site"></span>
 			<label for="auto_offload">
 				<h3><?php esc_html_e( 'Auto offload new images', 'cf-images' ); ?></h3>
@@ -69,12 +69,18 @@ $api_stats = sprintf( /* translators: %1$d - uploaded image count, %2$d - allowe
 				<h3><?php esc_html_e( 'Serve from custom domain', 'cf-images' ); ?></h3>
 			</label>
 			<div>
-				<input name="custom-domain" type="checkbox" id="custom_domain" value="1" <?php checked( get_option( 'cf-images-custom-domain', false ) ); ?> role="switch">
+				<?php $custom_domain = get_option( 'cf-images-custom-domain', false ); ?>
+				<input name="custom-domain" type="checkbox" id="custom_domain" value="1" <?php checked( (bool) $custom_domain ); ?> role="switch">
 				<p>
-					<?php esc_html_e( 'Use the current site domain instead of `imagedelivery.net`.', 'cf-images' ); ?>
+					<?php esc_html_e( 'Use the current site domain instead of `imagedelivery.net`, or specify a custom domain.', 'cf-images' ); ?>
 				</p>
 				<p>
-					<?php esc_html_e( 'Note: Image delivery is supported from all customer domains under the same Cloudflare account.', 'cf-images' ); ?>
+					<?php esc_html_e( 'Note: The domain must be linked with Cloudflare in order to work correctly.', 'cf-images' ); ?>
+				</p>
+
+				<p>
+					<label class="screen-reader-text" for="custom-domain-input"><?php esc_html_e( 'Custom domain', 'cf-images' ); ?></label>
+					<input class="<?php echo $custom_domain ? '' : 'hidden'; ?>" value="<?php echo wp_http_validate_url( $custom_domain ) ? esc_attr( $custom_domain ) : ''; ?>" type="text" name="custom_domain_input" id="custom-domain-input" placeholder="https://cdn.example.com">
 				</p>
 			</div>
 
@@ -147,6 +153,10 @@ $api_stats = sprintf( /* translators: %1$d - uploaded image count, %2$d - allowe
 		<footer>
 			<a href="#" role="button" aria-busy="false" id="save-settings">
 				<?php esc_html_e( 'Save Changes', 'cf-images' ); ?>
+			</a>
+
+			<a href="#" class="secondary" role="button" aria-busy="false" id="cf-images-disconnect">
+				<?php esc_html_e( 'Disconnect', 'cf-images' ); ?>
 			</a>
 		</footer>
 	</article>

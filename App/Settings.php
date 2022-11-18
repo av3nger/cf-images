@@ -84,7 +84,15 @@ class Settings {
 		if ( ! isset( $form['custom-domain'] ) ) {
 			delete_option( 'cf-images-custom-domain' );
 		} else {
-			update_option( 'cf-images-custom-domain', (bool) $form['custom-domain'], false );
+			$value = (bool) $form['custom-domain'];
+			if ( isset( $form['custom_domain_input'] ) ) {
+				$url = esc_url( $form['custom_domain_input'] );
+				if ( wp_http_validate_url( $url ) ) {
+					$value = $url;
+				}
+			}
+
+			update_option( 'cf-images-custom-domain', $value, false );
 		}
 
 		if ( ! isset( $form['auto-offload'] ) ) {
@@ -166,6 +174,28 @@ class Settings {
 		}
 
 		chmod( $wp_config_path, FS_CHMOD_FILE );
+
+	}
+
+	/**
+	 * Disconnect from Cloudflare.
+	 *
+	 * @since 1.1.2
+	 *
+	 * @return void
+	 */
+	public function ajax_disconnect() {
+
+		delete_option( 'cf-images-hash' );
+		delete_option( 'cf-images-setup-done' );
+		delete_option( 'cf-images-config-written' );
+		delete_option( 'cf-images-auth-error' );
+
+		// Remove defines from wp-config.php file.
+		$this->write_config( 'CF_IMAGES_ACCOUNT_ID' );
+		$this->write_config( 'CF_IMAGES_KEY_TOKEN' );
+
+		wp_send_json_success();
 
 	}
 

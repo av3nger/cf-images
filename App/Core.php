@@ -166,6 +166,7 @@ class Core {
 		if ( wp_doing_ajax() ) {
 			add_action( 'wp_ajax_cf_images_offload_image', array( $this, 'ajax_offload_image' ) );
 			add_action( 'wp_ajax_cf_images_bulk_process', array( $this, 'ajax_bulk_process' ) );
+			add_action( 'wp_ajax_cf_images_skip_image', array( $this, 'ajax_skip_image' ) );
 		}
 
 		add_action( 'admin_init', array( $this, 'maybe_redirect_to_plugin_page' ) );
@@ -253,7 +254,13 @@ class Core {
 
 		$metadata = wp_get_attachment_metadata( $attachment_id );
 		if ( false === $metadata ) {
-			wp_send_json_error( __( 'Image metadata not found.', 'cf-images' ) );
+			$message = sprintf( // translators: %1$s - opening <a> tag, %2$s - closing </a> tag.
+				esc_html__( 'Image metadata not found. %1$sSkip image%2$s', 'cf-images' ),
+				'<a href="#" data-id="' . $attachment_id . '" onclick="window.cfSkipImage(this)">',
+				'</a>'
+			);
+
+			wp_send_json_error( $message );
 		}
 
 		$this->upload_image( $metadata, $attachment_id );
@@ -331,15 +338,15 @@ class Core {
 		if ( 'upload' === $action ) {
 			$metadata = wp_get_attachment_metadata( $image->post->ID );
 			if ( false === $metadata ) {
-				wp_send_json_error( __( 'Image metadata not found.', 'cf-images' ) );
-			}
-
-			$this->upload_image( $metadata, $image->post->ID );
-
-			// If there's an error with offloading, we need to mark such an image as skipped.
-			if ( is_wp_error( $this->error ) ) {
 				update_post_meta( $image->post->ID, '_cloudflare_image_skip', true );
-				$this->error = false; // Reset the error.
+			} else {
+				$this->upload_image( $metadata, $image->post->ID );
+
+				// If there's an error with offloading, we need to mark such an image as skipped.
+				if ( is_wp_error( $this->error ) ) {
+					update_post_meta( $image->post->ID, '_cloudflare_image_skip', true );
+					$this->error = false; // Reset the error.
+				}
 			}
 		} else {
 			$this->delete_image( $image->post->ID );
@@ -365,6 +372,25 @@ class Core {
 	}
 
 	/**
+	 * Skip image from processing.
+	 *
+	 * @since 1.1.2
+	 *
+	 * @return void
+	 */
+	public function ajax_skip_image() {
+
+		$this->check_ajax_request();
+
+		$attachment_id = (int) filter_input( INPUT_POST, 'data', FILTER_SANITIZE_NUMBER_INT );
+
+		update_post_meta( $attachment_id, '_cloudflare_image_skip', true );
+
+		wp_send_json_success();
+
+	}
+
+	/**
 	 * Get Cloudflare CDN domain.
 	 *
 	 * @since 1.0.2
@@ -374,8 +400,12 @@ class Core {
 	private function get_cdn_domain(): string {
 
 		$domain = 'https://imagedelivery.net';
-		if ( get_option( 'cf-images-custom-domain', false ) ) {
-			$domain = get_site_url() . '/cdn-cgi/imagedelivery';
+
+		$custom_domain = get_option( 'cf-images-custom-domain', false );
+
+		if ( $custom_domain ) {
+			$domain  = wp_http_validate_url( $custom_domain ) ? $custom_domain : get_site_url();
+			$domain .= '/cdn-cgi/imagedelivery';
 		}
 
 		return $domain;

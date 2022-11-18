@@ -76,7 +76,6 @@ import '../css/app.scss';
 						showNotice( response.data, 'error' );
 					}
 
-					window.console.log( response );
 					return;
 				}
 
@@ -99,8 +98,8 @@ import '../css/app.scss';
 		post( 'cf_images_offload_image', $( this ).data( 'id' ) )
 			.then( ( response ) => {
 				if ( ! response.success ) {
-					divStatus.html( CFImages.strings.offloadError );
-					window.console.log( response );
+					const message = response.data || CFImages.strings.offloadError;
+					divStatus.html( message );
 					return;
 				}
 
@@ -131,6 +130,29 @@ import '../css/app.scss';
 
 		$( '.media_page_cf-images [role=button]' ).attr( 'disabled', true );
 		runProgressBar( 'remove' );
+	} );
+
+	/**
+	 * Disconnect from Cloudflare.
+	 *
+	 * @since 1.1.2
+	 */
+	$( '#cf-images-disconnect' ).on( 'click', function( e ) {
+		e.preventDefault();
+
+		$( this ).attr( 'aria-busy', true ).html( CFImages.strings.disconnecting );
+		post( 'cf_images_disconnect' )
+			.then( () => window.location.reload() )
+			.catch( window.console.log );
+	} );
+
+	/**
+	 * Toggle custom domain input.
+	 *
+	 * @since 1.1.2
+	 */
+	$( '#custom_domain' ).on( 'change', function( e ) {
+		$( 'input[name="custom_domain_input"]' ).toggleClass( 'hidden', ! e.target.checked );
 	} );
 
 	/**
@@ -223,4 +245,30 @@ import '../css/app.scss';
 			} )
 			.catch( window.console.log );
 	};
+
+	/**
+	 * Skip image from processing.
+	 *
+	 * @since 1.1.2
+	 *
+	 * @param {object} el  Link element.
+	 * @param {number} imageId  Image ID.
+	 */
+	const skipImage = ( el ) => {
+		const divStatus = $( el ).parent();
+		divStatus.html( CFImages.strings.inProgress + '<span class="spinner is-active"></span>' );
+
+		post( 'cf_images_skip_image', $( el ).data( 'id' ) )
+			.then( ( response ) => {
+				if ( ! response.success ) {
+					const message = response.data || CFImages.strings.offloadError;
+					divStatus.html( message );
+					return;
+				}
+
+				divStatus.html( CFImages.strings.skipped );
+			} )
+			.catch( window.console.log );
+	};
+	window.cfSkipImage = skipImage;
 }( jQuery ) );
