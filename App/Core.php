@@ -541,8 +541,15 @@ class Core {
 		$image = new Api\Image();
 		$dir   = wp_get_upload_dir();
 		$path  = trailingslashit( $dir['basedir'] ) . $metadata['file'];
-		$host  = wp_parse_url( get_site_url(), PHP_URL_HOST );
-		$name  = trailingslashit( $host ) . $metadata['file'];
+
+		$url = wp_parse_url( get_site_url() );
+		if ( is_multisite() && ! is_subdomain_install() ) {
+			$host = $url['host'] . $url['path'];
+		} else {
+			$host = $url['host'];
+		}
+
+		$name = trailingslashit( $host ) . $metadata['file'];
 
 		try {
 			$results = $image->upload( $path, $attachment_id, $name );

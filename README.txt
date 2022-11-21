@@ -67,6 +67,11 @@ If something is not working for you, please let me know by creating a support ti
 
 == Changelog ==
 
+= 1.1.3 =
+
+Fixed:
+* Image file names on subdirectory multisite installs
+
 = 1.1.2 - 19.11.2022 =
 
 Added:
