@@ -69,6 +69,9 @@ If something is not working for you, please let me know by creating a support ti
 
 = 1.1.3 =
 
+Changed:
+* Improved compatibility with RankMath - og:image tags will not be converted to Cloudflare Image URLs
+
 Fixed:
 * Image file names on subdirectory multisite installs
 
