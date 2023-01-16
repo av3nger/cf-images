@@ -186,7 +186,7 @@ class Core {
 		}
 		add_action( 'delete_attachment', array( $this, 'delete_image' ) );
 
-		if ( ! is_admin() && ! doing_filter( 'rank_math/head' ) ) {
+		if ( ! is_admin() && $this->can_run() ) {
 			// Replace images only on front-end.
 			add_filter( 'wp_get_attachment_image_src', array( $this, 'get_attachment_image_src' ), 10, 3 );
 			add_filter( 'wp_prepare_attachment_for_js', array( $this, 'prepare_attachment_for_js' ), 10, 2 );
@@ -237,6 +237,25 @@ class Core {
 			wp_die();
 		}
 
+	}
+
+	/**
+	 * Check if we can run the plugin. Not all images should be converted, for example,
+	 * SEO images from meta tags should be left untouched.
+	 *
+	 * @since 1.1.3
+	 *
+	 * @return bool
+	 */
+	private function can_run(): bool {
+		$a = doing_filter( 'rank_math/head' );
+		$a = doing_action( 'rank_math/opengraph/facebook' );
+
+		if ( doing_filter( 'rank_math/head' ) || doing_action( 'rank_math/opengraph/facebook' ) ) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -707,6 +726,10 @@ class Core {
 	 */
 	public function get_attachment_image_src( $image, int $attachment_id, $size ) {
 
+		if ( ! $this->can_run() ) {
+			return $image;
+		}
+
 		$meta = get_post_meta( $attachment_id, '_cloudflare_image_id', true );
 
 		if ( empty( $meta ) ) {
@@ -773,6 +796,10 @@ class Core {
 	 */
 	public function prepare_attachment_for_js( array $response, WP_Post $attachment ): array {
 
+		if ( ! $this->can_run() ) {
+			return $response;
+		}
+
 		if ( empty( $response['sizes'] ) ) {
 			return $response;
 		}
@@ -816,6 +843,10 @@ class Core {
 	 * @param int    $attachment_id Image attachment ID or 0.
 	 */
 	public function calculate_image_srcset( array $sources, array $size_array, string $image_src, array $image_meta, int $attachment_id ): array {
+
+		if ( ! $this->can_run() ) {
+			return $sources;
+		}
 
 		foreach ( $sources as $id => $size ) {
 			if ( ! isset( $size['url'] ) ) {
