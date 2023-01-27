@@ -47,7 +47,16 @@ class Image extends Api {
 		$data['file'] = curl_file_create( $image, '', $name );
 
 		if ( 0 !== $id ) {
-			$data['metadata'] = wp_json_encode( array( 'meta' => $id ) );
+			/**
+			 * Allow modifying the metadata, when offloading images to Cloudflare.
+			 *
+			 * @since 1.1.3
+			 *
+			 * @param array $metadata  Meta data.
+			 */
+			$metadata = apply_filters( 'cf_images_upload_meta_data', array( 'meta' => $id ) );
+
+			$data['metadata'] = wp_json_encode( $metadata );
 		}
 
 		$this->set_method( 'UPLOAD' );
