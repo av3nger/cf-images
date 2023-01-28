@@ -751,8 +751,13 @@ class Core {
 		}
 
 		// Handle `scaled` images.
-		if ( false !== strpos( $image[0], '-scaled' ) && apply_filters( 'big_image_size_threshold', 2560 ) === $size ) {
-			$image[0] = "$domain/$hash/$meta/w=" . $size;
+		if ( false !== strpos( $image[0], '-scaled' ) ) {
+			if ( apply_filters( 'big_image_size_threshold', 2560 ) === $size ) {
+				$image[0] = "$domain/$hash/$meta/w=" . $size;
+			} else {
+				$image[0] = "$domain/$hash/$meta/w=" . apply_filters( 'big_image_size_threshold', 2560 );
+			}
+
 			return $image;
 		}
 

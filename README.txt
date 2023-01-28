@@ -74,6 +74,7 @@ Added:
 * cf_images_upload_meta_data filter to allow customizing the metadata sent to Cloudflare Images
 
 Changed:
+* Improve detection of image sizes, fallback to scaled image dimensions
 * Improved compatibility with RankMath - og:image tags will not be converted to Cloudflare Image URLs
 
 Fixed:
