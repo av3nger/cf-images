@@ -898,6 +898,23 @@ class Core {
 
 		// We will try to find the best possible match based on the `width` attribute.
 		$width = isset( $size[1] ) ? (int) $size[1] : 'full';
+
+		/**
+		 * Support for Spectra plugins.
+		 *
+		 * Spectra blocks will remove the default WordPress class that identifies an image, and will replace it with
+		 * their own uag-image-<ID> class. Try to get attachment ID from class.
+		 *
+		 * @since 1.3.0
+		 */
+		if ( 0 === $attachment_id ) {
+			// Find `class` attributes in an image.
+			preg_match( '/class=[\'"]([^\'"]+)/i', $filtered_image, $class );
+			if ( isset( $class[1] ) && 'uag-image-' === substr( $class[1], 0, 10 ) ) {
+				$attachment_id = (int) substr( $class[1], 10 );
+			}
+		}
+
 		$image = $this->get_attachment_image_src( array( $src[1] ), $attachment_id, $width );
 
 		if ( isset( $image[0] ) && $image[0] !== $src[1] ) {

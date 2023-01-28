@@ -70,6 +70,7 @@ If something is not working for you, please let me know by creating a support ti
 = 1.1.3 =
 
 Added:
+* Compatibility with "Spectra – WordPress Gutenberg Blocks" plugin
 * cf_images_upload_meta_data filter to allow customizing the metadata sent to Cloudflare Images
 
 Changed:
