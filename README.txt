@@ -67,6 +67,19 @@ If something is not working for you, please let me know by creating a support ti
 
 == Changelog ==
 
+= 1.1.3 =
+
+Added:
+* Compatibility with "Spectra – WordPress Gutenberg Blocks" plugin
+* cf_images_upload_meta_data filter to allow customizing the metadata sent to Cloudflare Images
+
+Changed:
+* Improve detection of image sizes, fallback to scaled image dimensions
+* Improved compatibility with RankMath - og:image tags will not be converted to Cloudflare Image URLs
+
+Fixed:
+* Image file names on subdirectory multisite installs
+
 = 1.1.2 - 19.11.2022 =
 
 Added:

@@ -61,7 +61,7 @@ class Core {
 	 * @access protected
 	 * @var string $version  The current version of the plugin.
 	 */
-	protected $version = '1.0.0';
+	protected $version = '1.1.3';
 
 	/**
 	 * Error status.
@@ -186,7 +186,7 @@ class Core {
 		}
 		add_action( 'delete_attachment', array( $this, 'delete_image' ) );
 
-		if ( ! is_admin() ) {
+		if ( ! is_admin() && $this->can_run() ) {
 			// Replace images only on front-end.
 			add_filter( 'wp_get_attachment_image_src', array( $this, 'get_attachment_image_src' ), 10, 3 );
 			add_filter( 'wp_prepare_attachment_for_js', array( $this, 'prepare_attachment_for_js' ), 10, 2 );
@@ -237,6 +237,25 @@ class Core {
 			wp_die();
 		}
 
+	}
+
+	/**
+	 * Check if we can run the plugin. Not all images should be converted, for example,
+	 * SEO images from meta tags should be left untouched.
+	 *
+	 * @since 1.1.3
+	 *
+	 * @return bool
+	 */
+	private function can_run(): bool {
+		$a = doing_filter( 'rank_math/head' );
+		$a = doing_action( 'rank_math/opengraph/facebook' );
+
+		if ( doing_filter( 'rank_math/head' ) || doing_action( 'rank_math/opengraph/facebook' ) ) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -541,8 +560,15 @@ class Core {
 		$image = new Api\Image();
 		$dir   = wp_get_upload_dir();
 		$path  = trailingslashit( $dir['basedir'] ) . $metadata['file'];
-		$host  = wp_parse_url( get_site_url(), PHP_URL_HOST );
-		$name  = trailingslashit( $host ) . $metadata['file'];
+
+		$url = wp_parse_url( get_site_url() );
+		if ( is_multisite() && ! is_subdomain_install() ) {
+			$host = $url['host'] . $url['path'];
+		} else {
+			$host = $url['host'];
+		}
+
+		$name = trailingslashit( $host ) . $metadata['file'];
 
 		try {
 			$results = $image->upload( $path, $attachment_id, $name );
@@ -700,6 +726,10 @@ class Core {
 	 */
 	public function get_attachment_image_src( $image, int $attachment_id, $size ) {
 
+		if ( ! $this->can_run() ) {
+			return $image;
+		}
+
 		$meta = get_post_meta( $attachment_id, '_cloudflare_image_id', true );
 
 		if ( empty( $meta ) ) {
@@ -721,8 +751,13 @@ class Core {
 		}
 
 		// Handle `scaled` images.
-		if ( false !== strpos( $image[0], '-scaled' ) && apply_filters( 'big_image_size_threshold', 2560 ) === $size ) {
-			$image[0] = "$domain/$hash/$meta/w=" . $size;
+		if ( false !== strpos( $image[0], '-scaled' ) ) {
+			if ( apply_filters( 'big_image_size_threshold', 2560 ) === $size ) {
+				$image[0] = "$domain/$hash/$meta/w=" . $size;
+			} else {
+				$image[0] = "$domain/$hash/$meta/w=" . apply_filters( 'big_image_size_threshold', 2560 );
+			}
+
 			return $image;
 		}
 
@@ -765,6 +800,10 @@ class Core {
 	 * @return array
 	 */
 	public function prepare_attachment_for_js( array $response, WP_Post $attachment ): array {
+
+		if ( ! $this->can_run() ) {
+			return $response;
+		}
 
 		if ( empty( $response['sizes'] ) ) {
 			return $response;
@@ -809,6 +848,10 @@ class Core {
 	 * @param int    $attachment_id Image attachment ID or 0.
 	 */
 	public function calculate_image_srcset( array $sources, array $size_array, string $image_src, array $image_meta, int $attachment_id ): array {
+
+		if ( ! $this->can_run() ) {
+			return $sources;
+		}
 
 		foreach ( $sources as $id => $size ) {
 			if ( ! isset( $size['url'] ) ) {
@@ -860,6 +903,23 @@ class Core {
 
 		// We will try to find the best possible match based on the `width` attribute.
 		$width = isset( $size[1] ) ? (int) $size[1] : 'full';
+
+		/**
+		 * Support for Spectra plugins.
+		 *
+		 * Spectra blocks will remove the default WordPress class that identifies an image, and will replace it with
+		 * their own uag-image-<ID> class. Try to get attachment ID from class.
+		 *
+		 * @since 1.3.0
+		 */
+		if ( 0 === $attachment_id ) {
+			// Find `class` attributes in an image.
+			preg_match( '/class=[\'"]([^\'"]+)/i', $filtered_image, $class );
+			if ( isset( $class[1] ) && 'uag-image-' === substr( $class[1], 0, 10 ) ) {
+				$attachment_id = (int) substr( $class[1], 10 );
+			}
+		}
+
 		$image = $this->get_attachment_image_src( array( $src[1] ), $attachment_id, $width );
 
 		if ( isset( $image[0] ) && $image[0] !== $src[1] ) {
