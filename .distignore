@@ -1,0 +1,13 @@
+/.git
+/.github
+/assets/svn
+/build
+/node_modules
+
+.distignore
+.eslintrc.js
+.gitignore
+Gruntfile.js
+package.json
+package-lock.json
+webpack.config.js
