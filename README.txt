@@ -8,7 +8,7 @@ Requires PHP: 7.0
 Tested up to: 6.1
 Stable tag: %%VERSION%%
 License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Offload you media library images to the Cloudflare Images service. Store, resize, optimize and deliver images in a fast and secure manner.
 
