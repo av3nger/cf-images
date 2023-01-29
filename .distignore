@@ -1,6 +1,6 @@
 /.git
 /.github
-/assets/svn
+/.wordpress-org
 /build
 /node_modules
 

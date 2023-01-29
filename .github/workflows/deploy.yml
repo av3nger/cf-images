@@ -20,7 +20,7 @@ jobs:
         with:
           generate-zip: true
         env:
-          ASSETS_DIR: assets/svn
+          BUILD_DIR: ./build/cf-images
           SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
           SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
       - name: Upload release asset
