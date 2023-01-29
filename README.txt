@@ -67,6 +67,11 @@ If something is not working for you, please let me know by creating a support ti
 
 == Changelog ==
 
+= 1.1.4 - 29.01.2023 =
+
+Fixed:
+* Links in readme.txt file
+
 = 1.1.3 - 29.01.2023 =
 
 Added:
