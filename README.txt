@@ -67,7 +67,7 @@ If something is not working for you, please let me know by creating a support ti
 
 == Changelog ==
 
-= 1.1.3 =
+= 1.1.3 - 29.01.2023 =
 
 Added:
 * Compatibility with "Spectra – WordPress Gutenberg Blocks" plugin
