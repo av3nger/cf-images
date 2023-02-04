@@ -263,7 +263,7 @@ class Admin {
 	 */
 	public function view( string $file ) {
 
-		$view = __DIR__ . '/Views/' . $file . '.php';
+		$view = __DIR__ . '/views/' . $file . '.php';
 
 		if ( ! file_exists( $view ) ) {
 			return;

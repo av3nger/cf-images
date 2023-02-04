@@ -209,15 +209,15 @@ class Core {
 	 */
 	private function load_libs() {
 
-		require_once __DIR__ . '/Admin.php';
-		require_once __DIR__ . '/Settings.php';
+		require_once __DIR__ . '/class-admin.php';
+		require_once __DIR__ . '/class-settings.php';
 
-		require_once __DIR__ . '/Api/Api.php';
-		require_once __DIR__ . '/Api/Image.php';
-		require_once __DIR__ . '/Api/Variant.php';
+		require_once __DIR__ . '/api/class-api.php';
+		require_once __DIR__ . '/api/class-image.php';
+		require_once __DIR__ . '/api/class-variant.php';
 
-		require_once __DIR__ . '/Async/Task.php';
-		require_once __DIR__ . '/Async/Upload.php';
+		require_once __DIR__ . '/async/class-task.php';
+		require_once __DIR__ . '/async/class-upload.php';
 		new Async\Upload();
 
 	}

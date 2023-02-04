@@ -34,7 +34,7 @@ if ( ! defined( 'WPINC' ) ) {
 define( 'CF_IMAGES_VERSION', '1.1.5-beta.1' );
 define( 'CF_IMAGES_DIR_URL', plugin_dir_url( __FILE__ ) );
 
-require_once 'App/Activator.php';
+require_once 'app/class-activator.php';
 register_activation_hook( __FILE__, array( 'CF_Images\App\Activator', 'activate' ) );
 register_deactivation_hook( __FILE__, array( 'CF_Images\App\Activator', 'deactivate' ) );
 
@@ -49,8 +49,8 @@ register_deactivation_hook( __FILE__, array( 'CF_Images\App\Activator', 'deactiv
  */
 function run_cf_images() {
 
-	require_once __DIR__ . '/App/Traits/Helpers.php';
-	require_once __DIR__ . '/App/Core.php';
+	require_once __DIR__ . '/app/traits/trait-helpers.php';
+	require_once __DIR__ . '/app/class-core.php';
 	App\Core::get_instance();
 
 }

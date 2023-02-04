@@ -40,7 +40,7 @@ delete_option( 'cf-images-auth-error' );
 delete_option( 'cf-images-auto-offload' );
 
 // Remove defines from wp-config.php file.
-require_once __DIR__ . '/App/Settings.php';
+require_once __DIR__ . '/app/class-settings.php';
 $settings = new CF_Images\App\Settings();
 $settings->write_config( 'CF_IMAGES_ACCOUNT_ID' );
 $settings->write_config( 'CF_IMAGES_KEY_TOKEN' );
