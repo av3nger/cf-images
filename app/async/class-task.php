@@ -191,7 +191,7 @@ abstract class Task {
 	 */
 	public function handle_postback() {
 
-		if ( isset( $_POST['_nonce'] ) && $this->verify_async_nonce( wp_unslash( $_POST['_nonce'] ) ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( isset( $_POST['_nonce'] ) && $this->verify_async_nonce( wp_unslash( $_POST['_nonce'] ) ) ) { // phpcs:ignore WordPress.Security
 			if ( ! is_user_logged_in() ) {
 				$this->action = "nopriv_$this->action";
 			}
