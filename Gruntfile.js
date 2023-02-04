@@ -11,7 +11,7 @@ module.exports = function( grunt ) {
 		copy: {
 			main: {
 				src: [
-					'App/**',
+					'app/**',
 					'assets/**',
 					'!assets/svn/**',
 					'languages/**',
