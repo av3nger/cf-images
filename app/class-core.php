@@ -163,6 +163,7 @@ class Core {
 		}
 
 		$this->load_libs();
+		$this->init_integrations();
 
 		if ( is_admin() ) {
 			$this->admin = new Admin();
@@ -227,6 +228,20 @@ class Core {
 		require_once __DIR__ . '/async/class-task.php';
 		require_once __DIR__ . '/async/class-upload.php';
 		$this->upload = new Async\Upload();
+
+	}
+
+	/**
+	 * Init inetgrations.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @return void
+	 */
+	private function init_integrations() {
+
+		require_once __DIR__ . '/integrations/class-spectra.php';
+		new Integrations\Spectra();
 
 	}
 
@@ -910,20 +925,16 @@ class Core {
 		$width = isset( $size[1] ) ? (int) $size[1] : 'full';
 
 		/**
-		 * Support for Spectra plugins.
+		 * Filter that allows adjusting the attachment ID.
 		 *
-		 * Spectra blocks will remove the default WordPress class that identifies an image, and will replace it with
-		 * their own uag-image-<ID> class. Try to get attachment ID from class.
+		 * Some plugins will replace the WordPress image class and prevent WordPress from getting the correct attahcment ID.
 		 *
 		 * @since 1.3.0
+		 *
+		 * @param int    $attachment_id   The image attachment ID. May be 0 in case the image is not an attachment.
+		 * @param string $filtered_image  Full img tag with attributes that will replace the source img tag.
 		 */
-		if ( 0 === $attachment_id ) {
-			// Find `class` attributes in an image.
-			preg_match( '/class=[\'"]([^\'"]+)/i', $filtered_image, $class );
-			if ( isset( $class[1] ) && 'uag-image-' === substr( $class[1], 0, 10 ) ) {
-				$attachment_id = (int) substr( $class[1], 10 );
-			}
-		}
+		$attachment_id = apply_filters( 'cf_images_content_attachment_id', $attachment_id, $filtered_image );
 
 		$image = $this->get_attachment_image_src( array( $src[1] ), $attachment_id, $width );
 
