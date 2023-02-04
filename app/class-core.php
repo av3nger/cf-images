@@ -192,7 +192,12 @@ class Core {
 
 		// Image actions.
 		if ( get_option( 'cf-images-auto-offload', false ) ) {
-			add_filter( 'wp_async_wp_generate_attachment_metadata', array( $this, 'upload_image' ), 10, 2 );
+			// If async uploads are disabled, use the default hook.
+			if ( get_option( 'cf-images-disable-async', false ) ) {
+				add_filter( 'wp_generate_attachment_metadata', array( $this, 'upload_image' ), 10, 2 );
+			} else {
+				add_filter( 'wp_async_wp_generate_attachment_metadata', array( $this, 'upload_image' ), 10, 2 );
+			}
 		}
 		add_action( 'delete_attachment', array( $this, 'delete_image' ) );
 
@@ -225,9 +230,11 @@ class Core {
 		require_once __DIR__ . '/api/class-image.php';
 		require_once __DIR__ . '/api/class-variant.php';
 
-		require_once __DIR__ . '/async/class-task.php';
-		require_once __DIR__ . '/async/class-upload.php';
-		$this->upload = new Async\Upload();
+		if ( ! get_option( 'cf-images-disable-async', false ) ) {
+			require_once __DIR__ . '/async/class-task.php';
+			require_once __DIR__ . '/async/class-upload.php';
+			$this->upload = new Async\Upload();
+		}
 
 	}
 

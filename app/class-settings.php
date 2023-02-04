@@ -81,6 +81,12 @@ class Settings {
 			update_option( 'cf-images-disable-generation', (bool) $form['disable-sizes'], false );
 		}
 
+		if ( ! isset( $form['disable-async'] ) ) {
+			delete_option( 'cf-images-disable-async' );
+		} else {
+			update_option( 'cf-images-disable-async', (bool) $form['disable-async'], false );
+		}
+
 		if ( ! isset( $form['custom-domain'] ) ) {
 			delete_option( 'cf-images-custom-domain' );
 		} else {

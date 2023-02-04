@@ -102,6 +102,22 @@ $api_stats = sprintf( /* translators: %1$d - uploaded image count, %2$d - allowe
 
 			<hr>
 
+			<span class="dashicons dashicons-randomize"></span>
+			<label for="disable_async">
+				<h3><?php esc_html_e( 'Disable async processing', 'cf-images' ); ?></h3>
+			</label>
+			<div>
+				<input name="disable-async" type="checkbox" id="disable_async" value="1" <?php checked( get_option( 'cf-images-disable-async', false ) ); ?> role="switch">
+				<p>
+					<?php esc_html_e( 'By default, the plugin will try to offload images in asynchronous mode, meaning that the processing will be done in the background. If, for some reason, the host does not allow async processing, disable this option for backward compatibility.', 'cf-images' ); ?>
+				</p>
+				<p>
+					<?php esc_html_e( 'Note: disabling this option will increase the time to upload new images to the media library.', 'cf-images' ); ?>
+				</p>
+			</div>
+
+			<hr>
+
 			<span class="dashicons dashicons-cloud-upload"></span>
 			<label for="cf-images-upload-all">
 				<h3><?php esc_html_e( 'Bulk upload images', 'cf-images' ); ?></h3>

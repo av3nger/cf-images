@@ -71,6 +71,7 @@ If something is not working for you, please let me know by creating a support ti
 
 Added:
 * Integration with Multisite Global Media plugin
+* Option to disable async image offloading
 
 Changed:
 * Store the Cloudflare image hash in network options on multisite installs
