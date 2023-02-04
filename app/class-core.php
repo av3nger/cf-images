@@ -680,7 +680,7 @@ class Core {
 	 */
 	private function maybe_save_hash( array $variants ) {
 
-		$hash = get_option( 'cf-images-hash', '' );
+		$hash = get_site_option( 'cf-images-hash', '' );
 
 		if ( ! empty( $hash ) || ! isset( $variants[0] ) ) {
 			return;
@@ -689,7 +689,7 @@ class Core {
 		preg_match_all( '#/(.*?)/#i', $variants[0], $hash );
 
 		if ( isset( $hash[1] ) && ! empty( $hash[1][1] ) ) {
-			update_option( 'cf-images-hash', $hash[1][1], false );
+			update_site_option( 'cf-images-hash', $hash[1][1], false );
 		}
 
 	}
@@ -753,13 +753,23 @@ class Core {
 			return $image;
 		}
 
-		$meta = get_post_meta( $attachment_id, '_cloudflare_image_id', true );
+		$cloudflare_image_id = get_post_meta( $attachment_id, '_cloudflare_image_id', true );
 
-		if ( empty( $meta ) ) {
+		/**
+		 * Filters the Cloudflare image ID value.
+		 *
+		 * @since 1.5.0
+		 *
+		 * @param mixed $cloudflare_image_id  Image meta
+		 * @param int   $attachment_id        Attachment ID.
+		 */
+		$cloudflare_image_id = apply_filters( 'cf_images_attachment_meta', $cloudflare_image_id, $attachment_id );
+
+		if ( empty( $cloudflare_image_id ) ) {
 			return $image;
 		}
 
-		$hash = get_option( 'cf-images-hash', '' );
+		$hash = get_site_option( 'cf-images-hash', '' );
 
 		if ( empty( $hash ) ) {
 			return $image;
@@ -769,16 +779,16 @@ class Core {
 
 		// Full size image with defined dimensions.
 		if ( 'full' === $size && isset( $image[1] ) && $image[1] > 0 ) {
-			$image[0] = "$domain/$hash/$meta/w=" . $image[1];
+			$image[0] = "$domain/$hash/$cloudflare_image_id/w=" . $image[1];
 			return $image;
 		}
 
 		// Handle `scaled` images.
 		if ( false !== strpos( $image[0], '-scaled' ) ) {
 			if ( apply_filters( 'big_image_size_threshold', 2560 ) === $size ) {
-				$image[0] = "$domain/$hash/$meta/w=" . $size;
+				$image[0] = "$domain/$hash/$cloudflare_image_id/w=" . $size;
 			} else {
-				$image[0] = "$domain/$hash/$meta/w=" . apply_filters( 'big_image_size_threshold', 2560 );
+				$image[0] = "$domain/$hash/$cloudflare_image_id/w=" . apply_filters( 'big_image_size_threshold', 2560 );
 			}
 
 			return $image;
@@ -793,18 +803,18 @@ class Core {
 			$width_key  = array_search( (int) $variant_image[2], $this->widths, true );
 
 			if ( $width_key && $height_key && $width_key === $height_key && true === $this->registered_sizes[ $width_key ]['crop'] ) {
-				$image[0] = "$domain/$hash/$meta/w=" . $variant_image[1] . ',h=' . $variant_image[2] . ',fit=crop';
+				$image[0] = "$domain/$hash/$cloudflare_image_id/w=" . $variant_image[1] . ',h=' . $variant_image[2] . ',fit=crop';
 				return $image;
 			}
 
 			// Not a cropped image.
-			$image[0] = "$domain/$hash/$meta/w=" . $variant_image[1] . ',h=' . $variant_image[2];
+			$image[0] = "$domain/$hash/$cloudflare_image_id/w=" . $variant_image[1] . ',h=' . $variant_image[2];
 			return $image;
 		}
 
 		// Image without size prefix and no defined sizes - use the maximum available width.
 		if ( ! $variant_image && ! isset( $image[1] ) ) {
-			$image[0] = "$domain/$hash/$meta/w=9999";
+			$image[0] = "$domain/$hash/$cloudflare_image_id/w=9999";
 			return $image;
 		}
 

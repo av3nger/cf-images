@@ -69,7 +69,11 @@ If something is not working for you, please let me know by creating a support ti
 
 = 1.1.5 =
 
+Added:
+* Integration with Multisite Global Media plugin
+
 Changed:
+* Store the Cloudflare image hash in network options on multisite installs
 * Code refactor to be fully compatible with WordPress coding standards
 
 Fixed:

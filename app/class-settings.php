@@ -186,7 +186,7 @@ class Settings {
 	 */
 	public function ajax_disconnect() {
 
-		delete_option( 'cf-images-hash' );
+		delete_site_option( 'cf-images-hash' );
 		delete_option( 'cf-images-setup-done' );
 		delete_option( 'cf-images-config-written' );
 		delete_option( 'cf-images-auth-error' );
