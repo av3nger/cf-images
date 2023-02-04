@@ -67,6 +67,14 @@ If something is not working for you, please let me know by creating a support ti
 
 == Changelog ==
 
+= 1.1.5 =
+
+Changed:
+* Code refactor to be fully compatible with WordPress coding standards
+
+Fixed:
+* Removed debug code
+
 = 1.1.4 - 29.01.2023 =
 
 Fixed:

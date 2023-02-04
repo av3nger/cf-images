@@ -197,7 +197,6 @@ class Core {
 			if ( version_compare( $wp_version, '6.0.0', '>=' ) ) {
 				add_filter( 'wp_content_img_tag', array( $this, 'content_img_tag' ), 10, 3 );
 			}
-			// TODO: add content filtering.
 		}
 
 	}
@@ -248,9 +247,6 @@ class Core {
 	 * @return bool
 	 */
 	private function can_run(): bool {
-		$a = doing_filter( 'rank_math/head' );
-		$a = doing_action( 'rank_math/opengraph/facebook' );
-
 		if ( doing_filter( 'rank_math/head' ) || doing_action( 'rank_math/opengraph/facebook' ) ) {
 			return false;
 		}
@@ -837,14 +833,14 @@ class Core {
 	 *                                  pixel density value if paired with an 'x' descriptor.
 	 *     }
 	 * }
-	 * @param array $size_array     {
+	 * @param array  $size_array     {
 	 *     An array of requested width and height values.
 	 *
 	 *     @type int $0 The width in pixels.
 	 *     @type int $1 The height in pixels.
 	 * }
 	 * @param string $image_src     The 'src' of the image.
-	 * @param array  $image_meta    The image meta data as returned by 'wp_get_attachment_metadata()'.
+	 * @param array  $image_meta    The image metadata as returned by 'wp_get_attachment_metadata()'.
 	 * @param int    $attachment_id Image attachment ID or 0.
 	 */
 	public function calculate_image_srcset( array $sources, array $size_array, string $image_src, array $image_meta, int $attachment_id ): array {
@@ -952,17 +948,6 @@ class Core {
 	 */
 	public function get_version(): string {
 		return $this->version;
-	}
-
-	/**
-	 * Retrieve the admin instance.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return Admin  The admin instance of the plugin.
-	 */
-	public function get_admin(): Admin {
-		return $this->admin;
 	}
 
 	/**
