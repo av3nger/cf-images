@@ -82,6 +82,15 @@ class Core {
 	private $admin;
 
 	/**
+	 * Async upload instance.
+	 *
+	 * @since 1.1.5
+	 * @access private
+	 * @var Async\Upload $upload
+	 */
+	private $upload;
+
+	/**
 	 * Registered image sizes in WordPress.
 	 *
 	 * @since 1.0.0
@@ -217,7 +226,7 @@ class Core {
 
 		require_once __DIR__ . '/async/class-task.php';
 		require_once __DIR__ . '/async/class-upload.php';
-		new Async\Upload();
+		$this->upload = new Async\Upload();
 
 	}
 

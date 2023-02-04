@@ -270,7 +270,7 @@ class Admin {
 		}
 
 		ob_start();
-		include $view;
+		include_once $view;
 		echo ob_get_clean(); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped */
 
 	}
