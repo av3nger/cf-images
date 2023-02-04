@@ -57,7 +57,7 @@ class Multisite_Global_Media {
 	 */
 	public function attachment_meta( $cloudflare_image_id, int $attachment_id ) {
 
-		if ( ! empty( $meta ) || ! class_exists( '\\MultisiteGlobalMedia\\Site' ) ) {
+		if ( ! empty( $cloudflare_image_id ) || ! class_exists( '\\MultisiteGlobalMedia\\Site' ) ) {
 			return $cloudflare_image_id;
 		}
 
