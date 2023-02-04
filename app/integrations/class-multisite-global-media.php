@@ -1,10 +1,11 @@
 <?php
 /**
- * Spectra integration class
+ * Multisite Global Media integration class
  *
- * This class adds compatibility with the Spectra blocks plugin.
+ * This class adds compatibility with the Multisite Global Media plugin.
  *
  * @link https://vcore.au
+ * @see https://github.com/bueltge/multisite-global-media
  *
  * @package CF_Images
  * @subpackage CF_Images/App/Integrations
@@ -19,11 +20,11 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
- * Spectra class.
+ * Multisite_Global_Media class.
  *
  * @since 1.5.0
  */
-class Spectra {
+class Multisite_Global_Media {
 
 	/**
 	 * Class constructor.

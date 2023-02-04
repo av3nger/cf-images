@@ -241,7 +241,10 @@ class Core {
 	private function init_integrations() {
 
 		require_once __DIR__ . '/integrations/class-spectra.php';
-		new Integrations\Spectra();
+		$spectra = new Integrations\Spectra();
+
+		require_once __DIR__ . '/integrations/class-multisite-global-media.php';
+		$multisite_global_media = new Integrations\Multisite_Global_Media();
 
 	}
 
