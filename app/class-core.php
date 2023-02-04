@@ -749,7 +749,7 @@ class Core {
 	 */
 	public function get_attachment_image_src( $image, int $attachment_id, $size ) {
 
-		if ( ! $this->can_run() ) {
+		if ( ! $this->can_run() || ! $image ) {
 			return $image;
 		}
 
