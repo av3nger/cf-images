@@ -253,6 +253,9 @@ class Core {
 		require_once __DIR__ . '/integrations/class-multisite-global-media.php';
 		$multisite_global_media = new Integrations\Multisite_Global_Media();
 
+		require_once __DIR__ . '/integrations/class-rank-math.php';
+		$rank_math = new Integrations\Rank_Math();
+
 	}
 
 	/**

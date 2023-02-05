@@ -70,6 +70,7 @@ If something is not working for you, please let me know by creating a support ti
 = 1.1.5 =
 
 Added:
+* Integration with RankMath Image SEO module
 * Integration with Multisite Global Media plugin
 * Option to disable async image offloading
 
@@ -78,6 +79,7 @@ Changed:
 * Code refactor to be fully compatible with WordPress coding standards
 
 Fixed:
+* RankMath image titles not working properly with Cloudflare images
 * Removed debug code
 
 = 1.1.4 - 29.01.2023 =
