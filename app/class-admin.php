@@ -243,14 +243,14 @@ class Admin {
 	 */
 	public function render_page() {
 
-		$this->view( 'Header' );
+		$this->view( 'header' );
 
 		if ( ! $this->is_set_up() ) {
-			$this->view( 'Setup' );
+			$this->view( 'setup' );
 			return;
 		}
 
-		$this->view( 'Settings' );
+		$this->view( 'settings' );
 
 	}
 
