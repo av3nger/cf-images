@@ -751,13 +751,13 @@ class Core {
 	 *     @type int    $2  Image height in pixels.
 	 *     @type bool   $3  Whether the image is a resized image.
 	 * }
-	 * @param int          $attachment_id  Image attachment ID.
+	 * @param int|string   $attachment_id  Image attachment ID.
 	 * @param string|int[] $size           Requested image size. Can be any registered image size name, or
 	 *                                     an array of width and height values in pixels (in that order).
 	 *
 	 * @return array|false
 	 */
-	public function get_attachment_image_src( $image, int $attachment_id, $size ) {
+	public function get_attachment_image_src( $image, $attachment_id, $size ) {
 
 		if ( ! $this->can_run() || ! $image ) {
 			return $image;
@@ -773,7 +773,7 @@ class Core {
 		 * @param mixed $cloudflare_image_id  Image meta
 		 * @param int   $attachment_id        Attachment ID.
 		 */
-		$cloudflare_image_id = apply_filters( 'cf_images_attachment_meta', $cloudflare_image_id, $attachment_id );
+		$cloudflare_image_id = apply_filters( 'cf_images_attachment_meta', $cloudflare_image_id, (int) $attachment_id );
 
 		if ( empty( $cloudflare_image_id ) ) {
 			return $image;

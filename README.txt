@@ -80,6 +80,7 @@ Changed:
 
 Fixed:
 * RankMath image titles not working properly with Cloudflare images
+* TypeError in get_attachment_image_src method
 * Removed debug code
 
 = 1.1.4 - 29.01.2023 =
