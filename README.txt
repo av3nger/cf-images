@@ -67,6 +67,22 @@ If something is not working for you, please let me know by creating a support ti
 
 == Changelog ==
 
+= 1.1.5 - 28.02.2023 =
+
+Added:
+* Integration with RankMath Image SEO module
+* Integration with Multisite Global Media plugin
+* Option to disable async image offloading
+
+Changed:
+* Store the Cloudflare image hash in network options on multisite installs
+* Code refactor to be fully compatible with WordPress coding standards
+
+Fixed:
+* RankMath image titles not working properly with Cloudflare images
+* TypeError in get_attachment_image_src method
+* Removed debug code
+
 = 1.1.4 - 29.01.2023 =
 
 Fixed:

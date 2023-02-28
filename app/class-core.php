@@ -82,6 +82,15 @@ class Core {
 	private $admin;
 
 	/**
+	 * Async upload instance.
+	 *
+	 * @since 1.1.5
+	 * @access private
+	 * @var Async\Upload $upload
+	 */
+	private $upload;
+
+	/**
 	 * Registered image sizes in WordPress.
 	 *
 	 * @since 1.0.0
@@ -154,6 +163,7 @@ class Core {
 		}
 
 		$this->load_libs();
+		$this->init_integrations();
 
 		if ( is_admin() ) {
 			$this->admin = new Admin();
@@ -182,7 +192,12 @@ class Core {
 
 		// Image actions.
 		if ( get_option( 'cf-images-auto-offload', false ) ) {
-			add_filter( 'wp_async_wp_generate_attachment_metadata', array( $this, 'upload_image' ), 10, 2 );
+			// If async uploads are disabled, use the default hook.
+			if ( get_option( 'cf-images-disable-async', false ) ) {
+				add_filter( 'wp_generate_attachment_metadata', array( $this, 'upload_image' ), 10, 2 );
+			} else {
+				add_filter( 'wp_async_wp_generate_attachment_metadata', array( $this, 'upload_image' ), 10, 2 );
+			}
 		}
 		add_action( 'delete_attachment', array( $this, 'delete_image' ) );
 
@@ -197,7 +212,6 @@ class Core {
 			if ( version_compare( $wp_version, '6.0.0', '>=' ) ) {
 				add_filter( 'wp_content_img_tag', array( $this, 'content_img_tag' ), 10, 3 );
 			}
-			// TODO: add content filtering.
 		}
 
 	}
@@ -209,16 +223,38 @@ class Core {
 	 */
 	private function load_libs() {
 
-		require_once __DIR__ . '/Admin.php';
-		require_once __DIR__ . '/Settings.php';
+		require_once __DIR__ . '/class-admin.php';
+		require_once __DIR__ . '/class-settings.php';
 
-		require_once __DIR__ . '/Api/Api.php';
-		require_once __DIR__ . '/Api/Image.php';
-		require_once __DIR__ . '/Api/Variant.php';
+		require_once __DIR__ . '/api/class-api.php';
+		require_once __DIR__ . '/api/class-image.php';
+		require_once __DIR__ . '/api/class-variant.php';
 
-		require_once __DIR__ . '/Async/Task.php';
-		require_once __DIR__ . '/Async/Upload.php';
-		new Async\Upload();
+		if ( ! get_option( 'cf-images-disable-async', false ) ) {
+			require_once __DIR__ . '/async/class-task.php';
+			require_once __DIR__ . '/async/class-upload.php';
+			$this->upload = new Async\Upload();
+		}
+
+	}
+
+	/**
+	 * Init inetgrations.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @return void
+	 */
+	private function init_integrations() {
+
+		require_once __DIR__ . '/integrations/class-spectra.php';
+		$spectra = new Integrations\Spectra();
+
+		require_once __DIR__ . '/integrations/class-multisite-global-media.php';
+		$multisite_global_media = new Integrations\Multisite_Global_Media();
+
+		require_once __DIR__ . '/integrations/class-rank-math.php';
+		$rank_math = new Integrations\Rank_Math();
 
 	}
 
@@ -248,9 +284,6 @@ class Core {
 	 * @return bool
 	 */
 	private function can_run(): bool {
-		$a = doing_filter( 'rank_math/head' );
-		$a = doing_action( 'rank_math/opengraph/facebook' );
-
 		if ( doing_filter( 'rank_math/head' ) || doing_action( 'rank_math/opengraph/facebook' ) ) {
 			return false;
 		}
@@ -657,7 +690,7 @@ class Core {
 	 */
 	private function maybe_save_hash( array $variants ) {
 
-		$hash = get_option( 'cf-images-hash', '' );
+		$hash = get_site_option( 'cf-images-hash', '' );
 
 		if ( ! empty( $hash ) || ! isset( $variants[0] ) ) {
 			return;
@@ -666,7 +699,7 @@ class Core {
 		preg_match_all( '#/(.*?)/#i', $variants[0], $hash );
 
 		if ( isset( $hash[1] ) && ! empty( $hash[1][1] ) ) {
-			update_option( 'cf-images-hash', $hash[1][1], false );
+			update_site_option( 'cf-images-hash', $hash[1][1], false );
 		}
 
 	}
@@ -718,25 +751,35 @@ class Core {
 	 *     @type int    $2  Image height in pixels.
 	 *     @type bool   $3  Whether the image is a resized image.
 	 * }
-	 * @param int          $attachment_id  Image attachment ID.
+	 * @param int|string   $attachment_id  Image attachment ID.
 	 * @param string|int[] $size           Requested image size. Can be any registered image size name, or
 	 *                                     an array of width and height values in pixels (in that order).
 	 *
 	 * @return array|false
 	 */
-	public function get_attachment_image_src( $image, int $attachment_id, $size ) {
+	public function get_attachment_image_src( $image, $attachment_id, $size ) {
 
-		if ( ! $this->can_run() ) {
+		if ( ! $this->can_run() || ! $image ) {
 			return $image;
 		}
 
-		$meta = get_post_meta( $attachment_id, '_cloudflare_image_id', true );
+		$cloudflare_image_id = get_post_meta( $attachment_id, '_cloudflare_image_id', true );
 
-		if ( empty( $meta ) ) {
+		/**
+		 * Filters the Cloudflare image ID value.
+		 *
+		 * @since 1.5.0
+		 *
+		 * @param mixed $cloudflare_image_id  Image meta
+		 * @param int   $attachment_id        Attachment ID.
+		 */
+		$cloudflare_image_id = apply_filters( 'cf_images_attachment_meta', $cloudflare_image_id, (int) $attachment_id );
+
+		if ( empty( $cloudflare_image_id ) ) {
 			return $image;
 		}
 
-		$hash = get_option( 'cf-images-hash', '' );
+		$hash = get_site_option( 'cf-images-hash', '' );
 
 		if ( empty( $hash ) ) {
 			return $image;
@@ -746,16 +789,16 @@ class Core {
 
 		// Full size image with defined dimensions.
 		if ( 'full' === $size && isset( $image[1] ) && $image[1] > 0 ) {
-			$image[0] = "$domain/$hash/$meta/w=" . $image[1];
+			$image[0] = "$domain/$hash/$cloudflare_image_id/w=" . $image[1];
 			return $image;
 		}
 
 		// Handle `scaled` images.
 		if ( false !== strpos( $image[0], '-scaled' ) ) {
 			if ( apply_filters( 'big_image_size_threshold', 2560 ) === $size ) {
-				$image[0] = "$domain/$hash/$meta/w=" . $size;
+				$image[0] = "$domain/$hash/$cloudflare_image_id/w=" . $size;
 			} else {
-				$image[0] = "$domain/$hash/$meta/w=" . apply_filters( 'big_image_size_threshold', 2560 );
+				$image[0] = "$domain/$hash/$cloudflare_image_id/w=" . apply_filters( 'big_image_size_threshold', 2560 );
 			}
 
 			return $image;
@@ -770,18 +813,18 @@ class Core {
 			$width_key  = array_search( (int) $variant_image[2], $this->widths, true );
 
 			if ( $width_key && $height_key && $width_key === $height_key && true === $this->registered_sizes[ $width_key ]['crop'] ) {
-				$image[0] = "$domain/$hash/$meta/w=" . $variant_image[1] . ',h=' . $variant_image[2] . ',fit=crop';
+				$image[0] = "$domain/$hash/$cloudflare_image_id/w=" . $variant_image[1] . ',h=' . $variant_image[2] . ',fit=crop';
 				return $image;
 			}
 
 			// Not a cropped image.
-			$image[0] = "$domain/$hash/$meta/w=" . $variant_image[1] . ',h=' . $variant_image[2];
+			$image[0] = "$domain/$hash/$cloudflare_image_id/w=" . $variant_image[1] . ',h=' . $variant_image[2];
 			return $image;
 		}
 
 		// Image without size prefix and no defined sizes - use the maximum available width.
 		if ( ! $variant_image && ! isset( $image[1] ) ) {
-			$image[0] = "$domain/$hash/$meta/w=9999";
+			$image[0] = "$domain/$hash/$cloudflare_image_id/w=9999";
 			return $image;
 		}
 
@@ -837,14 +880,14 @@ class Core {
 	 *                                  pixel density value if paired with an 'x' descriptor.
 	 *     }
 	 * }
-	 * @param array $size_array     {
+	 * @param array  $size_array     {
 	 *     An array of requested width and height values.
 	 *
 	 *     @type int $0 The width in pixels.
 	 *     @type int $1 The height in pixels.
 	 * }
 	 * @param string $image_src     The 'src' of the image.
-	 * @param array  $image_meta    The image meta data as returned by 'wp_get_attachment_metadata()'.
+	 * @param array  $image_meta    The image metadata as returned by 'wp_get_attachment_metadata()'.
 	 * @param int    $attachment_id Image attachment ID or 0.
 	 */
 	public function calculate_image_srcset( array $sources, array $size_array, string $image_src, array $image_meta, int $attachment_id ): array {
@@ -905,20 +948,16 @@ class Core {
 		$width = isset( $size[1] ) ? (int) $size[1] : 'full';
 
 		/**
-		 * Support for Spectra plugins.
+		 * Filter that allows adjusting the attachment ID.
 		 *
-		 * Spectra blocks will remove the default WordPress class that identifies an image, and will replace it with
-		 * their own uag-image-<ID> class. Try to get attachment ID from class.
+		 * Some plugins will replace the WordPress image class and prevent WordPress from getting the correct attahcment ID.
 		 *
 		 * @since 1.3.0
+		 *
+		 * @param int    $attachment_id   The image attachment ID. May be 0 in case the image is not an attachment.
+		 * @param string $filtered_image  Full img tag with attributes that will replace the source img tag.
 		 */
-		if ( 0 === $attachment_id ) {
-			// Find `class` attributes in an image.
-			preg_match( '/class=[\'"]([^\'"]+)/i', $filtered_image, $class );
-			if ( isset( $class[1] ) && 'uag-image-' === substr( $class[1], 0, 10 ) ) {
-				$attachment_id = (int) substr( $class[1], 10 );
-			}
-		}
+		$attachment_id = apply_filters( 'cf_images_content_attachment_id', $attachment_id, $filtered_image );
 
 		$image = $this->get_attachment_image_src( array( $src[1] ), $attachment_id, $width );
 
@@ -952,17 +991,6 @@ class Core {
 	 */
 	public function get_version(): string {
 		return $this->version;
-	}
-
-	/**
-	 * Retrieve the admin instance.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return Admin  The admin instance of the plugin.
-	 */
-	public function get_admin(): Admin {
-		return $this->admin;
 	}
 
 	/**

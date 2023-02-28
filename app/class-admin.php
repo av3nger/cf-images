@@ -243,14 +243,14 @@ class Admin {
 	 */
 	public function render_page() {
 
-		$this->view( 'Header' );
+		$this->view( 'header' );
 
 		if ( ! $this->is_set_up() ) {
-			$this->view( 'Setup' );
+			$this->view( 'setup' );
 			return;
 		}
 
-		$this->view( 'Settings' );
+		$this->view( 'settings' );
 
 	}
 
@@ -263,14 +263,14 @@ class Admin {
 	 */
 	public function view( string $file ) {
 
-		$view = __DIR__ . '/Views/' . $file . '.php';
+		$view = __DIR__ . '/views/' . $file . '.php';
 
 		if ( ! file_exists( $view ) ) {
 			return;
 		}
 
 		ob_start();
-		include $view;
+		include_once $view;
 		echo ob_get_clean(); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped */
 
 	}

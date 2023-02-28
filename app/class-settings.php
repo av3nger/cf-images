@@ -81,6 +81,12 @@ class Settings {
 			update_option( 'cf-images-disable-generation', (bool) $form['disable-sizes'], false );
 		}
 
+		if ( ! isset( $form['disable-async'] ) ) {
+			delete_option( 'cf-images-disable-async' );
+		} else {
+			update_option( 'cf-images-disable-async', (bool) $form['disable-async'], false );
+		}
+
 		if ( ! isset( $form['custom-domain'] ) ) {
 			delete_option( 'cf-images-custom-domain' );
 		} else {
@@ -186,7 +192,7 @@ class Settings {
 	 */
 	public function ajax_disconnect() {
 
-		delete_option( 'cf-images-hash' );
+		delete_site_option( 'cf-images-hash' );
 		delete_option( 'cf-images-setup-done' );
 		delete_option( 'cf-images-config-written' );
 		delete_option( 'cf-images-auth-error' );
