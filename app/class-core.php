@@ -61,7 +61,7 @@ class Core {
 	 * @access protected
 	 * @var string $version  The current version of the plugin.
 	 */
-	protected $version = '1.1.3';
+	protected $version = '1.1.6-beta.1';
 
 	/**
 	 * Error status.
