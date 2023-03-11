@@ -70,6 +70,7 @@ If something is not working for you, please let me know by creating a support ti
 = 1.1.6 =
 Changed
 * Improved descriptions for the plugin settings
+* Improve settings layout
 
 = 1.1.5 - 28.02.2023 =
 
