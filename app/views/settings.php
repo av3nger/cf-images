@@ -148,7 +148,7 @@ $api_stats = sprintf( /* translators: %1$d - uploaded image count, %2$d - allowe
 				<?php esc_html_e( 'Bulk remove', 'cf-images' ); ?>
 			</label>
 			<div>
-				<a href="#" role="button" class="outline cf-images-button-red" id="cf-images-remove-all">
+				<a href="#" role="button" class="outline cf-images-button-red" id="cf-images-show-modal" data-target="modal-confirm">
 					<?php esc_attr_e( 'Remove', 'cf-images' ); ?>
 				</a>
 
@@ -176,4 +176,6 @@ $api_stats = sprintf( /* translators: %1$d - uploaded image count, %2$d - allowe
 			</a>
 		</footer>
 	</article>
+
+	<?php $this->view( 'modals/confirm' ); ?>
 </div>

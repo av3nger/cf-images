@@ -68,6 +68,9 @@ If something is not working for you, please let me know by creating a support ti
 == Changelog ==
 
 = 1.1.6 =
+Added:
+* Confirmation modal for bulk remove action
+
 Changed
 * Improved descriptions for the plugin settings
 * Improve settings layout
