@@ -67,6 +67,10 @@ If something is not working for you, please let me know by creating a support ti
 
 == Changelog ==
 
+= 1.1.6 =
+Changed
+* Improved descriptions for the plugin settings
+
 = 1.1.5 - 28.02.2023 =
 
 Added:

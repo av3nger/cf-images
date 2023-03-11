@@ -133,7 +133,7 @@ $api_stats = sprintf( /* translators: %1$d - uploaded image count, %2$d - allowe
 				</div>
 
 				<p>
-					<?php esc_html_e( 'You can either manually upload individual images from the media library, or bulk upload/remove all the images using the buttons below.', 'cf-images' ); ?>
+					<?php esc_html_e( 'You can either manually upload individual images from the media library, or bulk upload/remove all existing images using the buttons below.', 'cf-images' ); ?>
 				</p>
 
 				<p class="stats">
