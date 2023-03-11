@@ -131,6 +131,13 @@
     button[type=submit] {
       margin: 60px 0 0;
     }
+
+    & > label {
+      color: var(--color);
+      font-size: 1.3em;
+      font-weight: 600;
+      margin: 1em 0;
+    }
   }
 
   .stats {

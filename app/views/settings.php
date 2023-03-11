@@ -50,7 +50,7 @@ $api_stats = sprintf( /* translators: %1$d - uploaded image count, %2$d - allowe
 		<form id="cf-images-form" data-type="settings" onsubmit="event.preventDefault()">
 			<span class="dashicons dashicons-admin-site"></span>
 			<label for="auto_offload">
-				<h3><?php esc_html_e( 'Auto offload new images', 'cf-images' ); ?></h3>
+				<?php esc_html_e( 'Auto offload new images', 'cf-images' ); ?>
 			</label>
 			<div>
 				<input name="auto-offload" type="checkbox" id="auto_offload" value="1" <?php checked( get_option( 'cf-images-auto-offload', false ) ); ?> role="switch">
@@ -66,7 +66,7 @@ $api_stats = sprintf( /* translators: %1$d - uploaded image count, %2$d - allowe
 
 			<span class="dashicons dashicons-admin-links"></span>
 			<label for="custom_domain">
-				<h3><?php esc_html_e( 'Serve from custom domain', 'cf-images' ); ?></h3>
+				<?php esc_html_e( 'Serve from custom domain', 'cf-images' ); ?>
 			</label>
 			<div>
 				<?php $custom_domain = get_option( 'cf-images-custom-domain', false ); ?>
@@ -88,7 +88,7 @@ $api_stats = sprintf( /* translators: %1$d - uploaded image count, %2$d - allowe
 
 			<span class="dashicons dashicons-images-alt2"></span>
 			<label for="disable_sizes">
-				<h3><?php esc_html_e( 'Disable WordPress image sizes', 'cf-images' ); ?></h3>
+				<?php esc_html_e( 'Disable WordPress image sizes', 'cf-images' ); ?>
 			</label>
 			<div>
 				<input name="disable-sizes" type="checkbox" id="disable_sizes" value="1" <?php checked( get_option( 'cf-images-disable-generation', false ) ); ?> role="switch">
@@ -104,7 +104,7 @@ $api_stats = sprintf( /* translators: %1$d - uploaded image count, %2$d - allowe
 
 			<span class="dashicons dashicons-randomize"></span>
 			<label for="disable_async">
-				<h3><?php esc_html_e( 'Disable async processing', 'cf-images' ); ?></h3>
+				<?php esc_html_e( 'Disable async processing', 'cf-images' ); ?>
 			</label>
 			<div>
 				<input name="disable-async" type="checkbox" id="disable_async" value="1" <?php checked( get_option( 'cf-images-disable-async', false ) ); ?> role="switch">
@@ -120,7 +120,7 @@ $api_stats = sprintf( /* translators: %1$d - uploaded image count, %2$d - allowe
 
 			<span class="dashicons dashicons-cloud-upload"></span>
 			<label for="cf-images-upload-all">
-				<h3><?php esc_html_e( 'Bulk upload images', 'cf-images' ); ?></h3>
+				<?php esc_html_e( 'Bulk upload images', 'cf-images' ); ?>
 			</label>
 			<div>
 				<a href="#" role="button" class="outline" id="cf-images-upload-all">
@@ -145,7 +145,7 @@ $api_stats = sprintf( /* translators: %1$d - uploaded image count, %2$d - allowe
 
 			<span class="dashicons dashicons-trash"></span>
 			<label for="cf-images-remove-all">
-				<h3><?php esc_html_e( 'Bulk remove', 'cf-images' ); ?></h3>
+				<?php esc_html_e( 'Bulk remove', 'cf-images' ); ?>
 			</label>
 			<div>
 				<a href="#" role="button" class="outline cf-images-button-red" id="cf-images-remove-all">
