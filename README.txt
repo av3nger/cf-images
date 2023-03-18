@@ -71,9 +71,12 @@ If something is not working for you, please let me know by creating a support ti
 Added:
 * Confirmation modal for bulk remove action
 
-Changed
+Changed:
 * Improved descriptions for the plugin settings
 * Improve settings layout
+
+Fixed:
+* Prevent replacing images in wp-admin, because WordPress does not respect is_admin() checks
 
 = 1.1.5 - 28.02.2023 =
 

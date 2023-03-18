@@ -284,11 +284,46 @@ class Core {
 	 * @return bool
 	 */
 	private function can_run(): bool {
+
+		if ( $this->is_rest_request() || wp_doing_cron() ) {
+			return false;
+		}
+
 		if ( doing_filter( 'rank_math/head' ) || doing_action( 'rank_math/opengraph/facebook' ) ) {
 			return false;
 		}
 
 		return true;
+
+	}
+
+	/**
+	 * This is how WordPress treats us developers - doesn't give a sh*t about is_admin(), so we have to do these
+	 * custom checks to make sure we don't break the admin area.
+	 *
+	 * @since 1.1.6
+	 *
+	 * @return bool
+	 */
+	private function is_rest_request(): bool {
+
+		$wordpress_has_no_logic = filter_input( INPUT_GET, '_wp-find-template' );
+		$wordpress_has_no_logic = sanitize_key( $wordpress_has_no_logic );
+
+		if ( ! empty( $wordpress_has_no_logic ) && 'true' === $wordpress_has_no_logic ) {
+			// And if below was not enough - we also need to check this bs...
+			return true;
+		}
+
+		$rest_url_prefix = rest_get_url_prefix();
+		if ( empty( $rest_url_prefix ) ) {
+			return false;
+		}
+
+		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+
+		return strpos( $request_uri, $rest_url_prefix ) !== false;
+
 	}
 
 	/**
