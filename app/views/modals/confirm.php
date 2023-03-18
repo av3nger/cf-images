@@ -28,11 +28,11 @@ if ( ! defined( 'WPINC' ) ) {
 			<?php esc_html_e( 'Are you sure you want to remove all images from Cloudflare? This action will unlink all media library images from Cloudflare Images and remove all stored images on Cloudflare. Local images are not affected by this action.', 'cf-images' ); ?>
 		</p>
 		<footer>
-			<a href="#" role="button" class="secondary" data-target="modal-confirm" onClick="window.cfToggleModal(event)">
-				<?php esc_html_e( 'Cancel', 'cf-images' ); ?>
-			</a>
 			<a href="#" role="button" data-target="modal-confirm" id="cf-images-remove-all">
 				<?php esc_html_e( 'Confirm', 'cf-images' ); ?>
+			</a>
+			<a href="#" role="button" class="secondary" data-target="modal-confirm" onClick="window.cfToggleModal(event)">
+				<?php esc_html_e( 'Cancel', 'cf-images' ); ?>
 			</a>
 		</footer>
 	</article>
