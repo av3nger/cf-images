@@ -157,6 +157,9 @@ class Settings {
 
 		update_option( 'cf-images-config-written', ! empty( $value ), false );
 
+		// On some hosts, the wp-config.php updates take several seconds to "un-cache".
+		sleep( 1 );
+
 	}
 
 	/**
