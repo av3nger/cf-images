@@ -32,8 +32,6 @@ class Activator {
 	 */
 	public static function activate() {
 
-		update_option( 'cf-images-install-notice', true, false );
-
 		$activate = filter_input( INPUT_POST, 'action', FILTER_UNSAFE_RAW );
 		$checked  = filter_input( INPUT_POST, 'checked', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 
@@ -51,6 +49,29 @@ class Activator {
 	 * @since 1.0.0
 	 */
 	public static function deactivate() {
+	}
+
+	/**
+	 * Check if we need to perform any upgrade actions.
+	 *
+	 * @sicne 1.1.6
+	 *
+	 * @return void
+	 */
+	public static function maybe_upgrade() {
+
+		$version = get_site_option( 'cf-images-version' );
+
+		if ( CF_IMAGES_VERSION === $version ) {
+			return;
+		}
+
+		if ( ! $version || version_compare( CF_IMAGES_VERSION, '1.1.6', '<' ) ) {
+			delete_option( 'cf-images-install-notice' );
+		}
+
+		update_site_option( 'cf-images-version', CF_IMAGES_VERSION );
+
 	}
 
 }

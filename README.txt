@@ -75,7 +75,7 @@ Changed:
 * Improved descriptions for the plugin settings
 * Improve settings layout
 * Intentionally sleep for a second after setup to allow the PHP cache to expire on setup/disconnect
-* UI improvements
+* Various UI/UX improvements
 
 Fixed:
 * Prevent replacing images in wp-admin, because WordPress does not respect is_admin() checks

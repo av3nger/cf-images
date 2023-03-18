@@ -56,7 +56,6 @@ class Admin {
 			$settings = new Settings();
 			add_action( 'wp_ajax_cf_images_do_setup', array( $settings, 'ajax_do_setup' ) );
 			add_action( 'wp_ajax_cf_images_save_settings', array( $settings, 'ajax_save_settings' ) );
-			add_action( 'wp_ajax_cf_images_dismiss_install_notice', array( $this, 'ajax_dismiss_install_notice' ) );
 			add_action( 'wp_ajax_cf_images_disconnect', array( $settings, 'ajax_disconnect' ) );
 		}
 
@@ -226,10 +225,12 @@ class Admin {
 	 */
 	private function render_notice( string $message, string $type = 'success' ) {
 		?>
-		<div class="notice notice-<?php echo esc_attr( $type ); ?>" id="cf-images-notice">
-			<p>
-				<?php echo esc_html( $message ); ?>
-			</p>
+		<div class="cf-images-notifications">
+			<div class="notice notice-<?php echo esc_attr( $type ); ?>" id="cf-images-notice">
+				<p>
+					<?php echo esc_html( $message ); ?>
+				</p>
+			</div>
 		</div>
 		<?php
 	}
@@ -337,27 +338,6 @@ class Admin {
 			'<a href="#" class="cf-images-offload" data-id="' . esc_attr( $post_id ) . '">',
 			'</a>'
 		);
-
-	}
-
-	/**
-	 * Dismiss installation notice.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return void
-	 */
-	public function ajax_dismiss_install_notice() {
-
-		check_ajax_referer( 'cf-images-nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die();
-		}
-
-		delete_option( 'cf-images-install-notice' );
-
-		wp_send_json_success();
 
 	}
 

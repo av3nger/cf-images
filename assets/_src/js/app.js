@@ -34,15 +34,6 @@ import { toggleModal } from './modal';
 	 */
 	$( document ).ready( function() {
 		setTimeout( () => $( '#cf-images-notice' ).slideUp( 'slow' ), 5000 );
-
-		/**
-		 * Dismiss install notice.
-		 *
-		 * @since 1.0.0
-		 */
-		$( '#cf-images-install-notice > .notice-dismiss' ).on( 'click', function() {
-			post( 'cf_images_dismiss_install_notice' );
-		} );
 	} );
 
 	/**
