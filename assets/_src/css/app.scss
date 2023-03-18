@@ -6,7 +6,7 @@
 @import "@picocss/pico/scss/variables";
 @import "@picocss/pico/scss/themes/default";
 
-.media_page_cf-images div.wrap {
+.media_page_cf-images {
   @import "@picocss/pico/scss/content/form";
   @import "@picocss/pico/scss/content/form-checkbox-radio";
   @import "@picocss/pico/scss/components/card";
@@ -15,10 +15,6 @@
   @import "@picocss/pico/scss/components/nav";
   @import "@picocss/pico/scss/utilities/loading";
   @import "@picocss/pico/scss/utilities/tooltip";
-
-  & > h1 {
-    margin: 0;
-  }
 
   h3,
   .dashicons:before {
@@ -55,6 +51,8 @@
   article {
     @import "@picocss/pico/scss/content/button";
 
+    margin: var(--spacing) var(--spacing) 0 0;
+
     /**
      * Buttons
      */
@@ -73,15 +71,17 @@
       padding: 5px 20px;
     }
 
-    #save-settings {
-      float: right;
-    }
-
     & > header,
     & > footer {
       padding-bottom: 30px;
       padding-top: 30px;
       h3, button { margin: 0; }
+    }
+
+    & > footer {
+      display: flex;
+      justify-content: space-between;
+      flex-direction: row-reverse;
     }
 
     & > header > nav {
