@@ -830,10 +830,18 @@ class Core {
 
 		// Handle `scaled` images.
 		if ( false !== strpos( $image[0], '-scaled' ) ) {
-			if ( apply_filters( 'big_image_size_threshold', 2560 ) === $size ) {
+			$scaled_size = apply_filters( 'big_image_size_threshold', 2560 );
+
+			/**
+			 * This covers two cases:
+			 * 1: scaled sizes are disabled, but we have the size passed to the function
+			 * 2: scaled size equals the requested size
+			 * In both cases - use the size value.
+			 */
+			if ( ( ! $scaled_size && is_int( $size ) ) || $scaled_size === $size ) {
 				$image[0] = "$domain/$hash/$cloudflare_image_id/w=" . $size;
-			} else {
-				$image[0] = "$domain/$hash/$cloudflare_image_id/w=" . apply_filters( 'big_image_size_threshold', 2560 );
+			} else { // Fallback to scaled size.
+				$image[0] = "$domain/$hash/$cloudflare_image_id/w=" . $scaled_size;
 			}
 
 			return $image;

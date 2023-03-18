@@ -77,6 +77,7 @@ Changed:
 
 Fixed:
 * Prevent replacing images in wp-admin, because WordPress does not respect is_admin() checks
+* Scaled images having an empty 'w' parameter
 
 = 1.1.5 - 28.02.2023 =
 
