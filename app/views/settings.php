@@ -167,12 +167,12 @@ $api_stats = sprintf( /* translators: %1$d - uploaded image count, %2$d - allowe
 		</form>
 
 		<footer>
-			<a href="#" role="button" aria-busy="false" id="save-settings">
-				<?php esc_html_e( 'Save Changes', 'cf-images' ); ?>
-			</a>
-
 			<a href="#" class="secondary" role="button" aria-busy="false" id="cf-images-disconnect">
 				<?php esc_html_e( 'Disconnect', 'cf-images' ); ?>
+			</a>
+
+			<a href="#" role="button" aria-busy="false" id="save-settings">
+				<?php esc_html_e( 'Save Changes', 'cf-images' ); ?>
 			</a>
 		</footer>
 	</article>
