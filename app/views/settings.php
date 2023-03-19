@@ -99,6 +99,20 @@ $api_stats = sprintf( /* translators: %1$d - uploaded image count, %2$d - allowe
 
 		<hr>
 
+		<span class="dashicons dashicons-editor-expand"></span>
+		<label for="auto_resize">
+			<?php esc_html_e( 'Auto resize images on front-end', 'cf-images' ); ?>
+			<span class="cf-images-badge"><?php esc_html_e( 'Beta', 'cf-images' ); ?></span>
+		</label>
+		<div>
+			<input name="auto-resize" type="checkbox" id="auto_resize" value="1" <?php checked( get_option( 'cf-images-auto-resize', false ) ); ?> role="switch">
+			<p>
+				<?php esc_html_e( 'Set the image size to match the DOM required size. Instead of WordPress attachment sizes, this will attempt to match the image size to the element it is placed in on the front-end.', 'cf-images' ); ?>
+			</p>
+		</div>
+
+		<hr>
+
 		<span class="dashicons dashicons-images-alt2"></span>
 		<label for="disable_sizes">
 			<?php esc_html_e( 'Disable WordPress image sizes', 'cf-images' ); ?>

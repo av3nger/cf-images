@@ -79,6 +79,7 @@ class Settings {
 		$options = array(
 			'auto-offload'  => 'cf-images-auto-offload',
 			'custom-id'     => 'cf-images-custom-id',
+			'auto-resize'   => 'cf-images-auto-resize',
 			'disable-sizes' => 'cf-images-disable-generation',
 			'disable-async' => 'cf-images-disable-async',
 		);
