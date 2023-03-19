@@ -59,6 +59,13 @@ class Image extends Api {
 			$data['metadata'] = wp_json_encode( $metadata );
 		}
 
+		/**
+		 * Allow filtering the data, when offloading images to Cloudflare.
+		 *
+		 * @sice 1.1.6
+		 */
+		$data = apply_filters( 'cf_images_upload_data', $data );
+
 		$this->set_method( 'UPLOAD' );
 		$this->set_endpoint( '' );
 		$this->set_request_body( $data );
