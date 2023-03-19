@@ -68,6 +68,7 @@ If something is not working for you, please let me know by creating a support ti
 == Changelog ==
 
 = 1.2.0 =
+
 Added:
 * Option to use custom paths for images
 * Confirmation modal for bulk remove action
@@ -189,12 +190,16 @@ Fixed:
 * Incorrect status during bulk offload
 
 = 1.0.0 =
+
 First release
 * Offload images to Cloudflare Images
 * Option to disable WordPress image sizes
 * Support for custom domains
 
 == Upgrade Notice ==
+
+= 1.2.0 =
+Big update with lots of improvements and new features.
 
 = 1.0.0 =
 This is the first plugin release.
