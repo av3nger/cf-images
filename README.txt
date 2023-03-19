@@ -69,6 +69,7 @@ If something is not working for you, please let me know by creating a support ti
 
 = 1.1.6 =
 Added:
+* Option to use custom paths for images
 * Confirmation modal for bulk remove action
 * Offload status to media library grid mode
 

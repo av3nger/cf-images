@@ -186,4 +186,19 @@
       margin-top: 0;
     }
   }
+
+  .cf-images-badge {
+    align-items: center;
+    background-color: rgb(191 219 254);
+    border-radius: 9999px;
+    color: rgb(30 58 138);
+    display: inline-flex;
+    font-size: .75rem;
+    font-weight: 500;
+    line-height: 1.25;
+    margin-top: -3px;
+    padding: 0.125rem 0.5rem;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
 }
