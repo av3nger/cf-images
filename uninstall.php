@@ -38,6 +38,8 @@ delete_option( 'cf-images-config-written' );
 delete_option( 'cf-images-stats' );
 delete_option( 'cf-images-auth-error' );
 delete_option( 'cf-images-auto-offload' );
+delete_option( 'cf-images-disable-async' );
+delete_option( 'cf-images-custom-id' );
 
 // Remove defines from wp-config.php file.
 require_once __DIR__ . '/app/class-settings.php';
