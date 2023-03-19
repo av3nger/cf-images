@@ -81,7 +81,7 @@ import { toggleModal } from './modal';
 	 *
 	 * @since 1.0.0
 	 */
-	$( '.cf-images-offload' ).on( 'click', function( e ) {
+	$( document ).on( 'click', '.cf-images-offload', function( e ) {
 		e.preventDefault();
 
 		const divStatus = $( this ).parent();

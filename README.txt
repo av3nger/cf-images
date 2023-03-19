@@ -70,6 +70,7 @@ If something is not working for you, please let me know by creating a support ti
 = 1.1.6 =
 Added:
 * Confirmation modal for bulk remove action
+* Offload status to media library grid mode
 
 Changed:
 * Improved descriptions for the plugin settings

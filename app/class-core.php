@@ -223,6 +223,7 @@ class Core {
 	 */
 	private function load_libs() {
 
+		require_once __DIR__ . '/class-media.php';
 		require_once __DIR__ . '/class-admin.php';
 		require_once __DIR__ . '/class-settings.php';
 
