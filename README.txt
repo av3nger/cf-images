@@ -70,6 +70,7 @@ If something is not working for you, please let me know by creating a support ti
 = 1.2.0 =
 
 Added:
+* Auto image sizes on front-end
 * Option to use custom paths for images
 * Confirmation modal for bulk remove action
 * Offload status to media library grid mode
