@@ -63,8 +63,11 @@ class Image extends Api {
 		 * Allow filtering the data, when offloading images to Cloudflare.
 		 *
 		 * @sice 1.1.6
+		 *
+		 * @param array      $data  Data.
+		 * @param int|string $id    Image ID.
 		 */
-		$data = apply_filters( 'cf_images_upload_data', $data );
+		$data = apply_filters( 'cf_images_upload_data', $data, $id );
 
 		$this->set_method( 'UPLOAD' );
 		$this->set_endpoint( '' );

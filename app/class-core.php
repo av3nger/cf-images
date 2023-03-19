@@ -183,6 +183,9 @@ class Core {
 		add_action( 'admin_init', array( $this, 'enable_flexible_variants' ) );
 		add_action( 'init', array( $this, 'populate_image_sizes' ) );
 
+		// Use custom paths.
+		add_filter( 'cf_images_upload_data', array( $this, 'use_custom_image_path' ), 10, 2 );
+
 		// Disable generation of image sizes.
 		if ( get_option( 'cf-images-disable-generation', false ) ) {
 			add_filter( 'wp_image_editors', '__return_empty_array' );
@@ -735,7 +738,7 @@ class Core {
 		preg_match_all( '#/(.*?)/#i', $variants[0], $hash );
 
 		if ( isset( $hash[1] ) && ! empty( $hash[1][1] ) ) {
-			update_site_option( 'cf-images-hash', $hash[1][1], false );
+			update_site_option( 'cf-images-hash', $hash[1][1] );
 		}
 
 	}
@@ -1046,6 +1049,30 @@ class Core {
 	 */
 	public function get_error() {
 		return $this->error;
+	}
+
+	/**
+	 * Set custom ID for image to use the custom paths in image URLs.
+	 *
+	 * @since 1.1.6
+	 *
+	 * @param array      $data           Image data sent to the Cloudflare Images API.
+	 * @param int|string $attachment_id  Attachment ID.
+	 *
+	 * @return array
+	 */
+	public function use_custom_image_path( array $data, $attachment_id ): array {
+
+		if ( ! get_option( 'cf-images-custom-id', false ) ) {
+			return $data;
+		}
+
+		if ( ! isset( $data['id'] ) && isset( $data['file']->postname ) ) {
+			$data['id'] = $data['file']->postname;
+		}
+
+		return $data;
+
 	}
 
 }
