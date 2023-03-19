@@ -67,7 +67,7 @@ If something is not working for you, please let me know by creating a support ti
 
 == Changelog ==
 
-= 1.1.6 =
+= 1.2.0 =
 Added:
 * Option to use custom paths for images
 * Confirmation modal for bulk remove action

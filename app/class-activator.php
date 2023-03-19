@@ -54,7 +54,7 @@ class Activator {
 	/**
 	 * Check if we need to perform any upgrade actions.
 	 *
-	 * @sicne 1.1.6
+	 * @sicne 1.2.0
 	 *
 	 * @return void
 	 */
@@ -66,7 +66,7 @@ class Activator {
 			return;
 		}
 
-		if ( ! $version || version_compare( CF_IMAGES_VERSION, '1.1.6', '<' ) ) {
+		if ( ! $version || version_compare( CF_IMAGES_VERSION, '1.2.0', '<' ) ) {
 			delete_option( 'cf-images-install-notice' );
 		}
 

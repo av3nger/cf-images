@@ -9,7 +9,7 @@
  * @package CF_Images
  * @subpackage CF_Images/App
  * @author Anton Vanyukov <a.vanyukov@vcore.ru>
- * @since 1.1.6
+ * @since 1.2.0
  */
 
 namespace CF_Images\App;
@@ -23,7 +23,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * The Media plugin class.
  *
- * @since 1.1.6
+ * @since 1.2.0
  */
 class Media {
 
@@ -34,7 +34,7 @@ class Media {
 	 *
 	 * Init all actions and filters for the admin area of the plugin.
 	 *
-	 * @since 1.1.6
+	 * @since 1.2.0
 	 */
 	public function __construct() {
 
@@ -80,7 +80,7 @@ class Media {
 	 * Filters the Media list table columns.
 	 *
 	 * @since 1.0.0
-	 * @since 1.1.6 Moved from class-admin.php
+	 * @since 1.2.0 Moved from class-admin.php
 	 *
 	 * @param string[] $posts_columns  An array of columns displayed in the Media list table.
 	 *
@@ -97,7 +97,7 @@ class Media {
 	 * Fires for each custom column in the Media list table.
 	 *
 	 * @since 1.0.0
-	 * @since 1.1.6 Moved from class-admin.php
+	 * @since 1.2.0 Moved from class-admin.php
 	 *
 	 * @param string $column_name  Name of the custom column.
 	 * @param int    $post_id      Attachment ID.
@@ -148,7 +148,7 @@ class Media {
 	/**
 	 * Add offload status for the media library grid view.
 	 *
-	 * @since 1.1.6
+	 * @since 1.2.0
 	 *
 	 * @param array   $response    Array of prepared attachment data. @see wp_prepare_attachment_for_js().
 	 * @param WP_Post $attachment  Attachment object.

@@ -9,7 +9,7 @@
  * @package CF_Images
  * @subpackage CF_Images/App/Views
  * @author Anton Vanyukov <a.vanyukov@vcore.ru>
- * @since 1.1.6
+ * @since 1.2.0
  */
 
 namespace CF_Images\App\Views\Modals;

@@ -62,7 +62,7 @@ class Image extends Api {
 		/**
 		 * Allow filtering the data, when offloading images to Cloudflare.
 		 *
-		 * @sice 1.1.6
+		 * @sice 1.2.0
 		 *
 		 * @param array      $data  Data.
 		 * @param int|string $id    Image ID.

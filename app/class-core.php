@@ -61,7 +61,7 @@ class Core {
 	 * @access protected
 	 * @var string $version  The current version of the plugin.
 	 */
-	protected $version = '1.1.6-beta.2';
+	protected $version = '1.2.0-beta.2';
 
 	/**
 	 * Error status.
@@ -305,7 +305,7 @@ class Core {
 	 * This is how WordPress treats us developers - doesn't give a sh*t about is_admin(), so we have to do these
 	 * custom checks to make sure we don't break the admin area.
 	 *
-	 * @since 1.1.6
+	 * @since 1.2.0
 	 *
 	 * @return bool
 	 */
@@ -1054,7 +1054,7 @@ class Core {
 	/**
 	 * Set custom ID for image to use the custom paths in image URLs.
 	 *
-	 * @since 1.1.6
+	 * @since 1.2.0
 	 *
 	 * @param array      $data           Image data sent to the Cloudflare Images API.
 	 * @param int|string $attachment_id  Attachment ID.

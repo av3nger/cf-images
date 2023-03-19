@@ -129,7 +129,7 @@ import { toggleModal } from './modal';
 	/**
 	 * Show confirm modal.
 	 *
-	 * @since 1.1.6
+	 * @since 1.2.0
 	 */
 	$( '#cf-images-show-modal' ).on( 'click', function( e ) {
 		e.preventDefault();
