@@ -75,16 +75,20 @@ class Settings {
 		// Data sanitized later in code.
 		parse_str( wp_unslash( $_POST['data'] ), $form ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
-		if ( ! isset( $form['disable-sizes'] ) ) {
-			delete_option( 'cf-images-disable-generation' );
-		} else {
-			update_option( 'cf-images-disable-generation', (bool) $form['disable-sizes'], false );
-		}
+		// List of settings. The key corresponds to the name of the form field, the value corresponds to the name of the option.
+		$options = array(
+			'auto-offload'  => 'cf-images-auto-offload',
+			'custom-id'     => 'cf-images-custom-id',
+			'disable-sizes' => 'cf-images-disable-generation',
+			'disable-async' => 'cf-images-disable-async',
+		);
 
-		if ( ! isset( $form['disable-async'] ) ) {
-			delete_option( 'cf-images-disable-async' );
-		} else {
-			update_option( 'cf-images-disable-async', (bool) $form['disable-async'], false );
+		foreach ( $options as $key => $option ) {
+			if ( ! isset( $form[ $key ] ) ) {
+				delete_option( $option );
+			} else {
+				update_option( $option, (bool) $form[ $key ], false );
+			}
 		}
 
 		if ( ! isset( $form['custom-domain'] ) ) {
@@ -99,12 +103,6 @@ class Settings {
 			}
 
 			update_option( 'cf-images-custom-domain', $value, false );
-		}
-
-		if ( ! isset( $form['auto-offload'] ) ) {
-			delete_option( 'cf-images-auto-offload' );
-		} else {
-			update_option( 'cf-images-auto-offload', (bool) $form['auto-offload'], false );
 		}
 
 		wp_send_json_success();
