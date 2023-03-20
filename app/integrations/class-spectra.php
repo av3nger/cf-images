@@ -9,7 +9,7 @@
  * @package CF_Images
  * @subpackage CF_Images/App/Integrations
  * @author Anton Vanyukov <a.vanyukov@vcore.ru>
- * @since 1.5.0
+ * @since 1.1.5
  */
 
 namespace CF_Images\App\Integrations;
@@ -21,14 +21,14 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Spectra class.
  *
- * @since 1.5.0
+ * @since 1.1.5
  */
 class Spectra {
 
 	/**
 	 * Class constructor.
 	 *
-	 * @since 1.5.0
+	 * @since 1.1.5
 	 */
 	public function __construct() {
 		add_filter( 'cf_images_content_attachment_id', array( $this, 'detect_image_id' ), 10, 2 );
@@ -38,8 +38,8 @@ class Spectra {
 	 * Spectra blocks will remove the default WordPress class that identifies an image, and will replace it with
 	 * their own uag-image-<ID> class. Try to get attachment ID from class.
 	 *
-	 * @since 1.3.0
-	 * @since 1.5.0 Moved to the Spectra integration class.
+	 * @since 1.1.3
+	 * @since 1.1.5 Moved to the Spectra integration class.
 	 *
 	 * @param int    $attachment_id   The image attachment ID. May be 0 in case the image is not an attachment.
 	 * @param string $filtered_image  Full img tag with attributes that will replace the source img tag.

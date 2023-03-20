@@ -210,11 +210,8 @@ class Core {
 			add_filter( 'wp_prepare_attachment_for_js', array( $this, 'prepare_attachment_for_js' ), 10, 2 );
 			add_filter( 'wp_calculate_image_srcset', array( $this, 'calculate_image_srcset' ), 10, 5 );
 
-			global $wp_version;
 			// This filter is available on WordPress 6.0 or above.
-			if ( version_compare( $wp_version, '6.0.0', '>=' ) ) {
-				add_filter( 'wp_content_img_tag', array( $this, 'content_img_tag' ), 10, 3 );
-			}
+			add_filter( 'wp_content_img_tag', array( $this, 'content_img_tag' ), 10, 3 );
 		}
 
 	}
@@ -997,7 +994,7 @@ class Core {
 		/**
 		 * Filter that allows adjusting the attachment ID.
 		 *
-		 * Some plugins will replace the WordPress image class and prevent WordPress from getting the correct attahcment ID.
+		 * Some plugins will replace the WordPress image class and prevent WordPress from getting the correct attachment ID.
 		 *
 		 * @since 1.3.0
 		 *
