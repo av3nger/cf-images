@@ -82,7 +82,7 @@ trait Helpers {
 			return new WP_Error( 401, esc_html__( 'Authentication error. Check and update Cloudflare API key.', 'cf-images' ) );
 		}
 
-		return Core::get_instance()->get_error();
+		return Core::get_error();
 
 	}
 

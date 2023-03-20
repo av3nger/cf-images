@@ -21,7 +21,6 @@ namespace CF_Images\App;
 use Exception;
 use WP_Error;
 use WP_Post;
-use WP_Query;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -70,7 +69,7 @@ class Core {
 	 * @access private
 	 * @var bool|WP_Error $error
 	 */
-	private $error = false;
+	private static $error = false;
 
 	/**
 	 * Admin instance.
@@ -116,19 +115,6 @@ class Core {
 	 * @var array $heights
 	 */
 	private $heights;
-
-	/**
-	 * Default stats.
-	 *
-	 * @since 1.1.0
-	 * @access private
-	 * @var int[]
-	 */
-	private $default_stats = array(
-		'synced'      => 0,
-		'api_current' => 0,
-		'api_allowed' => 100000,
-	);
 
 	/**
 	 * CDN domain.
@@ -183,18 +169,13 @@ class Core {
 			return;
 		}
 
-		if ( wp_doing_ajax() ) {
-			add_action( 'wp_ajax_cf_images_offload_image', array( $this, 'ajax_offload_image' ) );
-			add_action( 'wp_ajax_cf_images_bulk_process', array( $this, 'ajax_bulk_process' ) );
-			add_action( 'wp_ajax_cf_images_skip_image', array( $this, 'ajax_skip_image' ) );
-		}
-
+		add_action( 'cf_images_error', array( $this, 'set_error' ), 10, 2 );
 		add_action( 'admin_init', array( $this, 'maybe_redirect_to_plugin_page' ) );
 		add_action( 'admin_init', array( $this, 'enable_flexible_variants' ) );
 		add_action( 'init', array( $this, 'populate_image_sizes' ) );
 
 		// Use custom paths.
-		add_filter( 'cf_images_upload_data', array( $this, 'use_custom_image_path' ), 10, 2 );
+		add_filter( 'cf_images_upload_data', array( $this, 'use_custom_image_path' ) );
 
 		// Disable generation of image sizes.
 		if ( get_option( 'cf-images-disable-generation', false ) ) {
@@ -202,17 +183,6 @@ class Core {
 			add_filter( 'big_image_size_threshold', '__return_false' );
 			add_filter( 'intermediate_image_sizes_advanced', '__return_empty_array' );
 		}
-
-		// Image actions.
-		if ( get_option( 'cf-images-auto-offload', false ) ) {
-			// If async uploads are disabled, use the default hook.
-			if ( get_option( 'cf-images-disable-async', false ) ) {
-				add_filter( 'wp_generate_attachment_metadata', array( $this, 'upload_image' ), 10, 2 );
-			} else {
-				add_filter( 'wp_async_wp_generate_attachment_metadata', array( $this, 'upload_image' ), 10, 2 );
-			}
-		}
-		add_action( 'delete_attachment', array( $this, 'delete_image' ) );
 
 		if ( ! is_admin() && $this->can_run() ) {
 			// Replace images only on front-end.
@@ -259,30 +229,13 @@ class Core {
 	private function init_integrations() {
 
 		require_once __DIR__ . '/integrations/class-spectra.php';
-		$spectra = new Integrations\Spectra();
+		new Integrations\Spectra();
 
 		require_once __DIR__ . '/integrations/class-multisite-global-media.php';
-		$multisite_global_media = new Integrations\Multisite_Global_Media();
+		new Integrations\Multisite_Global_Media();
 
 		require_once __DIR__ . '/integrations/class-rank-math.php';
-		$rank_math = new Integrations\Rank_Math();
-
-	}
-
-	/**
-	 * Check if this is a valid AJAX request coming from the user.
-	 *
-	 * @since 1.0.1
-	 *
-	 * @return void
-	 */
-	private function check_ajax_request() {
-
-		check_ajax_referer( 'cf-images-nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) || ! isset( $_POST['data'] ) ) {
-			wp_die();
-		}
+		new Integrations\Rank_Math();
 
 	}
 
@@ -338,157 +291,6 @@ class Core {
 	}
 
 	/**
-	 * Offload selected image to Cloudflare Images.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return void
-	 */
-	public function ajax_offload_image() {
-
-		$this->check_ajax_request();
-
-		$attachment_id = (int) filter_input( INPUT_POST, 'data', FILTER_SANITIZE_NUMBER_INT );
-
-		$metadata = wp_get_attachment_metadata( $attachment_id );
-		if ( false === $metadata ) {
-			$message = sprintf( // translators: %1$s - opening <a> tag, %2$s - closing </a> tag.
-				esc_html__( 'Image metadata not found. %1$sSkip image%2$s', 'cf-images' ),
-				'<a href="#" data-id="' . $attachment_id . '" onclick="window.cfSkipImage(this)">',
-				'</a>'
-			);
-
-			wp_send_json_error( $message );
-		}
-
-		$this->upload_image( $metadata, $attachment_id );
-
-		if ( is_wp_error( $this->error ) ) {
-			wp_send_json_error( $this->error->get_error_message() );
-		}
-
-		$this->fetch_stats();
-
-		wp_send_json_success();
-
-	}
-
-	/**
-	 * Bulk upload or bulk remove images progress bar handler.
-	 *
-	 * @since 1.0.1  Combined from ajax_remove_images() and ajax_upload_images().
-	 *
-	 * @return void
-	 */
-	public function ajax_bulk_process() {
-
-		$this->check_ajax_request();
-
-		// Data sanitized later in code.
-		$progress = filter_input( INPUT_POST, 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
-
-		if ( ! isset( $progress['action'] ) ) {
-			wp_send_json_error( esc_html__( 'Incorrect action call', 'cf-images' ) );
-		}
-
-		if ( ! isset( $progress['currentStep'] ) || ! isset( $progress['totalSteps'] ) ) {
-			wp_send_json_error( esc_html__( 'No current step or total steps defined', 'cf-images' ) );
-		}
-
-		$step  = (int) $progress['currentStep'];
-		$total = (int) $progress['totalSteps'];
-
-		$action = sanitize_text_field( $progress['action'] );
-
-		if ( ! in_array( $action, array( 'upload', 'remove' ), true ) ) {
-			wp_send_json_error( esc_html__( 'Unsupported action', 'cf-images' ) );
-		}
-
-		// Progress just started.
-		if ( 0 === $step && 0 === $total ) {
-			$args = $this->get_wp_query_args( $action );
-
-			// Look for images that have been offloaded.
-			$images = new WP_Query( $args );
-
-			// No available images found.
-			if ( 0 === $images->found_posts ) {
-				$this->update_stats( 0, false ); // Reset stats.
-				$this->fetch_stats();
-				wp_send_json_error( __( 'No images found', 'cf-images' ) );
-			}
-
-			$total = $images->found_posts;
-		}
-
-		$step++;
-
-		// Something is wrong with the steps count.
-		if ( $step > $total ) {
-			wp_send_json_error( esc_html__( 'Step error', 'cf-images' ) );
-		}
-
-		$args = $this->get_wp_query_args( $action, true );
-
-		// Look for images that have been offloaded.
-		$image = new WP_Query( $args );
-
-		if ( 'upload' === $action ) {
-			$metadata = wp_get_attachment_metadata( $image->post->ID );
-			if ( false === $metadata ) {
-				update_post_meta( $image->post->ID, '_cloudflare_image_skip', true );
-			} else {
-				$this->upload_image( $metadata, $image->post->ID );
-
-				// If there's an error with offloading, we need to mark such an image as skipped.
-				if ( is_wp_error( $this->error ) ) {
-					update_post_meta( $image->post->ID, '_cloudflare_image_skip', true );
-					$this->error = false; // Reset the error.
-				}
-			}
-		} else {
-			$this->delete_image( $image->post->ID );
-		}
-
-		// On final step - update API stats.
-		if ( $step === $total ) {
-			$this->fetch_stats();
-		}
-
-		$response = array(
-			'currentStep' => $step,
-			'totalSteps'  => $total,
-			'status'      => sprintf( /* translators: %1$d - current image, %2$d - total number of images */
-				esc_html__( 'Processing image %1$d out of %2$d...', 'cf-images' ),
-				(int) $step,
-				$total
-			),
-		);
-
-		wp_send_json_success( $response );
-
-	}
-
-	/**
-	 * Skip image from processing.
-	 *
-	 * @since 1.1.2
-	 *
-	 * @return void
-	 */
-	public function ajax_skip_image() {
-
-		$this->check_ajax_request();
-
-		$attachment_id = (int) filter_input( INPUT_POST, 'data', FILTER_SANITIZE_NUMBER_INT );
-
-		update_post_meta( $attachment_id, '_cloudflare_image_skip', true );
-
-		wp_send_json_success();
-
-	}
-
-	/**
 	 * Get Cloudflare CDN domain.
 	 *
 	 * @since 1.0.2
@@ -509,45 +311,21 @@ class Core {
 	}
 
 	/**
-	 * Get arguments for WP_Query call.
+	 * Setter for error.
 	 *
-	 * @since 1.0.1
+	 * @since 1.2.0
 	 *
-	 * @param string $action  Action name. Accepts: upload|remove.
-	 * @param bool   $single  Fetch single entry? Default: fetch all.
+	 * @param int|mixed $code     Error code.
+	 * @param string    $message  Error message.
 	 *
-	 * @return string[]
+	 * @return void
 	 */
-	private function get_wp_query_args( string $action, bool $single = false ): array {
-
-		$args = array(
-			'post_type'   => 'attachment',
-			'post_status' => 'inherit',
-		);
-
-		if ( $single ) {
-			$args['posts_per_page'] = 1;
+	public function set_error( $code = '', string $message = '' ) {
+		if ( '' === $code ) {
+			self::$error = false;
+		} else {
+			self::$error = new WP_Error( $code, $message );
 		}
-
-		if ( 'upload' === $action ) {
-			$args['meta_query'] = array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
-				array(
-					'key'     => '_cloudflare_image_id',
-					'compare' => 'NOT EXISTS',
-				),
-				array(
-					'key'     => '_cloudflare_image_skip',
-					'compare' => 'NOT EXISTS',
-				),
-			);
-		}
-
-		if ( 'remove' === $action ) {
-			$args['meta_key'] = '_cloudflare_image_id'; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
-		}
-
-		return $args;
-
 	}
 
 	/**
@@ -591,7 +369,7 @@ class Core {
 			$variant->toggle_flexible( true );
 			update_option( 'cf-images-setup-done', true, false );
 		} catch ( Exception $e ) {
-			$this->error = new WP_Error( $e->getCode(), $e->getMessage() );
+			self::$error = new WP_Error( $e->getCode(), $e->getMessage() );
 		}
 
 	}
@@ -609,176 +387,6 @@ class Core {
 
 		$this->heights = wp_list_pluck( $this->registered_sizes, 'height' );
 		$this->widths  = wp_list_pluck( $this->registered_sizes, 'width' );
-
-	}
-
-	/**
-	 * Upload to Cloudflare images.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array $metadata       An array of attachment meta data.
-	 * @param int   $attachment_id  Current attachment ID.
-	 *
-	 * @return array
-	 */
-	public function upload_image( array $metadata, int $attachment_id ): array {
-
-		if ( ! isset( $metadata['file'] ) ) {
-			$this->error = new WP_Error( 404, __( 'Media file not found', 'cf-images' ) );
-			return $metadata;
-		}
-
-		if ( ! wp_attachment_is_image( $attachment_id ) ) {
-			$this->error = new WP_Error( 415, __( 'Unsupported media type', 'cf-images' ) );
-			return $metadata;
-		}
-
-		$image = new Api\Image();
-		$dir   = wp_get_upload_dir();
-		$path  = trailingslashit( $dir['basedir'] ) . $metadata['file'];
-
-		$url = wp_parse_url( get_site_url() );
-		if ( is_multisite() && ! is_subdomain_install() ) {
-			$host = $url['host'] . $url['path'];
-		} else {
-			$host = $url['host'];
-		}
-
-		$name = trailingslashit( $host ) . $metadata['file'];
-
-		try {
-			$results = $image->upload( $path, $attachment_id, $name );
-			$this->update_stats( 1 );
-			update_post_meta( $attachment_id, '_cloudflare_image_id', $results->id );
-			$this->maybe_save_hash( $results->variants );
-
-			if ( doing_filter( 'wp_async_wp_generate_attachment_metadata' ) ) {
-				$this->fetch_stats();
-			}
-		} catch ( Exception $e ) {
-			$this->error = new WP_Error( $e->getCode(), $e->getMessage() );
-		}
-
-		return $metadata;
-
-	}
-
-	/**
-	 * Fetch API stats.
-	 *
-	 * @since 1.1.0
-	 *
-	 * @return void
-	 */
-	private function fetch_stats() {
-
-		$image = new Api\Image();
-
-		try {
-			$count = $image->stats();
-
-			$stats = get_option( 'cf-images-stats', $this->default_stats );
-
-			if ( isset( $count->current ) ) {
-				$stats['api_current'] = $count->current;
-			}
-
-			if ( isset( $count->allowed ) ) {
-				$stats['api_allowed'] = $count->allowed;
-			}
-
-			update_option( 'cf-images-stats', $stats, false );
-		} catch ( Exception $e ) {
-			$this->error = new WP_Error( $e->getCode(), $e->getMessage() );
-		}
-
-	}
-
-	/**
-	 * Update image stats.
-	 *
-	 * @since 1.0.1
-	 *
-	 * @param int  $count  Add or subtract number from `synced` image count.
-	 * @param bool $add    By default, we will add the required number of images. If set to false - replace the value.
-	 *
-	 * @return void
-	 */
-	private function update_stats( int $count, bool $add = true ) {
-
-		$stats = get_option( 'cf-images-stats', $this->default_stats );
-
-		if ( $add ) {
-			$stats['synced'] += $count;
-		} else {
-			$stats['synced'] = $count;
-		}
-
-		if ( $stats['synced'] < 0 ) {
-			$stats['synced'] = 0;
-		}
-
-		update_option( 'cf-images-stats', $stats, false );
-
-	}
-
-	/**
-	 * Try to get the Cloudflare Images account hash and store it for future use.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array $variants  Saved variants.
-	 *
-	 * @return void
-	 */
-	private function maybe_save_hash( array $variants ) {
-
-		$hash = get_site_option( 'cf-images-hash', '' );
-
-		if ( ! empty( $hash ) || ! isset( $variants[0] ) ) {
-			return;
-		}
-
-		preg_match_all( '#/(.*?)/#i', $variants[0], $hash );
-
-		if ( isset( $hash[1] ) && ! empty( $hash[1][1] ) ) {
-			update_site_option( 'cf-images-hash', $hash[1][1] );
-		}
-
-	}
-
-	/**
-	 * Fires before an attachment is deleted, at the start of wp_delete_attachment().
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param int $post_id  Attachment ID.
-	 *
-	 * @return void
-	 */
-	public function delete_image( int $post_id ) {
-
-		$id = get_post_meta( $post_id, '_cloudflare_image_id', true );
-
-		if ( ! $id ) {
-			return;
-		}
-
-		$image = new Api\Image();
-
-		try {
-			$image->delete( $id );
-			$this->update_stats( -1 );
-			delete_post_meta( $post_id, '_cloudflare_image_id' );
-			delete_post_meta( $post_id, '_cloudflare_image_skip' );
-
-			if ( doing_action( 'delete_attachment' ) ) {
-				$this->fetch_stats();
-			}
-		} catch ( Exception $e ) {
-			$this->error = new WP_Error( $e->getCode(), $e->getMessage() );
-		}
 
 	}
 
@@ -1046,11 +654,12 @@ class Core {
 	 * Retrieve stored error.
 	 *
 	 * @since 1.0.0
+	 * @sicne 1.2.0  Change to static method.
 	 *
 	 * @return bool|WP_Error
 	 */
-	public function get_error() {
-		return $this->error;
+	public static function get_error() {
+		return self::$error;
 	}
 
 	/**
@@ -1058,12 +667,11 @@ class Core {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param array      $data           Image data sent to the Cloudflare Images API.
-	 * @param int|string $attachment_id  Attachment ID.
+	 * @param array $data  Image data sent to the Cloudflare Images API.
 	 *
 	 * @return array
 	 */
-	public function use_custom_image_path( array $data, $attachment_id ): array {
+	public function use_custom_image_path( array $data ): array {
 
 		if ( ! get_option( 'cf-images-custom-id', false ) ) {
 			return $data;

@@ -49,7 +49,9 @@ register_deactivation_hook( __FILE__, array( 'CF_Images\App\Activator', 'deactiv
  */
 function run_cf_images() {
 
+	require_once __DIR__ . '/app/traits/trait-ajax.php';
 	require_once __DIR__ . '/app/traits/trait-helpers.php';
+	require_once __DIR__ . '/app/traits/trait-stats.php';
 	require_once __DIR__ . '/app/class-core.php';
 	App\Activator::maybe_upgrade();
 	App\Core::get_instance();

@@ -25,6 +25,8 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Settings {
 
+	use Traits\Ajax;
+
 	/**
 	 * Do initial setup by storing user provided Cloudflare account ID and API key in wp-config.php file.
 	 *
@@ -34,11 +36,7 @@ class Settings {
 	 */
 	public function ajax_do_setup() {
 
-		check_ajax_referer( 'cf-images-nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) || ! isset( $_POST['data'] ) ) {
-			wp_die();
-		}
+		$this->check_ajax_request();
 
 		// Data sanitized later in code.
 		parse_str( wp_unslash( $_POST['data'] ), $form ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
@@ -66,11 +64,7 @@ class Settings {
 	 */
 	public function ajax_save_settings() {
 
-		check_ajax_referer( 'cf-images-nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) || ! isset( $_POST['data'] ) ) {
-			wp_die();
-		}
+		$this->check_ajax_request();
 
 		// Data sanitized later in code.
 		parse_str( wp_unslash( $_POST['data'] ), $form ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
