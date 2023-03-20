@@ -185,6 +185,9 @@ class Core {
 		}
 
 		if ( ! is_admin() && $this->can_run() ) {
+			add_filter( 'wp_get_attachment_image_attributes', array( $this, 'add_class_to_attachment' ) );
+			add_filter( 'wp_content_img_tag', array( $this, 'add_class_to_img_tag' ), 15 );
+
 			// Replace images only on front-end.
 			add_filter( 'wp_get_attachment_image_src', array( $this, 'get_attachment_image_src' ), 10, 3 );
 			add_filter( 'wp_prepare_attachment_for_js', array( $this, 'prepare_attachment_for_js' ), 10, 2 );
@@ -682,6 +685,95 @@ class Core {
 		}
 
 		return $data;
+
+	}
+
+	/**
+	 * Add special class to images that are served via Cloudflare.
+	 *
+	 * @since 1.2.0
+	 * @see wp_get_attachment_image()
+	 *
+	 * @param string[] $attr  Array of attribute values for the image markup, keyed by attribute name.
+	 *
+	 * @return string[]
+	 */
+	public function add_class_to_attachment( array $attr ): array {
+
+		if ( ! get_option( 'cf-images-auto-resize', false ) ) {
+			return $attr;
+		}
+
+		if ( empty( $attr['src'] ) || false === strpos( $attr['src'], $this->cdn_domain ) ) {
+			return $attr;
+		}
+
+		if ( empty( $attr['class'] ) ) {
+			$attr['class'] = 'cf-image-auto-resize';
+		} elseif ( false === strpos( $attr['class'], 'cf-image-auto-resize' ) ) {
+			$attr['class'] .= ' cf-image-auto-resize';
+		}
+
+		return $attr;
+
+	}
+
+	/**
+	 * Add special class to images that are served via Cloudflare.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param string $filtered_image  Full img tag with attributes that will replace the source img tag.
+	 *
+	 * @return string
+	 */
+	public function add_class_to_img_tag( string $filtered_image ): string {
+
+		if ( ! get_option( 'cf-images-auto-resize', false ) ) {
+			return $filtered_image;
+		}
+
+		if ( false === strpos( $filtered_image, $this->cdn_domain ) ) {
+			return $filtered_image;
+		}
+
+		$this->add_attribute( $filtered_image, 'class', 'cf-image-auto-resize' );
+
+		return $filtered_image;
+
+	}
+
+	/**
+	 * Add attribute to selected tag.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param string $element    HTML element.
+	 * @param string $attribute  Attribute name (srcset, size, etc).
+	 * @param string $value      Attribute value.
+	 */
+	private function add_attribute( string &$element, string $attribute, string $value = null ) {
+
+		$closing = false === strpos( $element, '/>' ) ? '>' : ' />';
+		$quotes  = false === strpos( $element, '"' ) ? '\'' : '"';
+
+		preg_match( "/$attribute=['\"]([^'\"]+)['\"]/is", $element, $current_value );
+		if ( ! empty( $current_value['1'] ) ) {
+			// Remove the attribute if it already exists.
+			$element = preg_replace( '/' . $attribute . '=[\'"](.*?)[\'"]/i', '', $element );
+
+			if ( false === strpos( $current_value['1'], $value ) ) {
+				$value = $current_value['1'] . ' ' . $value;
+			} else {
+				$value = $current_value['1'];
+			}
+		}
+
+		if ( ! is_null( $value ) ) {
+			$element = rtrim( $element, $closing ) . " $attribute=$quotes$value$quotes$closing";
+		} else {
+			$element = rtrim( $element, $closing ) . " $attribute$closing";
+		}
 
 	}
 
