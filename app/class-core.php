@@ -131,6 +131,15 @@ class Core {
 	);
 
 	/**
+	 * CDN domain.
+	 *
+	 * @since 1.2.0
+	 * @access private
+	 * @var string
+	 */
+	private $cdn_domain = 'https://imagedelivery.net';
+
+	/**
 	 * Get plugin instance.
 	 *
 	 * @since 1.0.0
@@ -164,6 +173,7 @@ class Core {
 
 		$this->load_libs();
 		$this->init_integrations();
+		$this->set_cdn_domain();
 
 		if ( is_admin() ) {
 			$this->admin = new Admin();
@@ -483,20 +493,18 @@ class Core {
 	 *
 	 * @since 1.0.2
 	 *
-	 * @return string
+	 * @return void
 	 */
-	private function get_cdn_domain(): string {
-
-		$domain = 'https://imagedelivery.net';
+	private function set_cdn_domain() {
 
 		$custom_domain = get_option( 'cf-images-custom-domain', false );
 
 		if ( $custom_domain ) {
 			$domain  = wp_http_validate_url( $custom_domain ) ? $custom_domain : get_site_url();
 			$domain .= '/cdn-cgi/imagedelivery';
-		}
 
-		return $domain;
+			$this->cdn_domain = $domain;
+		}
 
 	}
 
@@ -821,11 +829,9 @@ class Core {
 			return $image;
 		}
 
-		$domain = $this->get_cdn_domain();
-
 		// Full size image with defined dimensions.
 		if ( 'full' === $size && isset( $image[1] ) && $image[1] > 0 ) {
-			$image[0] = "$domain/$hash/$cloudflare_image_id/w=" . $image[1];
+			$image[0] = "$this->cdn_domain/$hash/$cloudflare_image_id/w=" . $image[1];
 			return $image;
 		}
 
@@ -840,9 +846,9 @@ class Core {
 			 * In both cases - use the size value.
 			 */
 			if ( ( ! $scaled_size && is_int( $size ) ) || $scaled_size === $size ) {
-				$image[0] = "$domain/$hash/$cloudflare_image_id/w=" . $size;
+				$image[0] = "$this->cdn_domain/$hash/$cloudflare_image_id/w=" . $size;
 			} else { // Fallback to scaled size.
-				$image[0] = "$domain/$hash/$cloudflare_image_id/w=" . $scaled_size;
+				$image[0] = "$this->cdn_domain/$hash/$cloudflare_image_id/w=" . $scaled_size;
 			}
 
 			return $image;
@@ -857,18 +863,18 @@ class Core {
 			$width_key  = array_search( (int) $variant_image[2], $this->widths, true );
 
 			if ( $width_key && $height_key && $width_key === $height_key && true === $this->registered_sizes[ $width_key ]['crop'] ) {
-				$image[0] = "$domain/$hash/$cloudflare_image_id/w=" . $variant_image[1] . ',h=' . $variant_image[2] . ',fit=crop';
+				$image[0] = "$this->cdn_domain/$hash/$cloudflare_image_id/w=" . $variant_image[1] . ',h=' . $variant_image[2] . ',fit=crop';
 				return $image;
 			}
 
 			// Not a cropped image.
-			$image[0] = "$domain/$hash/$cloudflare_image_id/w=" . $variant_image[1] . ',h=' . $variant_image[2];
+			$image[0] = "$this->cdn_domain/$hash/$cloudflare_image_id/w=" . $variant_image[1] . ',h=' . $variant_image[2];
 			return $image;
 		}
 
 		// Image without size prefix and no defined sizes - use the maximum available width.
 		if ( ! $variant_image && ! isset( $image[1] ) ) {
-			$image[0] = "$domain/$hash/$cloudflare_image_id/w=9999";
+			$image[0] = "$this->cdn_domain/$hash/$cloudflare_image_id/w=9999";
 			return $image;
 		}
 
@@ -979,8 +985,7 @@ class Core {
 			return $filtered_image;
 		}
 
-		$domain = $this->get_cdn_domain();
-		if ( false !== strpos( $src[1], $domain ) ) {
+		if ( false !== strpos( $src[1], $this->cdn_domain ) ) {
 			// Image is already served via Cloudflare.
 			return $filtered_image;
 		}
