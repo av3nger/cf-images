@@ -204,15 +204,22 @@ class Api {
 		/**
 		 * We can skip these statuses and consider them success.
 		 * 404 - Image not found (when removing an image).
-		 * 409 - Duplicate entry (when creating a variation).
 		 */
-		if ( 409 === (int) $code || 404 === (int) $code ) {
+		if ( 404 === (int) $code ) {
 			return new stdClass();
 		}
 
 		// Authentication error.
 		if ( 401 === (int) $code ) {
 			update_option( 'cf-images-auth-error', true, false );
+		}
+
+		// Resource already exists.
+		if ( 409 === (int) $code ) {
+			$body             = new StdClass();
+			$body->id         = $args['body']['id'];
+			$body->variants[] = '';
+			return $body;
 		}
 
 		if ( 200 !== (int) $code ) {

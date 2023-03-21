@@ -82,6 +82,7 @@ Changed:
 * Various UI/UX improvements
 
 Fixed:
+* Properly handle already uploaded images and duplicates
 * Prevent replacing images in wp-admin, because WordPress does not respect is_admin() checks
 * Scaled images having an empty 'w' parameter
 
