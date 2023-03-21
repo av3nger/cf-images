@@ -185,6 +185,8 @@ class Core {
 		}
 
 		if ( ! is_admin() && $this->can_run() ) {
+			// Auto resize functionality.
+			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_auto_resize' ) );
 			add_filter( 'wp_get_attachment_image_attributes', array( $this, 'add_class_to_attachment' ) );
 			add_filter( 'wp_content_img_tag', array( $this, 'add_class_to_img_tag' ), 15 );
 
@@ -685,6 +687,23 @@ class Core {
 		}
 
 		return $data;
+
+	}
+
+	/**
+	 * Enqueue auto resize script on front-end.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @return void
+	 */
+	public function enqueue_auto_resize() {
+
+		if ( ! get_option( 'cf-images-auto-resize', false ) ) {
+			return;
+		}
+
+		wp_enqueue_script( $this->get_plugin_name(), CF_IMAGES_DIR_URL . 'assets/js/cf-auto-resize.min.js', array(), $this->version, true );
 
 	}
 
