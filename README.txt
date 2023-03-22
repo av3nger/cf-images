@@ -62,8 +62,8 @@ If something is not working for you, please let me know by creating a support ti
 
 == Screenshots ==
 
-1. Quick and easy setup wizard
-2. Various options
+1. Plugin options and settings
+2. Quick and easy setup wizard
 
 == Changelog ==
 
