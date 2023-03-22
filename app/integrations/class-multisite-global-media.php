@@ -10,7 +10,7 @@
  * @package CF_Images
  * @subpackage CF_Images/App/Integrations
  * @author Anton Vanyukov <a.vanyukov@vcore.ru>
- * @since 1.5.0
+ * @since 1.1.5
  */
 
 namespace CF_Images\App\Integrations;
@@ -24,14 +24,14 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Multisite_Global_Media class.
  *
- * @since 1.5.0
+ * @since 1.1.5
  */
 class Multisite_Global_Media {
 
 	/**
 	 * Class constructor.
 	 *
-	 * @since 1.5.0
+	 * @since 1.1.5
 	 */
 	public function __construct() {
 		if ( ! is_multisite() ) {
@@ -48,7 +48,7 @@ class Multisite_Global_Media {
 	 * <Site ID><Site::SITE_ID_PREFIX_RIGHT_PAD><Attachment ID>
 	 * Because of the above, we need to fetch the Cloudflare image ID from the global media site.
 	 *
-	 * @since 1.5.0
+	 * @since 1.1.5
 	 *
 	 * @param mixed $cloudflare_image_id  Cloudflare image ID.
 	 * @param int   $attachment_id        Attachment ID.
@@ -88,7 +88,7 @@ class Multisite_Global_Media {
 	 * value to compare against the actual image src. And the 'file' value will never be part of the Cloudflare image URL,
 	 * because of the Cloudflare images format.
 	 *
-	 * @since 1.5.0
+	 * @since 1.1.5
 	 *
 	 * @see \MultisiteGlobalMedia\Attachment::makeContentImagesResponsive()
 	 * @see wp_image_src_get_dimensions()
@@ -117,7 +117,7 @@ class Multisite_Global_Media {
 	/**
 	 * Fetch Cloudflare image ID for the selected image from the selected blog in multisite network.
 	 *
-	 * @since 1.5.0
+	 * @since 1.1.5
 	 *
 	 * @param int $attachment_id  Attachment ID.
 	 *

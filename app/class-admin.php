@@ -40,7 +40,7 @@ class Admin {
 			return;
 		}
 
-		new Media();
+		$media = new Media();
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
@@ -54,6 +54,10 @@ class Admin {
 			add_action( 'wp_ajax_cf_images_do_setup', array( $settings, 'ajax_do_setup' ) );
 			add_action( 'wp_ajax_cf_images_save_settings', array( $settings, 'ajax_save_settings' ) );
 			add_action( 'wp_ajax_cf_images_disconnect', array( $settings, 'ajax_disconnect' ) );
+
+			add_action( 'wp_ajax_cf_images_offload_image', array( $media, 'ajax_offload_image' ) );
+			add_action( 'wp_ajax_cf_images_bulk_process', array( $media, 'ajax_bulk_process' ) );
+			add_action( 'wp_ajax_cf_images_skip_image', array( $media, 'ajax_skip_image' ) );
 		}
 
 	}

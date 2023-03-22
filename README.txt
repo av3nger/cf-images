@@ -68,7 +68,9 @@ If something is not working for you, please let me know by creating a support ti
 == Changelog ==
 
 = 1.2.0 =
+
 Added:
+* Auto image sizes on front-end
 * Option to use custom paths for images
 * Confirmation modal for bulk remove action
 * Offload status to media library grid mode
@@ -81,6 +83,7 @@ Changed:
 * Various UI/UX improvements
 
 Fixed:
+* Properly handle already uploaded images and duplicates
 * Prevent replacing images in wp-admin, because WordPress does not respect is_admin() checks
 * Scaled images having an empty 'w' parameter
 
@@ -190,12 +193,16 @@ Fixed:
 * Incorrect status during bulk offload
 
 = 1.0.0 =
+
 First release
 * Offload images to Cloudflare Images
 * Option to disable WordPress image sizes
 * Support for custom domains
 
 == Upgrade Notice ==
+
+= 1.2.0 =
+Big update with lots of improvements and new features.
 
 = 1.0.0 =
 This is the first plugin release.

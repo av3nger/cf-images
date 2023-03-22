@@ -44,7 +44,7 @@ class Image extends Api {
 	public function upload( string $image, int $id = 0, string $name = '' ): stdClass {
 
 		// CURLFILE only works on PHP 5.5 and higher curl_file_create().
-		$data['file'] = curl_file_create( $image, '', $name );
+		$data['file'] = curl_file_create( $image, '', $name ); // phpcs:ignore WordPress.WP.AlternativeFunctions.curl_curl_file_create
 
 		if ( 0 !== $id ) {
 			/**

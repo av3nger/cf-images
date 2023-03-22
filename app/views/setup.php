@@ -61,10 +61,10 @@ if ( ! defined( 'WPINC' ) ) {
 	<form id="cf-images-form" data-type="setup">
 		<span class="dashicons dashicons-admin-users"></span>
 		<label for="account_id">
-			<h3><?php esc_html_e( 'Cloudflare Account ID', 'cf-images' ); ?></h3>
+			<?php esc_html_e( 'Cloudflare Account ID', 'cf-images' ); ?>
 		</label>
 		<div>
-			<input name="account-id" type="text" id="account_id" value="<?php echo defined( 'CF_IMAGES_ACCOUNT_ID' ) ? esc_attr( CF_IMAGES_ACCOUNT_ID ) : ''; ?>" placeholder="<?php esc_attr_e( 'Paste your Cloudflare ID here', 'cf-images' ); ?>" autocomplete="off">
+			<input name="account-id" type="text" id="account_id" value="<?php echo defined( 'CF_IMAGES_ACCOUNT_ID' ) ? esc_attr( constant( 'CF_IMAGES_ACCOUNT_ID' ) ) : ''; ?>" placeholder="<?php esc_attr_e( 'Paste your Cloudflare ID here', 'cf-images' ); ?>" autocomplete="off">
 			<p>1.&nbsp;
 				<?php
 				printf( /* translators: %1$s - opening <a> tag, %2$s - closing </a> tag */
@@ -89,7 +89,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 		<span class="dashicons dashicons-admin-network"></span>
 		<label for="api_key">
-			<h3><?php esc_html_e( 'Cloudflare API Token', 'cf-images' ); ?></h3>
+			<?php esc_html_e( 'Cloudflare API Token', 'cf-images' ); ?>
 		</label>
 		<div>
 			<input name="api-key" type="text" id="api_key" value="" placeholder="<?php esc_attr_e( 'Paste your Cloudflare API key here', 'cf-images' ); ?>" autocomplete="off">

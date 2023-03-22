@@ -40,6 +40,7 @@ delete_option( 'cf-images-auth-error' );
 delete_option( 'cf-images-auto-offload' );
 delete_option( 'cf-images-disable-async' );
 delete_option( 'cf-images-custom-id' );
+delete_option( 'cf-images-auto-resize' );
 
 // Remove defines from wp-config.php file.
 require_once __DIR__ . '/app/class-settings.php';
