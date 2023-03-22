@@ -48,7 +48,14 @@ if ( ! defined( 'WPINC' ) ) {
 	</p>
 
 	<p>
-		<?php esc_html_e( 'Note: The form will attempt to automatically set the required defines in wp-config.php file.', 'cf-images' ); ?>
+		<?php esc_html_e( 'The form will attempt to automatically set the required defines in wp-config.php file.', 'cf-images' ); ?>
+		<?php
+		printf( /* translators: %1$s - opening <a> tag, %2$s - closing </a> tag */
+			esc_html__( 'A detailed guide on how to setup the plugin can be found %1$shere%2$s.', 'cf-images' ),
+			'<a href="https://vcore.au/tutorials/how-to-setup-cloudflare-images-plugin/" target="_blank">',
+			'</a>'
+		);
+		?>
 	</p>
 
 	<form id="cf-images-form" data-type="setup">

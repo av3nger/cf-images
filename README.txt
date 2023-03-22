@@ -72,6 +72,7 @@ Added:
 * Option to use custom paths for images
 * Confirmation modal for bulk remove action
 * Offload status to media library grid mode
+* Detailed setup guide link in the setup wizard
 
 Changed:
 * Improved descriptions for the plugin settings

@@ -16,6 +16,10 @@
   @import "@picocss/pico/scss/utilities/loading";
   @import "@picocss/pico/scss/utilities/tooltip";
 
+  .notice.inline {
+    margin-left: 0;
+  }
+
   .cf-images-notifications {
     align-items: center;
     display: flex;
