@@ -86,4 +86,26 @@ trait Helpers {
 
 	}
 
+	/**
+	 * Get plugin slug.
+	 *
+	 * @since 1.2.1
+	 *
+	 * @return string
+	 */
+	public function get_plugin_slug(): string {
+		return Core::get_instance()->get_plugin_name();
+	}
+
+	/**
+	 * Get CDN URL.
+	 *
+	 * @since 1.2.1
+	 *
+	 * @return string
+	 */
+	public function get_cdn_domain(): string {
+		return Core::get_instance()->get_cdn_domain();
+	}
+
 }

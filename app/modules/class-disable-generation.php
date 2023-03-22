@@ -27,16 +27,6 @@ if ( ! defined( 'WPINC' ) ) {
 class Disable_Generation extends Module {
 
 	/**
-	 * Module ID.
-	 *
-	 * @since 1.2.1
-	 * @access protected
-	 *
-	 * @var string $module
-	 */
-	protected $module = 'disable-generation';
-
-	/**
 	 * Init the module.
 	 *
 	 * @since 1.2.1
