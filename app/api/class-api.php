@@ -16,6 +16,7 @@ namespace CF_Images\App\Api;
 
 use Exception;
 use stdClass;
+use WP_Http_Curl;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -138,7 +139,7 @@ class Api {
 			'method'  => $this->method,
 			'timeout' => $this->timeout,
 			'headers' => array(
-				'Authorization' => 'Bearer ' . CF_IMAGES_KEY_TOKEN,
+				'Authorization' => 'Bearer ' . constant( 'CF_IMAGES_KEY_TOKEN' ),
 			),
 		);
 
@@ -165,7 +166,7 @@ class Api {
 			return new stdClass();
 		}
 
-		$url  = $this->api_url . CF_IMAGES_ACCOUNT_ID . '/images/v1' . $this->endpoint;
+		$url  = $this->api_url . constant( 'CF_IMAGES_ACCOUNT_ID' ) . '/images/v1' . $this->endpoint;
 		$args = $this->get_args();
 
 		if ( 'GET' === $args['method'] ) {
@@ -187,7 +188,7 @@ class Api {
 			$args['filename']    = null;
 			$args['httpversion'] = '1.1';
 
-			$curl = new \WP_Http_Curl();
+			$curl = new WP_Http_Curl();
 
 			$response = $curl->request( $url, $args );
 		} else {
@@ -204,15 +205,22 @@ class Api {
 		/**
 		 * We can skip these statuses and consider them success.
 		 * 404 - Image not found (when removing an image).
-		 * 409 - Duplicate entry (when creating a variation).
 		 */
-		if ( 409 === (int) $code || 404 === (int) $code ) {
+		if ( 404 === (int) $code ) {
 			return new stdClass();
 		}
 
 		// Authentication error.
 		if ( 401 === (int) $code ) {
 			update_option( 'cf-images-auth-error', true, false );
+		}
+
+		// Resource already exists.
+		if ( 409 === (int) $code ) {
+			$body             = new StdClass();
+			$body->id         = $args['body']['id'];
+			$body->variants[] = '';
+			return $body;
 		}
 
 		if ( 200 !== (int) $code ) {

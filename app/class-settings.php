@@ -25,6 +25,8 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Settings {
 
+	use Traits\Ajax;
+
 	/**
 	 * Do initial setup by storing user provided Cloudflare account ID and API key in wp-config.php file.
 	 *
@@ -34,14 +36,10 @@ class Settings {
 	 */
 	public function ajax_do_setup() {
 
-		check_ajax_referer( 'cf-images-nonce' );
+		$this->check_ajax_request();
 
-		if ( ! current_user_can( 'manage_options' ) || ! isset( $_POST['data'] ) ) {
-			wp_die();
-		}
-
-		// Data sanitized later in code.
-		parse_str( wp_unslash( $_POST['data'] ), $form ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		// Nonce checked in check_ajax_request(), data sanitized later in code.
+		parse_str( wp_unslash( $_POST['data'] ), $form ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 
 		if ( ! isset( $form['account-id'] ) || ! isset( $form['api-key'] ) ) {
 			wp_die();
@@ -66,14 +64,10 @@ class Settings {
 	 */
 	public function ajax_save_settings() {
 
-		check_ajax_referer( 'cf-images-nonce' );
+		$this->check_ajax_request();
 
-		if ( ! current_user_can( 'manage_options' ) || ! isset( $_POST['data'] ) ) {
-			wp_die();
-		}
-
-		// Data sanitized later in code.
-		parse_str( wp_unslash( $_POST['data'] ), $form ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		// Nonce checked in check_ajax_request(), data sanitized later in code.
+		parse_str( wp_unslash( $_POST['data'] ), $form ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 
 		// List of settings. The key corresponds to the name of the form field, the value corresponds to the name of the option.
 		$options = array(

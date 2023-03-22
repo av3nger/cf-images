@@ -46,7 +46,7 @@ class Spectra {
 	 *
 	 * @return int
 	 */
-	public function detect_image_id( int $attachment_id, string $filtered_image ) {
+	public function detect_image_id( int $attachment_id, string $filtered_image ): int {
 
 		if ( 0 !== $attachment_id ) {
 			return $attachment_id;
