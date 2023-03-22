@@ -53,15 +53,6 @@ class Core {
 	protected $plugin_name = 'cf-images';
 
 	/**
-	 * The current version of the plugin.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string $version  The current version of the plugin.
-	 */
-	protected $version = '1.2.1-beta.1';
-
-	/**
 	 * Error status.
 	 *
 	 * @since 1.0.0
@@ -124,10 +115,6 @@ class Core {
 	 * @since 1.0.0
 	 */
 	private function __construct() {
-
-		if ( defined( 'CF_IMAGES_VERSION' ) ) {
-			$this->version = CF_IMAGES_VERSION;
-		}
 
 		$this->load_libs();
 		$this->init_integrations();
@@ -309,17 +296,6 @@ class Core {
 	 */
 	public function get_plugin_name(): string {
 		return $this->plugin_name;
-	}
-
-	/**
-	 * Retrieve the version number of the plugin.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string  The version number of the plugin.
-	 */
-	public function get_version(): string {
-		return $this->version;
 	}
 
 	/**

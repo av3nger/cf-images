@@ -38,17 +38,6 @@ trait Helpers {
 	}
 
 	/**
-	 * Get plugin version.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string
-	 */
-	public function get_version(): string {
-		return Core::get_instance()->get_version();
-	}
-
-	/**
 	 * Check if the required settings are present.
 	 *
 	 * @since 1.0.0

@@ -85,7 +85,7 @@ class Media {
 			$this->get_slug() . '-media',
 			CF_IMAGES_DIR_URL . 'assets/js/cf-images-media.min.js',
 			array( $this->get_slug(), 'media-views' ),
-			$this->get_version(),
+			CF_IMAGES_VERSION,
 			true
 		);
 

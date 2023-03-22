@@ -79,7 +79,7 @@ class Admin {
 				$this->get_slug(),
 				CF_IMAGES_DIR_URL . 'assets/css/cf-images.min.css',
 				array(),
-				$this->get_version()
+				CF_IMAGES_VERSION
 			);
 		}
 
@@ -89,7 +89,7 @@ class Admin {
 				$this->get_slug(),
 				CF_IMAGES_DIR_URL . 'assets/css/cf-images-media.min.css',
 				array(),
-				$this->get_version()
+				CF_IMAGES_VERSION
 			);
 		}
 
@@ -115,7 +115,7 @@ class Admin {
 			$this->get_slug(),
 			CF_IMAGES_DIR_URL . 'assets/js/cf-images.min.js',
 			array(),
-			$this->get_version(),
+			CF_IMAGES_VERSION,
 			true
 		);
 
