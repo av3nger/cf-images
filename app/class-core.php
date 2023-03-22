@@ -403,10 +403,10 @@ class Core {
 	 * @param array|false  $image         {
 	 *     Array of image data, or boolean false if no image is available.
 	 *
-	 *     @type string $0  Image source URL.
-	 *     @type int    $1  Image width in pixels.
-	 *     @type int    $2  Image height in pixels.
-	 *     @type bool   $3  Whether the image is a resized image.
+	 *     @type string $image[0]  Image source URL.
+	 *     @type int    $image[1]  Image width in pixels.
+	 *     @type int    $image[2]  Image height in pixels.
+	 *     @type bool   $image[3]  Whether the image is a resized image.
 	 * }
 	 * @param int|string   $attachment_id  Image attachment ID.
 	 * @param string|int[] $size           Requested image size. Can be any registered image size name, or
@@ -537,17 +537,16 @@ class Core {
 	 *
 	 *     @type array $width {
 	 *         @type string $url        The URL of an image source.
-	 *         @type string $descriptor The descriptor type used in the image candidate string,
-	 *                                  either 'w' or 'x'.
+	 *         @type string $descriptor The descriptor type used in the image candidate string, either 'w' or 'x'.
 	 *         @type int    $value      The source width if paired with a 'w' descriptor, or a
 	 *                                  pixel density value if paired with an 'x' descriptor.
-	 *     }
+	 *     }.
 	 * }
 	 * @param array  $size_array     {
 	 *     An array of requested width and height values.
 	 *
-	 *     @type int $0 The width in pixels.
-	 *     @type int $1 The height in pixels.
+	 *     @type int $size_array[0] The width in pixels.
+	 *     @type int $size_array[1] The height in pixels.
 	 * }
 	 * @param string $image_src     The 'src' of the image.
 	 * @param array  $image_meta    The image metadata as returned by 'wp_get_attachment_metadata()'.
