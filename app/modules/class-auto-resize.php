@@ -31,7 +31,7 @@ class Auto_Resize extends Module {
 	 * @since 1.2.1
 	 * @access protected
 	 *
-	 * @var bool $only_frontend
+	 * @var bool
 	 */
 	protected $only_frontend = true;
 

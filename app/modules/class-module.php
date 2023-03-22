@@ -30,6 +30,15 @@ abstract class Module {
 	use Helpers;
 
 	/**
+	 * This is a core module, meaning it can't be enabled/disabled via options.
+	 *
+	 * @since 1.2.1
+	 *
+	 * @var bool
+	 */
+	protected $core = false;
+
+	/**
 	 * Module ID.
 	 *
 	 * @since 1.2.1
@@ -92,7 +101,14 @@ abstract class Module {
 	 * @return bool
 	 */
 	public function is_enabled(): bool {
+
+		// Core modules cannot be disabled.
+		if ( $this->core ) {
+			return true;
+		}
+
 		return (bool) get_option( 'cf-images-' . $this->module, false );
+
 	}
 
 	/**
@@ -103,7 +119,7 @@ abstract class Module {
 	 *
 	 * @return bool
 	 */
-	private function can_run(): bool {
+	public function can_run(): bool {
 
 		if ( $this->is_rest_request() || wp_doing_cron() ) {
 			return false;
