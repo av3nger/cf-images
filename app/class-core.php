@@ -159,6 +159,7 @@ class Core {
 
 		$this->load_libs();
 		$this->init_integrations();
+		$this->load_modules();
 		$this->set_cdn_domain();
 
 		if ( is_admin() ) {
@@ -176,13 +177,6 @@ class Core {
 
 		// Use custom paths.
 		add_filter( 'cf_images_upload_data', array( $this, 'use_custom_image_path' ) );
-
-		// Disable generation of image sizes.
-		if ( get_option( 'cf-images-disable-generation', false ) ) {
-			add_filter( 'wp_image_editors', '__return_empty_array' );
-			add_filter( 'big_image_size_threshold', '__return_false' );
-			add_filter( 'intermediate_image_sizes_advanced', '__return_empty_array' );
-		}
 
 		if ( ! is_admin() && $this->can_run() ) {
 			// Auto resize functionality.
@@ -211,6 +205,7 @@ class Core {
 		require_once __DIR__ . '/class-media.php';
 		require_once __DIR__ . '/class-admin.php';
 		require_once __DIR__ . '/class-settings.php';
+		require_once __DIR__ . '/modules/class-loader.php';
 
 		require_once __DIR__ . '/api/class-api.php';
 		require_once __DIR__ . '/api/class-image.php';
@@ -225,22 +220,22 @@ class Core {
 	}
 
 	/**
-	 * Init inetgrations.
+	 * Get Cloudflare CDN domain.
 	 *
-	 * @since 1.5.0
+	 * @since 1.0.2
 	 *
 	 * @return void
 	 */
-	private function init_integrations() {
+	private function set_cdn_domain() {
 
-		require_once __DIR__ . '/integrations/class-spectra.php';
-		$spectra = new Integrations\Spectra();
+		$custom_domain = get_option( 'cf-images-custom-domain', false );
 
-		require_once __DIR__ . '/integrations/class-multisite-global-media.php';
-		$mgm = new Integrations\Multisite_Global_Media();
+		if ( $custom_domain ) {
+			$domain  = wp_http_validate_url( $custom_domain ) ? $custom_domain : get_site_url();
+			$domain .= '/cdn-cgi/imagedelivery';
 
-		require_once __DIR__ . '/integrations/class-rank-math.php';
-		$rank_math = new Integrations\Rank_Math();
+			$this->cdn_domain = $domain;
+		}
 
 	}
 
@@ -263,6 +258,26 @@ class Core {
 		}
 
 		return true;
+
+	}
+
+	/**
+	 * Init integrations.
+	 *
+	 * @since 1.1.5
+	 *
+	 * @return void
+	 */
+	private function init_integrations() {
+
+		require_once __DIR__ . '/integrations/class-spectra.php';
+		$spectra = new Integrations\Spectra();
+
+		require_once __DIR__ . '/integrations/class-multisite-global-media.php';
+		$mgm = new Integrations\Multisite_Global_Media();
+
+		require_once __DIR__ . '/integrations/class-rank-math.php';
+		$rank_math = new Integrations\Rank_Math();
 
 	}
 
@@ -296,22 +311,21 @@ class Core {
 	}
 
 	/**
-	 * Get Cloudflare CDN domain.
+	 * Load modules.
 	 *
-	 * @since 1.0.2
+	 * @since 1.2.1
+	 *
+	 * @see Modules\Auto_Resize
+	 * @see Modules\Disable_Generation
 	 *
 	 * @return void
 	 */
-	private function set_cdn_domain() {
+	private function load_modules() {
 
-		$custom_domain = get_option( 'cf-images-custom-domain', false );
+		$loader = Modules\Loader::get_instance();
 
-		if ( $custom_domain ) {
-			$domain  = wp_http_validate_url( $custom_domain ) ? $custom_domain : get_site_url();
-			$domain .= '/cdn-cgi/imagedelivery';
-
-			$this->cdn_domain = $domain;
-		}
+		$loader->register( 'auto-resize' );
+		$loader->register( 'disable-generation' );
 
 	}
 
@@ -425,7 +439,7 @@ class Core {
 		/**
 		 * Filters the Cloudflare image ID value.
 		 *
-		 * @since 1.5.0
+		 * @since 1.1.5
 		 *
 		 * @param mixed $cloudflare_image_id  Image meta
 		 * @param int   $attachment_id        Attachment ID.
