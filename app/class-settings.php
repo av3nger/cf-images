@@ -38,8 +38,8 @@ class Settings {
 
 		$this->check_ajax_request();
 
-		// Data sanitized later in code.
-		parse_str( wp_unslash( $_POST['data'] ), $form ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		// Nonce checked in check_ajax_request(), data sanitized later in code.
+		parse_str( wp_unslash( $_POST['data'] ), $form ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 
 		if ( ! isset( $form['account-id'] ) || ! isset( $form['api-key'] ) ) {
 			wp_die();
@@ -66,8 +66,8 @@ class Settings {
 
 		$this->check_ajax_request();
 
-		// Data sanitized later in code.
-		parse_str( wp_unslash( $_POST['data'] ), $form ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		// Nonce checked in check_ajax_request(), data sanitized later in code.
+		parse_str( wp_unslash( $_POST['data'] ), $form ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 
 		// List of settings. The key corresponds to the name of the form field, the value corresponds to the name of the option.
 		$options = array(
