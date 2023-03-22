@@ -234,13 +234,13 @@ class Core {
 	private function init_integrations() {
 
 		require_once __DIR__ . '/integrations/class-spectra.php';
-		new Integrations\Spectra();
+		$spectra = new Integrations\Spectra();
 
 		require_once __DIR__ . '/integrations/class-multisite-global-media.php';
-		new Integrations\Multisite_Global_Media();
+		$mgm = new Integrations\Multisite_Global_Media();
 
 		require_once __DIR__ . '/integrations/class-rank-math.php';
-		new Integrations\Rank_Math();
+		$rank_math = new Integrations\Rank_Math();
 
 	}
 
