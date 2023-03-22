@@ -135,6 +135,7 @@ class Core {
 
 		// Use custom paths.
 		add_filter( 'cf_images_upload_data', array( $this, 'use_custom_image_path' ) );
+
 	}
 
 	/**

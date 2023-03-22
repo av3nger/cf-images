@@ -56,7 +56,7 @@ class Auto_Resize extends Module {
 	 * @return void
 	 */
 	public function enqueue_auto_resize() {
-		wp_enqueue_script( $this->get_plugin_slug(), CF_IMAGES_DIR_URL . 'assets/js/cf-auto-resize.min.js', array(), CF_IMAGES_VERSION, true );
+		wp_enqueue_script( $this->get_slug(), CF_IMAGES_DIR_URL . 'assets/js/cf-auto-resize.min.js', array(), CF_IMAGES_VERSION, true );
 	}
 
 	/**
