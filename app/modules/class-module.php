@@ -125,8 +125,7 @@ abstract class Module {
 			return false;
 		}
 
-		// TODO: move this out to integrations.
-		if ( doing_filter( 'rank_math/head' ) || doing_action( 'rank_math/opengraph/facebook' ) ) {
+		if ( apply_filters( 'cf_images_can_run', false ) ) {
 			return false;
 		}
 

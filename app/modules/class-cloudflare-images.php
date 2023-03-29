@@ -81,6 +81,7 @@ class Cloudflare_Images extends Module {
 	 * @return void
 	 */
 	public function init() {
+
 		add_action( 'init', array( $this, 'populate_image_sizes' ) );
 
 		// Replace images only on front-end.
@@ -90,6 +91,7 @@ class Cloudflare_Images extends Module {
 
 		// This filter is available on WordPress 6.0 or above.
 		add_filter( 'wp_content_img_tag', array( $this, 'content_img_tag' ), 10, 3 );
+
 	}
 
 	/**
