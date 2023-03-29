@@ -67,7 +67,7 @@ If something is not working for you, please let me know by creating a support ti
 
 == Changelog ==
 
-= 1.2.0 =
+= 1.2.0 - 29.03.2023 =
 
 Added:
 * Auto image sizes on front-end
