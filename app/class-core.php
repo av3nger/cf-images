@@ -204,6 +204,7 @@ class Core {
 	 *
 	 * @since 1.2.1
 	 *
+	 * @see Modules\Auto_Offload
 	 * @see Modules\Auto_Resize
 	 * @see Modules\Cloudflare_Images
 	 * @see Modules\Custom_Id
