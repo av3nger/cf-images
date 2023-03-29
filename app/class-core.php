@@ -215,6 +215,7 @@ class Core {
 
 		$loader = Modules\Loader::get_instance();
 
+		$loader->register( 'auto-offload' );
 		$loader->register( 'auto-resize' );
 		$loader->register( 'cloudflare-images' ); // Core module.
 		$loader->register( 'custom-id' );
@@ -319,6 +320,17 @@ class Core {
 	 */
 	public function get_cdn_domain(): string {
 		return $this->cdn_domain;
+	}
+
+	/**
+	 * Return Admin instance.
+	 *
+	 * @since 1.2.1
+	 *
+	 * @return Admin
+	 */
+	public function admin(): Admin {
+		return $this->admin;
 	}
 
 }
