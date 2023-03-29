@@ -43,9 +43,11 @@ class Auto_Resize extends Module {
 	 * @return void
 	 */
 	public function init() {
+
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_auto_resize' ) );
 		add_filter( 'wp_get_attachment_image_attributes', array( $this, 'add_class_to_attachment' ) );
 		add_filter( 'wp_content_img_tag', array( $this, 'add_class_to_img_tag' ), 15 );
+
 	}
 
 	/**
