@@ -40,6 +40,8 @@ class Admin {
 			return;
 		}
 
+		$media = new Media();
+
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
@@ -47,17 +49,15 @@ class Admin {
 		add_action( 'admin_notices', array( $this, 'show_notice' ) );
 		add_filter( 'plugin_action_links_cf-images/cf-images.php', array( $this, 'settings_link' ) );
 
-		if ( $this->is_set_up() ) {
-			add_filter( 'manage_media_columns', array( $this, 'media_columns' ) );
-			add_action( 'manage_media_custom_column', array( $this, 'media_custom_column' ), 10, 2 );
-		}
-
 		if ( wp_doing_ajax() ) {
 			$settings = new Settings();
 			add_action( 'wp_ajax_cf_images_do_setup', array( $settings, 'ajax_do_setup' ) );
 			add_action( 'wp_ajax_cf_images_save_settings', array( $settings, 'ajax_save_settings' ) );
-			add_action( 'wp_ajax_cf_images_dismiss_install_notice', array( $this, 'ajax_dismiss_install_notice' ) );
 			add_action( 'wp_ajax_cf_images_disconnect', array( $settings, 'ajax_disconnect' ) );
+
+			add_action( 'wp_ajax_cf_images_offload_image', array( $media, 'ajax_offload_image' ) );
+			add_action( 'wp_ajax_cf_images_bulk_process', array( $media, 'ajax_bulk_process' ) );
+			add_action( 'wp_ajax_cf_images_skip_image', array( $media, 'ajax_skip_image' ) );
 		}
 
 	}
@@ -226,10 +226,12 @@ class Admin {
 	 */
 	private function render_notice( string $message, string $type = 'success' ) {
 		?>
-		<div class="notice notice-<?php echo esc_attr( $type ); ?>" id="cf-images-notice">
-			<p>
-				<?php echo esc_html( $message ); ?>
-			</p>
+		<div class="cf-images-notifications">
+			<div class="notice notice-<?php echo esc_attr( $type ); ?>" id="cf-images-notice">
+				<p>
+					<?php echo esc_html( $message ); ?>
+				</p>
+			</div>
 		</div>
 		<?php
 	}
@@ -272,92 +274,6 @@ class Admin {
 		ob_start();
 		include_once $view;
 		echo ob_get_clean(); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped */
-
-	}
-
-	/**
-	 * Filters the Media list table columns.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string[] $posts_columns  An array of columns displayed in the Media list table.
-	 *
-	 * @return array
-	 */
-	public function media_columns( array $posts_columns ): array {
-
-		$posts_columns['cf-images'] = __( 'Offload status', 'cf-images' );
-		return $posts_columns;
-
-	}
-
-	/**
-	 * Fires for each custom column in the Media list table.
-	 *
-	 * @param string $column_name  Name of the custom column.
-	 * @param int    $post_id      Attachment ID.
-	 *
-	 * @return void
-	 */
-	public function media_custom_column( string $column_name, int $post_id ) {
-
-		if ( 'cf-images' !== $column_name ) {
-			return;
-		}
-
-		$meta = get_post_meta( $post_id, '_cloudflare_image_id', true );
-
-		if ( ! empty( $meta ) ) {
-			echo '<span class="dashicons dashicons-cloud-saved"></span>';
-			esc_html_e( 'Offloaded', 'cf-images' );
-			return;
-		}
-
-		$supported_mimes = array( 'image/jpeg', 'image/png', 'image/gif', 'image/webp' );
-
-		if ( ! in_array( get_post_mime_type( $post_id ), $supported_mimes, true ) ) {
-			esc_html_e( 'Unsupported format', 'cf-images' );
-			return;
-		}
-
-		// This image was skipped because of some error during bulk upload.
-		if ( get_post_meta( $post_id, '_cloudflare_image_skip', true ) ) {
-			esc_html_e( 'Skipped from processing', 'cf-images' );
-			echo '<br />';
-			printf( /* translators: %1$s - opening <a> tag, %2$s - closing </a> tag */
-				esc_html__( '%1$sRetry offload%2$s', 'cf-images' ),
-				'<a href="#" class="cf-images-offload" data-id="' . esc_attr( $post_id ) . '">',
-				'</a>'
-			);
-			return;
-		}
-
-		printf( /* translators: %1$s - opening <a> tag, %2$s - closing </a> tag */
-			esc_html__( '%1$sOffload%2$s', 'cf-images' ),
-			'<a href="#" class="cf-images-offload" data-id="' . esc_attr( $post_id ) . '">',
-			'</a>'
-		);
-
-	}
-
-	/**
-	 * Dismiss installation notice.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return void
-	 */
-	public function ajax_dismiss_install_notice() {
-
-		check_ajax_referer( 'cf-images-nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die();
-		}
-
-		delete_option( 'cf-images-install-notice' );
-
-		wp_send_json_success();
 
 	}
 

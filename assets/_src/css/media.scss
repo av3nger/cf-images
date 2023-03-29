@@ -6,3 +6,19 @@
 
   .spinner { margin: 0 10px; }
 }
+
+.upload-php .cf-images-grid-status {
+  span.spinner.is-active,
+  .dashicons-cloud-saved {
+    font-size: 13px;
+    margin: 0;
+    min-width: 20px;
+    padding: 0;
+    text-align: left;
+  }
+
+  span.spinner.is-active {
+    background-size: 17px 17px;
+    margin-right: 7px;
+  }
+}

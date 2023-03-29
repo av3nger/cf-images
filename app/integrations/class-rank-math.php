@@ -9,7 +9,7 @@
  * @package CF_Images
  * @subpackage CF_Images/App/Integrations
  * @author Anton Vanyukov <a.vanyukov@vcore.ru>
- * @since 1.5.0
+ * @since 1.1.5
  */
 
 namespace CF_Images\App\Integrations;
@@ -26,14 +26,14 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Rank_Math class.
  *
- * @since 1.5.0
+ * @since 1.1.5
  */
 class Rank_Math {
 
 	/**
 	 * Class constructor.
 	 *
-	 * @since 1.5.0
+	 * @since 1.1.5
 	 */
 	public function __construct() {
 		add_filter( 'rank_math/replacements', array( $this, 'fix_file_name_replacement' ), 10, 2 );
@@ -43,7 +43,7 @@ class Rank_Math {
 	 * When using Image SEO and setting the image title to use the filename data, Cloudflare images will display
 	 * the URL params.
 	 *
-	 * @since 1.5.0
+	 * @since 1.1.5
 	 *
 	 * @param array $replacements  The replacements.
 	 * @param mixed $args          The object, where some replacement values might come from,
@@ -77,7 +77,7 @@ class Rank_Math {
 	/**
 	 * Get WordPress image ID from Cloudflare image URL.
 	 *
-	 * @since 1.5.0
+	 * @since 1.1.5
 	 *
 	 * @param string $image  Image URL.
 	 *
@@ -121,7 +121,7 @@ class Rank_Math {
 	 * Copy of Rank Math's get_filename() method.
 	 * Get the filename of the attachment to use as a replacement.
 	 *
-	 * @since 1.5.0
+	 * @since 1.1.5
 	 *
 	 * @see \RankMath\Replace_Variables\Basic_Variables::get_filename()
 	 *

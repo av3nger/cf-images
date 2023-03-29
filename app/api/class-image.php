@@ -44,7 +44,7 @@ class Image extends Api {
 	public function upload( string $image, int $id = 0, string $name = '' ): stdClass {
 
 		// CURLFILE only works on PHP 5.5 and higher curl_file_create().
-		$data['file'] = curl_file_create( $image, '', $name );
+		$data['file'] = curl_file_create( $image, '', $name ); // phpcs:ignore WordPress.WP.AlternativeFunctions.curl_curl_file_create
 
 		if ( 0 !== $id ) {
 			/**
@@ -58,6 +58,16 @@ class Image extends Api {
 
 			$data['metadata'] = wp_json_encode( $metadata );
 		}
+
+		/**
+		 * Allow filtering the data, when offloading images to Cloudflare.
+		 *
+		 * @sice 1.2.0
+		 *
+		 * @param array      $data  Data.
+		 * @param int|string $id    Image ID.
+		 */
+		$data = apply_filters( 'cf_images_upload_data', $data, $id );
 
 		$this->set_method( 'UPLOAD' );
 		$this->set_endpoint( '' );

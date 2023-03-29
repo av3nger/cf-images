@@ -25,6 +25,8 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Settings {
 
+	use Traits\Ajax;
+
 	/**
 	 * Do initial setup by storing user provided Cloudflare account ID and API key in wp-config.php file.
 	 *
@@ -34,14 +36,10 @@ class Settings {
 	 */
 	public function ajax_do_setup() {
 
-		check_ajax_referer( 'cf-images-nonce' );
+		$this->check_ajax_request();
 
-		if ( ! current_user_can( 'manage_options' ) || ! isset( $_POST['data'] ) ) {
-			wp_die();
-		}
-
-		// Data sanitized later in code.
-		parse_str( wp_unslash( $_POST['data'] ), $form ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		// Nonce checked in check_ajax_request(), data sanitized later in code.
+		parse_str( wp_unslash( $_POST['data'] ), $form ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 
 		if ( ! isset( $form['account-id'] ) || ! isset( $form['api-key'] ) ) {
 			wp_die();
@@ -66,25 +64,26 @@ class Settings {
 	 */
 	public function ajax_save_settings() {
 
-		check_ajax_referer( 'cf-images-nonce' );
+		$this->check_ajax_request();
 
-		if ( ! current_user_can( 'manage_options' ) || ! isset( $_POST['data'] ) ) {
-			wp_die();
-		}
+		// Nonce checked in check_ajax_request(), data sanitized later in code.
+		parse_str( wp_unslash( $_POST['data'] ), $form ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 
-		// Data sanitized later in code.
-		parse_str( wp_unslash( $_POST['data'] ), $form ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		// List of settings. The key corresponds to the name of the form field, the value corresponds to the name of the option.
+		$options = array(
+			'auto-offload'  => 'cf-images-auto-offload',
+			'custom-id'     => 'cf-images-custom-id',
+			'auto-resize'   => 'cf-images-auto-resize',
+			'disable-sizes' => 'cf-images-disable-generation',
+			'disable-async' => 'cf-images-disable-async',
+		);
 
-		if ( ! isset( $form['disable-sizes'] ) ) {
-			delete_option( 'cf-images-disable-generation' );
-		} else {
-			update_option( 'cf-images-disable-generation', (bool) $form['disable-sizes'], false );
-		}
-
-		if ( ! isset( $form['disable-async'] ) ) {
-			delete_option( 'cf-images-disable-async' );
-		} else {
-			update_option( 'cf-images-disable-async', (bool) $form['disable-async'], false );
+		foreach ( $options as $key => $option ) {
+			if ( ! isset( $form[ $key ] ) ) {
+				delete_option( $option );
+			} else {
+				update_option( $option, (bool) $form[ $key ], false );
+			}
 		}
 
 		if ( ! isset( $form['custom-domain'] ) ) {
@@ -99,12 +98,6 @@ class Settings {
 			}
 
 			update_option( 'cf-images-custom-domain', $value, false );
-		}
-
-		if ( ! isset( $form['auto-offload'] ) ) {
-			delete_option( 'cf-images-auto-offload' );
-		} else {
-			update_option( 'cf-images-auto-offload', (bool) $form['auto-offload'], false );
 		}
 
 		wp_send_json_success();
@@ -156,6 +149,9 @@ class Settings {
 		$this->write( $path_to_wp_config, $new_file_content );
 
 		update_option( 'cf-images-config-written', ! empty( $value ), false );
+
+		// On some hosts, the wp-config.php updates take several seconds to "un-cache".
+		sleep( 2 );
 
 	}
 

@@ -5,7 +5,7 @@ Tags: cdn, cloudflare images, offload images, cloudflare, optimize
 Donate link: https://www.paypal.com/donate/?business=JRR6QPRGTZ46N&no_recurring=0&item_name=Help+support+the+development+of+the+Cloudflare+Images+plugin+for+WordPress&currency_code=AUD
 Requires at least: 5.6
 Requires PHP: 7.0
-Tested up to: 6.1
+Tested up to: 6.2
 Stable tag: %%VERSION%%
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -62,10 +62,30 @@ If something is not working for you, please let me know by creating a support ti
 
 == Screenshots ==
 
-1. Quick and easy setup wizard
-2. Various options
+1. Plugin options and settings
+2. Quick and easy setup wizard
 
 == Changelog ==
+
+= 1.2.0 - 29.03.2023 =
+
+Added:
+* Auto image sizes on front-end
+* Option to use custom paths for images
+* Confirmation modal for bulk remove action
+* Offload status to media library grid mode
+* Detailed setup guide link in the setup wizard
+
+Changed:
+* Improved descriptions for the plugin settings
+* Improve settings layout
+* Intentionally sleep for a second after setup to allow the PHP cache to expire on setup/disconnect
+* Various UI/UX improvements
+
+Fixed:
+* Properly handle already uploaded images and duplicates
+* Prevent replacing images in wp-admin, because WordPress does not respect is_admin() checks
+* Scaled images having an empty 'w' parameter
 
 = 1.1.5 - 28.02.2023 =
 
@@ -173,12 +193,16 @@ Fixed:
 * Incorrect status during bulk offload
 
 = 1.0.0 =
+
 First release
 * Offload images to Cloudflare Images
 * Option to disable WordPress image sizes
 * Support for custom domains
 
 == Upgrade Notice ==
+
+= 1.2.0 =
+Big update with lots of improvements and new features.
 
 = 1.0.0 =
 This is the first plugin release.

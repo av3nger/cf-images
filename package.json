@@ -1,7 +1,7 @@
 {
   "name": "cf-images",
   "description": "Offload, Store, Resize & Optimize with Cloudflare Images",
-  "version": "1.1.5",
+  "version": "1.2.0",
   "main": "cf-images.php",
   "author": "Anton Vanyukov",
   "license": "GPL-2.0-or-later",
@@ -10,16 +10,16 @@
     "optimization"
   ],
   "devDependencies": {
-    "@wordpress/eslint-plugin": "^13.10.0",
+    "@wordpress/eslint-plugin": "^14.2.0",
     "css-loader": "^6.7.3",
     "grunt-contrib-clean": "^2.0.1",
     "grunt-contrib-compress": "^2.0.0",
     "grunt-contrib-copy": "^1.0.0",
     "load-grunt-tasks": "^5.1.0",
-    "mini-css-extract-plugin": "^2.7.2",
-    "sass": "^1.58.0",
+    "mini-css-extract-plugin": "^2.7.5",
+    "sass": "^1.59.3",
     "sass-loader": "^13.2.0",
-    "webpack": "^5.75.0",
+    "webpack": "^5.76.2",
     "webpack-cli": "^5.0.1"
   },
   "scripts": {

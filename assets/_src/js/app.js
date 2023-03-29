@@ -9,6 +9,7 @@
 /* global CFImages */
 
 import '../css/app.scss';
+import { toggleModal } from './modal';
 
 ( function( $ ) {
 	'use strict';
@@ -33,15 +34,6 @@ import '../css/app.scss';
 	 */
 	$( document ).ready( function() {
 		setTimeout( () => $( '#cf-images-notice' ).slideUp( 'slow' ), 5000 );
-
-		/**
-		 * Dismiss install notice.
-		 *
-		 * @since 1.0.0
-		 */
-		$( '#cf-images-install-notice > .notice-dismiss' ).on( 'click', function() {
-			post( 'cf_images_dismiss_install_notice' );
-		} );
 	} );
 
 	/**
@@ -89,7 +81,7 @@ import '../css/app.scss';
 	 *
 	 * @since 1.0.0
 	 */
-	$( '.cf-images-offload' ).on( 'click', function( e ) {
+	$( document ).on( 'click', '.cf-images-offload', function( e ) {
 		e.preventDefault();
 
 		const divStatus = $( this ).parent();
@@ -128,8 +120,20 @@ import '../css/app.scss';
 	$( '#cf-images-remove-all' ).on( 'click', function( e ) {
 		e.preventDefault();
 
-		$( '.media_page_cf-images [role=button]' ).attr( 'disabled', true );
+		toggleModal( e );
+		$( '.media_page_cf-images form#cf-images-form [role=button]' ).attr( 'disabled', true );
+
 		runProgressBar( 'remove' );
+	} );
+
+	/**
+	 * Show confirm modal.
+	 *
+	 * @since 1.2.0
+	 */
+	$( '#cf-images-show-modal' ).on( 'click', function( e ) {
+		e.preventDefault();
+		toggleModal( e );
 	} );
 
 	/**
@@ -251,10 +255,9 @@ import '../css/app.scss';
 	 *
 	 * @since 1.1.2
 	 *
-	 * @param {object} el  Link element.
-	 * @param {number} imageId  Image ID.
+	 * @param {Object} el Link element.
 	 */
-	const skipImage = ( el ) => {
+	window.cfSkipImage = ( el ) => {
 		const divStatus = $( el ).parent();
 		divStatus.html( CFImages.strings.inProgress + '<span class="spinner is-active"></span>' );
 
@@ -270,5 +273,4 @@ import '../css/app.scss';
 			} )
 			.catch( window.console.log );
 	};
-	window.cfSkipImage = skipImage;
 }( jQuery ) );
