@@ -133,9 +133,6 @@ class Core {
 		add_action( 'admin_init', array( $this, 'maybe_redirect_to_plugin_page' ) );
 		add_action( 'admin_init', array( $this, 'enable_flexible_variants' ) );
 
-		// Use custom paths.
-		add_filter( 'cf_images_upload_data', array( $this, 'use_custom_image_path' ) );
-
 	}
 
 	/**
@@ -209,6 +206,7 @@ class Core {
 	 *
 	 * @see Modules\Auto_Resize
 	 * @see Modules\Cloudflare_Images
+	 * @see Modules\Custom_Id
 	 * @see Modules\Disable_Generation
 	 *
 	 * @return void
@@ -219,6 +217,7 @@ class Core {
 
 		$loader->register( 'auto-resize' );
 		$loader->register( 'cloudflare-images' ); // Core module.
+		$loader->register( 'custom-id' );
 		$loader->register( 'disable-generation' );
 
 	}
@@ -320,29 +319,6 @@ class Core {
 	 */
 	public function get_cdn_domain(): string {
 		return $this->cdn_domain;
-	}
-
-	/**
-	 * Set custom ID for image to use the custom paths in image URLs.
-	 *
-	 * @since 1.2.0
-	 *
-	 * @param array $data  Image data sent to the Cloudflare Images API.
-	 *
-	 * @return array
-	 */
-	public function use_custom_image_path( array $data ): array {
-
-		if ( ! get_option( 'cf-images-custom-id', false ) ) {
-			return $data;
-		}
-
-		if ( ! isset( $data['id'] ) && isset( $data['file']->postname ) ) {
-			$data['id'] = $data['file']->postname;
-		}
-
-		return $data;
-
 	}
 
 }
