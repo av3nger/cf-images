@@ -48,7 +48,7 @@ class ACF {
 			return $url;
 		}
 
-		return apply_filters( 'wp_get_attachment_image_src', array( $url ), $attachment_id, '' );
+		return apply_filters( 'wp_get_attachment_image_src', array( $url ), $attachment_id, '', false );
 
 	}
 
