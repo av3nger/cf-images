@@ -7,12 +7,12 @@
  * @link https://vcore.au
  *
  * @package CF_Images
- * @subpackage CF_Images/App/Modules
+ * @subpackage CF_Images/App
  * @author Anton Vanyukov <a.vanyukov@vcore.ru>
  * @since 1.2.1
  */
 
-namespace CF_Images\App\Modules;
+namespace CF_Images\App;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -45,6 +45,16 @@ class Loader {
 	private $modules = array();
 
 	/**
+	 * Registered integrations.
+	 *
+	 * @since 1.2.1
+	 * @access private
+	 *
+	 * @var array $integrations  Registered integrations.
+	 */
+	private $integrations = array();
+
+	/**
 	 * Get Loader instance.
 	 *
 	 * @since 1.2.1
@@ -69,11 +79,11 @@ class Loader {
 	 * @return void
 	 */
 	private function __construct() {
-		require_once __DIR__ . '/class-module.php';
+		require_once __DIR__ . '/modules/class-module.php';
 	}
 
 	/**
-	 * Register the module.
+	 * Register a selected module.
 	 *
 	 * @since 1.2.1
 	 *
@@ -81,7 +91,7 @@ class Loader {
 	 *
 	 * @return void
 	 */
-	public function register( string $module ) {
+	public function module( string $module ) {
 
 		// If already registered - exit.
 		if ( isset( $this->modules[ $module ] ) ) {
@@ -89,12 +99,38 @@ class Loader {
 		}
 
 		// Unable to find module file - exit.
-		if ( ! file_exists( __DIR__ . '/class-' . $module . '.php' ) ) {
+		if ( ! file_exists( __DIR__ . '/modules/class-' . $module . '.php' ) ) {
 			return;
 		}
 
-		require_once __DIR__ . '/class-' . $module . '.php';
+		require_once __DIR__ . '/modules/class-' . $module . '.php';
 		$this->activate( $module );
+
+	}
+
+	/**
+	 * Register a selected integration.
+	 *
+	 * @since 1.2.1
+	 *
+	 * @param string $module  Module ID.
+	 *
+	 * @return void
+	 */
+	public function integration( string $module ) {
+
+		// If already registered - exit.
+		if ( isset( $this->integrations[ $module ] ) ) {
+			return;
+		}
+
+		// Unable to find module file - exit.
+		if ( ! file_exists( __DIR__ . '/integrations/class-' . $module . '.php' ) ) {
+			return;
+		}
+
+		require_once __DIR__ . '/integrations/class-' . $module . '.php';
+		$this->activate( $module, 'integrations' );
 
 	}
 
@@ -104,21 +140,26 @@ class Loader {
 	 * @since 1.2.1
 	 *
 	 * @param string $module  Module ID.
+	 * @param string $type    Module type. Accepts: modules, integrations. Default: modules.
 	 *
 	 * @return void
 	 */
-	private function activate( string $module ) {
+	private function activate( string $module, string $type = 'modules' ) {
 
 		$parts = explode( '-', $module );
 		$parts = array_map( 'ucfirst', $parts );
 		$class = implode( '_', $parts );
 
-		$class_name = '\\CF_Images\\App\\Modules\\' . $class;
+		$class_name = '\\CF_Images\\App\\' . ucfirst( $type ) . '\\' . $class;
 
 		$module_obj = new $class_name( $module );
 
 		if ( $module_obj instanceof $class_name ) {
-			$this->modules[ $module ] = $module_obj;
+			if ( $type === 'modules' ) {
+				$this->modules[ $module ] = $module_obj;
+			} else {
+				$this->integrations[ $module ] = $module_obj;
+			}
 		}
 
 	}

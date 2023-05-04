@@ -67,6 +67,14 @@ If something is not working for you, please let me know by creating a support ti
 
 == Changelog ==
 
+= 1.2.1 =
+
+Added:
+* ACF integration
+
+Changed:
+* Improved internal plugin structure
+
 = 1.2.0 - 29.03.2023 =
 
 Added:
