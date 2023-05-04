@@ -235,11 +235,13 @@ class Core {
 	 * @return void
 	 */
 	public function set_error( $code = '', string $message = '' ) {
+
 		if ( '' === $code ) {
 			self::$error = false;
 		} else {
 			self::$error = new WP_Error( $code, $message );
 		}
+
 	}
 
 	/**

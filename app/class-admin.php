@@ -233,6 +233,7 @@ class Admin {
 	 * @return void
 	 */
 	private function render_notice( string $message, string $type = 'success' ) {
+
 		?>
 		<div class="cf-images-notifications">
 			<div class="notice notice-<?php echo esc_attr( $type ); ?>" id="cf-images-notice">
@@ -242,6 +243,7 @@ class Admin {
 			</div>
 		</div>
 		<?php
+
 	}
 
 	/**
