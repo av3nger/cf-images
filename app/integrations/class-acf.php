@@ -41,6 +41,8 @@ class ACF {
 	 *
 	 * @param string $url            URL for the given attachment.
 	 * @param int    $attachment_id  Attachment post ID.
+	 *
+	 * @return mixed
 	 */
 	public function image_field_type_url( string $url, int $attachment_id ) {
 
@@ -48,7 +50,13 @@ class ACF {
 			return $url;
 		}
 
-		return apply_filters( 'wp_get_attachment_image_src', array( $url ), $attachment_id, '', false );
+		$image = apply_filters( 'wp_get_attachment_image_src', array( $url ), $attachment_id, '', false );
+
+		if ( ! empty( $image[0] ) ) {
+			return $image[0];
+		}
+
+		return $url;
 
 	}
 
