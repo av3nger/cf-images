@@ -155,7 +155,7 @@ class Loader {
 		$module_obj = new $class_name( $module );
 
 		if ( $module_obj instanceof $class_name ) {
-			if ( $type === 'modules' ) {
+			if ( 'modules' === $type ) {
 				$this->modules[ $module ] = $module_obj;
 			} else {
 				$this->integrations[ $module ] = $module_obj;
