@@ -37,6 +37,18 @@ class Rank_Math {
 	 */
 	public function __construct() {
 		add_filter( 'rank_math/replacements', array( $this, 'fix_file_name_replacement' ), 10, 2 );
+		add_filter( 'cf_images_can_run', array( $this, 'can_run' ) );
+	}
+
+	/**
+	 * Check if we can serve the images from Cloudflare.
+	 *
+	 * @since 1.2.1 Moved out from the module can_run() method.
+	 *
+	 * @return bool
+	 */
+	public function can_run(): bool {
+		return doing_filter( 'rank_math/head' ) || doing_action( 'rank_math/opengraph/facebook' );
 	}
 
 	/**

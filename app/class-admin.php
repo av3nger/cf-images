@@ -28,6 +28,14 @@ class Admin {
 	use Traits\Helpers;
 
 	/**
+	 * Media class instance.
+	 *
+	 * @since 1.2.1
+	 * @var Media $media
+	 */
+	private $media;
+
+	/**
 	 * Class constructor.
 	 *
 	 * Init all actions and filters for the admin area of the plugin.
@@ -40,7 +48,7 @@ class Admin {
 			return;
 		}
 
-		$media = new Media();
+		$this->media = new Media();
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
@@ -55,9 +63,9 @@ class Admin {
 			add_action( 'wp_ajax_cf_images_save_settings', array( $settings, 'ajax_save_settings' ) );
 			add_action( 'wp_ajax_cf_images_disconnect', array( $settings, 'ajax_disconnect' ) );
 
-			add_action( 'wp_ajax_cf_images_offload_image', array( $media, 'ajax_offload_image' ) );
-			add_action( 'wp_ajax_cf_images_bulk_process', array( $media, 'ajax_bulk_process' ) );
-			add_action( 'wp_ajax_cf_images_skip_image', array( $media, 'ajax_skip_image' ) );
+			add_action( 'wp_ajax_cf_images_offload_image', array( $this->media, 'ajax_offload_image' ) );
+			add_action( 'wp_ajax_cf_images_bulk_process', array( $this->media, 'ajax_bulk_process' ) );
+			add_action( 'wp_ajax_cf_images_skip_image', array( $this->media, 'ajax_skip_image' ) );
 		}
 
 	}
@@ -79,7 +87,7 @@ class Admin {
 				$this->get_slug(),
 				CF_IMAGES_DIR_URL . 'assets/css/cf-images.min.css',
 				array(),
-				$this->get_version()
+				CF_IMAGES_VERSION
 			);
 		}
 
@@ -89,7 +97,7 @@ class Admin {
 				$this->get_slug(),
 				CF_IMAGES_DIR_URL . 'assets/css/cf-images-media.min.css',
 				array(),
-				$this->get_version()
+				CF_IMAGES_VERSION
 			);
 		}
 
@@ -115,7 +123,7 @@ class Admin {
 			$this->get_slug(),
 			CF_IMAGES_DIR_URL . 'assets/js/cf-images.min.js',
 			array(),
-			$this->get_version(),
+			CF_IMAGES_VERSION,
 			true
 		);
 
@@ -225,6 +233,7 @@ class Admin {
 	 * @return void
 	 */
 	private function render_notice( string $message, string $type = 'success' ) {
+
 		?>
 		<div class="cf-images-notifications">
 			<div class="notice notice-<?php echo esc_attr( $type ); ?>" id="cf-images-notice">
@@ -234,6 +243,7 @@ class Admin {
 			</div>
 		</div>
 		<?php
+
 	}
 
 	/**
@@ -275,6 +285,17 @@ class Admin {
 		include_once $view;
 		echo ob_get_clean(); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped */
 
+	}
+
+	/**
+	 * Return Media instance.
+	 *
+	 * @since 1.2.1
+	 *
+	 * @return Media
+	 */
+	public function media(): Media {
+		return $this->media;
 	}
 
 }

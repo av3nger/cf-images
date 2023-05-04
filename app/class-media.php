@@ -53,14 +53,6 @@ class Media {
 		add_filter( 'wp_prepare_attachment_for_js', array( $this, 'grid_layout_column' ), 15, 2 );
 
 		// Image actions.
-		if ( get_option( 'cf-images-auto-offload', false ) ) {
-			// If async uploads are disabled, use the default hook.
-			if ( get_option( 'cf-images-disable-async', false ) ) {
-				add_filter( 'wp_generate_attachment_metadata', array( $this, 'upload_image' ), 10, 2 );
-			} else {
-				add_filter( 'wp_async_wp_generate_attachment_metadata', array( $this, 'upload_image' ), 10, 2 );
-			}
-		}
 		add_action( 'delete_attachment', array( $this, 'delete_image' ) );
 
 	}
@@ -85,7 +77,7 @@ class Media {
 			$this->get_slug() . '-media',
 			CF_IMAGES_DIR_URL . 'assets/js/cf-images-media.min.js',
 			array( $this->get_slug(), 'media-views' ),
-			$this->get_version(),
+			CF_IMAGES_VERSION,
 			true
 		);
 
