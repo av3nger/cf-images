@@ -34,12 +34,14 @@ class Multisite_Global_Media {
 	 * @since 1.1.5
 	 */
 	public function __construct() {
+
 		if ( ! is_multisite() ) {
 			return;
 		}
 
 		add_filter( 'cf_images_attachment_meta', array( $this, 'attachment_meta' ), 10, 2 );
 		add_filter( 'wp_get_attachment_metadata', array( $this, 'attachment_metadata' ), 10, 2 );
+
 	}
 
 	/**

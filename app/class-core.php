@@ -145,7 +145,7 @@ class Core {
 		require_once __DIR__ . '/class-media.php';
 		require_once __DIR__ . '/class-admin.php';
 		require_once __DIR__ . '/class-settings.php';
-		require_once __DIR__ . '/modules/class-loader.php';
+		require_once __DIR__ . '/class-loader.php';
 
 		require_once __DIR__ . '/api/class-api.php';
 		require_once __DIR__ . '/api/class-image.php';
@@ -184,18 +184,21 @@ class Core {
 	 *
 	 * @since 1.1.5
 	 *
+	 * @see Integrations\ACF
+	 * @see Integrations\Multisite_Global_Media
+	 * @see Integrations\Rank_Math
+	 * @see Integrations\Spectra
+	 *
 	 * @return void
 	 */
 	private function init_integrations() {
 
-		require_once __DIR__ . '/integrations/class-spectra.php';
-		$spectra = new Integrations\Spectra();
+		$loader = Loader::get_instance();
 
-		require_once __DIR__ . '/integrations/class-multisite-global-media.php';
-		$mgm = new Integrations\Multisite_Global_Media();
-
-		require_once __DIR__ . '/integrations/class-rank-math.php';
-		$rank_math = new Integrations\Rank_Math();
+		$loader->integration( 'spectra' );
+		$loader->integration( 'multisite-global-media' );
+		$loader->integration( 'rank-math' );
+		$loader->integration( 'acf' );
 
 	}
 
@@ -214,13 +217,13 @@ class Core {
 	 */
 	private function load_modules() {
 
-		$loader = Modules\Loader::get_instance();
+		$loader = Loader::get_instance();
 
-		$loader->register( 'auto-offload' );
-		$loader->register( 'auto-resize' );
-		$loader->register( 'cloudflare-images' ); // Core module.
-		$loader->register( 'custom-id' );
-		$loader->register( 'disable-generation' );
+		$loader->module( 'auto-offload' );
+		$loader->module( 'auto-resize' );
+		$loader->module( 'cloudflare-images' ); // Core module.
+		$loader->module( 'custom-id' );
+		$loader->module( 'disable-generation' );
 
 	}
 
