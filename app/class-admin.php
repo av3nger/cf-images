@@ -66,6 +66,7 @@ class Admin {
 			add_action( 'wp_ajax_cf_images_offload_image', array( $this->media, 'ajax_offload_image' ) );
 			add_action( 'wp_ajax_cf_images_bulk_process', array( $this->media, 'ajax_bulk_process' ) );
 			add_action( 'wp_ajax_cf_images_skip_image', array( $this->media, 'ajax_skip_image' ) );
+			add_action( 'wp_ajax_cf_images_undo_image', array( $this->media, 'ajax_undo_image' ) );
 		}
 
 	}
@@ -136,9 +137,11 @@ class Admin {
 					'disconnecting' => esc_html__( 'Disconnecting...', 'cf-images' ),
 					'saveChange'    => esc_html__( 'Save Changes', 'cf-images' ),
 					'inProgress'    => esc_html__( 'Processing', 'cf-images' ),
-					'offloadError'  => esc_html__( 'Error during offload', 'cf-images' ),
+					'offload'       => esc_html__( 'Offload', 'cf-images' ),
+					'offloadError'  => esc_html__( 'Processing error', 'cf-images' ),
 					'offloaded'     => esc_html__( 'Offloaded', 'cf-images' ),
 					'skipped'       => esc_html__( 'Skipped from processing', 'cf-images' ),
+					'undo'          => esc_html__( 'Remove offload', 'cf-images' ),
 				),
 			)
 		);

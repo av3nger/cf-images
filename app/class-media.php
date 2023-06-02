@@ -122,6 +122,12 @@ class Media {
 		if ( ! empty( $meta ) ) {
 			echo '<span class="dashicons dashicons-cloud-saved"></span>';
 			esc_html_e( 'Offloaded', 'cf-images' );
+			echo '<br />';
+			printf( /* translators: %1$s - opening <a> tag, %2$s - closing </a> tag */
+				esc_html__( '%1$sRemove offload%2$s', 'cf-images' ),
+				'<a href="#" class="cf-images-undo" data-id="' . esc_attr( $post_id ) . '">',
+				'</a>'
+			);
 			return;
 		}
 
@@ -410,6 +416,24 @@ class Media {
 		} catch ( Exception $e ) {
 			do_action( 'cf_images_error', $e->getCode(), $e->getMessage() );
 		}
+
+	}
+
+	/**
+	 * Remove selected image from Cloudflare Images.
+	 *
+	 * @since 1.2.1
+	 *
+	 * @return void
+	 */
+	public function ajax_undo_image() {
+
+		$this->check_ajax_request();
+
+		$attachment_id = (int) filter_input( INPUT_POST, 'data', FILTER_SANITIZE_NUMBER_INT );
+		$this->delete_image( $attachment_id );
+
+		wp_send_json_success();
 
 	}
 

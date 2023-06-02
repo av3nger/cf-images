@@ -87,7 +87,8 @@ import { toggleModal } from './modal';
 		const divStatus = $( this ).parent();
 		divStatus.html( CFImages.strings.inProgress + '<span class="spinner is-active"></span>' );
 
-		post( 'cf_images_offload_image', $( this ).data( 'id' ) )
+		const imageId = $( this ).data( 'id' );
+		post( 'cf_images_offload_image', imageId )
 			.then( ( response ) => {
 				if ( ! response.success ) {
 					const message = response.data || CFImages.strings.offloadError;
@@ -95,7 +96,10 @@ import { toggleModal } from './modal';
 					return;
 				}
 
-				divStatus.html( '<span class="dashicons dashicons-cloud-saved"></span>' + CFImages.strings.offloaded );
+				let div = '<span class="dashicons dashicons-cloud-saved"></span>' + CFImages.strings.offloaded;
+				div += '<br><a href="#" class="cf-images-undo" data-id="' + imageId + '">' + CFImages.strings.undo + '</a>';
+
+				divStatus.html( div );
 			} )
 			.catch( window.console.log );
 	} );
@@ -273,4 +277,29 @@ import { toggleModal } from './modal';
 			} )
 			.catch( window.console.log );
 	};
+
+	/**
+	 * Process undo offloading from media library.
+	 *
+	 * @since 1.2.1
+	 */
+	$( document ).on( 'click', '.cf-images-undo', function( e ) {
+		e.preventDefault();
+
+		const divStatus = $( this ).parent();
+		divStatus.html( CFImages.strings.inProgress + '<span class="spinner is-active"></span>' );
+
+		const imageId = $( this ).data( 'id' );
+		post( 'cf_images_undo_image', imageId )
+			.then( ( response ) => {
+				if ( ! response.success ) {
+					const message = response.data || CFImages.strings.offloadError;
+					divStatus.html( message );
+					return;
+				}
+
+				divStatus.html( '<a href="#" class="cf-images-offload" data-id="' + imageId + '">' + CFImages.strings.offload + '</a>' );
+			} )
+			.catch( window.console.log );
+	} );
 }( jQuery ) );
