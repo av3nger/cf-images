@@ -77,6 +77,9 @@ Changed:
 * Improved internal plugin structure
 * Improved media library status layout
 
+Fixed:
+* Fatal error when uninstalling the plugin
+
 = 1.2.0 - 29.03.2023 =
 
 Added:
