@@ -141,7 +141,7 @@ class Admin {
 					'offloadError'  => esc_html__( 'Processing error', 'cf-images' ),
 					'offloaded'     => esc_html__( 'Offloaded', 'cf-images' ),
 					'skipped'       => esc_html__( 'Skipped from processing', 'cf-images' ),
-					'undo'          => esc_html__( 'Remove offload', 'cf-images' ),
+					'undo'          => esc_html__( 'undo', 'cf-images' ),
 				),
 			)
 		);

@@ -121,10 +121,8 @@ class Media {
 
 		if ( ! empty( $meta ) ) {
 			echo '<span class="dashicons dashicons-cloud-saved"></span>';
-			esc_html_e( 'Offloaded', 'cf-images' );
-			echo '<br />';
 			printf( /* translators: %1$s - opening <a> tag, %2$s - closing </a> tag */
-				esc_html__( '%1$sRemove offload%2$s', 'cf-images' ),
+				esc_html__( 'Offloaded (%1$sundo%2$s)', 'cf-images' ),
 				'<a href="#" class="cf-images-undo" data-id="' . esc_attr( $post_id ) . '">',
 				'</a>'
 			);

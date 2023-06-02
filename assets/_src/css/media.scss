@@ -4,7 +4,15 @@
 .upload-php .fixed .column-cf-images {
   width: 10%;
 
-  .spinner { margin: 0 10px; }
+  .spinner {
+    background-size: 16px;
+    margin: 0 30px 0 0;
+  }
+
+  .dashicons-cloud-saved {
+    font-size: 18px;
+    margin-right: 2px;
+  }
 }
 
 .upload-php .cf-images-grid-status {

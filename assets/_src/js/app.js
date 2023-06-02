@@ -96,8 +96,8 @@ import { toggleModal } from './modal';
 					return;
 				}
 
-				let div = '<span class="dashicons dashicons-cloud-saved"></span>' + CFImages.strings.offloaded;
-				div += '<br><a href="#" class="cf-images-undo" data-id="' + imageId + '">' + CFImages.strings.undo + '</a>';
+				let div = '<span class="dashicons dashicons-cloud-saved"></span>' + CFImages.strings.offloaded + ' ';
+				div += '(<a href="#" class="cf-images-undo" data-id="' + imageId + '">' + CFImages.strings.undo + '</a>)';
 
 				divStatus.html( div );
 			} )
