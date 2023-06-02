@@ -75,6 +75,7 @@ Added:
 
 Changed:
 * Improved internal plugin structure
+* Improved media library status layout
 
 = 1.2.0 - 29.03.2023 =
 
