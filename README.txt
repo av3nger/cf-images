@@ -79,6 +79,7 @@ Changed:
 
 Fixed:
 * Fatal error when uninstalling the plugin
+* Error when image metadata is not an array
 
 = 1.2.0 - 29.03.2023 =
 

@@ -336,12 +336,12 @@ class Media {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $metadata       An array of attachment meta data.
+	 * @param mixed $metadata       An array of attachment meta data.
 	 * @param int   $attachment_id  Current attachment ID.
 	 *
 	 * @return array
 	 */
-	public function upload_image( array $metadata, int $attachment_id ): array {
+	public function upload_image( $metadata, int $attachment_id ): array {
 
 		if ( ! isset( $metadata['file'] ) ) {
 			do_action( 'cf_images_error', 404, __( 'Media file not found', 'cf-images' ) );
