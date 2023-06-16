@@ -105,6 +105,9 @@ class Cloudflare_Images extends Module {
 		// This filter is available on WordPress 6.0 or above.
 		add_filter( 'wp_content_img_tag', array( $this, 'content_img_tag' ), 10, 3 );
 
+		// Preconnect to CDN.
+		add_filter( 'wp_resource_hints', array( $this, 'preconnect' ), 10, 2 );
+
 	}
 
 	/**
@@ -349,6 +352,30 @@ class Cloudflare_Images extends Module {
 
 		return $filtered_image;
 
+	}
+
+
+	/**
+	 * Preconnect to CDN URL.
+	 *
+	 * @param array  $hints          List of URLs.
+	 * @param string $relation_type  Relation type.
+	 *
+	 * @return array
+	 */
+	public function preconnect( array $hints, string $relation_type ): array {
+		if ( 'preconnect' !== $relation_type ) {
+			return $hints;
+		}
+
+		return array_merge(
+			$hints,
+			array(
+				array(
+					'href' => $this->get_cdn_domain(),
+				),
+			)
+		);
 	}
 
 }

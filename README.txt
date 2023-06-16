@@ -72,6 +72,7 @@ If something is not working for you, please let me know by creating a support ti
 Added:
 * ACF integration
 * Option to remove selected image from Cloudflare Images
+* Preconnect to CDN URL
 
 Changed:
 * Improved internal plugin structure
