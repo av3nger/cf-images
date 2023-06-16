@@ -53,7 +53,7 @@ class Media {
 		add_filter( 'wp_prepare_attachment_for_js', array( $this, 'grid_layout_column' ), 15, 2 );
 
 		// Image actions.
-		add_action( 'delete_attachment', array( $this, 'delete_image' ) );
+		add_action( 'delete_attachment', array( $this, 'remove_from_cloudflare' ) );
 
 	}
 
@@ -128,13 +128,23 @@ class Media {
 			>
 				<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/cloud.svg' ); ?>" alt="<?php esc_attr_e( 'Image offloaded', 'cf-images' ); ?>" />
 			</a>
-			<a href="#" <?php disabled( ! $this->full_offload_enabled() ); ?>
-				data-tooltip="<?php $this->full_offload_enabled() ? esc_html_e( 'In media library. Remove?', 'cf-images' ) : esc_html_e( 'Option disabled', 'cf-images' ); ?>"
-				data-placement="left"
-				data-id="<?php echo esc_attr( $post_id ); ?>"
-			>
-				<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/hdd.svg' ); ?>" alt="<?php esc_attr_e( 'Full offload disabled', 'cf-images' ); ?>" />
-			</a>
+			<?php if ( get_post_meta( $post_id, '_cloudflare_image_offloaded', true ) ) : ?>
+				<a href="#" class="cf-images-restore"
+					data-tooltip="<?php esc_html_e( 'Fully offloaded. Restore?', 'cf-images' ); ?>"
+					data-placement="left"
+					data-id="<?php echo esc_attr( $post_id ); ?>"
+				>
+					<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/download.svg' ); ?>" alt="<?php esc_attr_e( 'Image fully offloaded', 'cf-images' ); ?>" />
+				</a>
+			<?php else : ?>
+				<a href="#" class="cf-images-delete" <?php disabled( ! $this->full_offload_enabled() ); ?>
+					data-tooltip="<?php $this->full_offload_enabled() ? esc_html_e( 'In media library. Remove?', 'cf-images' ) : esc_html_e( 'Option disabled', 'cf-images' ); ?>"
+					data-placement="left"
+					data-id="<?php echo esc_attr( $post_id ); ?>"
+				>
+					<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/hdd.svg' ); ?>" alt="<?php esc_attr_e( 'Full offload disabled', 'cf-images' ); ?>" />
+				</a>
+			<?php endif; ?>
 			<?php
 			return;
 		}
@@ -314,7 +324,7 @@ class Media {
 				}
 			}
 		} else {
-			$this->delete_image( $image->post->ID );
+			$this->remove_from_cloudflare( $image->post->ID );
 		}
 
 		// On final step - update API stats.
@@ -420,7 +430,7 @@ class Media {
 	 *
 	 * @return void
 	 */
-	public function delete_image( int $post_id ) {
+	public function remove_from_cloudflare( int $post_id ) {
 
 		$id = get_post_meta( $post_id, '_cloudflare_image_id', true );
 
@@ -457,6 +467,28 @@ class Media {
 		$this->check_ajax_request();
 
 		$attachment_id = (int) filter_input( INPUT_POST, 'data', FILTER_SANITIZE_NUMBER_INT );
+		$this->remove_from_cloudflare( $attachment_id );
+
+		ob_start();
+		$this->media_custom_column( 'cf-images', $attachment_id );
+		$column = ob_get_clean();
+
+		wp_send_json_success( $column );
+
+	}
+
+	/**
+	 * Remove (physically delete the files) selected image from WordPress media library.
+	 *
+	 * @since 1.2.1
+	 *
+	 * @return void
+	 */
+	public function ajax_delete_image() {
+
+		$this->check_ajax_request();
+
+		$attachment_id = (int) filter_input( INPUT_POST, 'data', FILTER_SANITIZE_NUMBER_INT );
 		$this->delete_image( $attachment_id );
 
 		ob_start();
@@ -464,6 +496,82 @@ class Media {
 		$column = ob_get_clean();
 
 		wp_send_json_success( $column );
+
+	}
+
+	/**
+	 * Delete image from WordPress media library.
+	 *
+	 * @since 1.2.1
+	 *
+	 * @param int $attachment_id  Attachment ID.
+	 *
+	 * @return void
+	 */
+	private function delete_image( int $attachment_id ) {
+
+		if ( ! wp_attachment_is_image( $attachment_id ) ) {
+			return;
+		}
+
+		// Image not offloaded.
+		if ( ! get_post_meta( $attachment_id, '_cloudflare_image_id', true ) ) {
+			return;
+		}
+
+		$metadata = wp_get_attachment_metadata( $attachment_id );
+
+		// Remove original.
+		if ( ! empty( $metadata['original_image'] ) ) {
+			$this->delete( $attachment_id, $metadata['original_image'] );
+		}
+
+		// Remove scaled version.
+		$attached_file = get_post_meta( $attachment_id, '_wp_attached_file', true );
+		if ( $attached_file ) {
+			$this->delete( $attachment_id, $attached_file, true );
+		}
+
+		// Remove intermediate sizes.
+		if ( ! empty( $metadata['sizes'] ) ) {
+			foreach ( $metadata['sizes'] as $size ) {
+				$this->delete( $attachment_id, $size['file'] );
+			}
+		}
+
+		// Set offload flag.
+		update_post_meta( $attachment_id, '_cloudflare_image_offloaded', true );
+
+	}
+
+	/**
+	 * Remove image from uploads directory.
+	 *
+	 * @since 1.2.1
+	 *
+	 * @param int    $attachment_id  Attachment ID.
+	 * @param string $image          Path in uploads folder.
+	 * @param bool   $scaled         Whether image is scaled.
+	 *
+	 * @return void
+	 */
+	private function delete( int $attachment_id, string $image, bool $scaled = false ) {
+
+		if ( $scaled ) {
+			$uploads = wp_get_upload_dir();
+			if ( ! empty( $uploads['basedir'] ) ) {
+				$path = trailingslashit( $uploads['basedir'] ) . $image;
+				if ( file_exists( $path ) ) {
+					unlink( $path );
+				}
+			}
+			return;
+		}
+
+		$path = trailingslashit( dirname( get_attached_file( $attachment_id ) ) ) . $image;
+		if ( file_exists( $path ) ) {
+			unlink( $path );
+		}
 
 	}
 

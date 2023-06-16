@@ -67,6 +67,7 @@ class Admin {
 			add_action( 'wp_ajax_cf_images_bulk_process', array( $this->media, 'ajax_bulk_process' ) );
 			add_action( 'wp_ajax_cf_images_skip_image', array( $this->media, 'ajax_skip_image' ) );
 			add_action( 'wp_ajax_cf_images_undo_image', array( $this->media, 'ajax_undo_image' ) );
+			add_action( 'wp_ajax_cf_images_delete_image', array( $this->media, 'ajax_delete_image' ) );
 		}
 
 	}

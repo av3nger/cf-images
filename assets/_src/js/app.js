@@ -297,4 +297,28 @@ import { toggleModal } from './modal';
 			} )
 			.catch( window.console.log );
 	} );
+
+	/**
+	 * Process remove image action from media library
+	 *
+	 * @since 1.2.1
+	 */
+	$( document ).on( 'click', '.cf-images-delete', function( e ) {
+		e.preventDefault();
+
+		const divStatus = $( this ).parent();
+		divStatus.html( CFImages.strings.inProgress + '<span class="spinner is-active"></span>' );
+
+		post( 'cf_images_delete_image', $( this ).data( 'id' ) )
+			.then( ( response ) => {
+				if ( ! response.success ) {
+					const message = response.data || CFImages.strings.offloadError;
+					divStatus.html( message );
+					return;
+				}
+
+				divStatus.html( response.data );
+			} )
+			.catch( window.console.log );
+	} );
 }( jQuery ) );
