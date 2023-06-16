@@ -8,9 +8,9 @@
 .column-cf-images [data-tooltip],
 .cf-images-grid-status [data-tooltip] {
   border: 1px solid #2c3338;
-  border-right-width: 0;
   display: inline-block;
   height: 24px;
+  margin-bottom: -4px;
   margin-right: -4px;
   padding: 5px;
   width: 24px;
@@ -38,7 +38,7 @@
   }
 
   &:last-of-type {
-    border-right-width: 1px;
+    margin-bottom: 0;
     margin-right: 0;
   }
 }

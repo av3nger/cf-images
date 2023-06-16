@@ -117,23 +117,20 @@ class Media {
 			return;
 		}
 
-		$mode = filter_input( INPUT_GET, 'mode' );
-		$mode = sanitize_text_field( $mode );
-
 		$meta = get_post_meta( $post_id, '_cloudflare_image_id', true );
 
 		if ( ! empty( $meta ) ) {
 			?>
 			<a href="#" class="cf-images-undo"
 				data-tooltip="<?php esc_html_e( 'Offloaded. Undo?', 'cf-images' ); ?>"
-				data-placement="<?php echo 'list' === $mode ? 'top' : 'bottom'; ?>"
+				data-placement="left"
 				data-id="<?php echo esc_attr( $post_id ); ?>"
 			>
 				<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/cloud.svg' ); ?>" alt="<?php esc_attr_e( 'Image offloaded', 'cf-images' ); ?>" />
 			</a>
 			<a href="#" <?php disabled( ! $this->full_offload_enabled() ); ?>
 				data-tooltip="<?php $this->full_offload_enabled() ? esc_html_e( 'In media library. Remove?', 'cf-images' ) : esc_html_e( 'Option disabled', 'cf-images' ); ?>"
-				data-placement="<?php echo 'list' === $mode ? 'top' : 'bottom'; ?>"
+				data-placement="left"
 				data-id="<?php echo esc_attr( $post_id ); ?>"
 			>
 				<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/hdd.svg' ); ?>" alt="<?php esc_attr_e( 'Full offload disabled', 'cf-images' ); ?>" />
@@ -146,7 +143,7 @@ class Media {
 
 		if ( ! in_array( get_post_mime_type( $post_id ), $supported_mimes, true ) ) {
 			?>
-			<span data-tooltip="<?php esc_html_e( 'Unsupported format', 'cf-images' ); ?>" data-placement="<?php echo 'list' === $mode ? 'top' : 'bottom'; ?>" disabled="disabled">
+			<span data-tooltip="<?php esc_html_e( 'Unsupported format', 'cf-images' ); ?>" data-placement="left" disabled="disabled">
 				<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/format.svg' ); ?>" alt="<?php esc_attr_e( 'Unsupported format', 'cf-images' ); ?>" />
 			</span>
 			<?php
@@ -158,7 +155,7 @@ class Media {
 			?>
 			<a href="#" class="cf-images-offload"
 				data-tooltip="<?php esc_html_e( 'Skipped. Retry?', 'cf-images' ); ?>"
-				data-placement="<?php echo 'list' === $mode ? 'top' : 'bottom'; ?>"
+				data-placement="left"
 				data-id="<?php echo esc_attr( $post_id ); ?>"
 			>
 				<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/pause.svg' ); ?>" alt="<?php esc_attr_e( 'Skipped from processing', 'cf-images' ); ?>" />
@@ -170,7 +167,7 @@ class Media {
 		?>
 		<a href="#" class="cf-images-offload"
 			data-tooltip="<?php esc_html_e( 'Not offloaded. Offload?', 'cf-images' ); ?>"
-			data-placement="<?php echo 'list' === $mode ? 'top' : 'bottom'; ?>"
+			data-placement="left"
 			data-id="<?php echo esc_attr( $post_id ); ?>"
 		>
 			<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/cloud-off.svg' ); ?>" alt="<?php esc_attr_e( 'Image not offloaded', 'cf-images' ); ?>" />
