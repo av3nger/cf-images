@@ -212,6 +212,7 @@ class Core {
 	 * @see Modules\Cloudflare_Images
 	 * @see Modules\Custom_Id
 	 * @see Modules\Disable_Generation
+	 * @see Modules\Full_Offload
 	 *
 	 * @return void
 	 */
@@ -224,6 +225,7 @@ class Core {
 		$loader->module( 'cloudflare-images' ); // Core module.
 		$loader->module( 'custom-id' );
 		$loader->module( 'disable-generation' );
+		$loader->module( 'full-offload' );
 
 	}
 

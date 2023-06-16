@@ -102,7 +102,6 @@ $api_stats = sprintf( /* translators: %1$d - uploaded image count, %2$d - allowe
 		<span class="dashicons dashicons-editor-expand"></span>
 		<label for="auto_resize">
 			<?php esc_html_e( 'Auto resize images on front-end', 'cf-images' ); ?>
-			<span class="cf-images-badge"><?php esc_html_e( 'Beta', 'cf-images' ); ?></span>
 		</label>
 		<div>
 			<input name="auto-resize" type="checkbox" id="auto_resize" value="1" <?php checked( get_option( 'cf-images-auto-resize', false ) ); ?> role="switch">
@@ -125,6 +124,20 @@ $api_stats = sprintf( /* translators: %1$d - uploaded image count, %2$d - allowe
 			</p>
 			<p>
 				<?php esc_html_e( 'Note: This feature is experimental. All the image sizes can be restored with the `Regenerate Thumbnails` plugin.', 'cf-images' ); ?>
+			</p>
+		</div>
+
+		<hr>
+
+		<span class="dashicons dashicons-images-alt2"></span>
+		<label for="full_offload">
+			<?php esc_html_e( 'Full offload', 'cf-images' ); ?>
+			<span class="cf-images-badge"><?php esc_html_e( 'Experimental', 'cf-images' ); ?></span>
+		</label>
+		<div>
+			<input name="full-offload" type="checkbox" id="full_offload" value="1" <?php checked( get_option( 'cf-images-full-offload', false ) ); ?> role="switch">
+			<p>
+				<?php esc_html_e( 'Setting this option will allow removing original images from the media library.', 'cf-images' ); ?>
 			</p>
 		</div>
 

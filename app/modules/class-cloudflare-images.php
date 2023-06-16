@@ -74,6 +74,19 @@ class Cloudflare_Images extends Module {
 	private $heights;
 
 	/**
+	 * Pre-init actions.
+	 *
+	 * @since 1.2.1
+	 *
+	 * @return void
+	 */
+	public function pre_init() {
+		if ( get_option( 'cf-images-full-offload', false ) ) {
+			$this->only_frontend = false;
+		}
+	}
+
+	/**
 	 * Init the module.
 	 *
 	 * @since 1.2.1
