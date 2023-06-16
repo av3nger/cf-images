@@ -137,11 +137,7 @@ class Admin {
 					'disconnecting' => esc_html__( 'Disconnecting...', 'cf-images' ),
 					'saveChange'    => esc_html__( 'Save Changes', 'cf-images' ),
 					'inProgress'    => esc_html__( 'Processing', 'cf-images' ),
-					'offload'       => esc_html__( 'Offload', 'cf-images' ),
 					'offloadError'  => esc_html__( 'Processing error', 'cf-images' ),
-					'offloaded'     => esc_html__( 'Offloaded', 'cf-images' ),
-					'skipped'       => esc_html__( 'Skipped from processing', 'cf-images' ),
-					'undo'          => esc_html__( 'undo', 'cf-images' ),
 				),
 			)
 		);

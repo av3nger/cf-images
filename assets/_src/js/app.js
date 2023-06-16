@@ -87,8 +87,7 @@ import { toggleModal } from './modal';
 		const divStatus = $( this ).parent();
 		divStatus.html( CFImages.strings.inProgress + '<span class="spinner is-active"></span>' );
 
-		const imageId = $( this ).data( 'id' );
-		post( 'cf_images_offload_image', imageId )
+		post( 'cf_images_offload_image', $( this ).data( 'id' ) )
 			.then( ( response ) => {
 				if ( ! response.success ) {
 					const message = response.data || CFImages.strings.offloadError;
@@ -96,10 +95,7 @@ import { toggleModal } from './modal';
 					return;
 				}
 
-				let div = '<span class="dashicons dashicons-cloud-saved"></span>' + CFImages.strings.offloaded + ' ';
-				div += '(<a href="#" class="cf-images-undo" data-id="' + imageId + '">' + CFImages.strings.undo + '</a>)';
-
-				divStatus.html( div );
+				divStatus.html( response.data );
 			} )
 			.catch( window.console.log );
 	} );
@@ -273,7 +269,7 @@ import { toggleModal } from './modal';
 					return;
 				}
 
-				divStatus.html( CFImages.strings.skipped );
+				divStatus.html( response.data );
 			} )
 			.catch( window.console.log );
 	};
@@ -289,8 +285,7 @@ import { toggleModal } from './modal';
 		const divStatus = $( this ).parent();
 		divStatus.html( CFImages.strings.inProgress + '<span class="spinner is-active"></span>' );
 
-		const imageId = $( this ).data( 'id' );
-		post( 'cf_images_undo_image', imageId )
+		post( 'cf_images_undo_image', $( this ).data( 'id' ) )
 			.then( ( response ) => {
 				if ( ! response.success ) {
 					const message = response.data || CFImages.strings.offloadError;
@@ -298,7 +293,7 @@ import { toggleModal } from './modal';
 					return;
 				}
 
-				divStatus.html( '<a href="#" class="cf-images-offload" data-id="' + imageId + '">' + CFImages.strings.offload + '</a>' );
+				divStatus.html( response.data );
 			} )
 			.catch( window.console.log );
 	} );

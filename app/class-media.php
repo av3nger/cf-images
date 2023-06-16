@@ -117,42 +117,65 @@ class Media {
 			return;
 		}
 
+		$mode = filter_input( INPUT_GET, 'mode' );
+		$mode = sanitize_text_field( $mode );
+
 		$meta = get_post_meta( $post_id, '_cloudflare_image_id', true );
 
 		if ( ! empty( $meta ) ) {
-			echo '<span class="dashicons dashicons-cloud-saved"></span>';
-			printf( /* translators: %1$s - opening <a> tag, %2$s - closing </a> tag */
-				esc_html__( 'Offloaded (%1$sundo%2$s)', 'cf-images' ),
-				'<a href="#" class="cf-images-undo" data-id="' . esc_attr( $post_id ) . '">',
-				'</a>'
-			);
+			?>
+			<a href="#" class="cf-images-undo"
+				data-tooltip="<?php esc_html_e( 'Offloaded. Undo?', 'cf-images' ); ?>"
+				data-placement="<?php echo 'list' === $mode ? 'top' : 'bottom'; ?>"
+				data-id="<?php echo esc_attr( $post_id ); ?>"
+			>
+				<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/cloud.svg' ); ?>" alt="<?php esc_attr_e( 'Image offloaded', 'cf-images' ); ?>" />
+			</a>
+			<a href="#" <?php disabled( ! $this->full_offload_enabled() ); ?>
+				data-tooltip="<?php $this->full_offload_enabled() ? esc_html_e( 'In media library. Remove?', 'cf-images' ) : esc_html_e( 'Option disabled', 'cf-images' ); ?>"
+				data-placement="<?php echo 'list' === $mode ? 'top' : 'bottom'; ?>"
+				data-id="<?php echo esc_attr( $post_id ); ?>"
+			>
+				<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/hdd.svg' ); ?>" alt="<?php esc_attr_e( 'Full offload disabled', 'cf-images' ); ?>" />
+			</a>
+			<?php
 			return;
 		}
 
 		$supported_mimes = array( 'image/jpeg', 'image/png', 'image/gif', 'image/webp' );
 
 		if ( ! in_array( get_post_mime_type( $post_id ), $supported_mimes, true ) ) {
-			esc_html_e( 'Unsupported format', 'cf-images' );
+			?>
+			<span data-tooltip="<?php esc_html_e( 'Unsupported format', 'cf-images' ); ?>" data-placement="<?php echo 'list' === $mode ? 'top' : 'bottom'; ?>" disabled="disabled">
+				<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/format.svg' ); ?>" alt="<?php esc_attr_e( 'Unsupported format', 'cf-images' ); ?>" />
+			</span>
+			<?php
 			return;
 		}
 
 		// This image was skipped because of some error during bulk upload.
 		if ( get_post_meta( $post_id, '_cloudflare_image_skip', true ) ) {
-			esc_html_e( 'Skipped from processing', 'cf-images' );
-			echo '<br />';
-			printf( /* translators: %1$s - opening <a> tag, %2$s - closing </a> tag */
-				esc_html__( '%1$sRetry offload%2$s', 'cf-images' ),
-				'<a href="#" class="cf-images-offload" data-id="' . esc_attr( $post_id ) . '">',
-				'</a>'
-			);
+			?>
+			<a href="#" class="cf-images-offload"
+				data-tooltip="<?php esc_html_e( 'Skipped. Retry?', 'cf-images' ); ?>"
+				data-placement="<?php echo 'list' === $mode ? 'top' : 'bottom'; ?>"
+				data-id="<?php echo esc_attr( $post_id ); ?>"
+			>
+				<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/pause.svg' ); ?>" alt="<?php esc_attr_e( 'Skipped from processing', 'cf-images' ); ?>" />
+			</a>
+			<?php
 			return;
 		}
 
-		printf( /* translators: %1$s - opening <a> tag, %2$s - closing </a> tag */
-			esc_html__( '%1$sOffload%2$s', 'cf-images' ),
-			'<a href="#" class="cf-images-offload" data-id="' . esc_attr( $post_id ) . '">',
-			'</a>'
-		);
+		?>
+		<a href="#" class="cf-images-offload"
+			data-tooltip="<?php esc_html_e( 'Not offloaded. Offload?', 'cf-images' ); ?>"
+			data-placement="<?php echo 'list' === $mode ? 'top' : 'bottom'; ?>"
+			data-id="<?php echo esc_attr( $post_id ); ?>"
+		>
+			<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/cloud-off.svg' ); ?>" alt="<?php esc_attr_e( 'Image not offloaded', 'cf-images' ); ?>" />
+		</a>
+		<?php
 
 	}
 
@@ -212,7 +235,11 @@ class Media {
 
 		$this->fetch_stats( new Api\Image() );
 
-		wp_send_json_success();
+		ob_start();
+		$this->media_custom_column( 'cf-images', $attachment_id );
+		$column = ob_get_clean();
+
+		wp_send_json_success( $column );
 
 	}
 
@@ -327,7 +354,11 @@ class Media {
 
 		update_post_meta( $attachment_id, '_cloudflare_image_skip', true );
 
-		wp_send_json_success();
+		ob_start();
+		$this->media_custom_column( 'cf-images', $attachment_id );
+		$column = ob_get_clean();
+
+		wp_send_json_success( $column );
 
 	}
 
@@ -431,7 +462,11 @@ class Media {
 		$attachment_id = (int) filter_input( INPUT_POST, 'data', FILTER_SANITIZE_NUMBER_INT );
 		$this->delete_image( $attachment_id );
 
-		wp_send_json_success();
+		ob_start();
+		$this->media_custom_column( 'cf-images', $attachment_id );
+		$column = ob_get_clean();
+
+		wp_send_json_success( $column );
 
 	}
 
