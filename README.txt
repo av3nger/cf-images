@@ -77,6 +77,7 @@ Added:
 Changed:
 * Improved internal plugin structure
 * Improved media library status layout
+* Improved media library UI
 
 Fixed:
 * Fatal error when uninstalling the plugin
