@@ -28,76 +28,77 @@ $api_stats = sprintf( /* translators: %1$d - uploaded image count, %2$d - allowe
 
 ?>
 
-<article>
-	<header>
-		<nav>
-			<ul>
-				<li>
-					<h3><?php esc_html_e( 'Offload Images to Cloudflare', 'cf-images' ); ?></h3>
-				</li>
-			</ul>
-			<ul>
-				<li>
-					<?php esc_html_e( 'Status', 'cf-images' ); ?>: <span style="color: green"><?php esc_html_e( 'Connected', 'cf-images' ); ?></span>
-				</li>
-			</ul>
-		</nav>
-	</header>
+<main class="cf-images-settings">
+	<article>
+		<header>
+			<nav>
+				<ul>
+					<li>
+						<h3><?php esc_html_e( 'Offload Images to Cloudflare', 'cf-images' ); ?></h3>
+					</li>
+				</ul>
+				<ul>
+					<li>
+						<?php esc_html_e( 'Status', 'cf-images' ); ?>: <span style="color: green"><?php esc_html_e( 'Connected', 'cf-images' ); ?></span>
+					</li>
+				</ul>
+			</nav>
+		</header>
 
-	<form id="cf-images-form" data-type="settings" onsubmit="event.preventDefault()">
-		<span class="dashicons dashicons-admin-site"></span>
-		<label for="auto_offload">
-			<?php esc_html_e( 'Auto offload new images', 'cf-images' ); ?>
-		</label>
-		<div>
-			<input name="auto-offload" type="checkbox" id="auto_offload" value="1" <?php checked( get_option( 'cf-images-auto-offload', false ) ); ?> role="switch">
-			<p>
-				<?php esc_html_e( 'Enable this option if you want to enable automatic offloading for newly uploaded images.', 'cf-images' ); ?>
-			</p>
-			<p>
-				<?php esc_html_e( 'By default, new images will not be auto offloaded to Cloudflare Images.', 'cf-images' ); ?>
-			</p>
-		</div>
+		<form id="cf-images-form" data-type="settings" onsubmit="event.preventDefault()">
+			<span class="dashicons dashicons-admin-site"></span>
+			<label for="auto_offload">
+				<?php esc_html_e( 'Auto offload new images', 'cf-images' ); ?>
+			</label>
+			<div>
+				<input name="auto-offload" type="checkbox" id="auto_offload" value="1" <?php checked( get_option( 'cf-images-auto-offload', false ) ); ?> role="switch">
+				<p>
+					<?php esc_html_e( 'Enable this option if you want to enable automatic offloading for newly uploaded images.', 'cf-images' ); ?>
+				</p>
+				<p>
+					<?php esc_html_e( 'By default, new images will not be auto offloaded to Cloudflare Images.', 'cf-images' ); ?>
+				</p>
+			</div>
 
-		<hr>
+			<hr>
 
-		<span class="dashicons dashicons-admin-links"></span>
-		<label for="custom_domain">
-			<?php esc_html_e( 'Serve from custom domain', 'cf-images' ); ?>
-		</label>
-		<div>
-			<?php $custom_domain = get_option( 'cf-images-custom-domain', false ); ?>
-			<input name="custom-domain" type="checkbox" id="custom_domain" value="1" <?php checked( (bool) $custom_domain ); ?> role="switch">
-			<p>
-				<?php esc_html_e( 'Use the current site domain instead of `imagedelivery.net`, or specify a custom domain.', 'cf-images' ); ?>
-			</p>
-			<p>
-				<?php esc_html_e( 'Note: The domain must be linked with Cloudflare in order to work correctly.', 'cf-images' ); ?>
-			</p>
+			<span class="dashicons dashicons-admin-links"></span>
+			<label for="custom_domain">
+				<?php esc_html_e( 'Serve from custom domain', 'cf-images' ); ?>
+			</label>
+			<div>
+				<?php $custom_domain = get_option( 'cf-images-custom-domain', false ); ?>
+				<input name="custom-domain" type="checkbox" id="custom_domain" value="1" <?php checked( (bool) $custom_domain ); ?> role="switch">
+				<p>
+					<?php esc_html_e( 'Use the current site domain instead of `imagedelivery.net`, or specify a custom domain.', 'cf-images' ); ?>
+				</p>
+				<p>
+					<?php esc_html_e( 'Note: The domain must be linked with Cloudflare in order to work correctly.', 'cf-images' ); ?>
+				</p>
 
-			<p>
-				<label class="screen-reader-text" for="custom-domain-input"><?php esc_html_e( 'Custom domain', 'cf-images' ); ?></label>
-				<input class="<?php echo $custom_domain ? '' : 'hidden'; ?>" value="<?php echo wp_http_validate_url( $custom_domain ) ? esc_attr( $custom_domain ) : ''; ?>" type="text" name="custom_domain_input" id="custom-domain-input" placeholder="https://cdn.example.com">
-			</p>
-		</div>
+				<p>
+					<label class="screen-reader-text" for="custom-domain-input"><?php esc_html_e( 'Custom domain', 'cf-images' ); ?></label>
+					<input class="<?php echo $custom_domain ? '' : 'hidden'; ?>" value="<?php echo wp_http_validate_url( $custom_domain ) ? esc_attr( $custom_domain ) : ''; ?>" type="text" name="custom_domain_input" id="custom-domain-input" placeholder="https://cdn.example.com">
+				</p>
+			</div>
 
-		<hr>
+			<hr>
 
-		<span class="dashicons dashicons-open-folder"></span>
-		<label for="custom_id">
-			<?php esc_html_e( 'Keep media library structure', 'cf-images' ); ?>
-		</label>
-		<div>
-			<input name="custom-id" type="checkbox" id="custom_id" value="1" <?php checked( get_option( 'cf-images-custom-id', false ) ); ?> role="switch">
-			<p>
-				<?php esc_html_e( 'Preserve the WordPress media library paths, when uploading images to Cloudflare Images, instead of the path automatically generated by Cloudflare Images’ Universal Unique Identifier (UUID).', 'cf-images' ); ?>
-			</p>
-			<p>
-				<?php esc_html_e( 'This does not convert already uploaded images. To change all the images to the new format (or back), you will need to perform bulk remove & upload.', 'cf-images' ); ?>
-			</p>
-		</div>
+			<span class="dashicons dashicons-open-folder"></span>
+			<label for="custom_id">
+				<?php esc_html_e( 'Keep media library structure', 'cf-images' ); ?>
+			</label>
+			<div>
+				<input name="custom-id" type="checkbox" id="custom_id" value="1" <?php checked( get_option( 'cf-images-custom-id', false ) ); ?> role="switch">
+				<p>
+					<?php esc_html_e( 'Preserve the WordPress media library paths, when uploading images to Cloudflare Images, instead of the path automatically generated by Cloudflare Images’ Universal Unique Identifier (UUID).', 'cf-images' ); ?>
+				</p>
+				<p>
+					<?php esc_html_e( 'This does not convert already uploaded images. To change all the images to the new format (or back), you will need to perform bulk remove & upload.', 'cf-images' ); ?>
+				</p>
+			</div>
 
-		<hr>
+			<hr>
 
 		<span class="dashicons dashicons-editor-expand"></span>
 		<label for="auto_resize">
@@ -110,7 +111,7 @@ $api_stats = sprintf( /* translators: %1$d - uploaded image count, %2$d - allowe
 			</p>
 		</div>
 
-		<hr>
+			<hr>
 
 		<span class="dashicons dashicons-images-alt2"></span>
 		<label for="disable_sizes">
@@ -141,81 +142,150 @@ $api_stats = sprintf( /* translators: %1$d - uploaded image count, %2$d - allowe
 			</p>
 		</div>
 
-		<hr>
+			<hr>
 
-		<span class="dashicons dashicons-randomize"></span>
-		<label for="disable_async">
-			<?php esc_html_e( 'Disable async processing', 'cf-images' ); ?>
-		</label>
-		<div>
-			<input name="disable-async" type="checkbox" id="disable_async" value="1" <?php checked( get_option( 'cf-images-disable-async', false ) ); ?> role="switch">
-			<p>
-				<?php esc_html_e( 'By default, the plugin will try to offload images in asynchronous mode, meaning that the processing will be done in the background. If, for some reason, the host does not allow async processing, disable this option for backward compatibility.', 'cf-images' ); ?>
-			</p>
-			<p>
-				<?php esc_html_e( 'Note: disabling this option will increase the time to upload new images to the media library.', 'cf-images' ); ?>
-			</p>
-		</div>
-
-		<hr>
-
-		<span class="dashicons dashicons-cloud-upload"></span>
-		<label for="cf-images-upload-all">
-			<?php esc_html_e( 'Bulk upload images', 'cf-images' ); ?>
-		</label>
-		<div>
-			<a href="#" role="button" class="outline" id="cf-images-upload-all">
-				<?php esc_html_e( 'Upload', 'cf-images' ); ?>
-			</a>
-
-			<div class="cf-images-progress upload">
-				<progress value="0" max="100" style="width: 80%"></progress>
-				<p><small><?php esc_html_e( 'Initializing...', 'cf-images' ); ?></small></p>
+			<span class="dashicons dashicons-randomize"></span>
+			<label for="disable_async">
+				<?php esc_html_e( 'Disable async processing', 'cf-images' ); ?>
+			</label>
+			<div>
+				<input name="disable-async" type="checkbox" id="disable_async" value="1" <?php checked( get_option( 'cf-images-disable-async', false ) ); ?> role="switch">
+				<p>
+					<?php esc_html_e( 'By default, the plugin will try to offload images in asynchronous mode, meaning that the processing will be done in the background. If, for some reason, the host does not allow async processing, disable this option for backward compatibility.', 'cf-images' ); ?>
+				</p>
+				<p>
+					<?php esc_html_e( 'Note: disabling this option will increase the time to upload new images to the media library.', 'cf-images' ); ?>
+				</p>
 			</div>
 
-			<p>
-				<?php esc_html_e( 'You can either manually upload individual images from the media library, or bulk upload/remove all existing images using the buttons below.', 'cf-images' ); ?>
-			</p>
+			<hr>
 
-			<p class="stats">
-				<?php esc_html_e( 'Offloaded', 'cf-images' ); ?>: <em data-tooltip="<?php echo esc_attr( $api_stats ); ?>"><?php echo absint( $stats['synced'] ); ?> <?php esc_html_e( 'images', 'cf-images' ); ?></em>
-			</p>
-		</div>
+			<span class="dashicons dashicons-cloud-upload"></span>
+			<label for="cf-images-upload-all">
+				<?php esc_html_e( 'Bulk upload images', 'cf-images' ); ?>
+			</label>
+			<div>
+				<a href="#" role="button" class="outline" id="cf-images-upload-all">
+					<?php esc_html_e( 'Upload', 'cf-images' ); ?>
+				</a>
 
-		<hr>
+				<div class="cf-images-progress upload">
+					<progress value="0" max="100" style="width: 80%"></progress>
+					<p><small><?php esc_html_e( 'Initializing...', 'cf-images' ); ?></small></p>
+				</div>
 
-		<span class="dashicons dashicons-trash"></span>
-		<label for="cf-images-remove-all">
-			<?php esc_html_e( 'Bulk remove', 'cf-images' ); ?>
-		</label>
-		<div>
-			<a href="#" role="button" class="outline cf-images-button-red" id="cf-images-show-modal" data-target="modal-confirm">
-				<?php esc_attr_e( 'Remove', 'cf-images' ); ?>
-			</a>
+				<p>
+					<?php esc_html_e( 'You can either manually upload individual images from the media library, or bulk upload/remove all existing images using the buttons below.', 'cf-images' ); ?>
+				</p>
 
-			<div class="cf-images-progress remove">
-				<progress value="0" max="100" style="width: 80%"></progress>
-				<p><small><?php esc_html_e( 'Initializing...', 'cf-images' ); ?></small></p>
+				<p class="stats">
+					<?php esc_html_e( 'Offloaded', 'cf-images' ); ?>: <em data-tooltip="<?php echo esc_attr( $api_stats ); ?>"><?php echo absint( $stats['synced'] ); ?> <?php esc_html_e( 'images', 'cf-images' ); ?></em>
+				</p>
 			</div>
 
-			<p>
-				<?php esc_html_e( 'Remove all previously uploaded images.', 'cf-images' ); ?>
-			</p>
-			<p>
-				<?php esc_html_e( 'Note: If `Disable WordPress image sizes` option has been selected above, you will need to regenerate all the image sizes manually.', 'cf-images' ); ?>
-			</p>
-		</div>
-	</form>
+			<hr>
 
-	<footer>
-		<a href="#" role="button" aria-busy="false" id="save-settings">
-			<?php esc_html_e( 'Save Changes', 'cf-images' ); ?>
-		</a>
+			<span class="dashicons dashicons-trash"></span>
+			<label for="cf-images-remove-all">
+				<?php esc_html_e( 'Bulk remove', 'cf-images' ); ?>
+			</label>
+			<div>
+				<a href="#" role="button" class="outline cf-images-button-red" id="cf-images-show-modal" data-target="modal-confirm">
+					<?php esc_attr_e( 'Remove', 'cf-images' ); ?>
+				</a>
 
-		<a href="#" class="secondary" role="button" aria-busy="false" id="cf-images-disconnect">
-			<?php esc_html_e( 'Disconnect', 'cf-images' ); ?>
-		</a>
-	</footer>
-</article>
+				<div class="cf-images-progress remove">
+					<progress value="0" max="100" style="width: 80%"></progress>
+					<p><small><?php esc_html_e( 'Initializing...', 'cf-images' ); ?></small></p>
+				</div>
+
+				<p>
+					<?php esc_html_e( 'Remove all previously uploaded images.', 'cf-images' ); ?>
+				</p>
+				<p>
+					<?php esc_html_e( 'Note: If `Disable WordPress image sizes` option has been selected above, you will need to regenerate all the image sizes manually.', 'cf-images' ); ?>
+				</p>
+			</div>
+		</form>
+
+		<footer>
+			<a href="#" role="button" aria-busy="false" id="save-settings">
+				<?php esc_html_e( 'Save Changes', 'cf-images' ); ?>
+			</a>
+
+			<a href="#" class="secondary" role="button" aria-busy="false" id="cf-images-disconnect">
+				<?php esc_html_e( 'Disconnect', 'cf-images' ); ?>
+			</a>
+		</footer>
+	</article>
+
+	<?php if ( ! get_site_option( 'cf-images-hide-sidebar' ) ) : ?>
+		<article class="cf-images-sidebar">
+			<h3><?php esc_html_e( 'Additional resources', 'cf-images' ); ?></h3>
+			<?php esc_html_e( 'Below is a list of links to resources that will help you get started or get additional help:', 'cf-images' ); ?>
+			<ul>
+				<li>&mdash;
+					<a href="https://vcore.au/tutorials/how-to-setup-cloudflare-images-plugin/" target="_blank">
+						<?php esc_html_e( 'A detailed guide with screenshots on how to setup the plugin.', 'cf-images' ); ?>
+					</a>
+				</li>
+				<li>&mdash;
+					<a href="https://wordpress.org/support/plugin/cf-images/" target="_blank">
+						<?php esc_html_e( 'WordPress support forums.', 'cf-images' ); ?>
+					</a>
+				</li>
+				<li>&mdash;
+					<?php
+					printf( /* translators: %1$s - opening <a> tag, %2$s - closing </a> tag */
+						esc_html__( 'Feel free to send me a message directly via my %1$scontact form%2$s.', 'cf-images' ),
+						'<a href="https://vcore.au/contact-us/" target="_blank">',
+						'</a>'
+					);
+					?>
+				</li>
+			</ul>
+
+			<h4><?php esc_html_e( 'Support the project', 'cf-images' ); ?></h4>
+			<?php esc_html_e( 'This is a free plugin, if you find it useful, please consider supporting it by:', 'cf-images' ); ?>
+			<ul>
+				<li>&mdash;
+					<?php
+					printf( /* translators: %1$s - opening <a> tag, %2$s - closing </a> tag */
+						esc_html__( 'Sharing your ideas and feedback on the %1$ssupport forums%2$s, it helps me make the plugin better.', 'cf-images' ),
+						'<a href="https://wordpress.org/support/plugin/cf-images/" target="_blank">',
+						'</a>'
+					);
+					?>
+				</li>
+				<li>&mdash;
+					<?php
+					printf( /* translators: %1$s - opening <a> tag, %2$s - closing </a> tag */
+						esc_html__( 'Trying out my %1$sFuzion AI plugin%2$s and subscribing to one of the plans.', 'cf-images' ),
+						'<a href="https://wordpress.org/plugins/fuzion/" target="_blank">',
+						'</a>'
+					);
+					?>
+				</li>
+				<li>&mdash;
+					<?php
+					printf( /* translators: %1$s - opening <a> tag, %2$s - closing </a> tag */
+						esc_html__( 'Buy me a coffee via %1$sPayPal%2$s.', 'cf-images' ),
+						'<a href="https://www.paypal.com/donate/?business=JRR6QPRGTZ46N&no_recurring=0&item_name=Help+support+the+development+of+the+Cloudflare+Images+plugin+for+WordPress&currency_code=AUD" target="_blank">',
+						'</a>'
+					);
+					?>
+				</li>
+			</ul>
+
+			<?php
+			printf( /* translators: %1$s - opening <a> tag, %2$s - closing </a> tag */
+				esc_html__( 'Or, if you prefer to never see this sidebar again, just %1$sclick here%2$s.', 'cf-images' ),
+				'<a href="#" id="hide-the-sidebar">',
+				'</a>'
+			);
+			?>
+		</article>
+	<?php endif; ?>
+</main>
 
 <?php $this->view( 'modals/confirm' ); ?>

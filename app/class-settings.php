@@ -202,4 +202,15 @@ class Settings {
 
 	}
 
+	/**
+	 * Hide sidebar.
+	 *
+	 * @since 1.2.1
+	 *
+	 * @return void
+	 */
+	public function ajax_hide_sidebar() {
+		update_site_option( 'cf-images-hide-sidebar', true );
+	}
+
 }
