@@ -385,7 +385,7 @@ class Media {
 
 		$image = new Api\Image();
 		$dir   = wp_get_upload_dir();
-		$path  = trailingslashit( $dir['basedir'] ) . $metadata['original_image'] ?? $metadata['file'];
+		$path  = wp_get_original_image_path( $attachment_id );
 
 		$url = wp_parse_url( get_site_url() );
 		if ( is_multisite() && ! is_subdomain_install() ) {
@@ -394,7 +394,7 @@ class Media {
 			$host = $url['host'];
 		}
 
-		$name = trailingslashit( $host ) . $metadata['file'];
+		$name = trailingslashit( $host ) . str_replace( trailingslashit( $dir['basedir'] ), '', $path );
 
 		try {
 			$results = $image->upload( $path, $attachment_id, $name );
