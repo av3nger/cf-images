@@ -81,6 +81,7 @@ Changed:
 * Improved media library UI
 
 Fixed:
+* Scaled images offloaded instead of originals
 * Fatal error when uninstalling the plugin
 * Error when image metadata is not an array
 

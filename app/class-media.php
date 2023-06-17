@@ -385,7 +385,7 @@ class Media {
 
 		$image = new Api\Image();
 		$dir   = wp_get_upload_dir();
-		$path  = trailingslashit( $dir['basedir'] ) . $metadata['file'];
+		$path  = trailingslashit( $dir['basedir'] ) . $metadata['original_image'] ?? $metadata['file'];
 
 		$url = wp_parse_url( get_site_url() );
 		if ( is_multisite() && ! is_subdomain_install() ) {
