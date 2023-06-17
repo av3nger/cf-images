@@ -227,7 +227,7 @@ class Media {
 		if ( false === $metadata ) {
 			$message = sprintf( // translators: %1$s - opening <a> tag, %2$s - closing </a> tag.
 				esc_html__( 'Image metadata not found. %1$sSkip image%2$s', 'cf-images' ),
-				'<a href="#" data-id="' . $attachment_id . '" onclick="window.cfSkipImage(this)">',
+				'<a href="#" data-id="' . $attachment_id . '" class="cf-images-skip">',
 				'</a>'
 			);
 
@@ -242,11 +242,7 @@ class Media {
 
 		$this->fetch_stats( new Api\Image() );
 
-		ob_start();
-		$this->media_custom_column( 'cf-images', $attachment_id );
-		$column = ob_get_clean();
-
-		wp_send_json_success( $column );
+		wp_send_json_success( $this->get_response_data( $attachment_id ) );
 
 	}
 
@@ -361,11 +357,7 @@ class Media {
 
 		update_post_meta( $attachment_id, '_cloudflare_image_skip', true );
 
-		ob_start();
-		$this->media_custom_column( 'cf-images', $attachment_id );
-		$column = ob_get_clean();
-
-		wp_send_json_success( $column );
+		wp_send_json_success( $this->get_response_data( $attachment_id ) );
 
 	}
 
@@ -469,11 +461,7 @@ class Media {
 		$attachment_id = (int) filter_input( INPUT_POST, 'data', FILTER_SANITIZE_NUMBER_INT );
 		$this->remove_from_cloudflare( $attachment_id );
 
-		ob_start();
-		$this->media_custom_column( 'cf-images', $attachment_id );
-		$column = ob_get_clean();
-
-		wp_send_json_success( $column );
+		wp_send_json_success( $this->get_response_data( $attachment_id ) );
 
 	}
 
@@ -491,11 +479,7 @@ class Media {
 		$attachment_id = (int) filter_input( INPUT_POST, 'data', FILTER_SANITIZE_NUMBER_INT );
 		$this->delete_image( $attachment_id );
 
-		ob_start();
-		$this->media_custom_column( 'cf-images', $attachment_id );
-		$column = ob_get_clean();
-
-		wp_send_json_success( $column );
+		wp_send_json_success( $this->get_response_data( $attachment_id ) );
 
 	}
 
@@ -572,6 +556,62 @@ class Media {
 		if ( file_exists( $path ) ) {
 			unlink( $path );
 		}
+
+	}
+
+	/**
+	 * Generate the div layout for Ajax responses.
+	 *
+	 * @since 1.2.1
+	 *
+	 * @param int $attachment_id  Attachment ID.
+	 *
+	 * @return string
+	 */
+	private function get_response_data( int $attachment_id ): string {
+
+		ob_start();
+		$this->media_custom_column( 'cf-images', $attachment_id );
+		return ob_get_clean();
+
+	}
+
+	/**
+	 * Restore image to media library from Cloudflare.
+	 *
+	 * @since 1.2.1
+	 *
+	 * @return void
+	 */
+	public function ajax_restore_image() {
+
+		$this->check_ajax_request();
+
+		$attachment_id = (int) filter_input( INPUT_POST, 'data', FILTER_SANITIZE_NUMBER_INT );
+
+		if ( ! $attachment_id ) {
+			return;
+		}
+
+		$image = new Api\Image();
+
+		try {
+			$image_blob = $image->download( $attachment_id );
+
+			$original = wp_get_original_image_path( $attachment_id );
+			if ( file_exists( $original ) ) {
+				delete_post_meta( $attachment_id, '_cloudflare_image_offloaded' );
+				wp_send_json_error( esc_html__( 'Image already exists in the media library.', 'cf-images' ) );
+			}
+
+			file_put_contents( $original, $image_blob ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
+			wp_create_image_subsizes( $original, $attachment_id );
+		} catch ( Exception $e ) {
+			do_action( 'cf_images_error', $e->getCode(), $e->getMessage() );
+		}
+
+		delete_post_meta( $attachment_id, '_cloudflare_image_offloaded' );
+		wp_send_json_success( $this->get_response_data( $attachment_id ) );
 
 	}
 
