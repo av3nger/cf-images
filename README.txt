@@ -70,6 +70,7 @@ If something is not working for you, please let me know by creating a support ti
 = 1.2.1 =
 
 Added:
+* Full offload and restore for images from the WordPress media library [beta]
 * ACF integration
 * Option to remove selected image from Cloudflare Images
 * Preconnect to CDN URL
