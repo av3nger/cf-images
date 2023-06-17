@@ -140,6 +140,12 @@ $api_stats = sprintf( /* translators: %1$d - uploaded image count, %2$d - allowe
 			<p>
 				<?php esc_html_e( 'Setting this option will allow removing original images from the media library.', 'cf-images' ); ?>
 			</p>
+
+			<div class="notice notice-warning full-offload-notice">
+				<p>
+					<?php esc_html_e( 'This is an experimental feature. To avoid any potential conflicts, it is highly recommended to re-sync your media library with Cloudflare Images by bulk removing and bulk offloading.', 'cf-images' ); ?>
+				</p>
+			</div>
 		</div>
 
 			<hr>
