@@ -302,4 +302,16 @@ import { toggleModal } from './modal';
 			} )
 			.catch( window.console.log );
 	} );
+
+	/**
+	 * Hide the sidebar.
+	 *
+	 * @since 1.2.1
+	 */
+	$( document ).on( 'click', '#hide-the-sidebar', () => {
+		post( 'cf_images_hide_sidebar' ).catch( window.console.log );
+		$( '.cf-images-sidebar' ).slideUp( 'slow', function() {
+			$( this ).remove();
+		} );
+	} );
 }( jQuery ) );

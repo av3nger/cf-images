@@ -16,6 +16,19 @@
   @import "@picocss/pico/scss/utilities/loading";
   @import "@picocss/pico/scss/utilities/tooltip";
 
+  .cf-images-settings {
+    display: flex;
+    width: 100%;
+
+    article:first-of-type {
+      flex-grow: 1;
+    }
+
+    .cf-images-sidebar {
+      flex-basis: 20%;
+    }
+  }
+
   .notice.inline {
     margin-left: 0;
   }

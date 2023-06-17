@@ -31,6 +31,7 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 
 delete_site_option( 'cf-images-version' );
 delete_site_option( 'cf-images-hash' );
+delete_site_option( 'cf-images-hide-sidebar' );
 delete_option( 'cf-images-disable-generation' );
 delete_option( 'cf-images-custom-domain' );
 delete_option( 'cf-images-setup-done' );
