@@ -81,6 +81,7 @@ Changed:
 Fixed:
 * Fatal error when uninstalling the plugin
 * Error when image metadata is not an array
+* Images not served via CDN if a custom size is used
 
 = 1.2.0 - 29.03.2023 =
 

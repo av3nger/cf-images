@@ -118,7 +118,7 @@ class Cloudflare_Images extends Module {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array|false  $image         {
+	 * @param array|false      $image         {
 	 *     Array of image data, or boolean false if no image is available.
 	 *
 	 *     @type string $image[0]  Image source URL.
@@ -126,9 +126,10 @@ class Cloudflare_Images extends Module {
 	 *     @type int    $image[2]  Image height in pixels.
 	 *     @type bool   $image[3]  Whether the image is a resized image.
 	 * }
-	 * @param int|string   $attachment_id  Image attachment ID.
-	 * @param string|int[] $size           Requested image size. Can be any registered image size name, or
-	 *                                     an array of width and height values in pixels (in that order).
+	 * @param int|string       $attachment_id  Image attachment ID.
+	 * @param string|int|int[] $size           Requested image size. Can be any registered image size name, or
+	 *                                         an array of width and height values in pixels (in that order),
+	 *                                         can also be just a single integer value.
 	 *
 	 * @return array|false
 	 */
@@ -160,8 +161,8 @@ class Cloudflare_Images extends Module {
 			return $image;
 		}
 
-		// Full size image with defined dimensions.
-		if ( 'full' === $size && isset( $image[1] ) && $image[1] > 0 ) {
+		// Image with defined dimensions.
+		if ( isset( $image[1] ) && $image[1] > 0 ) {
 			$image[0] = $this->get_cdn_domain() . "/$hash/$cloudflare_image_id/w=" . $image[1];
 			return $image;
 		}
