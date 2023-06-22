@@ -281,7 +281,7 @@ import { toggleModal } from './modal';
 	/**
 	 * Process undo offloading from media library.
 	 *
-	 * @since 1.2.1
+	 * @since 1.3.0
 	 */
 	$( document ).on( 'click', '.cf-images-undo', function( e ) {
 		e.preventDefault();
@@ -306,7 +306,7 @@ import { toggleModal } from './modal';
 	/**
 	 * Hide the sidebar.
 	 *
-	 * @since 1.2.1
+	 * @since 1.3.0
 	 */
 	$( document ).on( 'click', '#hide-the-sidebar', () => {
 		post( 'cf_images_hide_sidebar' ).catch( window.console.log );

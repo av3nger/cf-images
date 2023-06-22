@@ -420,7 +420,7 @@ class Media {
 	/**
 	 * Remove selected image from Cloudflare Images.
 	 *
-	 * @since 1.2.1
+	 * @since 1.3.0
 	 *
 	 * @return void
 	 */

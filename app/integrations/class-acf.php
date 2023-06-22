@@ -9,7 +9,7 @@
  * @package CF_Images
  * @subpackage CF_Images/App/Integrations
  * @author Anton Vanyukov <a.vanyukov@vcore.ru>
- * @since 1.2.1
+ * @since 1.3.0
  */
 
 namespace CF_Images\App\Integrations;
@@ -21,14 +21,14 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * ACF class.
  *
- * @since 1.2.1
+ * @since 1.3.0
  */
 class ACF {
 
 	/**
 	 * Class constructor.
 	 *
-	 * @since 1.2.1
+	 * @since 1.3.0
 	 */
 	public function __construct() {
 		add_filter( 'wp_get_attachment_url', array( $this, 'image_field_type_url' ), 10, 2 );
@@ -37,7 +37,7 @@ class ACF {
 	/**
 	 * Filters the attachment URL from the image field type.
 	 *
-	 * @since 1.2.1
+	 * @since 1.3.0
 	 *
 	 * @param string $url            URL for the given attachment.
 	 * @param int    $attachment_id  Attachment post ID.

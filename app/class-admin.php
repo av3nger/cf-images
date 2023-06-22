@@ -30,7 +30,7 @@ class Admin {
 	/**
 	 * Media class instance.
 	 *
-	 * @since 1.2.1
+	 * @since 1.3.0
 	 * @var Media $media
 	 */
 	private $media;
@@ -294,7 +294,7 @@ class Admin {
 	/**
 	 * Return Media instance.
 	 *
-	 * @since 1.2.1
+	 * @since 1.3.0
 	 *
 	 * @return Media
 	 */

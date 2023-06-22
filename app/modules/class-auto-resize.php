@@ -9,7 +9,7 @@
  * @package CF_Images
  * @subpackage CF_Images/App/Modules
  * @author Anton Vanyukov <a.vanyukov@vcore.ru>
- * @since 1.2.1  Moved out into its own module.
+ * @since 1.3.0  Moved out into its own module.
  */
 
 namespace CF_Images\App\Modules;
@@ -21,14 +21,14 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Auto_Resize class.
  *
- * @since 1.2.1
+ * @since 1.3.0
  */
 class Auto_Resize extends Module {
 
 	/**
 	 * Should the module only run on front-end?
 	 *
-	 * @since 1.2.1
+	 * @since 1.3.0
 	 * @access protected
 	 *
 	 * @var bool
@@ -38,7 +38,7 @@ class Auto_Resize extends Module {
 	/**
 	 * Init the module.
 	 *
-	 * @since 1.2.1
+	 * @since 1.3.0
 	 *
 	 * @return void
 	 */

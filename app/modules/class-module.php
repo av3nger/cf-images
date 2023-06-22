@@ -9,7 +9,7 @@
  * @package CF_Images
  * @subpackage CF_Images/App/Modules
  * @author Anton Vanyukov <a.vanyukov@vcore.ru>
- * @since 1.2.1
+ * @since 1.3.0
  */
 
 namespace CF_Images\App\Modules;
@@ -23,7 +23,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Abstract Module class.
  *
- * @since 1.2.1
+ * @since 1.3.0
  */
 abstract class Module {
 
@@ -32,7 +32,7 @@ abstract class Module {
 	/**
 	 * This is a core module, meaning it can't be enabled/disabled via options.
 	 *
-	 * @since 1.2.1
+	 * @since 1.3.0
 	 *
 	 * @var bool
 	 */
@@ -41,7 +41,7 @@ abstract class Module {
 	/**
 	 * Module ID.
 	 *
-	 * @since 1.2.1
+	 * @since 1.3.0
 	 * @access protected
 	 *
 	 * @var string $module
@@ -51,7 +51,7 @@ abstract class Module {
 	/**
 	 * Should the module only run on front-end?
 	 *
-	 * @since 1.2.1
+	 * @since 1.3.0
 	 * @access protected
 	 *
 	 * @var bool $only_frontend
@@ -61,7 +61,7 @@ abstract class Module {
 	/**
 	 * Module constructor.
 	 *
-	 * @since 1.2.1
+	 * @since 1.3.0
 	 *
 	 * @param string $module  Module ID.
 	 *
@@ -87,7 +87,7 @@ abstract class Module {
 	/**
 	 * Module init.
 	 *
-	 * @since 1.2.1
+	 * @since 1.3.0
 	 *
 	 * @return void
 	 */
@@ -96,7 +96,7 @@ abstract class Module {
 	/**
 	 * Check if module is enabled via plugin settings.
 	 *
-	 * @since 1.2.1
+	 * @since 1.3.0
 	 *
 	 * @return bool
 	 */

@@ -204,7 +204,7 @@ class Settings {
 	/**
 	 * Hide sidebar.
 	 *
-	 * @since 1.2.1
+	 * @since 1.3.0
 	 *
 	 * @return void
 	 */

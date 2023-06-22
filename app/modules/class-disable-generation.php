@@ -10,7 +10,7 @@
  * @package CF_Images
  * @subpackage CF_Images/App/Modules
  * @author Anton Vanyukov <a.vanyukov@vcore.ru>
- * @since 1.2.1  Moved out into its own module.
+ * @since 1.3.0  Moved out into its own module.
  */
 
 namespace CF_Images\App\Modules;
@@ -22,14 +22,14 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Disable_Generation class.
  *
- * @since 1.2.1
+ * @since 1.3.0
  */
 class Disable_Generation extends Module {
 
 	/**
 	 * Init the module.
 	 *
-	 * @since 1.2.1
+	 * @since 1.3.0
 	 *
 	 * @return void
 	 */
