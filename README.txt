@@ -67,7 +67,7 @@ If something is not working for you, please let me know by creating a support ti
 
 == Changelog ==
 
-= 1.2.1 =
+= 1.3.0 =
 
 Added:
 * Full offload and restore for images from the WordPress media library [beta]

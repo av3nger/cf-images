@@ -9,7 +9,7 @@
  * @package CF_Images
  * @subpackage CF_Images/App/Modules
  * @author Anton Vanyukov <a.vanyukov@vcore.ru>
- * @since 1.2.1  Moved out into its own module.
+ * @since 1.3.0  Moved out into its own module.
  */
 
 namespace CF_Images\App\Modules;
@@ -23,14 +23,14 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Cloudflare_Images class.
  *
- * @since 1.2.1
+ * @since 1.3.0
  */
 class Cloudflare_Images extends Module {
 
 	/**
 	 * This is a core module, meaning it can't be enabled/disabled via options.
 	 *
-	 * @since 1.2.1
+	 * @since 1.3.0
 	 *
 	 * @var bool
 	 */
@@ -39,7 +39,7 @@ class Cloudflare_Images extends Module {
 	/**
 	 * Should the module only run on front-end?
 	 *
-	 * @since 1.2.1
+	 * @since 1.3.0
 	 * @access protected
 	 *
 	 * @var bool
@@ -89,7 +89,7 @@ class Cloudflare_Images extends Module {
 	/**
 	 * Init the module.
 	 *
-	 * @since 1.2.1
+	 * @since 1.3.0
 	 *
 	 * @return void
 	 */

@@ -9,7 +9,7 @@
  * @package CF_Images
  * @subpackage CF_Images/App
  * @author Anton Vanyukov <a.vanyukov@vcore.ru>
- * @since 1.2.1
+ * @since 1.3.0
  */
 
 namespace CF_Images\App;
@@ -21,14 +21,14 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Loader class.
  *
- * @since 1.2.1
+ * @since 1.3.0
  */
 class Loader {
 
 	/**
 	 * Plugin instance.
 	 *
-	 * @since 1.2.1
+	 * @since 1.3.0
 	 * @access private
 	 * @var null|Loader $instance  Loader instance.
 	 */
@@ -37,7 +37,7 @@ class Loader {
 	/**
 	 * Registered modules.
 	 *
-	 * @since 1.2.1
+	 * @since 1.3.0
 	 * @access private
 	 *
 	 * @var array $modules  Registered modules.
@@ -47,7 +47,7 @@ class Loader {
 	/**
 	 * Registered integrations.
 	 *
-	 * @since 1.2.1
+	 * @since 1.3.0
 	 * @access private
 	 *
 	 * @var array $integrations  Registered integrations.
@@ -57,7 +57,7 @@ class Loader {
 	/**
 	 * Get Loader instance.
 	 *
-	 * @since 1.2.1
+	 * @since 1.3.0
 	 *
 	 * @return Loader
 	 */
@@ -74,7 +74,7 @@ class Loader {
 	/**
 	 * Module constructor.
 	 *
-	 * @since 1.2.1
+	 * @since 1.3.0
 	 *
 	 * @return void
 	 */
@@ -85,7 +85,7 @@ class Loader {
 	/**
 	 * Register a selected module.
 	 *
-	 * @since 1.2.1
+	 * @since 1.3.0
 	 *
 	 * @param string $module  Module ID.
 	 *
@@ -111,7 +111,7 @@ class Loader {
 	/**
 	 * Register a selected integration.
 	 *
-	 * @since 1.2.1
+	 * @since 1.3.0
 	 *
 	 * @param string $module  Module ID.
 	 *
@@ -137,7 +137,7 @@ class Loader {
 	/**
 	 * Activate module.
 	 *
-	 * @since 1.2.1
+	 * @since 1.3.0
 	 *
 	 * @param string $module  Module ID.
 	 * @param string $type    Module type. Accepts: modules, integrations. Default: modules.

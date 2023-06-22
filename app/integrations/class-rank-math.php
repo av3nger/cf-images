@@ -43,7 +43,7 @@ class Rank_Math {
 	/**
 	 * Check if we can serve the images from Cloudflare.
 	 *
-	 * @since 1.2.1 Moved out from the module can_run() method.
+	 * @since 1.3.0 Moved out from the module can_run() method.
 	 *
 	 * @return bool
 	 */

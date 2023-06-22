@@ -205,7 +205,7 @@ class Core {
 	/**
 	 * Load modules.
 	 *
-	 * @since 1.2.1
+	 * @since 1.3.0
 	 *
 	 * @see Modules\Auto_Offload
 	 * @see Modules\Auto_Resize
@@ -322,7 +322,7 @@ class Core {
 	/**
 	 * Getter method for CDN domain.
 	 *
-	 * @since 1.2.1
+	 * @since 1.3.0
 	 *
 	 * @return string
 	 */
@@ -333,7 +333,7 @@ class Core {
 	/**
 	 * Return Admin instance.
 	 *
-	 * @since 1.2.1
+	 * @since 1.3.0
 	 *
 	 * @return Admin
 	 */
