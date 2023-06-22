@@ -75,6 +75,7 @@ class Settings {
 			'custom-id'     => 'cf-images-custom-id',
 			'auto-resize'   => 'cf-images-auto-resize',
 			'disable-sizes' => 'cf-images-disable-generation',
+			'full-offload'  => 'cf-images-full-offload',
 			'disable-async' => 'cf-images-disable-async',
 		);
 

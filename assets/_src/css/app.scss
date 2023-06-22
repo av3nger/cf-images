@@ -33,6 +33,16 @@
     margin-left: 0;
   }
 
+  .full-offload-notice {
+    display: inline-block;
+    margin: 10px 0 0;
+    padding: 0 10px 7px;
+
+    p {
+      max-width: 100%;
+    }
+  }
+
   .cf-images-notifications {
     align-items: center;
     display: flex;

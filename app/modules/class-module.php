@@ -70,6 +70,7 @@ abstract class Module {
 	public function __construct( string $module ) {
 
 		$this->module = $module;
+		$this->pre_init();
 
 		if ( ! $this->is_set_up() || ! $this->is_enabled() ) {
 			return;
@@ -92,6 +93,15 @@ abstract class Module {
 	 * @return void
 	 */
 	abstract public function init();
+
+	/**
+	 * Module pre-init actions.
+	 *
+	 * @since 1.2.1
+	 *
+	 * @return void
+	 */
+	public function pre_init() {}
 
 	/**
 	 * Check if module is enabled via plugin settings.

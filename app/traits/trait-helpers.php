@@ -86,4 +86,15 @@ trait Helpers {
 		return Core::get_instance()->get_cdn_domain();
 	}
 
+	/**
+	 * Check if full offload is enabled.
+	 *
+	 * @since 1.2.1
+	 *
+	 * @return bool
+	 */
+	public function full_offload_enabled(): bool {
+		return (bool) get_option( 'cf-images-full-offload', false );
+	}
+
 }

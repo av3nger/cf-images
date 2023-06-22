@@ -28,6 +28,20 @@ import { toggleModal } from './modal';
 	};
 
 	/**
+	 * List of ajaxActions.
+	 * The first parameter is the Ajax callback, the second is which element to map the click event to.
+	 *
+	 * @since 1.2.1
+	 */
+	const ajaxActions = {
+		cf_images_offload_image: '.cf-images-offload', // Process offloading from media library.
+		cf_images_skip_image: '.cf-images-skip', // Skip image from processing.
+		cf_images_undo_image: '.cf-images-undo', // Process undo offloading from media library.
+		cf_images_delete_image: '.cf-images-delete', // Process remove image action from media library.
+		cf_images_restore_image: '.cf-images-restore', // Download image back to media library.
+	};
+
+	/**
 	 * Auto hide any pending notices.
 	 *
 	 * @since 1.0.0
@@ -72,34 +86,6 @@ import { toggleModal } from './modal';
 				}
 
 				window.location.search += '&saved=true';
-			} )
-			.catch( window.console.log );
-	} );
-
-	/**
-	 * Process offloading from media library.
-	 *
-	 * @since 1.0.0
-	 */
-	$( document ).on( 'click', '.cf-images-offload', function( e ) {
-		e.preventDefault();
-
-		const divStatus = $( this ).parent();
-		divStatus.html( CFImages.strings.inProgress + '<span class="spinner is-active"></span>' );
-
-		const imageId = $( this ).data( 'id' );
-		post( 'cf_images_offload_image', imageId )
-			.then( ( response ) => {
-				if ( ! response.success ) {
-					const message = response.data || CFImages.strings.offloadError;
-					divStatus.html( message );
-					return;
-				}
-
-				let div = '<span class="dashicons dashicons-cloud-saved"></span>' + CFImages.strings.offloaded + ' ';
-				div += '(<a href="#" class="cf-images-undo" data-id="' + imageId + '">' + CFImages.strings.undo + '</a>)';
-
-				divStatus.html( div );
 			} )
 			.catch( window.console.log );
 	} );
@@ -255,52 +241,27 @@ import { toggleModal } from './modal';
 	};
 
 	/**
-	 * Skip image from processing.
-	 *
-	 * @since 1.1.2
-	 *
-	 * @param {Object} el Link element.
+	 * Register Ajax actions.
 	 */
-	window.cfSkipImage = ( el ) => {
-		const divStatus = $( el ).parent();
-		divStatus.html( CFImages.strings.inProgress + '<span class="spinner is-active"></span>' );
+	Object.keys( ajaxActions ).forEach( ( action ) => {
+		$( document ).on( 'click', ajaxActions[ action ], function( e ) {
+			e.preventDefault();
 
-		post( 'cf_images_skip_image', $( el ).data( 'id' ) )
-			.then( ( response ) => {
-				if ( ! response.success ) {
-					const message = response.data || CFImages.strings.offloadError;
-					divStatus.html( message );
-					return;
-				}
+			const divStatus = $( this ).parent();
+			divStatus.html( CFImages.strings.inProgress + '<span class="spinner is-active"></span>' );
 
-				divStatus.html( CFImages.strings.skipped );
-			} )
-			.catch( window.console.log );
-	};
+			post( action, $( this ).data( 'id' ) )
+				.then( ( response ) => {
+					if ( ! response.success ) {
+						const message = response.data || CFImages.strings.offloadError;
+						divStatus.html( message );
+						return;
+					}
 
-	/**
-	 * Process undo offloading from media library.
-	 *
-	 * @since 1.3.0
-	 */
-	$( document ).on( 'click', '.cf-images-undo', function( e ) {
-		e.preventDefault();
-
-		const divStatus = $( this ).parent();
-		divStatus.html( CFImages.strings.inProgress + '<span class="spinner is-active"></span>' );
-
-		const imageId = $( this ).data( 'id' );
-		post( 'cf_images_undo_image', imageId )
-			.then( ( response ) => {
-				if ( ! response.success ) {
-					const message = response.data || CFImages.strings.offloadError;
-					divStatus.html( message );
-					return;
-				}
-
-				divStatus.html( '<a href="#" class="cf-images-offload" data-id="' + imageId + '">' + CFImages.strings.offload + '</a>' );
-			} )
-			.catch( window.console.log );
+					divStatus.html( response.data );
+				} )
+				.catch( window.console.log );
+		} );
 	} );
 
 	/**
