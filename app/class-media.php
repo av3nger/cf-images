@@ -477,6 +477,15 @@ class Media {
 		$this->check_ajax_request();
 
 		$attachment_id = (int) filter_input( INPUT_POST, 'data', FILTER_SANITIZE_NUMBER_INT );
+
+		// This is a backward compat check to make sure we have the original offloaded before removing it.
+		$metadata = wp_get_attachment_metadata( $attachment_id );
+		$original = wp_get_original_image_path( $attachment_id );
+
+		if ( false === strpos( $original, $metadata['file'] ) ) {
+			wp_send_json_error( esc_html__( 'Cannot remove image, scaled image offloaded.', 'cf-images' ) );
+		}
+
 		$this->delete_image( $attachment_id );
 
 		wp_send_json_success( $this->get_response_data( $attachment_id ) );
