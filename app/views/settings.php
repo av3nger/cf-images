@@ -235,12 +235,12 @@ $api_stats = sprintf( /* translators: %1$d - uploaded image count, %2$d - allowe
 			<?php esc_html_e( 'Below is a list of links to resources that will help you get started or get additional help:', 'cf-images' ); ?>
 			<ul>
 				<li>&mdash;
-					<a href="https://vcore.au/tutorials/how-to-setup-cloudflare-images-plugin/" target="_blank">
+					<a href="https://vcore.au/tutorials/how-to-setup-cloudflare-images-plugin/" target="_blank" rel="noopener">
 						<?php esc_html_e( 'A detailed guide with screenshots on how to setup the plugin.', 'cf-images' ); ?>
 					</a>
 				</li>
 				<li>&mdash;
-					<a href="https://wordpress.org/support/plugin/cf-images/" target="_blank">
+					<a href="https://wordpress.org/support/plugin/cf-images/" target="_blank" rel="noopener">
 						<?php esc_html_e( 'WordPress support forums.', 'cf-images' ); ?>
 					</a>
 				</li>
@@ -248,7 +248,7 @@ $api_stats = sprintf( /* translators: %1$d - uploaded image count, %2$d - allowe
 					<?php
 					printf( /* translators: %1$s - opening <a> tag, %2$s - closing </a> tag */
 						esc_html__( 'Feel free to send me a message directly via my %1$scontact form%2$s.', 'cf-images' ),
-						'<a href="https://vcore.au/contact-us/" target="_blank">',
+						'<a href="https://vcore.au/contact-us/" target="_blank" rel="noopener">',
 						'</a>'
 					);
 					?>
@@ -262,7 +262,7 @@ $api_stats = sprintf( /* translators: %1$d - uploaded image count, %2$d - allowe
 					<?php
 					printf( /* translators: %1$s - opening <a> tag, %2$s - closing </a> tag */
 						esc_html__( 'Sharing your ideas and feedback on the %1$ssupport forums%2$s, it helps me make the plugin better.', 'cf-images' ),
-						'<a href="https://wordpress.org/support/plugin/cf-images/" target="_blank">',
+						'<a href="https://wordpress.org/support/plugin/cf-images/" target="_blank" rel="noopener">',
 						'</a>'
 					);
 					?>
@@ -271,7 +271,7 @@ $api_stats = sprintf( /* translators: %1$d - uploaded image count, %2$d - allowe
 					<?php
 					printf( /* translators: %1$s - opening <a> tag, %2$s - closing </a> tag */
 						esc_html__( 'Trying out my %1$sFuzion AI plugin%2$s and subscribing to one of the plans.', 'cf-images' ),
-						'<a href="https://wordpress.org/plugins/fuzion/" target="_blank">',
+						'<a href="https://wordpress.org/plugins/fuzion/" target="_blank" rel="noopener">',
 						'</a>'
 					);
 					?>
@@ -280,7 +280,7 @@ $api_stats = sprintf( /* translators: %1$d - uploaded image count, %2$d - allowe
 					<?php
 					printf( /* translators: %1$s - opening <a> tag, %2$s - closing </a> tag */
 						esc_html__( 'Buy me a coffee via %1$sPayPal%2$s.', 'cf-images' ),
-						'<a href="https://www.paypal.com/donate/?business=JRR6QPRGTZ46N&no_recurring=0&item_name=Help+support+the+development+of+the+Cloudflare+Images+plugin+for+WordPress&currency_code=AUD" target="_blank">',
+						'<a href="https://www.paypal.com/donate/?business=JRR6QPRGTZ46N&no_recurring=0&item_name=Help+support+the+development+of+the+Cloudflare+Images+plugin+for+WordPress&currency_code=AUD" target="_blank" rel="noopener">',
 						'</a>'
 					);
 					?>
