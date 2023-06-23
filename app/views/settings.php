@@ -144,10 +144,10 @@ $api_stats = sprintf( /* translators: %1$d - uploaded image count, %2$d - allowe
 			<div class="notice notice-warning full-offload-notice">
 				<p>
 
-					<?php esc_html_e( 'By enabling this feature, you understand the potential risks of removing media files from the media library and relying on fairly new 3-rd party service. Please ensure you have a backup of your media library.', 'cf-images' ); ?>
+					<?php esc_html_e( 'By enabling this feature, you understand the potential risks of removing media files from the media library. Please ensure you have a backup of your media library.', 'cf-images' ); ?>
 				</p>
 				<p>
-					<?php esc_html_e( 'IMPORTANT! Previous versions of the plugin would often store a scaled version on Cloudflare. Scaled images will not restore to original full-size images. Make sure you bulk remove all the images from Cloudflare and bulk re-upload before using this feature.' ); ?>
+					<?php esc_html_e( 'Note: Previous versions of the plugin offloaded a scaled version to Cloudflare. Scaled images will not restore to original full-size images. Bulk remove all the images from Cloudflare and bulk re-upload before using this feature.' ); ?>
 				</p>
 			</div>
 		</div>
