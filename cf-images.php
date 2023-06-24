@@ -16,7 +16,7 @@
  * Description:       Offload media library images to the `Cloudflare Images` service.
  * Version:           1.4.0-beta.1
  * Author:            Anton Vanyukov
- * Author URI:        https://vanyukov.su
+ * Author URI:        https://vcore.au
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       cf-images
