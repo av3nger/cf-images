@@ -75,6 +75,7 @@ class Settings {
 			'custom-id'     => 'cf-images-custom-id',
 			'auto-resize'   => 'cf-images-auto-resize',
 			'disable-sizes' => 'cf-images-disable-generation',
+			'full-offload'  => 'cf-images-full-offload',
 			'disable-async' => 'cf-images-disable-async',
 		);
 
@@ -199,6 +200,17 @@ class Settings {
 
 		wp_send_json_success();
 
+	}
+
+	/**
+	 * Hide sidebar.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @return void
+	 */
+	public function ajax_hide_sidebar() {
+		update_site_option( 'cf-images-hide-sidebar', true );
 	}
 
 }

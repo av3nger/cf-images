@@ -155,12 +155,15 @@ class Api {
 	 * Do API request.
 	 *
 	 * @since 1.0.0
+	 * @since 1.2.1 Added $decode parameter.
+	 *
+	 * @param bool $decode  Return object. If false, will return string. Used for image blobs.
 	 *
 	 * @throws Exception  Exception during API call.
 	 *
-	 * @return stdClass
+	 * @return stdClass|string
 	 */
-	protected function request(): stdClass {
+	protected function request( bool $decode = true ) {
 
 		if ( ! defined( 'CF_IMAGES_ACCOUNT_ID' ) ) {
 			return new stdClass();
@@ -227,7 +230,11 @@ class Api {
 			throw new Exception( $body, $code );
 		}
 
-		return json_decode( $body );
+		if ( $decode ) {
+			return json_decode( $body );
+		}
+
+		return $body;
 
 	}
 

@@ -31,6 +31,7 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 
 delete_site_option( 'cf-images-version' );
 delete_site_option( 'cf-images-hash' );
+delete_site_option( 'cf-images-hide-sidebar' );
 delete_option( 'cf-images-disable-generation' );
 delete_option( 'cf-images-custom-domain' );
 delete_option( 'cf-images-setup-done' );
@@ -41,8 +42,10 @@ delete_option( 'cf-images-auto-offload' );
 delete_option( 'cf-images-disable-async' );
 delete_option( 'cf-images-custom-id' );
 delete_option( 'cf-images-auto-resize' );
+delete_option( 'cf-images-full-offload' );
 
 // Remove defines from wp-config.php file.
+require_once __DIR__ . '/app/traits/trait-ajax.php';
 require_once __DIR__ . '/app/class-settings.php';
 $settings = new CF_Images\App\Settings();
 $settings->write_config( 'CF_IMAGES_ACCOUNT_ID' );

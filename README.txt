@@ -67,6 +67,25 @@ If something is not working for you, please let me know by creating a support ti
 
 == Changelog ==
 
+= 1.3.0 - 24.06.2023 =
+
+Added:
+* Full offload and restore for images from the WordPress media library [beta]
+* ACF integration
+* Option to remove selected images from Cloudflare
+* Preconnect to CDN URL
+
+Changed:
+* Improved internal plugin structure
+* Improved media library status layout
+* Improved media library UI
+
+Fixed:
+* Scaled images offloaded instead of originals
+* Fatal error when uninstalling the plugin
+* Error when image metadata is not an array
+* Images not served via CDN if a custom size is used
+
 = 1.2.0 - 29.03.2023 =
 
 Added:

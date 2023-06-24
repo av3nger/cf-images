@@ -38,17 +38,6 @@ trait Helpers {
 	}
 
 	/**
-	 * Get plugin version.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string
-	 */
-	public function get_version(): string {
-		return Core::get_instance()->get_version();
-	}
-
-	/**
 	 * Check if the required settings are present.
 	 *
 	 * @since 1.0.0
@@ -84,6 +73,28 @@ trait Helpers {
 
 		return Core::get_error();
 
+	}
+
+	/**
+	 * Get CDN URL.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @return string
+	 */
+	public function get_cdn_domain(): string {
+		return Core::get_instance()->get_cdn_domain();
+	}
+
+	/**
+	 * Check if full offload is enabled.
+	 *
+	 * @since 1.2.1
+	 *
+	 * @return bool
+	 */
+	public function full_offload_enabled(): bool {
+		return (bool) get_option( 'cf-images-full-offload', false );
 	}
 
 }

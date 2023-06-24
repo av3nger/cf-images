@@ -131,4 +131,31 @@ class Image extends Api {
 
 	}
 
+	/**
+	 * Fetch base image.
+	 *
+	 * @since 1.2.1
+	 *
+	 * @see https://developers.cloudflare.com/api/operations/cloudflare-images-base-image
+	 *
+	 * @param int $attachment_id  Attachment ID.
+	 *
+	 * @throws Exception  Exception during API call.
+	 *
+	 * @return stdClass|string
+	 */
+	public function download( int $attachment_id ) {
+
+		$image_id = get_post_meta( $attachment_id, '_cloudflare_image_id', true );
+		if ( ! $image_id ) {
+			return new stdClass();
+		}
+
+		$this->set_method( 'GET' );
+		$this->set_endpoint( "/$image_id/blob" );
+
+		return $this->request( false );
+
+	}
+
 }
