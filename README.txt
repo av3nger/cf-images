@@ -67,6 +67,8 @@ If something is not working for you, please let me know by creating a support ti
 
 == Changelog ==
 
+= 1.4.0 =
+
 = 1.3.0 - 24.06.2023 =
 
 Added:
