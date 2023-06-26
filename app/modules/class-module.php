@@ -15,6 +15,7 @@
 namespace CF_Images\App\Modules;
 
 use CF_Images\App\Traits\Helpers;
+use CF_Images\App\Traits\Settings;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -27,7 +28,7 @@ if ( ! defined( 'WPINC' ) ) {
  */
 abstract class Module {
 
-	use Helpers;
+	use Helpers, Settings;
 
 	/**
 	 * This is a core module, meaning it can't be enabled/disabled via options.
@@ -70,7 +71,11 @@ abstract class Module {
 	public function __construct( string $module ) {
 
 		$this->module = $module;
+		$this->register_ui();
 		$this->pre_init();
+
+		add_action( 'cf_images_render_setting', array( $this, 'render_setting' ) );
+		add_action( 'cf_images_setting_description', array( $this, 'render_description' ) );
 
 		if ( ! $this->is_set_up() || ! $this->is_enabled() ) {
 			return;
@@ -101,7 +106,7 @@ abstract class Module {
 	 *
 	 * @return void
 	 */
-	public function pre_init() {}
+	protected function pre_init() {}
 
 	/**
 	 * Check if module is enabled via plugin settings.
@@ -110,7 +115,7 @@ abstract class Module {
 	 *
 	 * @return bool
 	 */
-	public function is_enabled(): bool {
+	protected function is_enabled(): bool {
 
 		// Core modules cannot be disabled.
 		if ( $this->core ) {
@@ -129,7 +134,7 @@ abstract class Module {
 	 *
 	 * @return bool
 	 */
-	public function can_run(): bool {
+	protected function can_run(): bool {
 
 		if ( $this->is_rest_request() || wp_doing_cron() ) {
 			return false;
@@ -169,6 +174,43 @@ abstract class Module {
 		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
 
 		return strpos( $request_uri, $rest_url_prefix ) !== false;
+
+	}
+
+	/**
+	 * Render module setting.
+	 *
+	 * @since 1.4.0
+	 *
+	 * @return void
+	 */
+	public function render_setting() {
+
+		if ( ! $this->title ) {
+			return;
+		}
+		?>
+
+		<div class="cf-form-item">
+			<?php if ( ! empty( $this->icon ) ) : ?>
+				<span class="dashicons dashicons-<?php echo esc_attr( $this->icon ); ?>"></span>
+			<?php endif; ?>
+			<?php if ( ! empty( $this->title ) ) : ?>
+				<label for="<?php echo esc_html( str_replace( '-', '_', $this->module ) ); ?>">
+					<?php echo esc_html( $this->title ); ?>
+				</label>
+			<?php endif; ?>
+			<div>
+				<input type="checkbox" value="1" role="switch"
+					name="<?php echo esc_html( $this->module ); ?>"
+					id="<?php echo esc_html( str_replace( '-', '_', $this->module ) ); ?>"
+					<?php checked( get_option( 'cf-images-' . $this->module, false ) ); ?>
+				>
+				<?php do_action( 'cf_images_setting_description', $this->module ); ?>
+			</div>
+		</div>
+
+		<?php
 
 	}
 

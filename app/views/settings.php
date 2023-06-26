@@ -46,21 +46,7 @@ $api_stats = sprintf( /* translators: %1$d - uploaded image count, %2$d - allowe
 		</header>
 
 		<form id="cf-images-form" data-type="settings" onsubmit="event.preventDefault()">
-			<div class="cf-form-item">
-				<span class="dashicons dashicons-admin-site"></span>
-				<label for="auto_offload">
-					<?php esc_html_e( 'Auto offload new images', 'cf-images' ); ?>
-				</label>
-				<div>
-					<input name="auto-offload" type="checkbox" id="auto_offload" value="1" <?php checked( get_option( 'cf-images-auto-offload', false ) ); ?> role="switch">
-					<p>
-						<?php esc_html_e( 'Enable this option if you want to enable automatic offloading for newly uploaded images.', 'cf-images' ); ?>
-					</p>
-					<p>
-						<?php esc_html_e( 'By default, new images will not be auto offloaded to Cloudflare Images.', 'cf-images' ); ?>
-					</p>
-				</div>
-			</div>
+			<?php do_action( 'cf_images_render_setting' ); ?>
 
 			<div class="cf-form-item">
 				<span class="dashicons dashicons-admin-links"></span>
