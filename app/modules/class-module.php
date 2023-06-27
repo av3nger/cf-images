@@ -209,7 +209,7 @@ abstract class Module {
 				<input type="checkbox" value="1" role="switch"
 					name="<?php echo esc_html( $this->module ); ?>"
 					id="<?php echo esc_html( str_replace( '-', '_', $this->module ) ); ?>"
-					<?php checked( get_option( 'cf-images-' . $this->module, false ) ); ?>
+					<?php checked( (bool) get_option( 'cf-images-' . $this->module, false ) ); ?>
 				>
 				<?php do_action( 'cf_images_setting_description', $this->module ); ?>
 			</div>

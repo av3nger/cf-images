@@ -49,28 +49,6 @@ $api_stats = sprintf( /* translators: %1$d - uploaded image count, %2$d - allowe
 			<?php do_action( 'cf_images_render_setting' ); ?>
 
 			<div class="cf-form-item">
-				<span class="dashicons dashicons-admin-links"></span>
-				<label for="custom_domain">
-					<?php esc_html_e( 'Serve from custom domain', 'cf-images' ); ?>
-				</label>
-				<div>
-					<?php $custom_domain = get_option( 'cf-images-custom-domain', false ); ?>
-					<input name="custom-domain" type="checkbox" id="custom_domain" value="1" <?php checked( (bool) $custom_domain ); ?> role="switch">
-					<p>
-						<?php esc_html_e( 'Use the current site domain instead of `imagedelivery.net`, or specify a custom domain.', 'cf-images' ); ?>
-					</p>
-					<p>
-						<?php esc_html_e( 'Note: The domain must be linked with Cloudflare in order to work correctly.', 'cf-images' ); ?>
-					</p>
-
-					<p>
-						<label class="screen-reader-text" for="custom-domain-input"><?php esc_html_e( 'Custom domain', 'cf-images' ); ?></label>
-						<input class="<?php echo $custom_domain ? '' : 'hidden'; ?>" value="<?php echo wp_http_validate_url( $custom_domain ) ? esc_attr( $custom_domain ) : ''; ?>" type="text" name="custom_domain_input" id="custom-domain-input" placeholder="https://cdn.example.com">
-					</p>
-				</div>
-			</div>
-
-			<div class="cf-form-item">
 				<span class="dashicons dashicons-cloud-upload"></span>
 				<label for="cf-images-upload-all">
 					<?php esc_html_e( 'Bulk upload images', 'cf-images' ); ?>
