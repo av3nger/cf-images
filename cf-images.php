@@ -51,6 +51,7 @@ function run_cf_images() {
 
 	require_once __DIR__ . '/app/traits/trait-ajax.php';
 	require_once __DIR__ . '/app/traits/trait-helpers.php';
+	require_once __DIR__ . '/app/traits/trait-settings.php';
 	require_once __DIR__ . '/app/traits/trait-stats.php';
 	require_once __DIR__ . '/app/class-core.php';
 	App\Activator::maybe_upgrade();
