@@ -211,6 +211,7 @@ class Core {
 	 * @see Modules\Auto_Resize
 	 * @see Modules\Cloudflare_Images
 	 * @see Modules\Custom_Id
+	 * @see Modules\Disable_Async
 	 * @see Modules\Disable_Generation
 	 * @see Modules\Full_Offload
 	 *
@@ -224,6 +225,7 @@ class Core {
 		$loader->module( 'auto-resize' );
 		$loader->module( 'cloudflare-images' ); // Core module.
 		$loader->module( 'custom-id' );
+		$loader->module( 'disable-async' );
 		$loader->module( 'disable-generation' );
 		$loader->module( 'full-offload' );
 
