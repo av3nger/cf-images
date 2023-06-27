@@ -69,6 +69,9 @@ If something is not working for you, please let me know by creating a support ti
 
 = 1.4.0 =
 
+Added:
+* Image AI - tag and caption your images with AI
+
 = 1.3.0 - 24.06.2023 =
 
 Added:
@@ -221,6 +224,9 @@ First release
 * Support for custom domains
 
 == Upgrade Notice ==
+
+= 1.4.0 =
+Image AI - tag and caption your images
 
 = 1.2.0 =
 Big update with lots of improvements and new features.
