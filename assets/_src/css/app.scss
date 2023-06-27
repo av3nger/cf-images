@@ -35,7 +35,7 @@
 
   .full-offload-notice {
     display: inline-block;
-    margin: 10px 0 0;
+    margin: 20px 0 0;
     padding: 0 10px 7px;
 
     p {
@@ -159,8 +159,7 @@
     input[type=checkbox],
     a[role=button],
     #account_id,
-    #api_key
-    {
+    #api_key {
       float: right;
     }
 
@@ -169,31 +168,39 @@
       margin-bottom: 0;
     }
 
-    & > div {
-      margin: 10px 0 10px 30px;
-
-      p {
-        line-height: 1.4;
-        max-width: 90%;
-        font-size: 14px;
-        margin-bottom: 0;
-        color: var(--color);
-      }
-    }
-
-    & > hr {
-      margin: 30px 0;
-    }
-
     button[type=submit] {
       margin: 60px 0 0;
     }
 
-    & > label {
-      color: var(--color);
-      font-size: 1.3em;
-      font-weight: 600;
-      margin: 1em 0;
+    & .cf-form-item {
+      border-bottom: 1px solid #dcdcde;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+
+      &:last-of-type {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+
+      & label {
+        color: var(--color);
+        font-size: 1.3em;
+        font-weight: 600;
+        margin: 1em 0;
+      }
+
+      & > div {
+        margin: 10px 0 10px 30px;
+
+        p {
+          line-height: 1.4;
+          max-width: 90%;
+          font-size: 14px;
+          margin-bottom: 0;
+          color: var(--color);
+        }
+      }
     }
   }
 

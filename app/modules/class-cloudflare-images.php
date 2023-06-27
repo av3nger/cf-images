@@ -80,7 +80,7 @@ class Cloudflare_Images extends Module {
 	 *
 	 * @return void
 	 */
-	public function pre_init() {
+	protected function pre_init() {
 		if ( $this->full_offload_enabled() ) {
 			$this->only_frontend = false;
 		}

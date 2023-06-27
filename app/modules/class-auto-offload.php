@@ -28,6 +28,43 @@ if ( ! defined( 'WPINC' ) ) {
 class Auto_Offload extends Module {
 
 	/**
+	 * Register UI components.
+	 *
+	 * @since 1.4.0
+	 *
+	 * @return void
+	 */
+	protected function register_ui() {
+		$this->icon  = 'admin-site';
+		$this->title = esc_html__( 'Auto offload new images', 'cf-images' );
+	}
+
+	/**
+	 * Render module description.
+	 *
+	 * @since 1.4.0
+	 *
+	 * @param string $module  Module ID.
+	 *
+	 * @return void
+	 */
+	public function render_description( string $module ) {
+
+		if ( $module !== $this->module ) {
+			return;
+		}
+		?>
+		<p>
+			<?php esc_html_e( 'Enable this option if you want to enable automatic offloading for newly uploaded images.', 'cf-images' ); ?>
+		</p>
+		<p>
+			<?php esc_html_e( 'By default, new images will not be auto offloaded to Cloudflare Images.', 'cf-images' ); ?>
+		</p>
+		<?php
+
+	}
+
+	/**
 	 * Init the module.
 	 *
 	 * @since 1.3.0
