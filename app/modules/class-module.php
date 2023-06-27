@@ -198,6 +198,11 @@ abstract class Module {
 			<?php if ( ! empty( $this->title ) ) : ?>
 				<label for="<?php echo esc_html( str_replace( '-', '_', $this->module ) ); ?>">
 					<?php echo esc_html( $this->title ); ?>
+					<?php if ( $this->experimental ) : ?>
+						<span class="cf-images-badge">
+							<?php esc_html_e( 'Experimental', 'cf-images' ); ?>
+						</span>
+					<?php endif; ?>
 				</label>
 			<?php endif; ?>
 			<div>

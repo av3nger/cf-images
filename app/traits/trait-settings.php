@@ -38,6 +38,13 @@ trait Settings {
 	protected $title = '';
 
 	/**
+	 * Module is experimental or beta.
+	 *
+	 * @var string
+	 */
+	protected $experimental = false;
+
+	/**
 	 * Register UI components.
 	 *
 	 * @since 1.4.0

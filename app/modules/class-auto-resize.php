@@ -26,6 +26,40 @@ if ( ! defined( 'WPINC' ) ) {
 class Auto_Resize extends Module {
 
 	/**
+	 * Register UI components.
+	 *
+	 * @since 1.4.0
+	 *
+	 * @return void
+	 */
+	protected function register_ui() {
+		$this->icon  = 'editor-expand';
+		$this->title = esc_html__( 'Auto resize images on front-end', 'cf-images' );
+	}
+
+	/**
+	 * Render module description.
+	 *
+	 * @since 1.4.0
+	 *
+	 * @param string $module  Module ID.
+	 *
+	 * @return void
+	 */
+	public function render_description( string $module ) {
+
+		if ( $module !== $this->module ) {
+			return;
+		}
+		?>
+		<p>
+			<?php esc_html_e( 'Set the image size to match the DOM required size. Instead of WordPress attachment sizes, this will attempt to match the image size to the element it is placed in on the front-end.', 'cf-images' ); ?>
+		</p>
+		<?php
+
+	}
+
+	/**
 	 * Should the module only run on front-end?
 	 *
 	 * @since 1.3.0
