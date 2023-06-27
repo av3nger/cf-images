@@ -74,7 +74,7 @@ abstract class Module {
 		$this->register_ui();
 		$this->pre_init();
 
-		add_action( 'cf_images_render_setting', array( $this, 'render_setting' ) );
+		add_action( 'cf_images_render_setting', array( $this, 'render_setting' ), $this->order );
 		add_action( 'cf_images_setting_description', array( $this, 'render_description' ) );
 
 		if ( ! $this->is_set_up() || ! $this->is_enabled() ) {

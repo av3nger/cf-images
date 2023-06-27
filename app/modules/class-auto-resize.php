@@ -34,6 +34,7 @@ class Auto_Resize extends Module {
 	 */
 	protected function register_ui() {
 		$this->icon  = 'editor-expand';
+		$this->order = 40;
 		$this->title = esc_html__( 'Auto resize images on front-end', 'cf-images' );
 	}
 

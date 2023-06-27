@@ -45,6 +45,13 @@ trait Settings {
 	protected $experimental = false;
 
 	/**
+	 * Order of the module in the list.
+	 *
+	 * @var int
+	 */
+	protected $order = 10;
+
+	/**
 	 * Register UI components.
 	 *
 	 * @since 1.4.0

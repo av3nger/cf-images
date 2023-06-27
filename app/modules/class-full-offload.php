@@ -36,6 +36,7 @@ class Full_Offload extends Module {
 	protected function register_ui() {
 		$this->experimental = true;
 		$this->icon         = 'images-alt2';
+		$this->order        = 60;
 		$this->title        = esc_html__( 'Full offload', 'cf-images' );
 	}
 

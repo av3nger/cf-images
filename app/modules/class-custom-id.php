@@ -35,6 +35,7 @@ class Custom_Id extends Module {
 	 */
 	protected function register_ui() {
 		$this->icon  = 'open-folder';
+		$this->order = 30;
 		$this->title = esc_html__( 'Keep media library structure', 'cf-images' );
 	}
 

@@ -36,6 +36,7 @@ class Disable_Generation extends Module {
 	protected function register_ui() {
 		$this->experimental = true;
 		$this->icon         = 'images-alt2';
+		$this->order        = 50;
 		$this->title        = esc_html__( 'Disable WordPress image sizes', 'cf-images' );
 	}
 

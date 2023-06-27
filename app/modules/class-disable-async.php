@@ -33,6 +33,7 @@ class Disable_Async extends Module {
 	 */
 	protected function register_ui() {
 		$this->icon  = 'randomize';
+		$this->order = 70;
 		$this->title = esc_html__( 'Disable async processing', 'cf-images' );
 	}
 
