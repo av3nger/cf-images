@@ -45,6 +45,13 @@ trait Settings {
 	protected $experimental = false;
 
 	/**
+	 * Module is new.
+	 *
+	 * @var bool
+	 */
+	protected $new = false;
+
+	/**
 	 * Order of the module in the list.
 	 *
 	 * @var int

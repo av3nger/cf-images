@@ -215,6 +215,7 @@ class Core {
 	 * @see Modules\Disable_Async
 	 * @see Modules\Disable_Generation
 	 * @see Modules\Full_Offload
+	 * @see Modules\Image_Ai
 	 *
 	 * @return void
 	 */
@@ -230,6 +231,7 @@ class Core {
 		$loader->module( 'disable-async' );
 		$loader->module( 'disable-generation' );
 		$loader->module( 'full-offload' );
+		$loader->module( 'image-ai' );
 
 	}
 
