@@ -57,6 +57,24 @@ class Image_Ai extends Module {
 		<p>
 			<?php esc_html_e( 'Use the power of AI to tag and caption your images.', 'cf-images' ); ?>
 		</p>
+		<?php if ( ! get_option( 'cf-image-ai-api-key', false ) ) : ?>
+			<p>
+				Don't have an account? Register for a free account. Already have an API key? Add it here.
+			</p>
+
+			<p>
+				<label class="screen-reader-text" for="cf-ai-email-address"><?php esc_html_e( 'Email address', 'cf-images' ); ?></label>
+				<input type="email" name="custom_domain_input" id="cf-ai-email-address" placeholder="<?php esc_attr_e( 'Email address', 'cf-images' ); ?>">
+
+				<label class="screen-reader-text" for="cf-ai-password"><?php esc_html_e( 'Password', 'cf-images' ); ?></label>
+				<input type="password" name="custom_domain_input" id="cf-ai-password" placeholder="<?php esc_attr_e( 'Password', 'cf-images' ); ?>">
+			</p>
+			<p>
+				<a href="#" role="button" class="outline" aria-busy="false" style="float:none;">
+					<?php esc_html_e( 'Login', 'cf-images' ); ?>
+				</a>
+			</p>
+		<?php endif; ?>
 		<?php
 
 	}

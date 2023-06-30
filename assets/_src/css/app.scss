@@ -163,6 +163,8 @@
       float: right;
     }
 
+    input[type=email],
+    input[type=password],
     input[type=text] {
       max-width: 350px;
       margin-bottom: 0;
