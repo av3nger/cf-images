@@ -29,13 +29,15 @@ trait Ajax {
 	 * @since 1.0.1
 	 * @since 1.2.0  Moved out to this trait from class-core.php
 	 *
+	 * @param bool $no_data  Request has no data.
+	 *
 	 * @return void
 	 */
-	private function check_ajax_request() {
+	private function check_ajax_request( $no_data = false ) {
 
 		check_ajax_referer( 'cf-images-nonce' );
 
-		if ( ! current_user_can( 'manage_options' ) || ! isset( $_POST['data'] ) ) {
+		if ( ! current_user_can( 'manage_options' ) || ( ! $no_data && ! isset( $_POST['data'] ) ) ) {
 			wp_die();
 		}
 

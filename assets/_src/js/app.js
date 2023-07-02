@@ -5,11 +5,13 @@
  * @since 1.0.0
  */
 
-/* global ajaxurl */
 /* global CFImages */
 
 import '../css/app.scss';
-import { toggleModal } from './modal';
+import { toggleModal } from './helpers/modal';
+import { showNotice } from './helpers/notice';
+import { post } from './helpers/post';
+import './modules/image-ai.js';
 
 ( function( $ ) {
 	'use strict';
@@ -148,54 +150,6 @@ import { toggleModal } from './modal';
 	$( '#custom_domain' ).on( 'change', function( e ) {
 		$( 'input[name="custom_domain_input"]' ).toggleClass( 'hidden', ! e.target.checked );
 	} );
-
-	/**
-	 * Do AJAX request to WordPress.
-	 *
-	 * @since 1.0.0
-	 * @param {string} action Registered AJAX action.
-	 * @param {Object} data   Additional data that needs to be passed in POST request.
-	 * @return {Promise<unknown>} Return data.
-	 */
-	const post = function( action, data = {} ) {
-		data = { _ajax_nonce: CFImages.nonce, action, data };
-
-		return new Promise( ( resolve, reject ) => {
-			$.ajax( {
-				url: ajaxurl,
-				type: 'POST',
-				data,
-				success( response ) {
-					resolve( response );
-				},
-				error( error ) {
-					reject( error );
-				},
-			} );
-		} );
-	};
-
-	/**
-	 * Show a notice.
-	 *
-	 * @since 1.0.0
-	 * @param {string} message Message text.
-	 * @param {string} type    Notice type.
-	 */
-	const showNotice = function( message, type = 'success' ) {
-		const notice = $( '#cf-images-ajax-notice' );
-
-		notice.addClass( 'notice-' + type );
-		notice.find( 'p' ).html( message );
-
-		notice.slideDown().delay( 5000 ).queue( function() {
-			$( this ).slideUp( 'slow', function() {
-				$( this ).removeClass( 'notice-' + type );
-				$( this ).find( 'p' ).html( '' );
-			} );
-			$.dequeue( this );
-		} );
-	};
 
 	/**
 	 * Run progress bar (remove or upload all images).
