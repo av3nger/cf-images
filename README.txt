@@ -69,7 +69,11 @@ If something is not working for you, please let me know by creating a support ti
 
 = 1.4.0 =
 
+Changed:
+* Improved detection of image sizes
+
 Fixed:
+* Issues with lazy loading
 * When full offload is enabled, images are not displaying on front-end
 * Removing of scaled images
 

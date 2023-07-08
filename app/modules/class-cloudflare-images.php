@@ -217,6 +217,12 @@ class Cloudflare_Images extends Module {
 			return $image;
 		}
 
+		// Maybe it's not a scaled, but we have the size?
+		if ( is_int( $size ) ) {
+			$image[0] = $this->get_cdn_domain() . "/$hash/$cloudflare_image_id/w=" . $size;
+			return $image;
+		}
+
 		// Image without size prefix and no defined sizes - use the maximum available width.
 		if ( ! $variant_image && ! isset( $image[1] ) ) {
 			$image[0] = $this->get_cdn_domain() . "/$hash/$cloudflare_image_id/w=9999";

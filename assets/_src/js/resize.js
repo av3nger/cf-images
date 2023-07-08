@@ -31,8 +31,11 @@
 					continue;
 				}
 
-				image.src = image.src.replace( this.regex, `w=${ image.clientWidth }` );
-				image.srcset = image.src + ' 1x, ' + image.src.replace( this.regex, `w=${ image.clientWidth * 2 }` ) + ' 2x';
+				// If not lazy loaded placeholder.
+				if ( ! this.isDataURL( image.src ) ) {
+					image.src = image.src.replace( this.regex, `w=${ image.clientWidth }` );
+					image.srcset = image.src + ' 1x, ' + image.src.replace( this.regex, `w=${ image.clientWidth * 2 }` ) + ' 2x';
+				}
 			}
 		},
 
@@ -60,6 +63,17 @@
 
 			// If width attribute is not set, do not continue.
 			return null === image.clientWidth || null === image.clientHeight;
+		},
+
+		/**
+		 * Check if the URL is a lazy-loading placeholder.
+		 *
+		 * @param {string} url
+		 * @return {boolean} Is this a placeholder or not.
+		 */
+		isDataURL( url ) {
+			const regex = /^data:image/;
+			return regex.test( url );
 		}
 	};
 
