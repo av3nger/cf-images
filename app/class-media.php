@@ -117,6 +117,9 @@ class Media {
 			return;
 		}
 
+		// This is used with WPML integration.
+		$post_id = apply_filters( 'cf_images_media_post_id', $post_id );
+
 		$meta = get_post_meta( $post_id, '_cloudflare_image_id', true );
 
 		if ( ! empty( $meta ) ) {

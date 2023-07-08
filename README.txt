@@ -69,6 +69,9 @@ If something is not working for you, please let me know by creating a support ti
 
 = 1.4.0 =
 
+Added:
+* Compatibility with WMPL
+
 Changed:
 * Improved detection of image sizes
 

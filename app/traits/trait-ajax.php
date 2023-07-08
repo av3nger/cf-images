@@ -54,6 +54,8 @@ trait Ajax {
 	 */
 	private function get_wp_query_args( string $action, bool $single = false ): array {
 
+		do_action( 'cf_images_before_wp_query' );
+
 		$args = array(
 			'post_type'   => 'attachment',
 			'post_status' => 'inherit',
