@@ -65,7 +65,7 @@ class Fuzion extends Api {
 	 *
 	 * @return string
 	 */
-	private function get_url(): string {
+	protected function get_url(): string {
 
 		$url = $this->api_url;
 		if ( defined( 'FUZION_API_URL' ) && constant( 'FUZION_API_URL' ) ) {
@@ -77,50 +77,37 @@ class Fuzion extends Api {
 	}
 
 	/**
-	 * Do API request.
+	 * Process API response.
 	 *
 	 * @since 1.4.0
+	 *
+	 * @param string $body    Response body.
+	 * @param int    $code    Response code.
+	 * @param bool   $decode  JSON decode the response.
+	 * @param array  $args    Arguments array.
 	 *
 	 * @throws Exception  Exception during API call.
 	 *
 	 * @return stdClass
 	 */
-	protected function request(): stdClass {
+	protected function process_response( string $body, int $code, bool $decode, array $args ): stdClass {
 
-		$url  = $this->get_url();
-		$args = $this->get_args();
-
-		if ( 'GET' === $args['method'] ) {
-			$response = wp_remote_get( $url, $args );
-		} elseif ( 'POST' === $args['method'] ) {
-			$response = wp_remote_post( $url, $args );
-		} else {
-			throw new Exception( __( 'Unsupported API call method', 'cf-images' ) );
-		}
-
-		if ( is_wp_error( $response ) ) {
-			throw new Exception( $response->get_error_message() );
-		}
-
-		$code = wp_remote_retrieve_response_code( $response );
-
-		$response = wp_remote_retrieve_body( $response );
-		$response = json_decode( $response );
+		$body = json_decode( $body );
 
 		if ( 200 === $code || 201 === $code ) {
-			return $response;
+			return $body;
 		}
 
-		if ( 422 === $code && isset( $response->message ) ) {
-			throw new Exception( $response->message );
+		if ( 422 === $code && isset( $body->message ) ) {
+			throw new Exception( $body->message );
 		}
 
-		if ( isset( $response->message ) ) {
+		if ( isset( $body->message ) ) {
 			// Invalid API key.
-			if ( str_contains( $response->message, 'Unauthenticated' ) ) {
+			if ( str_contains( $body->message, 'Unauthenticated' ) ) {
 				$message = __( 'Expired or invalid API key. Please update your API key on the setting page.', 'cf-images' );
 			} else {
-				$message = $response->message;
+				$message = $body->message;
 			}
 
 			throw new Exception( $message );
