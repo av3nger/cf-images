@@ -217,6 +217,12 @@ class Cloudflare_Images extends Module {
 			return $image;
 		}
 
+		// Maybe it's not a scaled, but we have the size?
+		if ( is_int( $size ) ) {
+			$image[0] = $this->get_cdn_domain() . "/$hash/$cloudflare_image_id/w=" . $size;
+			return $image;
+		}
+
 		// Image without size prefix and no defined sizes - use the maximum available width.
 		if ( ! $variant_image && ! isset( $image[1] ) ) {
 			$image[0] = $this->get_cdn_domain() . "/$hash/$cloudflare_image_id/w=9999";
@@ -248,7 +254,9 @@ class Cloudflare_Images extends Module {
 				continue;
 			}
 
-			$response['sizes'][ $id ]['url'] = $this->get_attachment_image_src( array( $size['url'] ), $attachment->ID, $id );
+			$image_src = $this->get_attachment_image_src( array( $size['url'] ), $attachment->ID, $id );
+
+			$response['sizes'][ $id ]['url'] = $image_src[0];
 		}
 
 		return $response;

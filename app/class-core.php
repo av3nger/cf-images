@@ -192,6 +192,7 @@ class Core {
 	 * @see Integrations\Multisite_Global_Media
 	 * @see Integrations\Rank_Math
 	 * @see Integrations\Spectra
+	 * @see Integrations\Wpml
 	 *
 	 * @return void
 	 */
@@ -203,6 +204,7 @@ class Core {
 		$loader->integration( 'multisite-global-media' );
 		$loader->integration( 'rank-math' );
 		$loader->integration( 'acf' );
+		$loader->integration( 'wpml' );
 
 	}
 

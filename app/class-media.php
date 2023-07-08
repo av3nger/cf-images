@@ -117,6 +117,9 @@ class Media {
 			return;
 		}
 
+		// This is used with WPML integration.
+		$post_id = apply_filters( 'cf_images_media_post_id', $post_id );
+
 		$meta = get_post_meta( $post_id, '_cloudflare_image_id', true );
 
 		if ( ! empty( $meta ) ) {
@@ -483,7 +486,21 @@ class Media {
 		$original = wp_get_original_image_path( $attachment_id );
 
 		if ( false === strpos( $original, $metadata['file'] ) ) {
-			wp_send_json_error( esc_html__( 'Cannot remove image, scaled image offloaded.', 'cf-images' ) );
+			try {
+				// This is a safety mechanism to make sure the image on Cloudflare is not a scaled image.
+				$image   = new Api\Image();
+				$results = $image->details( $attachment_id );
+			} catch ( Exception $e ) {
+				wp_send_json_error( $e->getMessage() );
+			}
+
+			if ( empty( $results->result->filename ) ) {
+				wp_send_json_error( esc_html__( 'Cannot map local image to image on Cloudflare.', 'cf-images' ) );
+			}
+
+			if ( false !== strpos( $results->result->filename, $metadata['file'] ) ) {
+				wp_send_json_error( esc_html__( 'Cannot remove image, scaled image offloaded.', 'cf-images' ) );
+			}
 		}
 
 		$this->delete_image( $attachment_id );

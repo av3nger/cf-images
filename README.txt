@@ -71,6 +71,15 @@ If something is not working for you, please let me know by creating a support ti
 
 Added:
 * Image AI - tag and caption your images with AI
+* Compatibility with WMPL
+
+Changed:
+* Improved detection of image sizes
+
+Fixed:
+* Issues with lazy loading
+* When full offload is enabled, images are not displaying on front-end
+* Removing of scaled images
 
 = 1.3.0 - 24.06.2023 =
 
