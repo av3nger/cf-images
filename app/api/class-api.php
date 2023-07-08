@@ -207,7 +207,7 @@ abstract class Api {
 
 		$body = wp_remote_retrieve_body( $response );
 
-		return $this->process_response( $body, (int) $code, $decode );
+		return $this->process_response( $body, (int) $code, $decode, $args );
 
 	}
 
