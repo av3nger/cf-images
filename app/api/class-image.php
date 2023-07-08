@@ -158,4 +158,29 @@ class Image extends Api {
 
 	}
 
+	/**
+	 * Get image details.
+	 *
+	 * @since 1.4.0
+	 *
+	 * @param int $attachment_id  Attachment ID.
+	 *
+	 * @throws Exception  Exception during API call.
+	 *
+	 * @return stdClass|string
+	 */
+	public function details( int $attachment_id ) {
+
+		$image_id = get_post_meta( $attachment_id, '_cloudflare_image_id', true );
+		if ( ! $image_id ) {
+			return new stdClass();
+		}
+
+		$this->set_method( 'GET' );
+		$this->set_endpoint( "/$image_id" );
+
+		return $this->request();
+
+	}
+
 }

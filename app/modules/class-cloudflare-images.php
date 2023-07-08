@@ -248,7 +248,9 @@ class Cloudflare_Images extends Module {
 				continue;
 			}
 
-			$response['sizes'][ $id ]['url'] = $this->get_attachment_image_src( array( $size['url'] ), $attachment->ID, $id );
+			$image_src = $this->get_attachment_image_src( array( $size['url'] ), $attachment->ID, $id );
+
+			$response['sizes'][ $id ]['url'] = $image_src[0];
 		}
 
 		return $response;

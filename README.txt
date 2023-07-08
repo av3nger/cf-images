@@ -69,6 +69,10 @@ If something is not working for you, please let me know by creating a support ti
 
 = 1.4.0 =
 
+Fixed:
+* When full offload is enabled, images are not displaying on front-end
+* Removing of scaled images
+
 = 1.3.0 - 24.06.2023 =
 
 Added:
