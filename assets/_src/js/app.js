@@ -201,7 +201,7 @@ import './modules/image-ai.js';
 		$( document ).on( 'click', ajaxActions[ action ], function( e ) {
 			e.preventDefault();
 
-			const divStatus = $( this ).parent();
+			const divStatus = $( this ).closest( '.cf-images-status' );
 			divStatus.html( CFImages.strings.inProgress + '<span class="spinner is-active"></span>' );
 
 			post( action, $( this ).data( 'id' ) )
