@@ -143,7 +143,6 @@ class Admin {
 					'offloadError'  => esc_html__( 'Processing error', 'cf-images' ),
 					'savingChanges' => esc_html__( 'Saving...', 'cf-images' ),
 					'login'         => esc_html__( 'Login', 'cf-images' ),
-					'apiKeyDone'    => esc_html__( 'API key generated', 'cf-images' ),
 				),
 			)
 		);
@@ -223,6 +222,11 @@ class Admin {
 		// Called on success after uploading all images to Cloudflare.
 		if ( filter_input( INPUT_GET, 'updated', FILTER_VALIDATE_BOOLEAN ) ) {
 			$this->render_notice( __( 'All images have been successfully uploaded to Cloudflare Images.', 'cf-images' ) );
+		}
+
+		// Logged in.
+		if ( filter_input( INPUT_GET, 'login', FILTER_VALIDATE_BOOLEAN ) ) {
+			$this->render_notice( __( 'API key generated', 'cf-images' ) );
 		}
 
 	}

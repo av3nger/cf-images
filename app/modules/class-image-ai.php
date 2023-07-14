@@ -126,8 +126,8 @@ class Image_Ai extends Module {
 	public function init() {
 
 		if ( wp_doing_ajax() ) {
-			add_action( 'wp_ajax_cf_images_ai_login', array( $this, 'login' ) );
-			add_action( 'wp_ajax_cf_images_ai_disconnect', array( $this, 'disconnect' ) );
+			add_action( 'wp_ajax_cf_images_ai_login', array( $this, 'ajax_login' ) );
+			add_action( 'wp_ajax_cf_images_ai_disconnect', array( $this, 'ajax_disconnect' ) );
 			add_action( 'wp_ajax_cf_images_ai_caption', array( $this, 'ajax_caption_image' ) );
 		}
 
@@ -140,7 +140,7 @@ class Image_Ai extends Module {
 	 *
 	 * @return void
 	 */
-	public function login() {
+	public function ajax_login() {
 
 		$this->check_ajax_request();
 
@@ -177,7 +177,7 @@ class Image_Ai extends Module {
 	 *
 	 * @return void
 	 */
-	public function disconnect() {
+	public function ajax_disconnect() {
 
 		$this->check_ajax_request( true );
 		delete_option( 'cf-image-ai-api-key' );

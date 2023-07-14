@@ -21,7 +21,7 @@ import { post } from '../helpers/post';
 	// Login.
 	$( '#image-ai-login' ).on( 'click', function( e ) {
 		e.preventDefault();
-		const { apiKeyDone, login, savingChanges } = CFImages.strings;
+		const { login, savingChanges } = CFImages.strings;
 
 		$( this ).attr( 'aria-busy', true ).html( savingChanges );
 
@@ -35,9 +35,10 @@ import { post } from '../helpers/post';
 				$( this ).attr( 'aria-busy', false ).html( login );
 				if ( ! response.success && 'undefined' !== typeof response.data ) {
 					showNotice( response.data, 'error' );
+					return;
 				}
 
-				showNotice( apiKeyDone );
+				window.location.search += '&login=true';
 			} )
 			.catch( window.console.log );
 	} );
