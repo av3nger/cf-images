@@ -128,6 +128,7 @@ class Image_Ai extends Module {
 		if ( wp_doing_ajax() ) {
 			add_action( 'wp_ajax_cf_images_ai_login', array( $this, 'login' ) );
 			add_action( 'wp_ajax_cf_images_ai_disconnect', array( $this, 'disconnect' ) );
+			add_action( 'wp_ajax_cf_images_ai_caption', array( $this, 'ajax_caption_image' ) );
 		}
 
 	}
@@ -181,6 +182,51 @@ class Image_Ai extends Module {
 		$this->check_ajax_request( true );
 		delete_option( 'cf-image-ai-api-key' );
 		wp_send_json_success();
+
+	}
+
+	/**
+	 * Caption image.
+	 *
+	 * @since 1.4.0
+	 *
+	 * @return void
+	 */
+	public function ajax_caption_image() {
+
+		$this->check_ajax_request();
+
+		$attachment_id = (int) filter_input( INPUT_POST, 'data', FILTER_SANITIZE_NUMBER_INT );
+
+		if ( ! $attachment_id ) {
+			return;
+		}
+
+		$cloudflare_image_id = get_post_meta( $attachment_id, '_cloudflare_image_id', true );
+		$cloudflare_image_id = apply_filters( 'cf_images_attachment_meta', $cloudflare_image_id, $attachment_id );
+
+		$hash = get_site_option( 'cf-images-hash', '' );
+		if ( empty( $cloudflare_image_id ) || empty( $hash ) ) {
+			$image = wp_get_original_image_url( $attachment_id );
+		} else {
+			$image = $this->get_cdn_domain() . "/$hash/$cloudflare_image_id/w=9999";
+		}
+
+		try {
+			$image_ai = new Ai();
+			$caption  = $image_ai->caption( $image );
+
+			if ( ! empty( $caption ) ) {
+				update_post_meta( $attachment_id, '_wp_attachment_image_alt', $caption );
+				$message = sprintf( /* translators: %s - alt text */
+					esc_html__( 'Alt text: %s', 'cf-images' ),
+					esc_html( $caption )
+				);
+				wp_send_json_success( $message );
+			}
+		} catch ( Exception $e ) {
+			wp_send_json_error( $e->getMessage() );
+		}
 
 	}
 

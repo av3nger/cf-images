@@ -50,4 +50,31 @@ class Ai extends Fuzion {
 
 	}
 
+	/**
+	 * Caption image.
+	 *
+	 * @since 1.4.0
+	 *
+	 * @param string $image  Image URL.
+	 *
+	 * @throws Exception  Exception if unable to generate caption.
+	 *
+	 * @return string
+	 */
+	public function caption( string $image ): string {
+
+		$this->set_method( 'POST' );
+		$this->set_endpoint( 'wp/image/caption' );
+		$this->set_request_body( wp_json_encode( array( 'image' => $image ) ) );
+
+		$response = $this->request();
+
+		if ( isset( $response->text ) ) {
+			return ucfirst( $response->text );
+		}
+
+		throw new Exception( esc_html__( 'Unable to caption image.', 'cf-images' ) );
+
+	}
+
 }

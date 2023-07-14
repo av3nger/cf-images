@@ -89,24 +89,24 @@ class Cloudflare extends Api {
 		 * We can skip these statuses and consider them success.
 		 * 404 - Image not found (when removing an image).
 		 */
-		if ( 404 === (int) $code ) {
+		if ( 404 === $code ) {
 			return new stdClass();
 		}
 
 		// Authentication error.
-		if ( 401 === (int) $code ) {
+		if ( 401 === $code ) {
 			update_option( 'cf-images-auth-error', true, false );
 		}
 
 		// Resource already exists.
-		if ( 409 === (int) $code ) {
+		if ( 409 === $code ) {
 			$body             = new StdClass();
 			$body->id         = $args['body']['id'];
 			$body->variants[] = '';
 			return $body;
 		}
 
-		if ( 200 !== (int) $code ) {
+		if ( 200 !== $code ) {
 			throw new Exception( $body, $code );
 		}
 
