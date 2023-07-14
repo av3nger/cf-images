@@ -107,13 +107,43 @@ class Fuzion extends Api {
 			if ( str_contains( $body->message, 'Unauthenticated' ) ) {
 				$message = __( 'Expired or invalid API key. Please update your API key on the setting page.', 'cf-images' );
 			} else {
-				$message = $body->message;
+				$message = $this->maybe_extract_message( $body->message );
 			}
 
 			throw new Exception( $message );
 		}
 
 		throw new Exception( __( 'Error doing API call. Please try again.', 'cf-images' ) );
+
+	}
+
+	/**
+	 * Extract message from error.
+	 *
+	 * Some errors can contain a JSON within a JSON object. For example:
+	 * {"message":"HTTP request returned status code 400:\n{\"error\":{\"code\":\"InvalidRequest\",\"message\":\"The provided image url is not accessible.\"}}\n"}
+	 * For such messages we need to extract the inner JSON and decode it.
+	 *
+	 * @since 1.4.0
+	 *
+	 * @param string $message  Error message.
+	 *
+	 * @return string
+	 */
+	private function maybe_extract_message( string $message ): string {
+
+		// Extract the JSON part from the message.
+		$json_start = strpos( $message, '{' );
+		$inner_json = substr( $message, $json_start );
+
+		// Decode the inner JSON.
+		$data = json_decode( $inner_json, true );
+
+		if ( $data && isset( $data['error'] ) && ! empty( $data['error']['message'] ) ) {
+			return $data['error']['message'];
+		}
+
+		return $message;
 
 	}
 
