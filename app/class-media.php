@@ -181,10 +181,12 @@ class Media {
 							</a></li>
 						<?php endif; ?>
 					<?php endif; ?>
-					<li><a href="#" class="cf-images-ai-alt" data-id="<?php echo esc_attr( $post_id ); ?>">
-						<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/wand.svg' ); ?>" alt="<?php esc_attr_e( 'Generate alt text', 'cf-images' ); ?>" />
-						<?php esc_html_e( 'Generate alt text', 'cf-images' ); ?>
-					</a></li>
+					<?php if ( apply_filters( 'cf_images_module_enabled', false, 'image-ai' ) ) : ?>
+						<li><a href="#" class="cf-images-ai-alt" data-id="<?php echo esc_attr( $post_id ); ?>">
+							<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/wand.svg' ); ?>" alt="<?php esc_attr_e( 'Generate alt text', 'cf-images' ); ?>" />
+							<?php esc_html_e( 'Generate alt text', 'cf-images' ); ?>
+						</a></li>
+					<?php endif; ?>
 				</ul>
 			</li>
 		</ul>
