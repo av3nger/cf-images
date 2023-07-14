@@ -75,6 +75,7 @@ Added:
 
 Changed:
 * Improved detection of image sizes
+* Media UI refactored for better accessibility
 
 Fixed:
 * Issues with lazy loading
