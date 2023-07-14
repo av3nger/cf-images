@@ -26,7 +26,7 @@ if ( ! defined( 'WPINC' ) ) {
  *
  * @since 1.0.0
  */
-class Image extends Api {
+class Image extends Cloudflare {
 
 	/**
 	 * Upload image to Cloudflare Images.

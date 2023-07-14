@@ -3,48 +3,40 @@
  */
 @import "@picocss/pico/scss/variables";
 @import "@picocss/pico/scss/themes/default";
-@import "@picocss/pico/scss/utilities/tooltip";
 
-.column-cf-images [data-tooltip],
-.cf-images-grid-status [data-tooltip] {
-  border: 1px solid #2c3338;
-  display: inline-block;
-  height: 24px;
-  margin-bottom: -4px;
-  margin-right: -4px;
-  padding: 5px;
-  width: 24px;
+.cf-images-status {
+  @import "@picocss/pico/scss/components/dropdown";
 
-  &:not(span):not([disabled="disabled"]):hover {
+  // Action dropdown.
+  ul:first-of-type {
+    margin: 5px 0 0;
 
-    img {
-      transform: scale(1.2);
-      transition: transform 0.3s ease-in-out;
+    & li[role="list"] {
+      & > a:after {
+        margin-top: -2px;
+      }
+
+      & > ul[role="listbox"] {
+        margin-top: 0;
+        min-width: 210px;
+
+        & li {
+          cursor: pointer;
+          width: auto;
+
+          & img {
+            float: left;
+            margin: 2px 5px 0 0;
+            width: 15px;
+          }
+        }
+      }
     }
-  }
-
-  &[disabled="disabled"] {
-    background: #f6f7f7;
-    border-color: #dcdcde;
-    cursor: default;
-
-    img {
-      opacity: 0.3;
-    }
-  }
-
-  & + [disabled="disabled"] {
-    border-left-color: #2c3338;
-  }
-
-  &:last-of-type {
-    margin-bottom: 0;
-    margin-right: 0;
   }
 }
 
-.upload-php .fixed .column-cf-images {
-  width: 10%;
+.upload-php .fixed .column-cf-images-status {
+  width: 12%;
 
   .spinner {
     background-size: 16px;
@@ -52,7 +44,18 @@
   }
 }
 
-.upload-php .cf-images-grid-status {
+.upload-php .setting.cf-images {
+  & .cf-images-status {
+    align-items: start;
+    display: flex;
+    flex-direction: column;
+  }
+
+  & span.status {
+    display: flex;
+    padding: 0;
+  }
+
   span.spinner.is-active {
     font-size: 13px;
     margin: 0;

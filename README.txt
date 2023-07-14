@@ -70,10 +70,12 @@ If something is not working for you, please let me know by creating a support ti
 = 1.4.0 =
 
 Added:
+* Image AI - tag and caption your images with AI
 * Compatibility with WMPL
 
 Changed:
 * Improved detection of image sizes
+* Media UI refactored for better accessibility
 
 Fixed:
 * Issues with lazy loading
@@ -232,6 +234,9 @@ First release
 * Support for custom domains
 
 == Upgrade Notice ==
+
+= 1.4.0 =
+Image AI - tag and caption your images
 
 = 1.2.0 =
 Big update with lots of improvements and new features.

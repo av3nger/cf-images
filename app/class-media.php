@@ -95,7 +95,7 @@ class Media {
 	 */
 	public function media_columns( array $posts_columns ): array {
 
-		$posts_columns['cf-images'] = __( 'Offload status', 'cf-images' );
+		$posts_columns['cf-images-status'] = __( 'Offload status', 'cf-images' );
 		return $posts_columns;
 
 	}
@@ -113,78 +113,81 @@ class Media {
 	 */
 	public function media_custom_column( string $column_name, int $post_id ) {
 
-		if ( 'cf-images' !== $column_name ) {
+		if ( 'cf-images-status' !== $column_name ) {
 			return;
 		}
 
 		// This is used with WPML integration.
 		$post_id = apply_filters( 'cf_images_media_post_id', $post_id );
 
-		$meta = get_post_meta( $post_id, '_cloudflare_image_id', true );
-
-		if ( ! empty( $meta ) ) {
-			?>
-			<a href="#" class="cf-images-undo"
-				data-tooltip="<?php esc_html_e( 'Offloaded. Undo?', 'cf-images' ); ?>"
-				data-placement="left"
-				data-id="<?php echo esc_attr( $post_id ); ?>"
-			>
-				<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/cloud.svg' ); ?>" alt="<?php esc_attr_e( 'Image offloaded', 'cf-images' ); ?>" />
-			</a>
-			<?php if ( get_post_meta( $post_id, '_cloudflare_image_offloaded', true ) ) : ?>
-				<a href="#" class="cf-images-restore"
-					data-tooltip="<?php esc_html_e( 'Fully offloaded. Restore?', 'cf-images' ); ?>"
-					data-placement="left"
-					data-id="<?php echo esc_attr( $post_id ); ?>"
-				>
-					<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/download.svg' ); ?>" alt="<?php esc_attr_e( 'Image fully offloaded', 'cf-images' ); ?>" />
-				</a>
-			<?php else : ?>
-				<a href="#" class="cf-images-delete" <?php disabled( ! $this->full_offload_enabled() ); ?>
-					data-tooltip="<?php $this->full_offload_enabled() ? esc_html_e( 'In media library. Remove?', 'cf-images' ) : esc_html_e( 'Option disabled', 'cf-images' ); ?>"
-					data-placement="left"
-					data-id="<?php echo esc_attr( $post_id ); ?>"
-				>
-					<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/hdd.svg' ); ?>" alt="<?php esc_attr_e( 'Full offload disabled', 'cf-images' ); ?>" />
-				</a>
-			<?php endif; ?>
-			<?php
-			return;
-		}
-
+		// Check if supported format.
 		$supported_mimes = array( 'image/jpeg', 'image/png', 'image/gif', 'image/webp' );
-
 		if ( ! in_array( get_post_mime_type( $post_id ), $supported_mimes, true ) ) {
-			?>
-			<span data-tooltip="<?php esc_html_e( 'Unsupported format', 'cf-images' ); ?>" data-placement="left" disabled="disabled">
-				<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/format.svg' ); ?>" alt="<?php esc_attr_e( 'Unsupported format', 'cf-images' ); ?>" />
-			</span>
-			<?php
+			esc_html_e( 'Unsupported format', 'cf-images' );
 			return;
 		}
 
-		// This image was skipped because of some error during bulk upload.
-		if ( get_post_meta( $post_id, '_cloudflare_image_skip', true ) ) {
-			?>
-			<a href="#" class="cf-images-offload"
-				data-tooltip="<?php esc_html_e( 'Skipped. Retry?', 'cf-images' ); ?>"
-				data-placement="left"
-				data-id="<?php echo esc_attr( $post_id ); ?>"
-			>
-				<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/pause.svg' ); ?>" alt="<?php esc_attr_e( 'Skipped from processing', 'cf-images' ); ?>" />
-			</a>
-			<?php
-			return;
-		}
+		$meta    = get_post_meta( $post_id, '_cloudflare_image_id', true );
+		$deleted = get_post_meta( $post_id, '_cloudflare_image_offloaded', true );
+		$skipped = get_post_meta( $post_id, '_cloudflare_image_skip', true );
 
+		$status = array();
+		if ( ! empty( $meta ) ) {
+			$status[] = esc_html__( 'Offloaded', 'cf-images' );
+			if ( $deleted ) {
+				$status[] = esc_html__( 'Removed from media library', 'cf-images' );
+			}
+		} elseif ( $skipped ) {
+			$status[] = esc_html__( 'Skipped', 'cf-images' );
+		} else {
+			$status[] = esc_html__( 'Not offloaded', 'cf-images' );
+		}
 		?>
-		<a href="#" class="cf-images-offload"
-			data-tooltip="<?php esc_html_e( 'Not offloaded. Offload?', 'cf-images' ); ?>"
-			data-placement="left"
-			data-id="<?php echo esc_attr( $post_id ); ?>"
-		>
-			<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/cloud-off.svg' ); ?>" alt="<?php esc_attr_e( 'Image not offloaded', 'cf-images' ); ?>" />
-		</a>
+		<span class="status"><?php echo esc_html( implode( ' | ', $status ) ); ?></span>
+		<ul>
+			<li role="list" dir="rtl">
+				<a href="#" aria-haspopup="listbox"><?php esc_html_e( 'Actions', 'cf-images' ); ?></a>
+				<ul role="listbox">
+					<?php if ( ! empty( $meta ) ) : ?>
+						<li><a href="#" class="cf-images-undo" data-id="<?php echo esc_attr( $post_id ); ?>">
+							<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/cloud-off.svg' ); ?>" alt="<?php esc_attr_e( 'Remove from Cloudflare', 'cf-images' ); ?>" />
+							<?php esc_html_e( 'Remove from Cloudflare', 'cf-images' ); ?>
+						</a></li>
+						<?php if ( $deleted ) : ?>
+							<li><a href="#" class="cf-images-restore" data-id="<?php echo esc_attr( $post_id ); ?>">
+								<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/download.svg' ); ?>" alt="<?php esc_attr_e( 'Restore in media library', 'cf-images' ); ?>" />
+								<?php esc_html_e( 'Restore in media library', 'cf-images' ); ?>
+							</a></li>
+						<?php elseif ( $this->full_offload_enabled() ) : ?>
+							<li><a href="#" class="cf-images-delete" data-id="<?php echo esc_attr( $post_id ); ?>">
+								<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/delete.svg' ); ?>" alt="<?php esc_attr_e( 'Remove from media library', 'cf-images' ); ?>" />
+								<?php esc_html_e( 'Delete files on WordPress', 'cf-images' ); ?>
+							</a></li>
+						<?php endif; ?>
+					<?php else : ?>
+						<li><a href="#" class="cf-images-offload" data-id="<?php echo esc_attr( $post_id ); ?>">
+							<?php if ( $skipped ) : ?>
+								<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/unpause.svg' ); ?>" alt="<?php esc_attr_e( 'Re-upload to Cloudflare', 'cf-images' ); ?>" />
+								<?php esc_html_e( 'Re-upload to Cloudflare', 'cf-images' ); ?>
+							<?php else : ?>
+								<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/cloud.svg' ); ?>" alt="<?php esc_attr_e( 'Upload to Cloudflare', 'cf-images' ); ?>" />
+								<?php esc_html_e( 'Upload to Cloudflare', 'cf-images' ); ?>
+							<?php endif; ?>
+						</a></li>
+						<?php if ( ! $skipped ) : ?>
+							<li><a href="#" class="cf-images-skip" data-id="<?php echo esc_attr( $post_id ); ?>">
+								<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/pause.svg' ); ?>" alt="<?php esc_attr_e( 'Ignore and skip image', 'cf-images' ); ?>" />
+								<?php esc_html_e( 'Ignore and skip image', 'cf-images' ); ?>
+							</a></li>
+						<?php endif; ?>
+					<?php endif; ?>
+					<li><a href="#" class="cf-images-ai-alt" data-id="<?php echo esc_attr( $post_id ); ?>">
+						<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/wand.svg' ); ?>" alt="<?php esc_attr_e( 'Generate alt text', 'cf-images' ); ?>" />
+						<?php esc_html_e( 'Generate alt text', 'cf-images' ); ?>
+					</a></li>
+				</ul>
+			</li>
+		</ul>
 		<?php
 
 	}
@@ -206,8 +209,8 @@ class Media {
 		}
 
 		ob_start();
-		$this->media_custom_column( 'cf-images', $attachment->ID );
-		$response['cf-images'] = ob_get_clean();
+		$this->media_custom_column( 'cf-images-status', $attachment->ID );
+		$response['cf-images-status'] = ob_get_clean();
 
 		return $response;
 
@@ -597,7 +600,7 @@ class Media {
 	private function get_response_data( int $attachment_id ): string {
 
 		ob_start();
-		$this->media_custom_column( 'cf-images', $attachment_id );
+		$this->media_custom_column( 'cf-images-status', $attachment_id );
 		return ob_get_clean();
 
 	}

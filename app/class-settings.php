@@ -72,11 +72,12 @@ class Settings {
 		// List of settings. The key corresponds to the name of the form field, the value corresponds to the name of the option.
 		$options = array(
 			'auto-offload'       => 'cf-images-auto-offload',
-			'custom-id'          => 'cf-images-custom-id',
 			'auto-resize'        => 'cf-images-auto-resize',
+			'custom-id'          => 'cf-images-custom-id',
+			'disable-async'      => 'cf-images-disable-async',
 			'disable-generation' => 'cf-images-disable-generation',
 			'full-offload'       => 'cf-images-full-offload',
-			'disable-async'      => 'cf-images-disable-async',
+			'image-ai'           => 'cf-images-image-ai',
 		);
 
 		foreach ( $options as $key => $option ) {

@@ -147,7 +147,11 @@ class Core {
 		require_once __DIR__ . '/class-settings.php';
 		require_once __DIR__ . '/class-loader.php';
 
+		// API classes.
 		require_once __DIR__ . '/api/class-api.php';
+		require_once __DIR__ . '/api/class-cloudflare.php';
+		require_once __DIR__ . '/api/class-fuzion.php';
+		require_once __DIR__ . '/api/class-ai.php';
 		require_once __DIR__ . '/api/class-image.php';
 		require_once __DIR__ . '/api/class-variant.php';
 
@@ -217,6 +221,7 @@ class Core {
 	 * @see Modules\Disable_Async
 	 * @see Modules\Disable_Generation
 	 * @see Modules\Full_Offload
+	 * @see Modules\Image_Ai
 	 *
 	 * @return void
 	 */
@@ -232,6 +237,7 @@ class Core {
 		$loader->module( 'disable-async' );
 		$loader->module( 'disable-generation' );
 		$loader->module( 'full-offload' );
+		$loader->module( 'image-ai' );
 
 	}
 

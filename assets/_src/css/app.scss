@@ -150,6 +150,19 @@
         padding-bottom: 0;
       }
     }
+
+    /**
+     * Image AI.
+     */
+    .cf-images-ai-settings {
+      a[role=button] {
+        float: none;
+      }
+
+      #cf-images-ai-api-key {
+        display: none;
+      }
+    }
   }
 
   form {
@@ -163,6 +176,8 @@
       float: right;
     }
 
+    input[type=email],
+    input[type=password],
     input[type=text] {
       max-width: 350px;
       margin-bottom: 0;
@@ -230,6 +245,7 @@
     font-size: .75rem;
     font-weight: 500;
     line-height: 1.25;
+    margin-left: 5px;
     margin-top: -3px;
     padding: 0.125rem 0.5rem;
     vertical-align: middle;
