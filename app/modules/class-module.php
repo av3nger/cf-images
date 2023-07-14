@@ -74,6 +74,7 @@ abstract class Module {
 		$this->register_ui();
 		$this->pre_init();
 
+		add_filter( 'cf_images_module_enabled', array( $this, 'is_module_enabled' ), 10, 2 );
 		add_action( 'cf_images_render_setting', array( $this, 'render_setting' ), $this->order );
 		add_action( 'cf_images_setting_description', array( $this, 'render_description' ) );
 
@@ -221,6 +222,27 @@ abstract class Module {
 		</div>
 
 		<?php
+
+	}
+
+	/**
+	 * Filter callback to check if a specific module is enabled.
+	 *
+	 * @since 1.4.0
+	 *
+	 * @param bool   $enabled  Status.
+	 * @param string $module   Module ID.
+	 *
+	 * @return bool
+	 */
+	public function is_module_enabled( bool $enabled, string $module ): bool {
+
+		// Core modules cannot be disabled.
+		if ( $this->core ) {
+			return true;
+		}
+
+		return (bool) get_option( 'cf-images-' . $module, false );
 
 	}
 
