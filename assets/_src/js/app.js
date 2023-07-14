@@ -70,16 +70,18 @@ import './modules/image-ai.js';
 			return;
 		}
 
+		const { inProgress, saveChange } = CFImages.strings;
+
 		$( this )
 			.attr( 'aria-busy', true )
-			.html( CFImages.strings.inProgress + '...' );
+			.html( inProgress + '...' );
 
 		post( action, form.serialize() )
 			.then( ( response ) => {
 				if ( ! response.success ) {
 					$( this )
 						.attr( 'aria-busy', false )
-						.html( CFImages.strings.saveChange );
+						.html( saveChange );
 
 					if ( 'undefined' !== typeof response.data ) {
 						showNotice( response.data, 'error' );
@@ -137,7 +139,9 @@ import './modules/image-ai.js';
 	$( '#cf-images-disconnect' ).on( 'click', function( e ) {
 		e.preventDefault();
 
-		$( this ).attr( 'aria-busy', true ).html( CFImages.strings.disconnecting );
+		const { disconnecting } = CFImages.strings;
+
+		$( this ).attr( 'aria-busy', true ).html( disconnecting );
 		post( 'cf_images_disconnect' )
 			.then( () => window.location.reload() )
 			.catch( window.console.log );
@@ -202,13 +206,15 @@ import './modules/image-ai.js';
 		$( document ).on( 'click', ajaxActions[ action ], function( e ) {
 			e.preventDefault();
 
+			const { inProgress, offloadError } = CFImages.strings;
+
 			const divStatus = $( this ).closest( '.cf-images-status' );
-			divStatus.html( CFImages.strings.inProgress + '<span class="spinner is-active"></span>' );
+			divStatus.html( inProgress + '<span class="spinner is-active"></span>' );
 
 			post( action, $( this ).data( 'id' ) )
 				.then( ( response ) => {
 					if ( ! response.success ) {
-						const message = response.data || CFImages.strings.offloadError;
+						const message = response.data || offloadError;
 						divStatus.html( message );
 						return;
 					}
