@@ -202,10 +202,8 @@ class Image_Ai extends Module {
 			return;
 		}
 
-		$cloudflare_image_id = get_post_meta( $attachment_id, '_cloudflare_image_id', true );
-		$cloudflare_image_id = apply_filters( 'cf_images_attachment_meta', $cloudflare_image_id, $attachment_id );
+		list( $hash, $cloudflare_image_id ) = Cloudflare_Images::get_hash_id_url_string( $attachment_id );
 
-		$hash = get_site_option( 'cf-images-hash', '' );
 		if ( empty( $cloudflare_image_id ) || empty( $hash ) ) {
 			$image = wp_get_original_image_url( $attachment_id );
 		} else {
