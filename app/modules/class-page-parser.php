@@ -181,7 +181,7 @@ class Page_Parser extends Module {
 	 */
 	private function process( string $image, string $content, int $attachment_id = 0 ): string {
 
-		preg_match_all( '/(?:https?[^\s\'"]*)/i', $content, $urls );
+		preg_match_all( '/https?[^\s\'"]*/i', $content, $urls );
 		if ( ! is_array( $urls ) || empty( $urls[0] ) ) {
 			return $image;
 		}
