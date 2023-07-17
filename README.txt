@@ -71,6 +71,8 @@ If something is not working for you, please let me know by creating a support ti
 
 Added:
 * Image AI - tag and caption your images with AI
+* Page parser module
+* Compatibility with Breakdance builder (via page parser module)
 * Compatibility with WMPL
 
 Changed:

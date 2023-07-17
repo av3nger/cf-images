@@ -222,6 +222,7 @@ class Core {
 	 * @see Modules\Disable_Generation
 	 * @see Modules\Full_Offload
 	 * @see Modules\Image_Ai
+	 * @see Modules\Page_Parser
 	 *
 	 * @return void
 	 */
@@ -238,6 +239,7 @@ class Core {
 		$loader->module( 'disable-generation' );
 		$loader->module( 'full-offload' );
 		$loader->module( 'image-ai' );
+		$loader->module( 'page-parser' );
 
 	}
 
