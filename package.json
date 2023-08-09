@@ -10,16 +10,16 @@
     "optimization"
   ],
   "devDependencies": {
-    "@wordpress/eslint-plugin": "^14.8.0",
+    "@wordpress/eslint-plugin": "^14.11.0",
     "css-loader": "^6.8.1",
     "grunt-contrib-clean": "^2.0.1",
     "grunt-contrib-compress": "^2.0.0",
     "grunt-contrib-copy": "^1.0.0",
     "load-grunt-tasks": "^5.1.0",
     "mini-css-extract-plugin": "^2.7.6",
-    "sass": "^1.63.6",
+    "sass": "^1.64.2",
     "sass-loader": "^13.3.2",
-    "webpack": "^5.88.0",
+    "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4"
   },
   "scripts": {
