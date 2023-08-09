@@ -67,7 +67,7 @@ If something is not working for you, please let me know by creating a support ti
 
 == Changelog ==
 
-= 1.4.0 =
+= 1.4.0 - 09.08.2023 =
 
 Added:
 * Image AI - tag and caption your images with AI
