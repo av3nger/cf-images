@@ -164,7 +164,7 @@ class Page_Parser extends Module {
 			$image = $this->process( $image, $srcset, $attachment_id );
 		}
 
-		return $image;
+		return apply_filters( 'cf_images_replace_paths', $image, $src, $srcset, $attachment_id );
 
 	}
 

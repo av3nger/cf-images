@@ -79,9 +79,12 @@ class Auto_Resize extends Module {
 	 */
 	public function init() {
 
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_auto_resize' ) );
-		add_filter( 'wp_get_attachment_image_attributes', array( $this, 'add_class_to_attachment' ) );
-		add_filter( 'wp_content_img_tag', array( $this, 'add_class_to_img_tag' ), 15 );
+		//add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_auto_resize' ) );
+		//add_filter( 'wp_get_attachment_image_attributes', array( $this, 'add_class_to_attachment' ) );
+		//add_filter( 'wp_content_img_tag', array( $this, 'add_class_to_img_tag' ), 15 );
+
+		// New.
+		add_filter( 'cf_images_replace_paths', array( $this, 'add_srcset_to_image' ), 10, 3 );
 
 	}
 
@@ -93,7 +96,8 @@ class Auto_Resize extends Module {
 	 * @return void
 	 */
 	public function enqueue_auto_resize() {
-		wp_enqueue_script( $this->get_slug(), CF_IMAGES_DIR_URL . 'assets/js/cf-auto-resize.min.js', array(), CF_IMAGES_VERSION, true );
+		// This needs to be loaded in the header, otherwise images get double loaded.
+		wp_enqueue_script( $this->get_slug(), CF_IMAGES_DIR_URL . 'assets/js/cf-auto-resize.min.js', array(), CF_IMAGES_VERSION, false );
 	}
 
 	/**
@@ -173,6 +177,34 @@ class Auto_Resize extends Module {
 			$element = rtrim( $element, $closing ) . " class=$quotes$value$quotes$closing";
 		}
 
+	}
+
+	public function add_srcset_to_image( string $image, string $src, string $srcset ): string {
+
+		if ( empty( $src ) || ! empty( $srcset ) ) {
+			return $image;
+		}
+
+		/**
+		 * 1. Get hash.
+		 * 2. Extract image ID and w= attribute value.
+		 * 3. Generate intermediate sizes.
+		 */
+		if ( ! preg_match( '/w=(\d+)(?:,h=\d+)?"/', $image, $matches ) || empty( $matches[1] ) ) {
+			return $image;
+		}
+
+		$width = $matches[1];
+		$sizes = array( 320, 480, 768, 1024, 1280, 1536, 1920, 2048 );
+		foreach ( $sizes as $size ) {
+			if ( ( $matches[1] - $size ) < 50 ) {
+				break;
+			}
+
+			// TODO: We stopped here.
+			//$url = '';
+			//$srcset .= str_replace( ' ', '%20', $src ) . ' ' . $size . 'px, ';
+		}
 	}
 
 }
