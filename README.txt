@@ -5,7 +5,7 @@ Tags: cdn, cloudflare images, offload images, cloudflare, optimize
 Donate link: https://www.paypal.com/donate/?business=JRR6QPRGTZ46N&no_recurring=0&item_name=Help+support+the+development+of+the+Cloudflare+Images+plugin+for+WordPress&currency_code=AUD
 Requires at least: 5.6
 Requires PHP: 7.0
-Tested up to: 6.2
+Tested up to: 6.3
 Stable tag: %%VERSION%%
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
