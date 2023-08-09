@@ -67,6 +67,11 @@ If something is not working for you, please let me know by creating a support ti
 
 == Changelog ==
 
+= 1.5.0 =
+
+Fixed:
+* Cannot log in Image AI module without activating it first
+
 = 1.4.0 - 09.08.2023 =
 
 Added:
