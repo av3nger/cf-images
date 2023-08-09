@@ -13,9 +13,9 @@ import '../css/media.scss';
 	}
 
 	const sharedTemplate =
-		"<span class='setting cf-images-grid-status'>" +
+		"<span class='setting cf-images'>" +
 		"<span class='name'><%= label %></span>" +
-		"<span class='value'><%= value %></span>" +
+		"<span class='value cf-images-status'><%= value %></span>" +
 		'</span>';
 
 	const template = _.template( sharedTemplate );
@@ -24,13 +24,13 @@ import '../css/media.scss';
 		{
 			initialize() {
 				Details.prototype.initialize.apply( this, arguments );
-				this.listenTo( this.model, 'change:cf-images', this.render );
+				this.listenTo( this.model, 'change:cf-images-status', this.render );
 			},
 
 			render() {
 				Details.prototype.render.apply( this, arguments );
 
-				const html = this.model.get( 'cf-images' );
+				const html = this.model.get( 'cf-images-status' );
 				if ( 'undefined' === typeof html ) {
 					return this;
 				}

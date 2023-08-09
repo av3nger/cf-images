@@ -27,6 +27,45 @@ if ( ! defined( 'WPINC' ) ) {
 class Disable_Generation extends Module {
 
 	/**
+	 * Register UI components.
+	 *
+	 * @since 1.4.0
+	 *
+	 * @return void
+	 */
+	protected function register_ui() {
+		$this->experimental = true;
+		$this->icon         = 'images-alt2';
+		$this->order        = 50;
+		$this->title        = esc_html__( 'Disable WordPress image sizes', 'cf-images' );
+	}
+
+	/**
+	 * Render module description.
+	 *
+	 * @since 1.4.0
+	 *
+	 * @param string $module  Module ID.
+	 *
+	 * @return void
+	 */
+	public function render_description( string $module ) {
+
+		if ( $module !== $this->module ) {
+			return;
+		}
+		?>
+		<p>
+			<?php esc_html_e( 'Setting this option will disable generation of `-scaled` images and other image sizes. Only the original image will be stored in the media library. Only for newly uploaded files, current images will not be affected.', 'cf-images' ); ?>
+		</p>
+		<p>
+			<?php esc_html_e( 'Note: This feature is experimental. All the image sizes can be restored with the `Regenerate Thumbnails` plugin.', 'cf-images' ); ?>
+		</p>
+		<?php
+
+	}
+
+	/**
 	 * Init the module.
 	 *
 	 * @since 1.3.0

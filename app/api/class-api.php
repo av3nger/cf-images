@@ -1,8 +1,6 @@
 <?php
 /**
- * Cloudflare API class
- *
- * This class defines all code necessary to communicate with the Cloudflare API.
+ * API class
  *
  * @link https://vcore.au
  *
@@ -27,16 +25,16 @@ if ( ! defined( 'WPINC' ) ) {
  *
  * @since 1.0.0
  */
-class Api {
+abstract class Api {
 
 	/**
-	 * Cloudflare API URL.
+	 * API URL.
 	 *
 	 * @since 1.0.0
 	 * @access protected
 	 * @var string
 	 */
-	protected $api_url = 'https://api.cloudflare.com/client/v4/accounts/';
+	protected $api_url = '';
 
 	/**
 	 * Endpoint for API call.
@@ -45,7 +43,7 @@ class Api {
 	 * @access private
 	 * @var string
 	 */
-	private $endpoint = '';
+	protected $endpoint = '';
 
 	/**
 	 * Body for API call.
@@ -54,7 +52,7 @@ class Api {
 	 * @access private
 	 * @var null|string|array
 	 */
-	private $request_body = null;
+	protected $request_body = null;
 
 	/**
 	 * Method used to do API call.
@@ -63,7 +61,7 @@ class Api {
 	 * @access private
 	 * @var string
 	 */
-	private $method = 'POST';
+	protected $method = 'POST';
 
 	/**
 	 * Request timeout (in seconds).
@@ -72,7 +70,7 @@ class Api {
 	 * @access private
 	 * @var int
 	 */
-	private $timeout = 5;
+	protected $timeout = 5;
 
 	/**
 	 * Setter for $endpoint.
@@ -133,14 +131,11 @@ class Api {
 	 *
 	 * @return array
 	 */
-	private function get_args(): array {
+	protected function get_args(): array {
 
 		$args = array(
 			'method'  => $this->method,
 			'timeout' => $this->timeout,
-			'headers' => array(
-				'Authorization' => 'Bearer ' . constant( 'CF_IMAGES_KEY_TOKEN' ),
-			),
 		);
 
 		if ( isset( $this->request_body ) && in_array( $args['method'], array( 'POST', 'UPLOAD', 'PATCH' ), true ) ) {
@@ -149,6 +144,17 @@ class Api {
 
 		return $args;
 
+	}
+
+	/**
+	 * Get URL for API call.
+	 *
+	 * @since 1.4.0
+	 *
+	 * @return string
+	 */
+	protected function get_url(): string {
+		return $this->api_url . $this->endpoint;
 	}
 
 	/**
@@ -165,11 +171,7 @@ class Api {
 	 */
 	protected function request( bool $decode = true ) {
 
-		if ( ! defined( 'CF_IMAGES_ACCOUNT_ID' ) ) {
-			return new stdClass();
-		}
-
-		$url  = $this->api_url . constant( 'CF_IMAGES_ACCOUNT_ID' ) . '/images/v1' . $this->endpoint;
+		$url  = $this->get_url();
 		$args = $this->get_args();
 
 		if ( 'GET' === $args['method'] ) {
@@ -205,37 +207,24 @@ class Api {
 
 		$body = wp_remote_retrieve_body( $response );
 
-		/**
-		 * We can skip these statuses and consider them success.
-		 * 404 - Image not found (when removing an image).
-		 */
-		if ( 404 === (int) $code ) {
-			return new stdClass();
-		}
+		return $this->process_response( $body, (int) $code, $decode, $args );
 
-		// Authentication error.
-		if ( 401 === (int) $code ) {
-			update_option( 'cf-images-auth-error', true, false );
-		}
+	}
 
-		// Resource already exists.
-		if ( 409 === (int) $code ) {
-			$body             = new StdClass();
-			$body->id         = $args['body']['id'];
-			$body->variants[] = '';
-			return $body;
-		}
-
-		if ( 200 !== (int) $code ) {
-			throw new Exception( $body, $code );
-		}
-
-		if ( $decode ) {
-			return json_decode( $body );
-		}
-
-		return $body;
-
+	/**
+	 * Process response.
+	 *
+	 * @since 1.4.0
+	 *
+	 * @param string $body    Response body.
+	 * @param int    $code    Response code.
+	 * @param bool   $decode  JSON decode the response.
+	 * @param array  $args    Arguments array.
+	 *
+	 * @return stdClass|string
+	 */
+	protected function process_response( string $body, int $code, bool $decode, array $args ) {
+		return $decode ? json_decode( $body ) : $body;
 	}
 
 }

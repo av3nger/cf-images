@@ -5,7 +5,7 @@ Tags: cdn, cloudflare images, offload images, cloudflare, optimize
 Donate link: https://www.paypal.com/donate/?business=JRR6QPRGTZ46N&no_recurring=0&item_name=Help+support+the+development+of+the+Cloudflare+Images+plugin+for+WordPress&currency_code=AUD
 Requires at least: 5.6
 Requires PHP: 7.0
-Tested up to: 6.2
+Tested up to: 6.3
 Stable tag: %%VERSION%%
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -66,6 +66,23 @@ If something is not working for you, please let me know by creating a support ti
 2. Quick and easy setup wizard
 
 == Changelog ==
+
+= 1.4.0 - 09.08.2023 =
+
+Added:
+* Image AI - tag and caption your images with AI
+* Page parser module
+* Compatibility with Breakdance builder (via page parser module)
+* Compatibility with WMPL
+
+Changed:
+* Improved detection of image sizes
+* Media UI refactored for better accessibility
+
+Fixed:
+* Issues with lazy loading
+* When full offload is enabled, images are not displaying on front-end
+* Removing of scaled images
 
 = 1.3.0 - 24.06.2023 =
 
@@ -219,6 +236,9 @@ First release
 * Support for custom domains
 
 == Upgrade Notice ==
+
+= 1.4.0 =
+Image AI - tag and caption your images using AI. Page parser module - improved compatibility with themes and plugins.
 
 = 1.2.0 =
 Big update with lots of improvements and new features.

@@ -35,7 +35,7 @@
 
   .full-offload-notice {
     display: inline-block;
-    margin: 10px 0 0;
+    margin: 20px 0 0;
     padding: 0 10px 7px;
 
     p {
@@ -150,6 +150,19 @@
         padding-bottom: 0;
       }
     }
+
+    /**
+     * Image AI.
+     */
+    .cf-images-ai-settings {
+      a[role=button] {
+        float: none;
+      }
+
+      #cf-images-ai-api-key {
+        display: none;
+      }
+    }
   }
 
   form {
@@ -159,41 +172,50 @@
     input[type=checkbox],
     a[role=button],
     #account_id,
-    #api_key
-    {
+    #api_key {
       float: right;
     }
 
+    input[type=email],
+    input[type=password],
     input[type=text] {
       max-width: 350px;
       margin-bottom: 0;
-    }
-
-    & > div {
-      margin: 10px 0 10px 30px;
-
-      p {
-        line-height: 1.4;
-        max-width: 90%;
-        font-size: 14px;
-        margin-bottom: 0;
-        color: var(--color);
-      }
-    }
-
-    & > hr {
-      margin: 30px 0;
     }
 
     button[type=submit] {
       margin: 60px 0 0;
     }
 
-    & > label {
-      color: var(--color);
-      font-size: 1.3em;
-      font-weight: 600;
-      margin: 1em 0;
+    & .cf-form-item {
+      border-bottom: 1px solid #dcdcde;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+
+      &:last-of-type {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+
+      & label {
+        color: var(--color);
+        font-size: 1.3em;
+        font-weight: 600;
+        margin: 1em 0;
+      }
+
+      & > div {
+        margin: 10px 0 10px 30px;
+
+        p {
+          line-height: 1.4;
+          max-width: 90%;
+          font-size: 14px;
+          margin-bottom: 0;
+          color: var(--color);
+        }
+      }
     }
   }
 
@@ -223,6 +245,7 @@
     font-size: .75rem;
     font-weight: 500;
     line-height: 1.25;
+    margin-left: 5px;
     margin-top: -3px;
     padding: 0.125rem 0.5rem;
     vertical-align: middle;

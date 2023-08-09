@@ -5,11 +5,13 @@
  * @since 1.0.0
  */
 
-/* global ajaxurl */
 /* global CFImages */
 
 import '../css/app.scss';
-import { toggleModal } from './modal';
+import { toggleModal } from './helpers/modal';
+import { showNotice } from './helpers/notice';
+import { post } from './helpers/post';
+import './modules/image-ai.js';
 
 ( function( $ ) {
 	'use strict';
@@ -39,6 +41,7 @@ import { toggleModal } from './modal';
 		cf_images_undo_image: '.cf-images-undo', // Process undo offloading from media library.
 		cf_images_delete_image: '.cf-images-delete', // Process remove image action from media library.
 		cf_images_restore_image: '.cf-images-restore', // Download image back to media library.
+		cf_images_ai_caption: '.cf-images-ai-alt', // Process AI caption.
 	};
 
 	/**
@@ -67,16 +70,18 @@ import { toggleModal } from './modal';
 			return;
 		}
 
+		const { inProgress, saveChange } = CFImages.strings;
+
 		$( this )
 			.attr( 'aria-busy', true )
-			.html( CFImages.strings.inProgress + '...' );
+			.html( inProgress + '...' );
 
 		post( action, form.serialize() )
 			.then( ( response ) => {
 				if ( ! response.success ) {
 					$( this )
 						.attr( 'aria-busy', false )
-						.html( CFImages.strings.saveChange );
+						.html( saveChange );
 
 					if ( 'undefined' !== typeof response.data ) {
 						showNotice( response.data, 'error' );
@@ -134,7 +139,9 @@ import { toggleModal } from './modal';
 	$( '#cf-images-disconnect' ).on( 'click', function( e ) {
 		e.preventDefault();
 
-		$( this ).attr( 'aria-busy', true ).html( CFImages.strings.disconnecting );
+		const { disconnecting } = CFImages.strings;
+
+		$( this ).attr( 'aria-busy', true ).html( disconnecting );
 		post( 'cf_images_disconnect' )
 			.then( () => window.location.reload() )
 			.catch( window.console.log );
@@ -148,54 +155,6 @@ import { toggleModal } from './modal';
 	$( '#custom_domain' ).on( 'change', function( e ) {
 		$( 'input[name="custom_domain_input"]' ).toggleClass( 'hidden', ! e.target.checked );
 	} );
-
-	/**
-	 * Do AJAX request to WordPress.
-	 *
-	 * @since 1.0.0
-	 * @param {string} action Registered AJAX action.
-	 * @param {Object} data   Additional data that needs to be passed in POST request.
-	 * @return {Promise<unknown>} Return data.
-	 */
-	const post = function( action, data = {} ) {
-		data = { _ajax_nonce: CFImages.nonce, action, data };
-
-		return new Promise( ( resolve, reject ) => {
-			$.ajax( {
-				url: ajaxurl,
-				type: 'POST',
-				data,
-				success( response ) {
-					resolve( response );
-				},
-				error( error ) {
-					reject( error );
-				},
-			} );
-		} );
-	};
-
-	/**
-	 * Show a notice.
-	 *
-	 * @since 1.0.0
-	 * @param {string} message Message text.
-	 * @param {string} type    Notice type.
-	 */
-	const showNotice = function( message, type = 'success' ) {
-		const notice = $( '#cf-images-ajax-notice' );
-
-		notice.addClass( 'notice-' + type );
-		notice.find( 'p' ).html( message );
-
-		notice.slideDown().delay( 5000 ).queue( function() {
-			$( this ).slideUp( 'slow', function() {
-				$( this ).removeClass( 'notice-' + type );
-				$( this ).find( 'p' ).html( '' );
-			} );
-			$.dequeue( this );
-		} );
-	};
 
 	/**
 	 * Run progress bar (remove or upload all images).
@@ -247,13 +206,15 @@ import { toggleModal } from './modal';
 		$( document ).on( 'click', ajaxActions[ action ], function( e ) {
 			e.preventDefault();
 
-			const divStatus = $( this ).parent();
-			divStatus.html( CFImages.strings.inProgress + '<span class="spinner is-active"></span>' );
+			const { inProgress, offloadError } = CFImages.strings;
+
+			const divStatus = $( this ).closest( '.cf-images-status' );
+			divStatus.html( inProgress + '<span class="spinner is-active"></span>' );
 
 			post( action, $( this ).data( 'id' ) )
 				.then( ( response ) => {
 					if ( ! response.success ) {
-						const message = response.data || CFImages.strings.offloadError;
+						const message = response.data || offloadError;
 						divStatus.html( message );
 						return;
 					}

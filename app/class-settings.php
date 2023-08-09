@@ -71,12 +71,14 @@ class Settings {
 
 		// List of settings. The key corresponds to the name of the form field, the value corresponds to the name of the option.
 		$options = array(
-			'auto-offload'  => 'cf-images-auto-offload',
-			'custom-id'     => 'cf-images-custom-id',
-			'auto-resize'   => 'cf-images-auto-resize',
-			'disable-sizes' => 'cf-images-disable-generation',
-			'full-offload'  => 'cf-images-full-offload',
-			'disable-async' => 'cf-images-disable-async',
+			'auto-offload'       => 'cf-images-auto-offload',
+			'auto-resize'        => 'cf-images-auto-resize',
+			'custom-id'          => 'cf-images-custom-id',
+			'disable-async'      => 'cf-images-disable-async',
+			'disable-generation' => 'cf-images-disable-generation',
+			'full-offload'       => 'cf-images-full-offload',
+			'image-ai'           => 'cf-images-image-ai',
+			'page-parser'        => 'cf-images-page-parser',
 		);
 
 		foreach ( $options as $key => $option ) {
@@ -171,12 +173,6 @@ class Settings {
 		$handle = fopen( $wp_config_path, 'w' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fopen
 		fwrite( $handle, implode( '', $content ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fwrite
 		fclose( $handle ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fclose
-
-		if ( ! defined( 'FS_CHMOD_FILE' ) ) {
-			define( 'FS_CHMOD_FILE', ( fileperms( ABSPATH . 'index.php' ) & 0777 | 0644 ) );
-		}
-
-		chmod( $wp_config_path, FS_CHMOD_FILE );
 
 	}
 

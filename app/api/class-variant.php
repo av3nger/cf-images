@@ -26,7 +26,7 @@ if ( ! defined( 'WPINC' ) ) {
  *
  * @since 1.0.0
  */
-class Variant extends Api {
+class Variant extends Cloudflare {
 
 	/**
 	 * Toggle flexible variants.

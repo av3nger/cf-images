@@ -80,7 +80,7 @@ class Cloudflare_Images extends Module {
 	 *
 	 * @return void
 	 */
-	public function pre_init() {
+	protected function pre_init() {
 		if ( $this->full_offload_enabled() ) {
 			$this->only_frontend = false;
 		}
@@ -152,25 +152,9 @@ class Cloudflare_Images extends Module {
 			return $image;
 		}
 
-		$cloudflare_image_id = get_post_meta( $attachment_id, '_cloudflare_image_id', true );
+		list( $hash, $cloudflare_image_id ) = self::get_hash_id_url_string( $attachment_id );
 
-		/**
-		 * Filters the Cloudflare image ID value.
-		 *
-		 * @since 1.1.5
-		 *
-		 * @param mixed $cloudflare_image_id  Image meta
-		 * @param int   $attachment_id        Attachment ID.
-		 */
-		$cloudflare_image_id = apply_filters( 'cf_images_attachment_meta', $cloudflare_image_id, (int) $attachment_id );
-
-		if ( empty( $cloudflare_image_id ) ) {
-			return $image;
-		}
-
-		$hash = get_site_option( 'cf-images-hash', '' );
-
-		if ( empty( $hash ) ) {
+		if ( empty( $cloudflare_image_id ) || empty( $hash ) ) {
 			return $image;
 		}
 
@@ -217,6 +201,12 @@ class Cloudflare_Images extends Module {
 			return $image;
 		}
 
+		// Maybe it's not a scaled, but we have the size?
+		if ( is_int( $size ) ) {
+			$image[0] = $this->get_cdn_domain() . "/$hash/$cloudflare_image_id/w=" . $size;
+			return $image;
+		}
+
 		// Image without size prefix and no defined sizes - use the maximum available width.
 		if ( ! $variant_image && ! isset( $image[1] ) ) {
 			$image[0] = $this->get_cdn_domain() . "/$hash/$cloudflare_image_id/w=9999";
@@ -224,6 +214,35 @@ class Cloudflare_Images extends Module {
 		}
 
 		return $image;
+
+	}
+
+	/**
+	 * Get Cloudflare hash and Cloudflare Image ID.
+	 *
+	 * @since 1.4.0
+	 *
+	 * @param int $attachment_id  Attachment ID.
+	 *
+	 * @return array
+	 */
+	public static function get_hash_id_url_string( int $attachment_id ): array {
+
+		$cloudflare_image_id = get_post_meta( $attachment_id, '_cloudflare_image_id', true );
+
+		/**
+		 * Filters the Cloudflare image ID value.
+		 *
+		 * @since 1.1.5
+		 *
+		 * @param mixed $cloudflare_image_id  Image meta
+		 * @param int   $attachment_id        Attachment ID.
+		 */
+		$cloudflare_image_id = apply_filters( 'cf_images_attachment_meta', $cloudflare_image_id, (int) $attachment_id );
+
+		$hash = get_site_option( 'cf-images-hash', '' );
+
+		return array( $hash, $cloudflare_image_id );
 
 	}
 
@@ -248,7 +267,9 @@ class Cloudflare_Images extends Module {
 				continue;
 			}
 
-			$response['sizes'][ $id ]['url'] = $this->get_attachment_image_src( array( $size['url'] ), $attachment->ID, $id );
+			$image_src = $this->get_attachment_image_src( array( $size['url'] ), $attachment->ID, $id );
+
+			$response['sizes'][ $id ]['url'] = $image_src[0];
 		}
 
 		return $response;
