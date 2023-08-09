@@ -238,7 +238,7 @@ First release
 == Upgrade Notice ==
 
 = 1.4.0 =
-Image AI - tag and caption your images
+Image AI - tag and caption your images using AI. Page parser module - improved compatibility with themes and plugins.
 
 = 1.2.0 =
 Big update with lots of improvements and new features.
