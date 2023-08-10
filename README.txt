@@ -71,6 +71,7 @@ If something is not working for you, please let me know by creating a support ti
 
 Fixed:
 * Cannot log in Image AI module without activating it first
+* Handling of images with "scaled" in the file name
 
 = 1.4.0 - 09.08.2023 =
 
