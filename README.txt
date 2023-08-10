@@ -14,9 +14,34 @@ Offload you media library images to the Cloudflare Images service. Store, resize
 
 == Description ==
 
-Tired of using expensive CDN plugins that charge ridiculous amounts for something that should be free? Offload your media library to Cloudflare Images and let it handle everything for you - store, resize, optimize and deliver images in the best possible format to your users.
+Offload your media library to Cloudflare Images and let it handle everything for you - store, resize, optimize and deliver images in the best possible format to your users.
 
-Note from the developer: The plugin is a work in progress, which I created for my personal use, because I got tired with image optimization plugins ignoring real user needs or overcharging for services. If something is not working as expected, or you want a feature added to the plugin, please create a support request, and I will do my best to make it happen.
+= Why Overpay for CDN Plugins? =
+
+With the avalanche of expensive plugins out there, it's time to switch to a smarter choice. Why should you pay more for something that deserves to be free?
+
+= Simplify Your Image Management =
+
+Offload your media library to Cloudflare Images! Let our plugin take charge:
+
+* Store your images securely;
+* Resize images to perfection without any manual hassle;
+* Optimize them to ensure they load blazingly fast;
+* Deliver in the most user-friendly format, ensuring satisfaction at every user's end.
+
+= But wait, there's more! =
+
+Image AI - tag and caption your images using AI.
+
+= A Developer's Promise =
+
+Born from personal need, this plugin represents a developer's dedication to the community. While it's still a work in progress, remember – it's crafted with real user needs in mind, not profit.
+
+= Your Feedback Makes Us Better =
+
+Found a hiccup? Yearning for a feature? Just shoot us a support request. Our commitment is to continually evolve to serve you better. Your wish is our command!
+
+= Disclaimer =
 
 Cloudflare, the Cloudflare logo, and Cloudflare Workers are trademarks and/or registered trademarks of Cloudflare, Inc. in the United States and other jurisdictions.
 
@@ -57,8 +82,9 @@ These are the maximum allowed sizes and dimensions Cloudflare Images supports:
 
 = Why are not all images being replaced in content? =
 
-This is just a first iteration of the plugin. I have tested it over a set of projects that I deployed to my clients.
-If something is not working for you, please let me know by creating a support ticket on the plugin support forums.
+By default, the plugin relies on WordPress core functions to process images.
+Some themes and plugins can implement their own image processing functions, which can prevent the plugin from replacing the image URLs in content. If you are experiencing this, try to enable the `Parse page for images` module in the plugin settings.
+If something is still not working for you, please let me know by creating a support ticket on the plugin support forums.
 
 == Screenshots ==
 
@@ -67,7 +93,7 @@ If something is not working for you, please let me know by creating a support ti
 
 == Changelog ==
 
-= 1.5.0 =
+= 1.4.1 - 11.08.2023 =
 
 Fixed:
 * Cannot log in Image AI module without activating it first
