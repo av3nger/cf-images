@@ -93,7 +93,7 @@ If something is still not working for you, please let me know by creating a supp
 
 == Changelog ==
 
-= 1.4.1 - 11.08.2023 =
+= 1.4.1 - 21.08.2023 =
 
 Fixed:
 * Cannot log in Image AI module without activating it first
