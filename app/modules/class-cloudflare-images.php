@@ -164,25 +164,6 @@ class Cloudflare_Images extends Module {
 			return $image;
 		}
 
-		// Handle `scaled` images.
-		if ( false !== strpos( $image[0], '-scaled' ) ) {
-			$scaled_size = apply_filters( 'big_image_size_threshold', 2560 );
-
-			/**
-			 * This covers two cases:
-			 * 1: scaled sizes are disabled, but we have the size passed to the function
-			 * 2: scaled size equals the requested size
-			 * In both cases - use the size value.
-			 */
-			if ( ( ! $scaled_size && is_int( $size ) ) || $scaled_size === $size ) {
-				$image[0] = $this->get_cdn_domain() . "/$hash/$cloudflare_image_id/w=" . $size;
-			} else { // Fallback to scaled size.
-				$image[0] = $this->get_cdn_domain() . "/$hash/$cloudflare_image_id/w=" . $scaled_size;
-			}
-
-			return $image;
-		}
-
 		preg_match( '/-(\d+)x(\d+)\.[a-zA-Z]{3,4}$/', $image[0], $variant_image );
 
 		// Image with `-<width>x<height>` prefix, for example, image-300x125.jpg.
@@ -204,6 +185,25 @@ class Cloudflare_Images extends Module {
 		// Maybe it's not a scaled, but we have the size?
 		if ( is_int( $size ) ) {
 			$image[0] = $this->get_cdn_domain() . "/$hash/$cloudflare_image_id/w=" . $size;
+			return $image;
+		}
+
+		// Handle `scaled` images.
+		if ( false !== strpos( $image[0], '-scaled' ) ) {
+			$scaled_size = apply_filters( 'big_image_size_threshold', 2560 );
+
+			/**
+			 * This covers two cases:
+			 * 1: scaled sizes are disabled, but we have the size passed to the function
+			 * 2: scaled size equals the requested size
+			 * In both cases - use the size value.
+			 */
+			if ( ( ! $scaled_size && is_int( $size ) ) || $scaled_size === $size ) {
+				$image[0] = $this->get_cdn_domain() . "/$hash/$cloudflare_image_id/w=" . $size;
+			} else { // Fallback to scaled size.
+				$image[0] = $this->get_cdn_domain() . "/$hash/$cloudflare_image_id/w=" . $scaled_size;
+			}
+
 			return $image;
 		}
 

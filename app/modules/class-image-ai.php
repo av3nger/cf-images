@@ -126,9 +126,21 @@ class Image_Ai extends Module {
 	public function init() {
 
 		if ( wp_doing_ajax() ) {
+			add_action( 'wp_ajax_cf_images_ai_caption', array( $this, 'ajax_caption_image' ) );
+		}
+
+	}
+
+	/**
+	 * Init the module.
+	 *
+	 * @since 1.4.1
+	 */
+	public function pre_init() {
+
+		if ( wp_doing_ajax() ) {
 			add_action( 'wp_ajax_cf_images_ai_login', array( $this, 'ajax_login' ) );
 			add_action( 'wp_ajax_cf_images_ai_disconnect', array( $this, 'ajax_disconnect' ) );
-			add_action( 'wp_ajax_cf_images_ai_caption', array( $this, 'ajax_caption_image' ) );
 		}
 
 	}
