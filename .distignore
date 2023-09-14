@@ -1,13 +1,12 @@
 /.git
 /.github
 /.wordpress-org
-/build
 /node_modules
+/assets/_src
 
 .distignore
 .eslintrc.js
 .gitignore
-Gruntfile.js
 package.json
 package-lock.json
 webpack.config.js
