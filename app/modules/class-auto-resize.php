@@ -48,7 +48,7 @@ class Auto_Resize extends Module {
 		}
 		?>
 		<p>
-			<?php esc_html_e( 'Will make images more responsive by adding missing image sizes into the srcset image attribute.', 'cf-images' ); ?>
+			<?php esc_html_e( 'Make images responsive by adding missing image sizes into the srcset attribute.', 'cf-images' ); ?>
 		</p>
 		<p>
 			<?php esc_html_e( 'Requires the "Parse page for images" module to be enabled.', 'cf-images' ); ?>
