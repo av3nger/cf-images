@@ -26,13 +26,10 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.3.0
  */
 class Auto_Offload extends Module {
-
 	/**
 	 * Register UI components.
 	 *
 	 * @since 1.4.0
-	 *
-	 * @return void
 	 */
 	protected function register_ui() {
 		$this->icon  = 'admin-site';
@@ -44,12 +41,9 @@ class Auto_Offload extends Module {
 	 *
 	 * @since 1.4.0
 	 *
-	 * @param string $module  Module ID.
-	 *
-	 * @return void
+	 * @param string $module Module ID.
 	 */
 	public function render_description( string $module ) {
-
 		if ( $module !== $this->module ) {
 			return;
 		}
@@ -61,15 +55,12 @@ class Auto_Offload extends Module {
 			<?php esc_html_e( 'By default, new images will not be auto offloaded to Cloudflare Images.', 'cf-images' ); ?>
 		</p>
 		<?php
-
 	}
 
 	/**
 	 * Init the module.
 	 *
 	 * @since 1.3.0
-	 *
-	 * @return void
 	 */
 	public function init() {
 		add_action( 'admin_init', array( $this, 'auto_offload' ) );
@@ -79,11 +70,8 @@ class Auto_Offload extends Module {
 	 * Run auto offload.
 	 *
 	 * @since 1.3.0
-	 *
-	 * @return void
 	 */
 	public function auto_offload() {
-
 		$media = Core::get_instance()->admin()->media();
 
 		// If async uploads are disabled, use the default hook.
@@ -92,7 +80,5 @@ class Auto_Offload extends Module {
 		} else {
 			add_filter( 'wp_async_wp_generate_attachment_metadata', array( $media, 'upload_image' ), 10, 2 );
 		}
-
 	}
-
 }

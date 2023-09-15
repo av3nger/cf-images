@@ -27,8 +27,8 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.3.0
  */
 abstract class Module {
-
-	use Helpers, Settings;
+	use Helpers;
+	use Settings;
 
 	/**
 	 * This is a core module, meaning it can't be enabled/disabled via options.
@@ -64,12 +64,9 @@ abstract class Module {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param string $module  Module ID.
-	 *
-	 * @return void
+	 * @param string $module Module ID.
 	 */
 	public function __construct( string $module ) {
-
 		$this->module = $module;
 		$this->register_ui();
 		$this->pre_init();
@@ -88,15 +85,12 @@ abstract class Module {
 		}
 
 		$this->init();
-
 	}
 
 	/**
 	 * Module init.
 	 *
 	 * @since 1.3.0
-	 *
-	 * @return void
 	 */
 	abstract public function init();
 
@@ -104,8 +98,6 @@ abstract class Module {
 	 * Module pre-init actions.
 	 *
 	 * @since 1.2.1
-	 *
-	 * @return void
 	 */
 	protected function pre_init() {}
 
@@ -117,14 +109,12 @@ abstract class Module {
 	 * @return bool
 	 */
 	protected function is_enabled(): bool {
-
 		// Core modules cannot be disabled.
 		if ( $this->core ) {
 			return true;
 		}
 
 		return (bool) get_option( 'cf-images-' . $this->module, false );
-
 	}
 
 	/**
@@ -136,7 +126,6 @@ abstract class Module {
 	 * @return bool
 	 */
 	protected function can_run(): bool {
-
 		if ( $this->is_rest_request() || wp_doing_cron() ) {
 			return false;
 		}
@@ -146,7 +135,6 @@ abstract class Module {
 		}
 
 		return true;
-
 	}
 
 	/**
@@ -158,7 +146,6 @@ abstract class Module {
 	 * @return bool
 	 */
 	private function is_rest_request(): bool {
-
 		$wordpress_has_no_logic = filter_input( INPUT_GET, '_wp-find-template' );
 		$wordpress_has_no_logic = sanitize_key( $wordpress_has_no_logic );
 
@@ -175,18 +162,14 @@ abstract class Module {
 		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
 
 		return strpos( $request_uri, $rest_url_prefix ) !== false;
-
 	}
 
 	/**
 	 * Render module setting.
 	 *
 	 * @since 1.4.0
-	 *
-	 * @return void
 	 */
 	public function render_setting() {
-
 		if ( ! $this->title ) {
 			return;
 		}
@@ -222,7 +205,6 @@ abstract class Module {
 		</div>
 
 		<?php
-
 	}
 
 	/**
@@ -230,20 +212,17 @@ abstract class Module {
 	 *
 	 * @since 1.4.0
 	 *
-	 * @param bool   $enabled  Status.
-	 * @param string $module   Module ID.
+	 * @param bool   $enabled Status.
+	 * @param string $module  Module ID.
 	 *
 	 * @return bool
 	 */
 	public function is_module_enabled( bool $enabled, string $module ): bool {
-
 		// Core modules cannot be disabled.
 		if ( $this->core ) {
 			return true;
 		}
 
 		return (bool) get_option( 'cf-images-' . $module, false );
-
 	}
-
 }

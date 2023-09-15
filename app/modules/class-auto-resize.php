@@ -24,13 +24,10 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.3.0
  */
 class Auto_Resize extends Module {
-
 	/**
 	 * Register UI components.
 	 *
 	 * @since 1.4.0
-	 *
-	 * @return void
 	 */
 	protected function register_ui() {
 		$this->icon  = 'editor-expand';
@@ -43,12 +40,9 @@ class Auto_Resize extends Module {
 	 *
 	 * @since 1.4.0
 	 *
-	 * @param string $module  Module ID.
-	 *
-	 * @return void
+	 * @param string $module Module ID.
 	 */
 	public function render_description( string $module ) {
-
 		if ( $module !== $this->module ) {
 			return;
 		}
@@ -57,7 +51,6 @@ class Auto_Resize extends Module {
 			<?php esc_html_e( 'Set the image size to match the DOM required size. Instead of WordPress attachment sizes, this will attempt to match the image size to the element it is placed in on the front-end.', 'cf-images' ); ?>
 		</p>
 		<?php
-
 	}
 
 	/**
@@ -74,26 +67,20 @@ class Auto_Resize extends Module {
 	 * Init the module.
 	 *
 	 * @since 1.3.0
-	 *
-	 * @return void
 	 */
 	public function init() {
-
 		//add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_auto_resize' ) );
 		//add_filter( 'wp_get_attachment_image_attributes', array( $this, 'add_class_to_attachment' ) );
 		//add_filter( 'wp_content_img_tag', array( $this, 'add_class_to_img_tag' ), 15 );
 
 		// New.
 		add_filter( 'cf_images_replace_paths', array( $this, 'add_srcset_to_image' ), 10, 3 );
-
 	}
 
 	/**
 	 * Enqueue auto resize script on front-end.
 	 *
 	 * @since 1.2.0
-	 *
-	 * @return void
 	 */
 	public function enqueue_auto_resize() {
 		// This needs to be loaded in the header, otherwise images get double loaded.
@@ -106,12 +93,11 @@ class Auto_Resize extends Module {
 	 * @since 1.2.0
 	 * @see wp_get_attachment_image()
 	 *
-	 * @param string[] $attr  Array of attribute values for the image markup, keyed by attribute name.
+	 * @param string[] $attr Array of attribute values for the image markup, keyed by attribute name.
 	 *
 	 * @return string[]
 	 */
 	public function add_class_to_attachment( array $attr ): array {
-
 		if ( empty( $attr['src'] ) || false === strpos( $attr['src'], $this->get_cdn_domain() ) ) {
 			return $attr;
 		}
@@ -123,7 +109,6 @@ class Auto_Resize extends Module {
 		}
 
 		return $attr;
-
 	}
 
 	/**
@@ -131,12 +116,11 @@ class Auto_Resize extends Module {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param string $filtered_image  Full img tag with attributes that will replace the source img tag.
+	 * @param string $filtered_image Full img tag with attributes that will replace the source img tag.
 	 *
 	 * @return string
 	 */
 	public function add_class_to_img_tag( string $filtered_image ): string {
-
 		if ( ! get_option( 'cf-images-auto-resize', false ) ) {
 			return $filtered_image;
 		}
@@ -148,7 +132,6 @@ class Auto_Resize extends Module {
 		$this->add_resize_class( $filtered_image );
 
 		return $filtered_image;
-
 	}
 
 	/**
@@ -156,10 +139,9 @@ class Auto_Resize extends Module {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param string $element  HTML element.
+	 * @param string $element HTML element.
 	 */
 	private function add_resize_class( string &$element ) {
-
 		$closing = false === strpos( $element, '/>' ) ? '>' : ' />';
 		$quotes  = false === strpos( $element, '"' ) ? '\'' : '"';
 
@@ -176,11 +158,9 @@ class Auto_Resize extends Module {
 
 			$element = rtrim( $element, $closing ) . " class=$quotes$value$quotes$closing";
 		}
-
 	}
 
 	public function add_srcset_to_image( string $image, string $src, string $srcset ): string {
-
 		if ( empty( $src ) || ! empty( $srcset ) ) {
 			return $image;
 		}

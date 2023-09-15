@@ -31,11 +31,8 @@ class Settings {
 	 * Do initial setup by storing user provided Cloudflare account ID and API key in wp-config.php file.
 	 *
 	 * @since 1.0.0
-	 *
-	 * @return void
 	 */
 	public function ajax_do_setup() {
-
 		$this->check_ajax_request();
 
 		// Nonce checked in check_ajax_request(), data sanitized later in code.
@@ -52,18 +49,14 @@ class Settings {
 		delete_option( 'cf-images-auth-error' );
 
 		wp_send_json_success();
-
 	}
 
 	/**
 	 * Save settings.
 	 *
 	 * @since 1.0.0
-	 *
-	 * @return void
 	 */
 	public function ajax_save_settings() {
-
 		$this->check_ajax_request();
 
 		// Nonce checked in check_ajax_request(), data sanitized later in code.
@@ -104,7 +97,6 @@ class Settings {
 		}
 
 		wp_send_json_success();
-
 	}
 
 	/**
@@ -114,14 +106,11 @@ class Settings {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $name       Name of the constant to add.
-	 * @param string $value      Value of the constant to add.
-	 * @param bool   $overwrite  Overwrite the current value. Default: false.
-	 *
-	 * @return void
+	 * @param string $name      Name of the constant to add.
+	 * @param string $value     Value of the constant to add.
+	 * @param bool   $overwrite Overwrite the current value. Default: false.
 	 */
 	public function write_config( string $name, string $value = '', bool $overwrite = false ) {
-
 		$path_to_wp_config = ABSPATH . 'wp-config.php';
 
 		// wp-config.php file not found - exit early.
@@ -155,7 +144,6 @@ class Settings {
 
 		// On some hosts, the wp-config.php updates take several seconds to "un-cache".
 		sleep( 2 );
-
 	}
 
 	/**
@@ -163,28 +151,21 @@ class Settings {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $wp_config_path  Path to wp-config.php file.
-	 * @param array  $content         Array of lines to add to the file.
-	 *
-	 * @return void
+	 * @param string $wp_config_path Path to wp-config.php file.
+	 * @param array  $content        Array of lines to add to the file.
 	 */
 	private function write( string $wp_config_path, array $content ) {
-
-		$handle = fopen( $wp_config_path, 'w' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fopen
-		fwrite( $handle, implode( '', $content ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fwrite
-		fclose( $handle ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fclose
-
+		$handle = fopen( $wp_config_path, 'w' ); // phpcs:ignore WordPress.WP.AlternativeFunctions
+		fwrite( $handle, implode( '', $content ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions
+		fclose( $handle ); // phpcs:ignore WordPress.WP.AlternativeFunctions
 	}
 
 	/**
 	 * Disconnect from Cloudflare.
 	 *
 	 * @since 1.1.2
-	 *
-	 * @return void
 	 */
 	public function ajax_disconnect() {
-
 		delete_site_option( 'cf-images-hash' );
 		delete_option( 'cf-images-setup-done' );
 		delete_option( 'cf-images-config-written' );
@@ -195,18 +176,14 @@ class Settings {
 		$this->write_config( 'CF_IMAGES_KEY_TOKEN' );
 
 		wp_send_json_success();
-
 	}
 
 	/**
 	 * Hide sidebar.
 	 *
 	 * @since 1.3.0
-	 *
-	 * @return void
 	 */
 	public function ajax_hide_sidebar() {
 		update_site_option( 'cf-images-hide-sidebar', true );
 	}
-
 }

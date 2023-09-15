@@ -25,13 +25,10 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.3.0
  */
 class Custom_Id extends Module {
-
 	/**
 	 * Register UI components.
 	 *
 	 * @since 1.4.0
-	 *
-	 * @return void
 	 */
 	protected function register_ui() {
 		$this->icon  = 'open-folder';
@@ -44,12 +41,9 @@ class Custom_Id extends Module {
 	 *
 	 * @since 1.4.0
 	 *
-	 * @param string $module  Module ID.
-	 *
-	 * @return void
+	 * @param string $module Module ID.
 	 */
 	public function render_description( string $module ) {
-
 		if ( $module !== $this->module ) {
 			return;
 		}
@@ -61,15 +55,12 @@ class Custom_Id extends Module {
 			<?php esc_html_e( 'This does not convert already uploaded images. To change all the images to the new format (or back), you will need to perform bulk remove & upload.', 'cf-images' ); ?>
 		</p>
 		<?php
-
 	}
 
 	/**
 	 * Init the module.
 	 *
 	 * @since 1.3.0
-	 *
-	 * @return void
 	 */
 	public function init() {
 		add_filter( 'cf_images_upload_data', array( $this, 'use_custom_image_path' ) );
@@ -80,12 +71,11 @@ class Custom_Id extends Module {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param array $data  Image data sent to the Cloudflare Images API.
+	 * @param array $data Image data sent to the Cloudflare Images API.
 	 *
 	 * @return array
 	 */
 	public function use_custom_image_path( array $data ): array {
-
 		if ( ! $this->is_enabled() ) {
 			return $data;
 		}
@@ -95,7 +85,5 @@ class Custom_Id extends Module {
 		}
 
 		return $data;
-
 	}
-
 }

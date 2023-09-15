@@ -25,13 +25,10 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.2.1
  */
 class Full_Offload extends Module {
-
 	/**
 	 * Register UI components.
 	 *
 	 * @since 1.4.0
-	 *
-	 * @return void
 	 */
 	protected function register_ui() {
 		$this->experimental = true;
@@ -45,12 +42,9 @@ class Full_Offload extends Module {
 	 *
 	 * @since 1.4.0
 	 *
-	 * @param string $module  Module ID.
-	 *
-	 * @return void
+	 * @param string $module Module ID.
 	 */
 	public function render_description( string $module ) {
-
 		if ( $module !== $this->module ) {
 			return;
 		}
@@ -69,18 +63,12 @@ class Full_Offload extends Module {
 			</p>
 		</div>
 		<?php
-
 	}
 
 	/**
 	 * Init the module.
 	 *
 	 * @since 1.2.1
-	 *
-	 * @return void
 	 */
-	public function init() {
-
-	}
-
+	public function init() {}
 }

@@ -23,7 +23,6 @@ if ( ! defined( 'WPINC' ) ) {
  * Abstract class Task.
  */
 abstract class Task {
-
 	/**
 	 * Constant identifier for a task that should be available to logged-in users
 	 *
@@ -87,12 +86,11 @@ abstract class Task {
 	 *  - BOTH
 	 * $auth_level defaults to BOTH
 	 *
-	 * @throws Exception  If the class' $action value hasn't been set.
+	 * @throws Exception If the class' $action value hasn't been set.
 	 *
-	 * @param int $auth_level  The authentication level to use (see above).
+	 * @param int $auth_level The authentication level to use (see above).
 	 */
 	public function __construct( int $auth_level = self::BOTH ) {
-
 		if ( empty( $this->action ) ) {
 			throw new Exception( 'Action not defined for class ' . __CLASS__ );
 		}
@@ -106,7 +104,6 @@ abstract class Task {
 		if ( $auth_level & self::LOGGED_OUT ) {
 			add_action( "admin_post_nopriv_wp_async_$this->action", array( $this, 'handle_postback' ) );
 		}
-
 	}
 
 	/**
@@ -118,7 +115,6 @@ abstract class Task {
 	 * @return array|void
 	 */
 	public function launch() {
-
 		$data = func_get_args();
 		try {
 			$data = $this->prepare_data( $data );
@@ -138,7 +134,6 @@ abstract class Task {
 		if ( isset( $data['current'] ) ) {
 			return $data['current'];
 		}
-
 	}
 
 	/**
@@ -157,7 +152,6 @@ abstract class Task {
 	 * @uses wp_remote_post()
 	 */
 	public function launch_on_shutdown() {
-
 		if ( ! empty( $this->body_data ) ) {
 			$cookies = array();
 			foreach ( $_COOKIE as $name => $value ) {
@@ -178,7 +172,6 @@ abstract class Task {
 
 			wp_remote_post( $url, $request_args );
 		}
-
 	}
 
 	/**
@@ -190,7 +183,6 @@ abstract class Task {
 	 * @uses wp_die()
 	 */
 	public function handle_postback() {
-
 		if ( isset( $_POST['_nonce'] ) && $this->verify_async_nonce( wp_unslash( $_POST['_nonce'] ) ) ) { // phpcs:ignore WordPress.Security
 			if ( ! is_user_logged_in() ) {
 				$this->action = "nopriv_$this->action";
@@ -200,12 +192,11 @@ abstract class Task {
 
 		add_filter(
 			'wp_die_handler',
-			function() {
+			function () {
 				die();
 			}
 		);
 		wp_die();
-
 	}
 
 	/**
@@ -217,15 +208,13 @@ abstract class Task {
 	 * @uses wp_nonce_tick()
 	 * @uses wp_hash()
 	 *
-	 * @return string  The one-time use token.
+	 * @return string The one-time use token.
 	 */
 	protected function create_async_nonce(): string {
-
 		$action = $this->get_nonce_action();
 		$i      = wp_nonce_tick();
 
 		return substr( wp_hash( $i . $action . get_class( $this ), 'nonce' ), - 12, 10 );
-
 	}
 
 	/**
@@ -234,12 +223,11 @@ abstract class Task {
 	 * @uses wp_nonce_tick()
 	 * @uses wp_hash()
 	 *
-	 * @param string $nonce  Nonce to be verified.
+	 * @param string $nonce Nonce to be verified.
 	 *
-	 * @return bool  Whether the nonce check passed or failed.
+	 * @return bool Whether the nonce check passed or failed.
 	 */
 	protected function verify_async_nonce( string $nonce ): bool {
-
 		$action = $this->get_nonce_action();
 		$i      = wp_nonce_tick();
 
@@ -255,16 +243,14 @@ abstract class Task {
 
 		// Invalid nonce.
 		return false;
-
 	}
 
 	/**
 	 * Get a nonce action based on the $action property of the class.
 	 *
-	 * @return string  The nonce action for the current instance.
+	 * @return string The nonce action for the current instance.
 	 */
 	protected function get_nonce_action(): string {
-
 		$action = $this->action;
 
 		if ( substr( $action, 0, 7 ) === 'nopriv_' ) {
@@ -272,7 +258,6 @@ abstract class Task {
 		}
 
 		return "wp_async_$action";
-
 	}
 
 	/**
@@ -289,11 +274,11 @@ abstract class Task {
 	 * Do not set values for 'action' or '_nonce', as those will get overwritten
 	 * later in launch().
 	 *
-	 * @throws Exception  If the postback should not occur for any reason.
+	 * @throws Exception If the postback should not occur for any reason.
 	 *
-	 * @param array $data  The raw data received by the launch method.
+	 * @param array $data The raw data received by the launch method.
 	 *
-	 * @return array  The prepared data.
+	 * @return array The prepared data.
 	 */
 	abstract protected function prepare_data( array $data ): array;
 
@@ -306,5 +291,4 @@ abstract class Task {
 	 * The action should be constructed as "wp_async_task_$this->action"
 	 */
 	abstract protected function run_action();
-
 }

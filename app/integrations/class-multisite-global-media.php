@@ -27,21 +27,18 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.1.5
  */
 class Multisite_Global_Media {
-
 	/**
 	 * Class constructor.
 	 *
 	 * @since 1.1.5
 	 */
 	public function __construct() {
-
 		if ( ! is_multisite() ) {
 			return;
 		}
 
 		add_filter( 'cf_images_attachment_meta', array( $this, 'attachment_meta' ), 10, 2 );
 		add_filter( 'wp_get_attachment_metadata', array( $this, 'attachment_metadata' ), 10, 2 );
-
 	}
 
 	/**
@@ -52,13 +49,12 @@ class Multisite_Global_Media {
 	 *
 	 * @since 1.1.5
 	 *
-	 * @param mixed $cloudflare_image_id  Cloudflare image ID.
-	 * @param int   $attachment_id        Attachment ID.
+	 * @param mixed $cloudflare_image_id Cloudflare image ID.
+	 * @param int   $attachment_id       Attachment ID.
 	 *
 	 * @return mixed
 	 */
 	public function attachment_meta( $cloudflare_image_id, int $attachment_id ) {
-
 		if ( ! empty( $cloudflare_image_id ) || ! class_exists( '\\MultisiteGlobalMedia\\Site' ) ) {
 			return $cloudflare_image_id;
 		}
@@ -77,7 +73,6 @@ class Multisite_Global_Media {
 		}
 
 		return $cloudflare_image_id;
-
 	}
 
 	/**
@@ -95,13 +90,12 @@ class Multisite_Global_Media {
 	 * @see \MultisiteGlobalMedia\Attachment::makeContentImagesResponsive()
 	 * @see wp_image_src_get_dimensions()
 	 *
-	 * @param array $data           Array of metadata for the given attachment.
-	 * @param int   $attachment_id  Attachment post ID.
+	 * @param array $data          Array of metadata for the given attachment.
+	 * @param int   $attachment_id Attachment post ID.
 	 *
 	 * @return array
 	 */
 	public function attachment_metadata( array $data, int $attachment_id ): array {
-
 		if ( ! doing_filter( 'the_content' ) || ! class_exists( '\\MultisiteGlobalMedia\\Site' ) ) {
 			return $data;
 		}
@@ -113,7 +107,6 @@ class Multisite_Global_Media {
 		}
 
 		return $data;
-
 	}
 
 	/**
@@ -121,12 +114,11 @@ class Multisite_Global_Media {
 	 *
 	 * @since 1.1.5
 	 *
-	 * @param int $attachment_id  Attachment ID.
+	 * @param int $attachment_id Attachment ID.
 	 *
-	 * @return mixed  Image ID if found, false otherwise.
+	 * @return mixed Image ID if found, false otherwise.
 	 */
 	private function get_image_id_from_site( int $attachment_id ) {
-
 		$site_id = (int) apply_filters( 'global_media.site_id', 1 ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
 		switch_to_blog( $site_id );
@@ -134,7 +126,5 @@ class Multisite_Global_Media {
 		restore_current_blog();
 
 		return $image;
-
 	}
-
 }

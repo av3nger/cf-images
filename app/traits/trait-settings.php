@@ -22,7 +22,6 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.4.0
  */
 trait Settings {
-
 	/**
 	 * Module icon.
 	 *
@@ -62,8 +61,6 @@ trait Settings {
 	 * Register UI components.
 	 *
 	 * @since 1.4.0
-	 *
-	 * @return void
 	 */
 	protected function register_ui() {}
 
@@ -72,10 +69,7 @@ trait Settings {
 	 *
 	 * @since 1.4.0
 	 *
-	 * @param string $module  Module ID.
-	 *
-	 * @return void
+	 * @param string $module Module ID.
 	 */
 	public function render_description( string $module ) {}
-
 }

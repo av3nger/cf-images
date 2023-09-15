@@ -22,13 +22,10 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.4.0
  */
 class Custom_Domain extends Module {
-
 	/**
 	 * Register UI components.
 	 *
 	 * @since 1.4.0
-	 *
-	 * @return void
 	 */
 	protected function register_ui() {
 		$this->icon  = 'admin-links';
@@ -41,12 +38,9 @@ class Custom_Domain extends Module {
 	 *
 	 * @since 1.4.0
 	 *
-	 * @param string $module  Module ID.
-	 *
-	 * @return void
+	 * @param string $module Module ID.
 	 */
 	public function render_description( string $module ) {
-
 		if ( $module !== $this->module ) {
 			return;
 		}
@@ -64,15 +58,12 @@ class Custom_Domain extends Module {
 			<input class="<?php echo $custom_domain ? '' : 'hidden'; ?>" value="<?php echo wp_http_validate_url( $custom_domain ) ? esc_attr( $custom_domain ) : ''; ?>" type="text" name="custom_domain_input" id="custom-domain-input" placeholder="https://cdn.example.com">
 		</p>
 		<?php
-
 	}
 
 	/**
 	 * Init the module.
 	 *
 	 * @since 1.4.0
-	 *
-	 * @return void
 	 */
 	public function init() {}
 }

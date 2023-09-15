@@ -29,15 +29,12 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.4.0
  */
 class Image_Ai extends Module {
-
 	use Ajax;
 
 	/**
 	 * Register UI components.
 	 *
 	 * @since 1.4.0
-	 *
-	 * @return void
 	 */
 	protected function register_ui() {
 		$this->icon  = 'format-image';
@@ -50,12 +47,9 @@ class Image_Ai extends Module {
 	 *
 	 * @since 1.4.0
 	 *
-	 * @param string $module  Module ID.
-	 *
-	 * @return void
+	 * @param string $module Module ID.
 	 */
 	public function render_description( string $module ) {
-
 		if ( $module !== $this->module ) {
 			return;
 		}
@@ -115,7 +109,6 @@ class Image_Ai extends Module {
 			</p>
 		<?php endif; ?>
 		<?php
-
 	}
 
 	/**
@@ -124,24 +117,29 @@ class Image_Ai extends Module {
 	 * @since 1.4.0
 	 */
 	public function init() {
+		if ( wp_doing_ajax() ) {
+			add_action( 'wp_ajax_cf_images_ai_caption', array( $this, 'ajax_caption_image' ) );
+		}
+	}
 
+	/**
+	 * Init the module.
+	 *
+	 * @since 1.4.1
+	 */
+	public function pre_init() {
 		if ( wp_doing_ajax() ) {
 			add_action( 'wp_ajax_cf_images_ai_login', array( $this, 'ajax_login' ) );
 			add_action( 'wp_ajax_cf_images_ai_disconnect', array( $this, 'ajax_disconnect' ) );
-			add_action( 'wp_ajax_cf_images_ai_caption', array( $this, 'ajax_caption_image' ) );
 		}
-
 	}
 
 	/**
 	 * Login to Image AI service.
 	 *
 	 * @since 1.4.0
-	 *
-	 * @return void
 	 */
 	public function ajax_login() {
-
 		$this->check_ajax_request();
 
 		$data = filter_input( INPUT_POST, 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
@@ -167,33 +165,25 @@ class Image_Ai extends Module {
 		} catch ( Exception $e ) {
 			wp_send_json_error( $e->getMessage() );
 		}
-
 	}
 
 	/**
 	 * Disconnect from API.
 	 *
 	 * @since 1.4.0
-	 *
-	 * @return void
 	 */
 	public function ajax_disconnect() {
-
 		$this->check_ajax_request( true );
 		delete_option( 'cf-image-ai-api-key' );
 		wp_send_json_success();
-
 	}
 
 	/**
 	 * Caption image.
 	 *
 	 * @since 1.4.0
-	 *
-	 * @return void
 	 */
 	public function ajax_caption_image() {
-
 		$this->check_ajax_request();
 
 		$attachment_id = (int) filter_input( INPUT_POST, 'data', FILTER_SANITIZE_NUMBER_INT );
@@ -225,7 +215,5 @@ class Image_Ai extends Module {
 		} catch ( Exception $e ) {
 			wp_send_json_error( $e->getMessage() );
 		}
-
 	}
-
 }
