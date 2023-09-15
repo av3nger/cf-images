@@ -93,6 +93,11 @@ If something is still not working for you, please let me know by creating a supp
 
 == Changelog ==
 
+= 1.5.0 =
+
+Fixed:
+* Compatibility with latest WordPress coding standards
+
 = 1.4.1 - 21.08.2023 =
 
 Fixed:
