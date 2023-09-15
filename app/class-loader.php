@@ -24,13 +24,12 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.3.0
  */
 class Loader {
-
 	/**
 	 * Plugin instance.
 	 *
 	 * @since 1.3.0
 	 * @access private
-	 * @var null|Loader $instance  Loader instance.
+	 * @var null|Loader $instance Loader instance.
 	 */
 	private static $instance = null;
 
@@ -40,7 +39,7 @@ class Loader {
 	 * @since 1.3.0
 	 * @access private
 	 *
-	 * @var array $modules  Registered modules.
+	 * @var array $modules Registered modules.
 	 */
 	private $modules = array();
 
@@ -50,7 +49,7 @@ class Loader {
 	 * @since 1.3.0
 	 * @access private
 	 *
-	 * @var array $integrations  Registered integrations.
+	 * @var array $integrations Registered integrations.
 	 */
 	private $integrations = array();
 
@@ -62,21 +61,17 @@ class Loader {
 	 * @return Loader
 	 */
 	public static function get_instance(): Loader {
-
 		if ( ! self::$instance ) {
 			self::$instance = new self();
 		}
 
 		return self::$instance;
-
 	}
 
 	/**
 	 * Module constructor.
 	 *
 	 * @since 1.3.0
-	 *
-	 * @return void
 	 */
 	private function __construct() {
 		require_once __DIR__ . '/modules/class-module.php';
@@ -87,12 +82,9 @@ class Loader {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param string $module  Module ID.
-	 *
-	 * @return void
+	 * @param string $module Module ID.
 	 */
 	public function module( string $module ) {
-
 		// If already registered - exit.
 		if ( isset( $this->modules[ $module ] ) ) {
 			return;
@@ -105,7 +97,6 @@ class Loader {
 
 		require_once __DIR__ . '/modules/class-' . $module . '.php';
 		$this->activate( $module );
-
 	}
 
 	/**
@@ -113,12 +104,9 @@ class Loader {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param string $module  Module ID.
-	 *
-	 * @return void
+	 * @param string $module Module ID.
 	 */
 	public function integration( string $module ) {
-
 		// If already registered - exit.
 		if ( isset( $this->integrations[ $module ] ) ) {
 			return;
@@ -131,7 +119,6 @@ class Loader {
 
 		require_once __DIR__ . '/integrations/class-' . $module . '.php';
 		$this->activate( $module, 'integrations' );
-
 	}
 
 	/**
@@ -139,13 +126,10 @@ class Loader {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param string $module  Module ID.
-	 * @param string $type    Module type. Accepts: modules, integrations. Default: modules.
-	 *
-	 * @return void
+	 * @param string $module Module ID.
+	 * @param string $type   Module type. Accepts: modules, integrations. Default: modules.
 	 */
 	private function activate( string $module, string $type = 'modules' ) {
-
 		$parts = explode( '-', $module );
 		$parts = array_map( 'ucfirst', $parts );
 		$class = implode( '_', $parts );
@@ -161,7 +145,5 @@ class Loader {
 				$this->integrations[ $module ] = $module_obj;
 			}
 		}
-
 	}
-
 }

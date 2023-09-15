@@ -24,7 +24,6 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.4.0
  */
 class Page_Parser extends Module {
-
 	/**
 	 * Should the module only run on front-end?
 	 *
@@ -39,8 +38,6 @@ class Page_Parser extends Module {
 	 * Register UI components.
 	 *
 	 * @since 1.4.0
-	 *
-	 * @return void
 	 */
 	protected function register_ui() {
 		$this->icon  = 'format-gallery';
@@ -52,12 +49,9 @@ class Page_Parser extends Module {
 	 *
 	 * @since 1.4.0
 	 *
-	 * @param string $module  Module ID.
-	 *
-	 * @return void
+	 * @param string $module Module ID.
 	 */
 	public function render_description( string $module ) {
-
 		if ( $module !== $this->module ) {
 			return;
 		}
@@ -66,15 +60,12 @@ class Page_Parser extends Module {
 			<?php esc_html_e( 'Compatibility module to support themes that do not use WordPress hooks and filters. If the images are not replaced on the site, try enabling this module', 'cf-images' ); ?>
 		</p>
 		<?php
-
 	}
 
 	/**
 	 * Init the module.
 	 *
 	 * @since 1.4.0
-	 *
-	 * @return void
 	 */
 	public function init() {
 		add_action( 'template_redirect', array( $this, 'output_buffering' ), 1 );
@@ -84,8 +75,6 @@ class Page_Parser extends Module {
 	 * Turn on output buffering.
 	 *
 	 * @since 1.4.0
-	 *
-	 * @return void
 	 */
 	public function output_buffering() {
 		ob_start( array( $this, 'replace_images' ) );
@@ -96,12 +85,11 @@ class Page_Parser extends Module {
 	 *
 	 * @since 1.4.0
 	 *
-	 * @param string $buffer  Contents of the output buffer.
+	 * @param string $buffer Contents of the output buffer.
 	 *
 	 * @return string
 	 */
 	public function replace_images( string $buffer ): string {
-
 		$images = $this->get_images( $buffer );
 
 		foreach ( $images[0] as $key => $image ) {
@@ -110,7 +98,6 @@ class Page_Parser extends Module {
 		}
 
 		return $buffer;
-
 	}
 
 	/**
@@ -120,12 +107,11 @@ class Page_Parser extends Module {
 	 *
 	 * @since 1.4.0
 	 *
-	 * @param string $buffer  Output buffer.
+	 * @param string $buffer Output buffer.
 	 *
 	 * @return array
 	 */
 	private function get_images( string $buffer ): array {
-
 		if ( preg_match( '/(?=<body).*<\/body>/is', $buffer, $body ) ) {
 			$pattern = '/<(?:img|source)\b(?>\s+(?:src=[\'"]([^\'"]*)[\'"]|srcset=[\'"]([^\'"]*)[\'"])|[^\s>]+|\s+)*>/i';
 			if ( preg_match_all( $pattern, $body[0], $images ) ) {
@@ -134,7 +120,6 @@ class Page_Parser extends Module {
 		}
 
 		return array();
-
 	}
 
 	/**
@@ -142,14 +127,13 @@ class Page_Parser extends Module {
 	 *
 	 * @since 1.4.0
 	 *
-	 * @param string $image   Original image element.
-	 * @param string $src     Image src attribute value.
-	 * @param string $srcset  Image srcset attribute value.
+	 * @param string $image  Original image element.
+	 * @param string $src    Image src attribute value.
+	 * @param string $srcset Image srcset attribute value.
 	 *
 	 * @return string
 	 */
 	private function replace_paths( string $image, string $src, string $srcset ): string {
-
 		// Try to get image ID from class attribute.
 		$attachment_id = 0;
 		if ( preg_match( '/wp-image-([0-9]+)/i', $image, $class_id ) ) {
@@ -165,7 +149,6 @@ class Page_Parser extends Module {
 		}
 
 		return $image;
-
 	}
 
 	/**
@@ -173,14 +156,13 @@ class Page_Parser extends Module {
 	 *
 	 * @since 1.4.0
 	 *
-	 * @param string $image          Image element.
-	 * @param string $content        Content (value from src or srcset attribute).
-	 * @param int    $attachment_id  Attachment ID.
+	 * @param string $image         Image element.
+	 * @param string $content       Content (value from src or srcset attribute).
+	 * @param int    $attachment_id Attachment ID.
 	 *
 	 * @return string
 	 */
 	private function process( string $image, string $content, int $attachment_id = 0 ): string {
-
 		preg_match_all( '/https?[^\s\'"]*/i', $content, $urls );
 		if ( ! is_array( $urls ) || empty( $urls[0] ) ) {
 			return $image;
@@ -194,7 +176,6 @@ class Page_Parser extends Module {
 		}
 
 		return $image;
-
 	}
 
 	/**
@@ -202,13 +183,12 @@ class Page_Parser extends Module {
 	 *
 	 * @since 1.4.0
 	 *
-	 * @param string $image          Image URL.
-	 * @param int    $attachment_id  Attachment ID.
+	 * @param string $image         Image URL.
+	 * @param int    $attachment_id Attachment ID.
 	 *
 	 * @return string|bool  Cloudflare Image URL or false otherwise.
 	 */
 	private function generate_url( string $image, int $attachment_id = 0 ) {
-
 		/**
 		 * Check if an image is already on Cloudflare.
 		 *
@@ -251,7 +231,6 @@ class Page_Parser extends Module {
 		}
 
 		return $this->get_cdn_domain() . "/$hash/$cloudflare_image_id/w=$width";
-
 	}
 
 
@@ -260,12 +239,11 @@ class Page_Parser extends Module {
 	 *
 	 * @since 1.4.0
 	 *
-	 * @param string $url  The URL to resolve.
+	 * @param string $url The URL to resolve.
 	 *
 	 * @return int The found post ID, or 0 on failure.
 	 */
 	private function attachment_url_to_postid( string $url ): int {
-
 		$post_id = wp_cache_get( $url, 'cf_images' );
 
 		if ( ! $post_id ) {
@@ -288,8 +266,5 @@ class Page_Parser extends Module {
 		}
 
 		return $post_id;
-
 	}
-
-
 }

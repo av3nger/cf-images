@@ -29,7 +29,6 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.1.5
  */
 class Rank_Math {
-
 	/**
 	 * Class constructor.
 	 *
@@ -57,14 +56,13 @@ class Rank_Math {
 	 *
 	 * @since 1.1.5
 	 *
-	 * @param array $replacements  The replacements.
-	 * @param mixed $args          The object, where some replacement values might come from,
-	 *                             could be a post, taxonomy or term.
+	 * @param array $replacements The replacements.
+	 * @param mixed $args         The object, where some replacement values might come from,
+	 *                            could be a post, taxonomy or term.
 	 *
 	 * @return array
 	 */
 	public function fix_file_name_replacement( array $replacements, $args ): array {
-
 		if ( ! isset( $replacements['%filename%'] ) || ! is_object( $args ) || ! isset( $args->filename ) ) {
 			return $replacements;
 		}
@@ -83,7 +81,6 @@ class Rank_Math {
 		} catch ( Exception $e ) {
 			return $replacements;
 		}
-
 	}
 
 	/**
@@ -91,12 +88,11 @@ class Rank_Math {
 	 *
 	 * @since 1.1.5
 	 *
-	 * @param string $image  Image URL.
+	 * @param string $image Image URL.
 	 *
-	 * @return int|bool  Image ID or false if not found.
+	 * @return int|bool Image ID or false if not found.
 	 */
 	private function get_image_id_from_url( string $image ) {
-
 		if ( false === strpos( $image, 'cdn-cgi/imagedelivery' ) ) {
 			return false;
 		}
@@ -126,7 +122,6 @@ class Rank_Math {
 		}
 
 		return $results->posts[0];
-
 	}
 
 	/**
@@ -137,12 +132,11 @@ class Rank_Math {
 	 *
 	 * @see \RankMath\Replace_Variables\Basic_Variables::get_filename()
 	 *
-	 * @param string $file  Attachment image file path.
+	 * @param string $file Attachment image file path.
 	 *
 	 * @return string|null
 	 */
 	private function get_filename( string $file ) {
-
 		$name = pathinfo( $file );
 
 		// Remove size if embedded.
@@ -156,7 +150,5 @@ class Rank_Math {
 		$name = trim( str_replace( '_', ' ', $name ) );
 
 		return '' !== $name ? $name : null;
-
 	}
-
 }

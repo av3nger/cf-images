@@ -28,7 +28,6 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.2.0
  */
 class Media {
-
 	use Traits\Ajax;
 	use Traits\Helpers;
 	use Traits\Stats;
@@ -41,7 +40,6 @@ class Media {
 	 * @since 1.2.0
 	 */
 	public function __construct() {
-
 		if ( ! is_admin() || ! $this->is_set_up() ) {
 			return;
 		}
@@ -54,7 +52,6 @@ class Media {
 
 		// Image actions.
 		add_action( 'delete_attachment', array( $this, 'remove_from_cloudflare' ) );
-
 	}
 
 	/**
@@ -62,12 +59,9 @@ class Media {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $hook  The current admin page.
-	 *
-	 * @return void
+	 * @param string $hook The current admin page.
 	 */
 	public function enqueue_scripts( string $hook ) {
-
 		// Run only on plugin pages.
 		if ( 'upload.php' !== $hook ) {
 			return;
@@ -80,7 +74,6 @@ class Media {
 			CF_IMAGES_VERSION,
 			true
 		);
-
 	}
 
 	/**
@@ -89,15 +82,13 @@ class Media {
 	 * @since 1.0.0
 	 * @since 1.2.0 Moved from class-admin.php
 	 *
-	 * @param string[] $posts_columns  An array of columns displayed in the Media list table.
+	 * @param string[] $posts_columns An array of columns displayed in the Media list table.
 	 *
 	 * @return array
 	 */
 	public function media_columns( array $posts_columns ): array {
-
 		$posts_columns['cf-images-status'] = __( 'Offload status', 'cf-images' );
 		return $posts_columns;
-
 	}
 
 	/**
@@ -106,13 +97,10 @@ class Media {
 	 * @since 1.0.0
 	 * @since 1.2.0 Moved from class-admin.php
 	 *
-	 * @param string $column_name  Name of the custom column.
-	 * @param int    $post_id      Attachment ID.
-	 *
-	 * @return void
+	 * @param string $column_name Name of the custom column.
+	 * @param int    $post_id     Attachment ID.
 	 */
 	public function media_custom_column( string $column_name, int $post_id ) {
-
 		if ( 'cf-images-status' !== $column_name ) {
 			return;
 		}
@@ -191,7 +179,6 @@ class Media {
 			</li>
 		</ul>
 		<?php
-
 	}
 
 	/**
@@ -199,13 +186,12 @@ class Media {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param array   $response    Array of prepared attachment data. @see wp_prepare_attachment_for_js().
-	 * @param WP_Post $attachment  Attachment object.
+	 * @param array   $response   Array of prepared attachment data. @see wp_prepare_attachment_for_js().
+	 * @param WP_Post $attachment Attachment object.
 	 *
 	 * @return array
 	 */
 	public function grid_layout_column( array $response, WP_Post $attachment ): array {
-
 		if ( ! isset( $attachment->ID ) ) {
 			return $response;
 		}
@@ -215,18 +201,14 @@ class Media {
 		$response['cf-images-status'] = ob_get_clean();
 
 		return $response;
-
 	}
 
 	/**
 	 * Offload selected image to Cloudflare Images.
 	 *
 	 * @since 1.0.0
-	 *
-	 * @return void
 	 */
 	public function ajax_offload_image() {
-
 		$this->check_ajax_request();
 
 		$attachment_id = (int) filter_input( INPUT_POST, 'data', FILTER_SANITIZE_NUMBER_INT );
@@ -251,18 +233,14 @@ class Media {
 		$this->fetch_stats( new Api\Image() );
 
 		wp_send_json_success( $this->get_response_data( $attachment_id ) );
-
 	}
 
 	/**
 	 * Bulk upload or bulk remove images progress bar handler.
 	 *
-	 * @since 1.0.1  Combined from ajax_remove_images() and ajax_upload_images().
-	 *
-	 * @return void
+	 * @since 1.0.1 Combined from ajax_remove_images() and ajax_upload_images().
 	 */
 	public function ajax_bulk_process() {
-
 		$this->check_ajax_request();
 
 		// Data sanitized later in code.
@@ -302,7 +280,7 @@ class Media {
 			$total = $images->found_posts;
 		}
 
-		$step++;
+		++$step;
 
 		// Something is wrong with the steps count.
 		if ( $step > $total ) {
@@ -347,18 +325,14 @@ class Media {
 		);
 
 		wp_send_json_success( $response );
-
 	}
 
 	/**
 	 * Skip image from processing.
 	 *
 	 * @since 1.1.2
-	 *
-	 * @return void
 	 */
 	public function ajax_skip_image() {
-
 		$this->check_ajax_request();
 
 		$attachment_id = (int) filter_input( INPUT_POST, 'data', FILTER_SANITIZE_NUMBER_INT );
@@ -366,7 +340,6 @@ class Media {
 		update_post_meta( $attachment_id, '_cloudflare_image_skip', true );
 
 		wp_send_json_success( $this->get_response_data( $attachment_id ) );
-
 	}
 
 	/**
@@ -374,13 +347,12 @@ class Media {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param mixed $metadata       An array of attachment meta data.
-	 * @param int   $attachment_id  Current attachment ID.
+	 * @param mixed $metadata      An array of attachment meta data.
+	 * @param int   $attachment_id Current attachment ID.
 	 *
 	 * @return array
 	 */
 	public function upload_image( $metadata, int $attachment_id ): array {
-
 		if ( ! isset( $metadata['file'] ) ) {
 			do_action( 'cf_images_error', 404, __( 'Media file not found', 'cf-images' ) );
 			return $metadata;
@@ -418,7 +390,6 @@ class Media {
 		}
 
 		return $metadata;
-
 	}
 
 	/**
@@ -426,12 +397,9 @@ class Media {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $post_id  Attachment ID.
-	 *
-	 * @return void
+	 * @param int $post_id Attachment ID.
 	 */
 	public function remove_from_cloudflare( int $post_id ) {
-
 		$id = get_post_meta( $post_id, '_cloudflare_image_id', true );
 
 		if ( ! $id ) {
@@ -452,36 +420,28 @@ class Media {
 		} catch ( Exception $e ) {
 			do_action( 'cf_images_error', $e->getCode(), $e->getMessage() );
 		}
-
 	}
 
 	/**
 	 * Remove selected image from Cloudflare Images.
 	 *
 	 * @since 1.3.0
-	 *
-	 * @return void
 	 */
 	public function ajax_undo_image() {
-
 		$this->check_ajax_request();
 
 		$attachment_id = (int) filter_input( INPUT_POST, 'data', FILTER_SANITIZE_NUMBER_INT );
 		$this->remove_from_cloudflare( $attachment_id );
 
 		wp_send_json_success( $this->get_response_data( $attachment_id ) );
-
 	}
 
 	/**
 	 * Remove (physically delete the files) selected image from WordPress media library.
 	 *
 	 * @since 1.2.1
-	 *
-	 * @return void
 	 */
 	public function ajax_delete_image() {
-
 		$this->check_ajax_request();
 
 		$attachment_id = (int) filter_input( INPUT_POST, 'data', FILTER_SANITIZE_NUMBER_INT );
@@ -503,7 +463,7 @@ class Media {
 				wp_send_json_error( esc_html__( 'Cannot map local image to image on Cloudflare.', 'cf-images' ) );
 			}
 
-			if ( false !== strpos( $results->result->filename, $metadata['file'] ) ) {
+			if ( isset( $results ) && false !== strpos( $results->result->filename, $metadata['file'] ) ) {
 				wp_send_json_error( esc_html__( 'Cannot remove image, scaled image offloaded.', 'cf-images' ) );
 			}
 		}
@@ -511,7 +471,6 @@ class Media {
 		$this->delete_image( $attachment_id );
 
 		wp_send_json_success( $this->get_response_data( $attachment_id ) );
-
 	}
 
 	/**
@@ -519,12 +478,9 @@ class Media {
 	 *
 	 * @since 1.2.1
 	 *
-	 * @param int $attachment_id  Attachment ID.
-	 *
-	 * @return void
+	 * @param int $attachment_id Attachment ID.
 	 */
 	private function delete_image( int $attachment_id ) {
-
 		if ( ! wp_attachment_is_image( $attachment_id ) ) {
 			return;
 		}
@@ -556,7 +512,6 @@ class Media {
 
 		// Set offload flag.
 		update_post_meta( $attachment_id, '_cloudflare_image_offloaded', true );
-
 	}
 
 	/**
@@ -564,20 +519,17 @@ class Media {
 	 *
 	 * @since 1.2.1
 	 *
-	 * @param int    $attachment_id  Attachment ID.
-	 * @param string $image          Path in uploads folder.
-	 * @param bool   $scaled         Whether image is scaled.
-	 *
-	 * @return void
+	 * @param int    $attachment_id Attachment ID.
+	 * @param string $image         Path in uploads folder.
+	 * @param bool   $scaled        Whether image is scaled.
 	 */
 	private function delete( int $attachment_id, string $image, bool $scaled = false ) {
-
 		if ( $scaled ) {
 			$uploads = wp_get_upload_dir();
 			if ( ! empty( $uploads['basedir'] ) ) {
 				$path = trailingslashit( $uploads['basedir'] ) . $image;
 				if ( file_exists( $path ) ) {
-					unlink( $path );
+					wp_delete_file( $path );
 				}
 			}
 			return;
@@ -585,9 +537,8 @@ class Media {
 
 		$path = trailingslashit( dirname( get_attached_file( $attachment_id ) ) ) . $image;
 		if ( file_exists( $path ) ) {
-			unlink( $path );
+			wp_delete_file( $path );
 		}
-
 	}
 
 	/**
@@ -600,22 +551,17 @@ class Media {
 	 * @return string
 	 */
 	private function get_response_data( int $attachment_id ): string {
-
 		ob_start();
 		$this->media_custom_column( 'cf-images-status', $attachment_id );
 		return ob_get_clean();
-
 	}
 
 	/**
 	 * Restore image to media library from Cloudflare.
 	 *
 	 * @since 1.2.1
-	 *
-	 * @return void
 	 */
 	public function ajax_restore_image() {
-
 		$this->check_ajax_request();
 
 		$attachment_id = (int) filter_input( INPUT_POST, 'data', FILTER_SANITIZE_NUMBER_INT );
@@ -635,7 +581,7 @@ class Media {
 				wp_send_json_error( esc_html__( 'Image already exists in the media library.', 'cf-images' ) );
 			}
 
-			file_put_contents( $original, $image_blob ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
+			file_put_contents( $original, $image_blob ); // phpcs:ignore WordPress.WP.AlternativeFunctions
 			wp_create_image_subsizes( $original, $attachment_id );
 		} catch ( Exception $e ) {
 			do_action( 'cf_images_error', $e->getCode(), $e->getMessage() );
@@ -643,7 +589,5 @@ class Media {
 
 		delete_post_meta( $attachment_id, '_cloudflare_image_offloaded' );
 		wp_send_json_success( $this->get_response_data( $attachment_id ) );
-
 	}
-
 }

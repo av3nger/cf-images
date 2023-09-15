@@ -26,7 +26,6 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.3.0
  */
 class Cloudflare_Images extends Module {
-
 	/**
 	 * This is a core module, meaning it can't be enabled/disabled via options.
 	 *
@@ -77,8 +76,6 @@ class Cloudflare_Images extends Module {
 	 * Pre-init actions.
 	 *
 	 * @since 1.2.1
-	 *
-	 * @return void
 	 */
 	protected function pre_init() {
 		if ( $this->full_offload_enabled() ) {
@@ -90,11 +87,8 @@ class Cloudflare_Images extends Module {
 	 * Init the module.
 	 *
 	 * @since 1.3.0
-	 *
-	 * @return void
 	 */
 	public function init() {
-
 		add_action( 'init', array( $this, 'populate_image_sizes' ) );
 
 		// Replace images only on front-end.
@@ -107,23 +101,18 @@ class Cloudflare_Images extends Module {
 
 		// Preconnect to CDN.
 		add_filter( 'wp_resource_hints', array( $this, 'preconnect' ), 10, 2 );
-
 	}
 
 	/**
 	 * Save all required data for faster access later on.
 	 *
 	 * @since 1.0.0
-	 *
-	 * @return void
 	 */
 	public function populate_image_sizes() {
-
 		$this->registered_sizes = wp_get_registered_image_subsizes();
 
 		$this->heights = wp_list_pluck( $this->registered_sizes, 'height' );
 		$this->widths  = wp_list_pluck( $this->registered_sizes, 'width' );
-
 	}
 
 	/**
@@ -134,20 +123,19 @@ class Cloudflare_Images extends Module {
 	 * @param array|false      $image         {
 	 *     Array of image data, or boolean false if no image is available.
 	 *
-	 *     @type string $image[0]  Image source URL.
-	 *     @type int    $image[1]  Image width in pixels.
-	 *     @type int    $image[2]  Image height in pixels.
-	 *     @type bool   $image[3]  Whether the image is a resized image.
+	 *     @type string $image[0] Image source URL.
+	 *     @type int    $image[1] Image width in pixels.
+	 *     @type int    $image[2] Image height in pixels.
+	 *     @type bool   $image[3] Whether the image is a resized image.
 	 * }
-	 * @param int|string       $attachment_id  Image attachment ID.
-	 * @param string|int|int[] $size           Requested image size. Can be any registered image size name, or
-	 *                                         an array of width and height values in pixels (in that order),
-	 *                                         can also be just a single integer value.
+	 * @param int|string       $attachment_id Image attachment ID.
+	 * @param string|int|int[] $size          Requested image size. Can be any registered image size name, or
+	 *                                        an array of width and height values in pixels (in that order),
+	 *                                        can also be just a single integer value.
 	 *
 	 * @return array|false
 	 */
 	public function get_attachment_image_src( $image, $attachment_id, $size ) {
-
 		if ( ! $this->can_run() || ! $image ) {
 			return $image;
 		}
@@ -214,7 +202,6 @@ class Cloudflare_Images extends Module {
 		}
 
 		return $image;
-
 	}
 
 	/**
@@ -222,12 +209,11 @@ class Cloudflare_Images extends Module {
 	 *
 	 * @since 1.4.0
 	 *
-	 * @param int $attachment_id  Attachment ID.
+	 * @param int $attachment_id Attachment ID.
 	 *
 	 * @return array
 	 */
 	public static function get_hash_id_url_string( int $attachment_id ): array {
-
 		$cloudflare_image_id = get_post_meta( $attachment_id, '_cloudflare_image_id', true );
 
 		/**
@@ -235,15 +221,14 @@ class Cloudflare_Images extends Module {
 		 *
 		 * @since 1.1.5
 		 *
-		 * @param mixed $cloudflare_image_id  Image meta
-		 * @param int   $attachment_id        Attachment ID.
+		 * @param mixed $cloudflare_image_id Image meta
+		 * @param int   $attachment_id       Attachment ID.
 		 */
-		$cloudflare_image_id = apply_filters( 'cf_images_attachment_meta', $cloudflare_image_id, (int) $attachment_id );
+		$cloudflare_image_id = apply_filters( 'cf_images_attachment_meta', $cloudflare_image_id, $attachment_id );
 
 		$hash = get_site_option( 'cf-images-hash', '' );
 
 		return array( $hash, $cloudflare_image_id );
-
 	}
 
 	/**
@@ -251,13 +236,12 @@ class Cloudflare_Images extends Module {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array   $response    Array of prepared attachment data. @see wp_prepare_attachment_for_js().
-	 * @param WP_Post $attachment  Attachment object.
+	 * @param array   $response   Array of prepared attachment data. @see wp_prepare_attachment_for_js().
+	 * @param WP_Post $attachment Attachment object.
 	 *
 	 * @return array
 	 */
 	public function prepare_attachment_for_js( array $response, WP_Post $attachment ): array {
-
 		if ( empty( $response['sizes'] ) ) {
 			return $response;
 		}
@@ -273,7 +257,6 @@ class Cloudflare_Images extends Module {
 		}
 
 		return $response;
-
 	}
 
 	/**
@@ -302,7 +285,6 @@ class Cloudflare_Images extends Module {
 	 * @param int    $attachment_id Image attachment ID or 0.
 	 */
 	public function calculate_image_srcset( array $sources, array $size_array, string $image_src, array $image_meta, int $attachment_id ): array {
-
 		foreach ( $sources as $id => $size ) {
 			if ( ! isset( $size['url'] ) ) {
 				continue;
@@ -314,7 +296,6 @@ class Cloudflare_Images extends Module {
 		}
 
 		return $sources;
-
 	}
 
 	/**
@@ -327,14 +308,13 @@ class Cloudflare_Images extends Module {
 	 *
 	 * @since 1.0.2
 	 *
-	 * @param string      $filtered_image  Full img tag with attributes that will replace the source img tag.
-	 * @param string|bool $context         Additional context, like the current filter name or the function name from where this was called.
-	 * @param int         $attachment_id   The image attachment ID. May be 0 in case the image is not an attachment.
+	 * @param string      $filtered_image Full img tag with attributes that will replace the source img tag.
+	 * @param string|bool $context        Additional context, like the current filter name or the function name from where this was called.
+	 * @param int         $attachment_id  The image attachment ID. May be 0 in case the image is not an attachment.
 	 *
 	 * @return string
 	 */
 	public function content_img_tag( string $filtered_image, $context, int $attachment_id ): string {
-
 		// Find `src` attribute in an image.
 		preg_match( '/src=[\'"]([^\'"]+)/i', $filtered_image, $src );
 
@@ -373,15 +353,13 @@ class Cloudflare_Images extends Module {
 		}
 
 		return $filtered_image;
-
 	}
-
 
 	/**
 	 * Preconnect to CDN URL.
 	 *
-	 * @param array  $hints          List of URLs.
-	 * @param string $relation_type  Relation type.
+	 * @param array  $hints         List of URLs.
+	 * @param string $relation_type Relation type.
 	 *
 	 * @return array
 	 */
@@ -399,5 +377,4 @@ class Cloudflare_Images extends Module {
 			)
 		);
 	}
-
 }

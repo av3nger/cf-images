@@ -24,7 +24,6 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.3.0
  */
 class ACF {
-
 	/**
 	 * Class constructor.
 	 *
@@ -39,13 +38,12 @@ class ACF {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param string $url            URL for the given attachment.
-	 * @param int    $attachment_id  Attachment post ID.
+	 * @param string $url           URL for the given attachment.
+	 * @param int    $attachment_id Attachment post ID.
 	 *
 	 * @return mixed
 	 */
 	public function image_field_type_url( string $url, int $attachment_id ) {
-
 		if ( ! doing_action( 'acf/format_value' ) ) {
 			return $url;
 		}
@@ -57,7 +55,5 @@ class ACF {
 		}
 
 		return $url;
-
 	}
-
 }

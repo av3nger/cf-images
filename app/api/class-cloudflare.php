@@ -27,7 +27,6 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.0.0
  */
 class Cloudflare extends Api {
-
 	/**
 	 * Cloudflare API URL.
 	 *
@@ -45,7 +44,6 @@ class Cloudflare extends Api {
 	 * @return array
 	 */
 	protected function get_args(): array {
-
 		$args = parent::get_args();
 
 		$args['headers'] = array(
@@ -53,7 +51,6 @@ class Cloudflare extends Api {
 		);
 
 		return $args;
-
 	}
 
 	/**
@@ -74,17 +71,16 @@ class Cloudflare extends Api {
 	 * @since 1.2.1 Added $decode parameter.
 	 * @since 1.4.0 Abstracted from request().
 	 *
-	 * @param string $body    Response body.
-	 * @param int    $code    Response code.
-	 * @param bool   $decode  JSON decode the response.
-	 * @param array  $args    Arguments array.
+	 * @param string $body   Response body.
+	 * @param int    $code   Response code.
+	 * @param bool   $decode JSON decode the response.
+	 * @param array  $args   Arguments array.
 	 *
-	 * @throws Exception  Exception during API call.
+	 * @throws Exception Exception during API call.
 	 *
 	 * @return stdClass|string
 	 */
 	protected function process_response( string $body, int $code, bool $decode, array $args ) {
-
 		/**
 		 * We can skip these statuses and consider them success.
 		 * 404 - Image not found (when removing an image).
@@ -111,7 +107,5 @@ class Cloudflare extends Api {
 		}
 
 		return $decode ? json_decode( $body ) : $body;
-
 	}
-
 }

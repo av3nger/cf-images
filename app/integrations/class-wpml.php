@@ -24,7 +24,6 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.4.0
  */
 class Wpml {
-
 	/**
 	 * Class constructor.
 	 *
@@ -42,12 +41,11 @@ class Wpml {
 	 *
 	 * @since 1.4.0
 	 *
-	 * @param int $attachment_id  Attachment ID.
+	 * @param int $attachment_id Attachment ID.
 	 *
 	 * @return mixed
 	 */
 	public function get_original_image_id( int $attachment_id ) {
-
 		global $sitepress;
 
 		if ( ! $sitepress || ! method_exists( $sitepress, 'get_default_language' ) ) {
@@ -60,25 +58,20 @@ class Wpml {
 		// Get the ID of the image in the original language.
 		$original_image_id = apply_filters( 'wpml_object_id', $attachment_id, 'attachment', false, $original_language );
 		return is_null( $original_image_id ) ? $attachment_id : $original_image_id;
-
 	}
 
 	/**
 	 * Remove WPML query filters.
 	 *
 	 * @since 1.4.0
-	 *
-	 * @return void
 	 */
 	public function remove_wpml_filters() {
-
 		global $wpml_query_filter;
 
 		if ( is_object( $wpml_query_filter ) && has_filter( 'posts_join', array( $wpml_query_filter, 'posts_join_filter' ) ) ) {
 			remove_filter( 'posts_join', array( $wpml_query_filter, 'posts_join_filter' ) );
 			remove_filter( 'posts_where', array( $wpml_query_filter, 'posts_where_filter' ) );
 		}
-
 	}
 
 	/**
@@ -90,11 +83,8 @@ class Wpml {
 	 * @param int $duplicated_attachment_id The ID of the duplicated attachment.
 	 *
 	 * @since 1.4.0
-	 *
-	 * @return void
 	 */
 	public function ignore_attachment( int $attachment_id, int $duplicated_attachment_id ) {
 		update_post_meta( $duplicated_attachment_id, '_cloudflare_image_skip', true );
 	}
-
 }

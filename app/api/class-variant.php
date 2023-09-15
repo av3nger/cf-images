@@ -27,7 +27,6 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.0.0
  */
 class Variant extends Cloudflare {
-
 	/**
 	 * Toggle flexible variants.
 	 *
@@ -37,14 +36,13 @@ class Variant extends Cloudflare {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param bool $value  Accepts: true|false values.
+	 * @param bool $value Accepts: true|false values.
 	 *
-	 * @throws Exception  Exception during API call.
+	 * @throws Exception Exception during API call.
 	 *
 	 * @return stdClass
 	 */
 	public function toggle_flexible( bool $value ): stdClass {
-
 		$data = array(
 			'flexible_variants' => $value,
 		);
@@ -55,7 +53,5 @@ class Variant extends Cloudflare {
 		$this->set_request_body( wp_json_encode( $data ) );
 
 		return $this->request();
-
 	}
-
 }

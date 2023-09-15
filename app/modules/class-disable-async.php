@@ -23,13 +23,10 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.4.0
  */
 class Disable_Async extends Module {
-
 	/**
 	 * Register UI components.
 	 *
 	 * @since 1.4.0
-	 *
-	 * @return void
 	 */
 	protected function register_ui() {
 		$this->icon  = 'randomize';
@@ -42,12 +39,9 @@ class Disable_Async extends Module {
 	 *
 	 * @since 1.4.0
 	 *
-	 * @param string $module  Module ID.
-	 *
-	 * @return void
+	 * @param string $module Module ID.
 	 */
 	public function render_description( string $module ) {
-
 		if ( $module !== $this->module ) {
 			return;
 		}
@@ -59,16 +53,12 @@ class Disable_Async extends Module {
 			<?php esc_html_e( 'Note: disabling this option will increase the time to upload new images to the media library.', 'cf-images' ); ?>
 		</p>
 		<?php
-
 	}
 
 	/**
 	 * Init the module.
 	 *
 	 * @since 1.4.0
-	 *
-	 * @return void
 	 */
 	public function init() {}
-
 }

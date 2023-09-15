@@ -45,10 +45,9 @@ register_deactivation_hook( __FILE__, array( 'CF_Images\App\Activator', 'deactiv
  * then kicking off the plugin from this point in the file does
  * not affect the page life cycle.
  *
- * @since    1.0.0
+ * @since 1.0.0
  */
 function run_cf_images() {
-
 	require_once __DIR__ . '/app/traits/trait-ajax.php';
 	require_once __DIR__ . '/app/traits/trait-helpers.php';
 	require_once __DIR__ . '/app/traits/trait-settings.php';
@@ -56,6 +55,5 @@ function run_cf_images() {
 	require_once __DIR__ . '/app/class-core.php';
 	App\Activator::maybe_upgrade();
 	App\Core::get_instance();
-
 }
 run_cf_images();

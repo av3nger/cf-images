@@ -25,13 +25,10 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.3.0
  */
 class Disable_Generation extends Module {
-
 	/**
 	 * Register UI components.
 	 *
 	 * @since 1.4.0
-	 *
-	 * @return void
 	 */
 	protected function register_ui() {
 		$this->experimental = true;
@@ -45,12 +42,9 @@ class Disable_Generation extends Module {
 	 *
 	 * @since 1.4.0
 	 *
-	 * @param string $module  Module ID.
-	 *
-	 * @return void
+	 * @param string $module Module ID.
 	 */
 	public function render_description( string $module ) {
-
 		if ( $module !== $this->module ) {
 			return;
 		}
@@ -62,22 +56,16 @@ class Disable_Generation extends Module {
 			<?php esc_html_e( 'Note: This feature is experimental. All the image sizes can be restored with the `Regenerate Thumbnails` plugin.', 'cf-images' ); ?>
 		</p>
 		<?php
-
 	}
 
 	/**
 	 * Init the module.
 	 *
 	 * @since 1.3.0
-	 *
-	 * @return void
 	 */
 	public function init() {
-
 		add_filter( 'wp_image_editors', '__return_empty_array' );
 		add_filter( 'big_image_size_threshold', '__return_false' );
 		add_filter( 'intermediate_image_sizes_advanced', '__return_empty_array' );
-
 	}
-
 }

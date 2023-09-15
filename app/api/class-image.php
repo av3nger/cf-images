@@ -27,22 +27,20 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.0.0
  */
 class Image extends Cloudflare {
-
 	/**
 	 * Upload image to Cloudflare Images.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $image  Image path.
-	 * @param int    $id     Image ID.
-	 * @param string $name   File name.
+	 * @param string $image Image path.
+	 * @param int    $id    Image ID.
+	 * @param string $name  File name.
 	 *
-	 * @throws Exception  Exception during API call.
+	 * @throws Exception Exception during API call.
 	 *
 	 * @return stdClass
 	 */
 	public function upload( string $image, int $id = 0, string $name = '' ): stdClass {
-
 		// CURLFILE only works on PHP 5.5 and higher curl_file_create().
 		$data['file'] = curl_file_create( $image, '', $name ); // phpcs:ignore WordPress.WP.AlternativeFunctions.curl_curl_file_create
 
@@ -80,7 +78,6 @@ class Image extends Cloudflare {
 		}
 
 		return $results;
-
 	}
 
 	/**
@@ -88,19 +85,17 @@ class Image extends Cloudflare {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $id  Image identifier.
+	 * @param string $id Image identifier.
 	 *
-	 * @throws Exception  Exception during API call.
+	 * @throws Exception Exception during API call.
 	 *
 	 * @return stdClass
 	 */
 	public function delete( string $id ): stdClass {
-
 		$this->set_method( 'DELETE' );
 		$this->set_endpoint( "/$id" );
 
 		return $this->request();
-
 	}
 
 	/**
@@ -108,12 +103,11 @@ class Image extends Cloudflare {
 	 *
 	 * @since 1.1.0
 	 *
-	 * @throws Exception  Exception during API call.
+	 * @throws Exception Exception during API call.
 	 *
 	 * @return stdClass
 	 */
 	public function stats(): stdClass {
-
 		$this->set_method( 'GET' );
 		$this->set_endpoint( '/stats' );
 
@@ -128,7 +122,6 @@ class Image extends Cloudflare {
 		}
 
 		return $result->result->count;
-
 	}
 
 	/**
@@ -138,14 +131,13 @@ class Image extends Cloudflare {
 	 *
 	 * @see https://developers.cloudflare.com/api/operations/cloudflare-images-base-image
 	 *
-	 * @param int $attachment_id  Attachment ID.
+	 * @param int $attachment_id Attachment ID.
 	 *
-	 * @throws Exception  Exception during API call.
+	 * @throws Exception Exception during API call.
 	 *
 	 * @return stdClass|string
 	 */
 	public function download( int $attachment_id ) {
-
 		$image_id = get_post_meta( $attachment_id, '_cloudflare_image_id', true );
 		if ( ! $image_id ) {
 			return new stdClass();
@@ -155,7 +147,6 @@ class Image extends Cloudflare {
 		$this->set_endpoint( "/$image_id/blob" );
 
 		return $this->request( false );
-
 	}
 
 	/**
@@ -163,14 +154,13 @@ class Image extends Cloudflare {
 	 *
 	 * @since 1.4.0
 	 *
-	 * @param int $attachment_id  Attachment ID.
+	 * @param int $attachment_id Attachment ID.
 	 *
-	 * @throws Exception  Exception during API call.
+	 * @throws Exception Exception during API call.
 	 *
 	 * @return stdClass|string
 	 */
 	public function details( int $attachment_id ) {
-
 		$image_id = get_post_meta( $attachment_id, '_cloudflare_image_id', true );
 		if ( ! $image_id ) {
 			return new stdClass();
@@ -180,7 +170,5 @@ class Image extends Cloudflare {
 		$this->set_endpoint( "/$image_id" );
 
 		return $this->request();
-
 	}
-
 }

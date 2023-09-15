@@ -31,7 +31,6 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.0.0
  */
 class Core {
-
 	use Traits\Helpers;
 
 	/**
@@ -39,7 +38,7 @@ class Core {
 	 *
 	 * @since 1.0.0
 	 * @access private
-	 * @var null|Core $instance  Plugin instance.
+	 * @var null|Core $instance Plugin instance.
 	 */
 	private static $instance = null;
 
@@ -48,7 +47,7 @@ class Core {
 	 *
 	 * @since 1.0.0
 	 * @access protected
-	 * @var string $plugin_name  The string used to uniquely identify this plugin.
+	 * @var string $plugin_name The string used to uniquely identify this plugin.
 	 */
 	protected $plugin_name = 'cf-images';
 
@@ -96,13 +95,11 @@ class Core {
 	 * @return Core
 	 */
 	public static function get_instance(): Core {
-
 		if ( ! self::$instance ) {
 			self::$instance = new self();
 		}
 
 		return self::$instance;
-
 	}
 
 	/**
@@ -115,7 +112,6 @@ class Core {
 	 * @since 1.0.0
 	 */
 	private function __construct() {
-
 		$this->load_libs();
 		$this->init_integrations();
 		$this->load_modules();
@@ -132,7 +128,6 @@ class Core {
 		add_action( 'cf_images_error', array( $this, 'set_error' ), 10, 2 );
 		add_action( 'admin_init', array( $this, 'maybe_redirect_to_plugin_page' ) );
 		add_action( 'admin_init', array( $this, 'enable_flexible_variants' ) );
-
 	}
 
 	/**
@@ -141,7 +136,6 @@ class Core {
 	 * @since 1.0.0
 	 */
 	private function load_libs() {
-
 		require_once __DIR__ . '/class-media.php';
 		require_once __DIR__ . '/class-admin.php';
 		require_once __DIR__ . '/class-settings.php';
@@ -160,18 +154,14 @@ class Core {
 			require_once __DIR__ . '/async/class-upload.php';
 			$this->upload = new Async\Upload();
 		}
-
 	}
 
 	/**
 	 * Get Cloudflare CDN domain.
 	 *
 	 * @since 1.0.2
-	 *
-	 * @return void
 	 */
 	private function set_cdn_domain() {
-
 		$custom_domain = get_option( 'cf-images-custom-domain', false );
 
 		if ( $custom_domain ) {
@@ -180,7 +170,6 @@ class Core {
 
 			$this->cdn_domain = $domain;
 		}
-
 	}
 
 	/**
@@ -193,11 +182,8 @@ class Core {
 	 * @see Integrations\Rank_Math
 	 * @see Integrations\Spectra
 	 * @see Integrations\Wpml
-	 *
-	 * @return void
 	 */
 	private function init_integrations() {
-
 		$loader = Loader::get_instance();
 
 		$loader->integration( 'spectra' );
@@ -205,7 +191,6 @@ class Core {
 		$loader->integration( 'rank-math' );
 		$loader->integration( 'acf' );
 		$loader->integration( 'wpml' );
-
 	}
 
 	/**
@@ -223,11 +208,8 @@ class Core {
 	 * @see Modules\Full_Offload
 	 * @see Modules\Image_Ai
 	 * @see Modules\Page_Parser
-	 *
-	 * @return void
 	 */
 	private function load_modules() {
-
 		$loader = Loader::get_instance();
 
 		$loader->module( 'auto-offload' );
@@ -240,7 +222,6 @@ class Core {
 		$loader->module( 'full-offload' );
 		$loader->module( 'image-ai' );
 		$loader->module( 'page-parser' );
-
 	}
 
 	/**
@@ -248,30 +229,23 @@ class Core {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param int|mixed $code     Error code.
-	 * @param string    $message  Error message.
-	 *
-	 * @return void
+	 * @param int|mixed $code    Error code.
+	 * @param string    $message Error message.
 	 */
 	public function set_error( $code = '', string $message = '' ) {
-
 		if ( '' === $code ) {
 			self::$error = false;
 		} else {
 			self::$error = new WP_Error( $code, $message );
 		}
-
 	}
 
 	/**
 	 * Maybe redirect to plugin page on activation.
 	 *
 	 * @since 1.0.0
-	 *
-	 * @return void
 	 */
 	public function maybe_redirect_to_plugin_page() {
-
 		if ( ! get_transient( 'cf-images-admin-redirect' ) ) {
 			return;
 		}
@@ -279,7 +253,6 @@ class Core {
 		delete_transient( 'cf-images-admin-redirect' );
 		wp_safe_redirect( admin_url( 'upload.php?page=cf-images' ) );
 		exit;
-
 	}
 
 	/**
@@ -288,11 +261,8 @@ class Core {
 	 * This action is only required once.
 	 *
 	 * @since 1.0.0
-	 *
-	 * @return void
 	 */
 	public function enable_flexible_variants() {
-
 		// Already done.
 		if ( get_option( 'cf-images-setup-done', false ) ) {
 			return;
@@ -306,7 +276,6 @@ class Core {
 		} catch ( Exception $e ) {
 			self::$error = new WP_Error( $e->getCode(), $e->getMessage() );
 		}
-
 	}
 
 	/**
@@ -315,7 +284,7 @@ class Core {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return string  The name of the plugin.
+	 * @return string The name of the plugin.
 	 */
 	public function get_plugin_name(): string {
 		return $this->plugin_name;
@@ -325,7 +294,7 @@ class Core {
 	 * Retrieve stored error.
 	 *
 	 * @since 1.0.0
-	 * @sicne 1.2.0  Change to static method.
+	 * @sicne 1.2.0 Change to static method.
 	 *
 	 * @return bool|WP_Error
 	 */
@@ -354,5 +323,4 @@ class Core {
 	public function admin(): Admin {
 		return $this->admin;
 	}
-
 }

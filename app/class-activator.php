@@ -24,14 +24,12 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.0.0
  */
 class Activator {
-
 	/**
 	 * Activation hook.
 	 *
 	 * @since 1.0.0
 	 */
 	public static function activate() {
-
 		$activate = filter_input( INPUT_POST, 'action', FILTER_UNSAFE_RAW );
 		$checked  = filter_input( INPUT_POST, 'checked', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 
@@ -40,7 +38,6 @@ class Activator {
 		}
 
 		set_transient( 'cf-images-admin-redirect', 5 * MINUTE_IN_SECONDS );
-
 	}
 
 	/**
@@ -55,11 +52,8 @@ class Activator {
 	 * Check if we need to perform any upgrade actions.
 	 *
 	 * @sicne 1.2.0
-	 *
-	 * @return void
 	 */
 	public static function maybe_upgrade() {
-
 		$version = get_site_option( 'cf-images-version' );
 
 		if ( CF_IMAGES_VERSION === $version ) {
@@ -71,7 +65,5 @@ class Activator {
 		}
 
 		update_site_option( 'cf-images-version', CF_IMAGES_VERSION );
-
 	}
-
 }

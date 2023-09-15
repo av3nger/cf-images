@@ -24,7 +24,6 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.0.0
  */
 class Upload extends Task {
-
 	/**
 	 * Action.
 	 *
@@ -50,12 +49,11 @@ class Upload extends Task {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $data  Indexed array of input data.
+	 * @param array $data Indexed array of input data.
 	 *
 	 * @return array
 	 */
 	protected function prepare_data( array $data ): array {
-
 		$out_data = array(
 			'images'   => array(),
 			'metadata' => array(),
@@ -72,23 +70,19 @@ class Upload extends Task {
 		$out_data['metadata'][ $data[1] ] = $data[0];
 
 		return $out_data;
-
 	}
 
 	/**
 	 * Run the do_action function for the asynchronous postback.
 	 *
 	 * @since 1.0.0
-	 *
-	 * @return void
 	 */
 	protected function run_action() {
-
 		$image_ids = wp_parse_id_list( $_POST['images'] ); // phpcs:ignore
 
 		array_walk(
 			$image_ids,
-			function( $attachment_id ) {
+			function ( $attachment_id ) {
 				if ( ! wp_attachment_is_image( $attachment_id ) ) {
 					return;
 				}
@@ -99,7 +93,5 @@ class Upload extends Task {
 				}
 			}
 		);
-
 	}
-
 }

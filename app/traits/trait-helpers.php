@@ -25,7 +25,6 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.0.0
  */
 trait Helpers {
-
 	/**
 	 * Get plugin slug.
 	 *
@@ -45,7 +44,6 @@ trait Helpers {
 	 * @return bool
 	 */
 	public function is_set_up(): bool {
-
 		if ( get_option( 'cf-images-auth-error', false ) ) {
 			return false;
 		}
@@ -55,7 +53,6 @@ trait Helpers {
 		$defines_found  = defined( 'CF_IMAGES_ACCOUNT_ID' ) && defined( 'CF_IMAGES_KEY_TOKEN' );
 
 		return ( $config_written && $saved ) || $defines_found;
-
 	}
 
 	/**
@@ -66,13 +63,11 @@ trait Helpers {
 	 * @return bool|WP_Error
 	 */
 	public function get_error() {
-
 		if ( get_option( 'cf-images-auth-error', false ) ) {
 			return new WP_Error( 401, esc_html__( 'Authentication error. Check and update Cloudflare API key.', 'cf-images' ) );
 		}
 
 		return Core::get_error();
-
 	}
 
 	/**
@@ -96,5 +91,4 @@ trait Helpers {
 	public function full_offload_enabled(): bool {
 		return (bool) get_option( 'cf-images-full-offload', false );
 	}
-
 }
