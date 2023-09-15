@@ -48,7 +48,7 @@ class Auto_Resize extends Module {
 		}
 		?>
 		<p>
-			<?php esc_html_e( 'Set the image size to match the DOM required size. Instead of WordPress attachment sizes, this will attempt to match the image size to the element it is placed in on the front-end.', 'cf-images' ); ?>
+			<?php esc_html_e( 'Will make images more responsive by adding missing image sizes into the srcset image attribute. Requires the "Parse page for images" module to be enabled.', 'cf-images' ); ?>
 		</p>
 		<?php
 	}
