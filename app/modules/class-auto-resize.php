@@ -48,7 +48,10 @@ class Auto_Resize extends Module {
 		}
 		?>
 		<p>
-			<?php esc_html_e( 'Will make images more responsive by adding missing image sizes into the srcset image attribute. Requires the "Parse page for images" module to be enabled.', 'cf-images' ); ?>
+			<?php esc_html_e( 'Will make images more responsive by adding missing image sizes into the srcset image attribute.', 'cf-images' ); ?>
+		</p>
+		<p>
+			<?php esc_html_e( 'Requires the "Parse page for images" module to be enabled.', 'cf-images' ); ?>
 		</p>
 		<?php
 	}
@@ -94,18 +97,16 @@ class Auto_Resize extends Module {
 		 * 2. Extract image ID and w= attribute value.
 		 * 3. Generate intermediate sizes.
 		 */
-		if ( ! preg_match( '#(https?://[^/]+/[^/]+/[a-zA-Z0-9-]+)/w=(\d+)#', $image, $matches ) ) {
-			return $image;
-		}
+		if ( preg_match( '#(https?://[^/]+/[^/]+/[a-zA-Z0-9-]+)/w=(\d+)#', $image, $matches ) ) {
+			$sizes  = array( 320, 480, 768, 1024, 1280, 1536, 1920, 2048 );
+			$srcset = array(); // Yeah, yeah, I know, we're changing the type.
+			foreach ( $sizes as $size ) {
+				if ( ( $matches[2] - $size ) < 50 ) {
+					break;
+				}
 
-		$sizes  = array( 320, 480, 768, 1024, 1280, 1536, 1920, 2048 );
-		$srcset = array(); // Yeah, yeah, I know, we're changing the type.
-		foreach ( $sizes as $size ) {
-			if ( ( $matches[2] - $size ) < 50 ) {
-				break;
+				$srcset[] = $matches[1] . '/w=' . $size . ' ' . $size . 'px';
 			}
-
-			$srcset[] = $matches[1] . '/w=' . $size . ' ' . $size . 'px';
 		}
 
 		if ( empty( $srcset ) ) {
