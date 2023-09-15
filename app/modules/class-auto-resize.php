@@ -69,122 +69,70 @@ class Auto_Resize extends Module {
 	 * @since 1.3.0
 	 */
 	public function init() {
-		//add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_auto_resize' ) );
-		//add_filter( 'wp_get_attachment_image_attributes', array( $this, 'add_class_to_attachment' ) );
-		//add_filter( 'wp_content_img_tag', array( $this, 'add_class_to_img_tag' ), 15 );
-
-		// New.
-		add_filter( 'cf_images_replace_paths', array( $this, 'add_srcset_to_image' ), 10, 3 );
+		add_filter( 'cf_images_replace_paths', array( $this, 'add_srcset_to_image' ), 10, 4 );
 	}
 
 	/**
-	 * Enqueue auto resize script on front-end.
+	 * Add srcset and sizes attributes to the image markup.
 	 *
-	 * @since 1.2.0
-	 */
-	public function enqueue_auto_resize() {
-		// This needs to be loaded in the header, otherwise images get double loaded.
-		wp_enqueue_script( $this->get_slug(), CF_IMAGES_DIR_URL . 'assets/js/cf-auto-resize.min.js', array(), CF_IMAGES_VERSION, false );
-	}
-
-	/**
-	 * Add special class to images that are served via Cloudflare.
+	 * @since 1.5.0
 	 *
-	 * @since 1.2.0
-	 * @see wp_get_attachment_image()
-	 *
-	 * @param string[] $attr Array of attribute values for the image markup, keyed by attribute name.
-	 *
-	 * @return string[]
-	 */
-	public function add_class_to_attachment( array $attr ): array {
-		if ( empty( $attr['src'] ) || false === strpos( $attr['src'], $this->get_cdn_domain() ) ) {
-			return $attr;
-		}
-
-		if ( empty( $attr['class'] ) ) {
-			$attr['class'] = 'cf-image-auto-resize';
-		} elseif ( false === strpos( $attr['class'], 'cf-image-auto-resize' ) ) {
-			$attr['class'] .= ' cf-image-auto-resize';
-		}
-
-		return $attr;
-	}
-
-	/**
-	 * Add special class to images that are served via Cloudflare.
-	 *
-	 * @since 1.2.0
-	 *
-	 * @param string $filtered_image Full img tag with attributes that will replace the source img tag.
+	 * @param string $image         Image markup.
+	 * @param string $src           Current src attribute value.
+	 * @param string $srcset        Current srcset attribute value.
+	 * @param int    $attachment_id Attachment ID.
 	 *
 	 * @return string
 	 */
-	public function add_class_to_img_tag( string $filtered_image ): string {
-		if ( ! get_option( 'cf-images-auto-resize', false ) ) {
-			return $filtered_image;
-		}
-
-		if ( false === strpos( $filtered_image, $this->get_cdn_domain() ) ) {
-			return $filtered_image;
-		}
-
-		$this->add_resize_class( $filtered_image );
-
-		return $filtered_image;
-	}
-
-	/**
-	 * Add attribute to selected tag.
-	 *
-	 * @since 1.2.0
-	 *
-	 * @param string $element HTML element.
-	 */
-	private function add_resize_class( string &$element ) {
-		$closing = false === strpos( $element, '/>' ) ? '>' : ' />';
-		$quotes  = false === strpos( $element, '"' ) ? '\'' : '"';
-
-		preg_match( "/class=['\"]([^'\"]+)['\"]/i", $element, $current_value );
-		if ( ! empty( $current_value['1'] ) ) {
-			// Remove the attribute if it already exists.
-			$element = preg_replace( '/class=[\'"](.*?)[\'"]/i', '', $element );
-
-			if ( false === strpos( $current_value['1'], 'cf-image-auto-resize' ) ) {
-				$value = $current_value['1'] . ' cf-image-auto-resize';
-			} else {
-				$value = $current_value['1'];
-			}
-
-			$element = rtrim( $element, $closing ) . " class=$quotes$value$quotes$closing";
-		}
-	}
-
-	public function add_srcset_to_image( string $image, string $src, string $srcset ): string {
+	public function add_srcset_to_image( string $image, string $src, string $srcset, int $attachment_id ): string {
 		if ( empty( $src ) || ! empty( $srcset ) ) {
 			return $image;
 		}
 
 		/**
-		 * 1. Get hash.
+		 * 1. Get src image with hash.
 		 * 2. Extract image ID and w= attribute value.
 		 * 3. Generate intermediate sizes.
 		 */
-		if ( ! preg_match( '/w=(\d+)(?:,h=\d+)?"/', $image, $matches ) || empty( $matches[1] ) ) {
+		if ( ! preg_match( '#(https?://[^/]+/[^/]+/[a-zA-Z0-9-]+)/w=(\d+)#', $image, $matches ) ) {
 			return $image;
 		}
 
-		$width = $matches[1];
-		$sizes = array( 320, 480, 768, 1024, 1280, 1536, 1920, 2048 );
+		$sizes  = array( 320, 480, 768, 1024, 1280, 1536, 1920, 2048 );
+		$srcset = array(); // Yeah, yeah, I know, we're changing the type.
 		foreach ( $sizes as $size ) {
-			if ( ( $matches[1] - $size ) < 50 ) {
+			if ( ( $matches[2] - $size ) < 50 ) {
 				break;
 			}
 
-			// TODO: We stopped here.
-			//$url = '';
-			//$srcset .= str_replace( ' ', '%20', $src ) . ' ' . $size . 'px, ';
+			$srcset[] = $matches[1] . '/w=' . $size . ' ' . $size . 'px';
 		}
-	}
 
+		if ( empty( $srcset ) ) {
+			return $image;
+		}
+
+		// Add the original image to the srcset.
+		$srcset[] = $matches[1] . '/w=' . $matches[2] . ' ' . $matches[2] . 'px';
+
+		// Check if there is already a 'sizes' attribute.
+		$sizes = strpos( $image, ' sizes=' );
+
+		if ( ! $sizes ) {
+			$sizes = wp_calculate_image_sizes( array( $matches[2] ), $src, null, $attachment_id );
+		}
+
+		if ( $sizes && is_string( $sizes ) ) {
+			$attr = sprintf( ' sizes="%s"', esc_attr( $sizes ) );
+
+			// Add the srcset and sizes attributes to the image markup.
+			$image = preg_replace( '/<img ([^>]+?)[\/ ]*>/', '<img $1' . $attr . ' />', $image );
+		}
+
+		return str_replace(
+			'src="' . $matches[0] . '"',
+			'src="' . $matches[0] . '" srcset="' . implode( ', ', $srcset ) . '"',
+			$image
+		);
+	}
 }
