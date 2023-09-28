@@ -14,6 +14,7 @@
 
 namespace CF_Images\App\Modules;
 
+use CF_Images\App\Image;
 use CF_Images\App\Traits\Helpers;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -76,7 +77,7 @@ class Auto_Resize extends Module {
 	 * @since 1.3.0
 	 */
 	public function init() {
-		add_filter( 'cf_images_replace_paths', array( $this, 'add_srcset_to_image' ), 10, 4 );
+		add_filter( 'cf_images_replace_paths', array( $this, 'add_srcset_to_image' ), 10, 2 );
 	}
 
 	/**
@@ -84,20 +85,19 @@ class Auto_Resize extends Module {
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param string $image         Image markup.
-	 * @param string $src           Current src attribute value.
-	 * @param string $srcset        Current srcset attribute value.
-	 * @param int    $attachment_id Attachment ID.
+	 * @param string $image_dom Image markup.
+	 * @param Image  $image     Image object.
 	 *
 	 * @return string
 	 */
-	public function add_srcset_to_image( string $image, string $src, string $srcset, int $attachment_id ): string {
-		if ( empty( $src ) || ! empty( $srcset ) ) {
-			return $image;
+	public function add_srcset_to_image( string $image_dom, Image $image ): string {
+		if ( empty( $image->get_src() ) || ! empty( $image->get_srcset() ) ) {
+			return $image_dom;
 		}
 
-		$domain = $this->get_cdn_domain();
-		$domain = str_replace( '.', '\.', $domain );
+		if ( empty( $image->get_cf_image() ) ) {
+			return $image_dom;
+		}
 
 		/**
 		 * 1. Get src image with hash.
@@ -105,48 +105,41 @@ class Auto_Resize extends Module {
 		 * 3. Generate intermediate sizes.
 		 */
 
-		// Find `src` attribute in an image.
-		if ( ! preg_match( '/src=[\'"]([^\'"]+)/i', $image, $src ) ) {
-			return $image;
-		}
-
-		if ( preg_match( '#(' . $domain . '/.*?/)w=(\d+)#', $src[1], $matches ) ) {
-			$sizes  = array( 320, 480, 768, 1024, 1280, 1536, 1920, 2048 );
-			$srcset = array(); // Yeah, yeah, I know, we're changing the type.
-			foreach ( $sizes as $size ) {
-				if ( ( $matches[2] - $size ) < 50 ) {
-					break;
-				}
-
-				$srcset[] = $matches[1] . 'w=' . $size . ' ' . $size . 'px';
+		$sizes  = array( 320, 480, 768, 1024, 1280, 1536, 1920, 2048 );
+		$srcset = array();
+		foreach ( $sizes as $size ) {
+			if ( ( $image->get_width() - $size ) < 50 ) {
+				break;
 			}
+
+			$srcset[] = $image->get_cf_image() . 'w=' . $size . ' ' . $size . 'px';
 		}
+
+		unset( $size );
 
 		if ( empty( $srcset ) ) {
-			return $image;
+			return $image_dom;
 		}
 
 		// Add the original image to the srcset.
-		$srcset[] = $matches[1] . 'w=' . $matches[2] . ' ' . $matches[2] . 'px';
+		$srcset[] = $image->get_cf_image() . 'w=' . $image->get_width() . ' ' . $image->get_width() . 'px';
 
 		// Check if there is already a 'sizes' attribute.
-		$sizes = strpos( $image, ' sizes=' );
+		$sizes = strpos( $image_dom, ' sizes=' );
 
 		if ( ! $sizes ) {
-			$sizes = wp_calculate_image_sizes( array( $matches[2] ), $src, null, $attachment_id );
+			$sizes = wp_calculate_image_sizes( array( $image->get_width() ), $image->get_src(), null, $image->get_id() );
 		}
 
 		if ( $sizes && is_string( $sizes ) ) {
 			$attr = sprintf( ' sizes="%s"', esc_attr( $sizes ) );
 
 			// Add the srcset and sizes attributes to the image markup.
-			$image = preg_replace( '/<img ([^>]+?)[\/ ]*>/', '<img $1' . $attr . ' />', $image );
+			$image_dom = preg_replace( '/<img ([^>]+?)[\/ ]*>/', '<img $1' . $attr . ' />', $image_dom );
+			unset( $sizes );
 		}
 
-		return str_replace(
-			'src="' . $src[1] . '"',
-			'src="' . $matches[0] . '" srcset="' . implode( ', ', $srcset ) . '"',
-			$image
-		);
+		$attr = sprintf( ' srcset="%s"', esc_attr( implode( ', ', $srcset ) ) );
+		return preg_replace( '/<img ([^>]+?)[\/ ]*>/', '<img $1' . $attr . ' />', $image_dom );
 	}
 }
