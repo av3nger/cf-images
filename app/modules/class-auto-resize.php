@@ -14,6 +14,8 @@
 
 namespace CF_Images\App\Modules;
 
+use CF_Images\App\Traits\Helpers;
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -24,6 +26,8 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.3.0
  */
 class Auto_Resize extends Module {
+	use Helpers;
+
 	/**
 	 * Register UI components.
 	 *
@@ -92,12 +96,21 @@ class Auto_Resize extends Module {
 			return $image;
 		}
 
+		$domain = $this->get_cdn_domain();
+		$domain = str_replace( '.', '\.', $domain );
+
 		/**
 		 * 1. Get src image with hash.
 		 * 2. Extract image ID and w= attribute value.
 		 * 3. Generate intermediate sizes.
 		 */
-		if ( preg_match( '#(https?://[^/]+/[^/]+/[a-zA-Z0-9-]+)/w=(\d+)#', $image, $matches ) ) {
+
+		// Find `src` attribute in an image.
+		if ( ! preg_match( '/src=[\'"]([^\'"]+)/i', $image, $src ) ) {
+			return $image;
+		}
+
+		if ( preg_match( '#(' . $domain . '/.*?/)w=(\d+)#', $src[1], $matches ) ) {
 			$sizes  = array( 320, 480, 768, 1024, 1280, 1536, 1920, 2048 );
 			$srcset = array(); // Yeah, yeah, I know, we're changing the type.
 			foreach ( $sizes as $size ) {
@@ -105,7 +118,7 @@ class Auto_Resize extends Module {
 					break;
 				}
 
-				$srcset[] = $matches[1] . '/w=' . $size . ' ' . $size . 'px';
+				$srcset[] = $matches[1] . 'w=' . $size . ' ' . $size . 'px';
 			}
 		}
 
@@ -114,7 +127,7 @@ class Auto_Resize extends Module {
 		}
 
 		// Add the original image to the srcset.
-		$srcset[] = $matches[1] . '/w=' . $matches[2] . ' ' . $matches[2] . 'px';
+		$srcset[] = $matches[1] . 'w=' . $matches[2] . ' ' . $matches[2] . 'px';
 
 		// Check if there is already a 'sizes' attribute.
 		$sizes = strpos( $image, ' sizes=' );
@@ -131,7 +144,7 @@ class Auto_Resize extends Module {
 		}
 
 		return str_replace(
-			'src="' . $matches[0] . '"',
+			'src="' . $src[1] . '"',
 			'src="' . $matches[0] . '" srcset="' . implode( ', ', $srcset ) . '"',
 			$image
 		);
