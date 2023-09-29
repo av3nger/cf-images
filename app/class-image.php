@@ -129,7 +129,7 @@ class Image {
 	 * @since 1.5.0
 	 */
 	private function get_attachment_id() {
-		if ( preg_match( '/wp-image-([0-9]+)/i', $this->image, $class_id ) ) {
+		if ( preg_match( '/wp-image-(\d+)/i', $this->image, $class_id ) ) {
 			$this->id = absint( $class_id[1] );
 		}
 	}
@@ -140,7 +140,10 @@ class Image {
 	 * @since 1.5.0
 	 */
 	private function check_if_cf_image() {
-		if ( false === strpos( $this->get_src(), 'imagedelivery.net' ) && false === strpos( $this->get_src(), 'cdn-cgi/imagedelivery' ) ) {
+		if (
+			false === strpos( $this->get_src(), 'imagedelivery.net' ) &&
+			false === strpos( $this->get_src(), 'cdn-cgi/imagedelivery' )
+		) {
 			return;
 		}
 
@@ -215,7 +218,10 @@ class Image {
 		 * to the site URL, this will cause all images to be flagged. Instead, we check that the image is either
 		 * served from imagedelivery.net or has cdn-cgi/imagedelivery part in the URL.
 		 */
-		if ( false !== strpos( $image_url, 'imagedelivery.net' ) || false !== strpos( $image_url, 'cdn-cgi/imagedelivery' ) ) {
+		if (
+			false !== strpos( $image_url, 'imagedelivery.net' ) ||
+			false !== strpos( $image_url, 'cdn-cgi/imagedelivery' )
+		) {
 			return false;
 		}
 
