@@ -140,6 +140,7 @@ class Core {
 		require_once __DIR__ . '/class-admin.php';
 		require_once __DIR__ . '/class-settings.php';
 		require_once __DIR__ . '/class-loader.php';
+		require_once __DIR__ . '/class-image.php';
 
 		// API classes.
 		require_once __DIR__ . '/api/class-api.php';

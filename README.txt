@@ -95,6 +95,9 @@ If something is still not working for you, please let me know by creating a supp
 
 = 1.5.0 =
 
+Changed:
+* The "Auto resize images on front-end" module has been refactored to prevent double loading of images
+
 Fixed:
 * Compatibility with latest WordPress coding standards
 
