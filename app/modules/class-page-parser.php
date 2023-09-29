@@ -94,6 +94,10 @@ class Page_Parser extends Module {
 	public function replace_images( string $buffer ): string {
 		$images = $this->get_images( $buffer );
 
+		if ( empty( $images ) ) {
+			return $buffer;
+		}
+
 		foreach ( $images[0] as $key => $image_dom ) {
 			$image  = new Image( $image_dom, $images[1][ $key ], $images[2][ $key ] );
 			$buffer = str_replace( $image_dom, $image->get_processed(), $buffer );

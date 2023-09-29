@@ -100,6 +100,7 @@ Changed:
 
 Fixed:
 * Compatibility with latest WordPress coding standards
+* PHP warnings with page parser module on pages with no images
 
 = 1.4.1 - 21.08.2023 =
 
