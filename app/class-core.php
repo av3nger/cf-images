@@ -19,6 +19,7 @@
 namespace CF_Images\App;
 
 use Exception;
+use WP_CLI;
 use WP_Error;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -141,6 +142,11 @@ class Core {
 		require_once __DIR__ . '/class-settings.php';
 		require_once __DIR__ . '/class-loader.php';
 		require_once __DIR__ . '/class-image.php';
+
+		if ( defined( 'WP_CLI' ) && constant( 'WP_CLI' ) ) {
+			require_once __DIR__ . '/class-cli.php';
+			WP_CLI::add_command( 'cf-images', '\\CF_Images\\App\\CLI' );
+		}
 
 		// API classes.
 		require_once __DIR__ . '/api/class-api.php';

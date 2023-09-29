@@ -95,6 +95,9 @@ If something is still not working for you, please let me know by creating a supp
 
 = 1.5.0 =
 
+Added:
+* WP CLI support via the "wp cf-images" commands (bulk & individual offload)
+
 Changed:
 * The "Auto resize images on front-end" module has been refactored to prevent double loading of images
 
