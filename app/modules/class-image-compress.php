@@ -16,8 +16,7 @@
 namespace CF_Images\App\Modules;
 
 use CF_Images\App\Api\Compress;
-use CF_Images\App\Core;
-use CF_Images\App\Traits\Ajax;
+use CF_Images\App\Traits;
 use Exception;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -30,7 +29,8 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.5.0
  */
 class Image_Compress extends Module {
-	use Ajax;
+	use Traits\Ajax;
+	use Traits\Helpers;
 
 	/**
 	 * Register UI components.
@@ -99,7 +99,7 @@ class Image_Compress extends Module {
 		try {
 			$response = ( new Compress() )->optimize( $image_path, $mime_type );
 			$this->write_file( $image_path, $response );
-			wp_send_json_success( Core::get_instance()->admin()->media()->get_response_data( $attachment_id ) );
+			wp_send_json_success( $this->media()->get_response_data( $attachment_id ) );
 		} catch ( Exception $e ) {
 			wp_send_json_error( $e->getMessage() );
 		}

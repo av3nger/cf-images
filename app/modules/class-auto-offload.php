@@ -15,6 +15,7 @@
 namespace CF_Images\App\Modules;
 
 use CF_Images\App\Core;
+use CF_Images\App\Traits\Helpers;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -26,6 +27,8 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.3.0
  */
 class Auto_Offload extends Module {
+	use Helpers;
+
 	/**
 	 * Register UI components.
 	 *
@@ -72,13 +75,11 @@ class Auto_Offload extends Module {
 	 * @since 1.3.0
 	 */
 	public function auto_offload() {
-		$media = Core::get_instance()->admin()->media();
-
 		// If async uploads are disabled, use the default hook.
 		if ( get_option( 'cf-images-disable-async', false ) ) {
-			add_filter( 'wp_generate_attachment_metadata', array( $media, 'upload_image' ), 10, 2 );
+			add_filter( 'wp_generate_attachment_metadata', array( $this->media(), 'upload_image' ), 10, 2 );
 		} else {
-			add_filter( 'wp_async_wp_generate_attachment_metadata', array( $media, 'upload_image' ), 10, 2 );
+			add_filter( 'wp_async_wp_generate_attachment_metadata', array( $this->media(), 'upload_image' ), 10, 2 );
 		}
 	}
 }

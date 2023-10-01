@@ -13,6 +13,7 @@
 namespace CF_Images\App\Traits;
 
 use CF_images\App\Core;
+use CF_Images\App\Media;
 use WP_Error;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -101,5 +102,16 @@ trait Helpers {
 	 */
 	public function is_fuzion_api_connected(): bool {
 		return (bool) get_option( 'cf-image-ai-api-key', false );
+	}
+
+	/**
+	 * Media getter.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @return Media
+	 */
+	public function media(): Media {
+		return Core::get_instance()->admin()->media();
 	}
 }
