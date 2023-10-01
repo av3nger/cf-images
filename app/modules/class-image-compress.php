@@ -16,6 +16,7 @@
 namespace CF_Images\App\Modules;
 
 use CF_Images\App\Api\Compress;
+use CF_Images\App\Core;
 use CF_Images\App\Traits\Ajax;
 use Exception;
 
@@ -97,31 +98,40 @@ class Image_Compress extends Module {
 
 		try {
 			$response = ( new Compress() )->optimize( $image_path, $mime_type );
-			// TODO: move FS operations to a separate class or trait.
-			$temp_file = wp_tempnam( basename( $image_path ) );
-
-			if ( ! $temp_file ) {
-				wp_send_json_error( __( 'Could not create temporary file.', 'cf-images' ) );
-				return;
-			}
-
-			file_put_contents( $temp_file, $response ); // phpcs:ignore WordPress.WP.AlternativeFunctions
-
-			// TODO: remove .bak extension.
-			$success = rename( $temp_file, $image_path . '.bak' ); // phpcs:ignore WordPress.WP.AlternativeFunctions
-			if ( ! $success ) {
-				copy( $temp_file, $image_path . '.bak' ); // TODO: remove .bak extension.
-			}
-
-			if ( file_exists( $temp_file ) ) {
-				wp_delete_file( $temp_file );
-			}
-
-			// TODO: regenerate the image dropdowns.
-			//wp_send_json_success( $this->get_response_data( $attachment_id ) );
-			wp_send_json_success( __( 'Image compressed.', 'cf-images' ) );
+			$this->write_file( $image_path, $response );
+			wp_send_json_success( Core::get_instance()->admin()->media()->get_response_data( $attachment_id ) );
 		} catch ( Exception $e ) {
 			wp_send_json_error( $e->getMessage() );
+		}
+	}
+
+	/**
+	 * Write file.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param string $original_path Original image path.
+	 * @param string $new_image     New image data.
+	 *
+	 * @throws Exception Error writing file.
+	 */
+	private function write_file( string $original_path, string $new_image ) {
+		$temp_file = wp_tempnam( basename( $original_path ) );
+
+		if ( ! $temp_file ) {
+			throw new Exception( esc_html__( 'Could not create temporary file.', 'cf-images' ) );
+		}
+
+		file_put_contents( $temp_file, $new_image ); // phpcs:ignore WordPress.WP.AlternativeFunctions
+
+		// TODO: remove .bak extension.
+		$success = rename( $temp_file, $original_path . '.bak' ); // phpcs:ignore WordPress.WP.AlternativeFunctions
+		if ( ! $success ) {
+			copy( $temp_file, $original_path . '.bak' ); // TODO: remove .bak extension.
+		}
+
+		if ( file_exists( $temp_file ) ) {
+			wp_delete_file( $temp_file );
 		}
 	}
 }

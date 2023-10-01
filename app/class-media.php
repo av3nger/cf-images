@@ -556,7 +556,7 @@ class Media {
 	 *
 	 * @return string
 	 */
-	private function get_response_data( int $attachment_id ): string {
+	public function get_response_data( int $attachment_id ): string {
 		ob_start();
 		$this->media_custom_column( 'cf-images-status', $attachment_id );
 		return ob_get_clean();
