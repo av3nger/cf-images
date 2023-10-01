@@ -175,6 +175,12 @@ class Media {
 							<?php esc_html_e( 'Generate alt text', 'cf-images' ); ?>
 						</a></li>
 					<?php endif; ?>
+					<?php if ( apply_filters( 'cf_images_module_enabled', false, 'image-compress' ) ) : ?>
+						<li><a href="#" class="cf-images-compress" data-id="<?php echo esc_attr( $post_id ); ?>">
+							<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/minimize.svg' ); ?>" alt="<?php esc_attr_e( 'Compress image', 'cf-images' ); ?>" />
+							<?php esc_html_e( 'Compress image', 'cf-images' ); ?>
+						</a></li>
+					<?php endif; ?>
 				</ul>
 			</li>
 		</ul>

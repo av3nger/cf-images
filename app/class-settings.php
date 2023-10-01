@@ -71,6 +71,7 @@ class Settings {
 			'disable-generation' => 'cf-images-disable-generation',
 			'full-offload'       => 'cf-images-full-offload',
 			'image-ai'           => 'cf-images-image-ai',
+			'image-compress'     => 'cf-images-image-compress',
 			'page-parser'        => 'cf-images-page-parser',
 		);
 

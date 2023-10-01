@@ -6,9 +6,6 @@ import { post } from '../helpers/post';
 ( function( $ ) {
 	'use strict';
 
-	// Toggle settings on/off.
-	$( '#image_ai' ).on( 'change', ( e ) => $( '.cf-images-ai-settings' ).toggle( e.target.checked ) );
-
 	// Disconnect from Image AI.
 	$( '#image-ai-disconnect' ).on( 'click', function( e ) {
 		e.preventDefault();
@@ -16,6 +13,22 @@ import { post } from '../helpers/post';
 		post( 'cf_images_ai_disconnect' )
 			.then( () => window.location.search += '&saved=true' )
 			.catch( window.console.log );
+	} );
+
+	// Show API key form.
+	$( '#js-add-image-ai-api-key' ).on( 'click', function( e ) {
+		e.preventDefault();
+
+		$( '#cf-images-ai-email' ).hide();
+		$( '#cf-images-ai-api-key' ).show();
+	} );
+
+	// Show login form.
+	$( '#js-show-login-pass-form' ).on( 'click', function( e ) {
+		e.preventDefault();
+
+		$( '#cf-images-ai-email' ).show();
+		$( '#cf-images-ai-api-key' ).hide();
 	} );
 
 	// Login.
@@ -39,6 +52,30 @@ import { post } from '../helpers/post';
 				}
 
 				window.location.search += '&login=true';
+			} )
+			.catch( window.console.log );
+	} );
+
+	// Save API key.
+	$( '#image-ai-save-key' ).on( 'click', function( e ) {
+		e.preventDefault();
+		const { save, savingChanges } = CFImages.strings;
+
+		$( this ).attr( 'aria-busy', true ).html( savingChanges );
+
+		const args = {
+			apikey: $( '#cf-ai-api-key' ).val(),
+		};
+
+		post( 'cf_images_ai_save', args )
+			.then( ( response ) => {
+				$( this ).attr( 'aria-busy', false ).html( save );
+				if ( ! response.success && 'undefined' !== typeof response.data ) {
+					showNotice( response.data, 'error' );
+					return;
+				}
+
+				window.location.search += '&saved=true';
 			} )
 			.catch( window.console.log );
 	} );

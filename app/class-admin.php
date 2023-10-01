@@ -129,6 +129,7 @@ class Admin {
 				'strings' => array(
 					'disconnecting' => esc_html__( 'Disconnecting...', 'cf-images' ),
 					'saveChange'    => esc_html__( 'Save Changes', 'cf-images' ),
+					'save'          => esc_html__( 'Save', 'cf-images' ),
 					'inProgress'    => esc_html__( 'Processing', 'cf-images' ),
 					'offloadError'  => esc_html__( 'Processing error', 'cf-images' ),
 					'savingChanges' => esc_html__( 'Saving...', 'cf-images' ),

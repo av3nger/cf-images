@@ -153,6 +153,7 @@ class Core {
 		require_once __DIR__ . '/api/class-cloudflare.php';
 		require_once __DIR__ . '/api/class-fuzion.php';
 		require_once __DIR__ . '/api/class-ai.php';
+		require_once __DIR__ . '/api/class-compress.php';
 		require_once __DIR__ . '/api/class-image.php';
 		require_once __DIR__ . '/api/class-variant.php';
 
@@ -214,6 +215,7 @@ class Core {
 	 * @see Modules\Disable_Generation
 	 * @see Modules\Full_Offload
 	 * @see Modules\Image_Ai
+	 * @see Modules\Image_Compress
 	 * @see Modules\Page_Parser
 	 */
 	private function load_modules() {
@@ -228,6 +230,7 @@ class Core {
 		$loader->module( 'disable-generation' );
 		$loader->module( 'full-offload' );
 		$loader->module( 'image-ai' );
+		$loader->module( 'image-compress' );
 		$loader->module( 'page-parser' );
 	}
 

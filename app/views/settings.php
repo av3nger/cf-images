@@ -39,7 +39,22 @@ $api_stats = sprintf( /* translators: %1$d - uploaded image count, %2$d - allowe
 				</ul>
 				<ul>
 					<li>
-						<?php esc_html_e( 'Status', 'cf-images' ); ?>: <span style="color: green"><?php esc_html_e( 'Connected', 'cf-images' ); ?></span>
+						<?php esc_html_e( 'Cloudflare status', 'cf-images' ); ?>:
+						<span style="color: green">
+							<?php esc_html_e( 'Connected', 'cf-images' ); ?>
+						</span>
+					</li>
+					<li>
+						<?php esc_html_e( 'AI & Optimization API', 'cf-images' ); ?>:
+						<span style="color: <?php echo $this->is_fuzion_api_connected() ? 'green' : 'red'; ?>">
+							<?php
+							if ( $this->is_fuzion_api_connected() ) {
+								esc_html_e( 'Connected', 'cf-images' );
+							} else {
+								esc_html_e( 'Disconnected', 'cf-images' );
+							}
+							?>
+						</span>
 					</li>
 				</ul>
 			</nav>

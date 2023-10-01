@@ -91,4 +91,15 @@ trait Helpers {
 	public function full_offload_enabled(): bool {
 		return (bool) get_option( 'cf-images-full-offload', false );
 	}
+
+	/**
+	 * Check if Fuzion API is connected.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @return bool
+	 */
+	public function is_fuzion_api_connected(): bool {
+		return (bool) get_option( 'cf-image-ai-api-key', false );
+	}
 }

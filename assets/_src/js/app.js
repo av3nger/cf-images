@@ -42,6 +42,7 @@ import './modules/image-ai.js';
 		cf_images_delete_image: '.cf-images-delete', // Process remove image action from media library.
 		cf_images_restore_image: '.cf-images-restore', // Download image back to media library.
 		cf_images_ai_caption: '.cf-images-ai-alt', // Process AI caption.
+		cf_images_compress: '.cf-images-compress', // Compress image.
 	};
 
 	/**

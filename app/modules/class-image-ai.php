@@ -58,7 +58,7 @@ class Image_Ai extends Module {
 			<?php esc_html_e( 'Use the power of AI to tag and caption your images.', 'cf-images' ); ?>
 		</p>
 		<?php if ( ! get_option( 'cf-image-ai-api-key', false ) ) : ?>
-			<div class="cf-images-ai-settings" <?php echo $this->is_enabled() ? '' : 'style="display: none"'; ?>>
+			<div class="cf-images-ai-settings">
 				<p>
 					<?php
 					printf( /* translators: %1$s - register link, %2$s - closing tag, %3$s - add API key link */
@@ -91,7 +91,12 @@ class Image_Ai extends Module {
 						<input type="text" id="cf-ai-api-key" placeholder="<?php esc_attr_e( 'API key', 'cf-images' ); ?>">
 					</p>
 					<p>
-						<a href="#" role="button" class="outline" aria-busy="false">
+						<a href="#" id="js-show-login-pass-form">
+							<?php esc_html_e( 'Use email & password', 'cf-images' ); ?>
+						</a>
+					</p>
+					<p>
+						<a href="#" role="button" class="outline" aria-busy="false" id="image-ai-save-key">
 							<?php esc_html_e( 'Save', 'cf-images' ); ?>
 						</a>
 					</p>
@@ -131,6 +136,7 @@ class Image_Ai extends Module {
 		if ( wp_doing_ajax() ) {
 			add_action( 'wp_ajax_cf_images_ai_login', array( $this, 'ajax_login' ) );
 			add_action( 'wp_ajax_cf_images_ai_disconnect', array( $this, 'ajax_disconnect' ) );
+			add_action( 'wp_ajax_cf_images_ai_save', array( $this, 'ajax_save_key' ) );
 		}
 	}
 
@@ -215,5 +221,24 @@ class Image_Ai extends Module {
 		} catch ( Exception $e ) {
 			wp_send_json_error( $e->getMessage() );
 		}
+	}
+
+	/**
+	 * Save API key.
+	 *
+	 * @since 1.5.0
+	 */
+	public function ajax_save_key() {
+		$this->check_ajax_request();
+
+		$data = filter_input( INPUT_POST, 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+
+		if ( empty( $data['apikey'] ) ) {
+			wp_send_json_error( __( 'API key cannot be empty.', 'cf-images' ) );
+		}
+
+		update_option( 'cf-image-ai-api-key', sanitize_text_field( $data['apikey'] ), false );
+
+		wp_send_json_success();
 	}
 }
