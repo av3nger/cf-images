@@ -96,6 +96,7 @@ If something is still not working for you, please let me know by creating a supp
 = 1.5.0 =
 
 Added:
+* Image compression module: optimize the size of your media library images
 * WP CLI support via the "wp cf-images" commands (bulk & individual offload)
 
 Changed:
