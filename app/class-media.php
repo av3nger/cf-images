@@ -131,7 +131,10 @@ class Media {
 			$status[] = esc_html__( 'Not offloaded', 'cf-images' );
 		}
 		?>
-		<span class="status"><?php echo esc_html( implode( ' | ', $status ) ); ?></span>
+		<span class="status">
+			<?php echo esc_html( implode( ' | ', $status ) ); ?>
+			<?php do_action( 'cf_images_media_custom_column', (int) $post_id ); ?>
+		</span>
 		<ul>
 			<li role="list" dir="rtl">
 				<a href="#" aria-haspopup="listbox"><?php esc_html_e( 'Actions', 'cf-images' ); ?></a>

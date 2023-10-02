@@ -33,6 +33,19 @@ class Image_Compress extends Module {
 	use Traits\Helpers;
 
 	/**
+	 * Default `cf_images_compressed` meta values.
+	 *
+	 * @since 1.5.0
+	 */
+	const DEFAULTS = array(
+		'stats' => array(
+			'size_before' => 0,
+			'size_after'  => 0,
+		),
+		'sizes' => array(),
+	);
+
+	/**
 	 * Register UI components.
 	 *
 	 * @since 1.4.0
@@ -67,9 +80,40 @@ class Image_Compress extends Module {
 	 * @since 1.5.0
 	 */
 	public function init() {
+		add_action( 'cf_images_media_custom_column', array( $this, 'add_stats_to_media_library' ) );
+
 		if ( wp_doing_ajax() ) {
 			add_action( 'wp_ajax_cf_images_compress', array( $this, 'ajax_compress' ) );
 		}
+	}
+
+	/**
+	 * Add stats to media library.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param int $attachment_id Attachment ID.
+	 */
+	public function add_stats_to_media_library( int $attachment_id ) {
+		$stats = get_post_meta( $attachment_id, 'cf_images_compressed', true );
+
+		if ( ! $stats ) {
+			return;
+		}
+
+		if ( ! isset( $stats['stats']['size_before'] ) || ! isset( $stats['stats']['size_after'] ) ) {
+			return;
+		}
+
+		echo '<br>';
+
+		// TODO: the percentage is not calculated correctly, we don't have all the file sizes.
+		$savings = $stats['stats']['size_before'] - $stats['stats']['size_after'];
+		printf( /* translators: %1$s - savings, %2$s - savings in percent */
+			esc_html__( 'Savings: %1$s (%2$s)', 'cf-images' ),
+			esc_html( $this->format_bytes( $savings ) ),
+			esc_html( round( $savings / $stats['stats']['size_before'] * 100, 1 ) ) . '%'
+		);
 	}
 
 	/**
@@ -94,15 +138,112 @@ class Image_Compress extends Module {
 			return;
 		}
 
-		$image_path = wp_get_original_image_path( $attachment_id );
-
 		try {
-			$response = ( new Compress() )->optimize( $image_path, $mime_type );
-			$this->write_file( $image_path, $response );
+			$images  = $this->get_paths( $attachment_id );
+			$results = ( new Compress() )->optimize( $images, $mime_type );
+
+			$db_stats = get_post_meta( $attachment_id, 'cf_images_compressed', true );
+			if ( empty( $db_stats ) ) {
+				$db_stats = self::DEFAULTS;
+			}
+
+			foreach ( $results as $size => $response ) {
+				if ( ! isset( $images[ $size ] ) ) {
+					continue;
+				}
+
+				if ( ! $this->write_file( $images[ $size ], $response['image'] ) ) {
+					continue;
+				}
+
+				// Only save stats if we were able to save the file.
+				$stats = $this->get_stats( $response['stats'] );
+
+				$db_stats['stats']['size_before'] += $stats['o'] ?? 0;
+				$db_stats['stats']['size_after']  += $stats['c'] ?? 0;
+
+				$db_stats['sizes'][ $size ] = array(
+					'size_before' => $stats['o'] ?? 0,
+					'size_after'  => $stats['c'] ?? 0,
+				);
+			}
+
+			update_post_meta( $attachment_id, 'cf_images_compressed', $db_stats );
+
 			wp_send_json_success( $this->media()->get_response_data( $attachment_id ) );
 		} catch ( Exception $e ) {
 			wp_send_json_error( $e->getMessage() );
 		}
+	}
+
+	/**
+	 * Get a list of image paths for a given attachment.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param int $attachment_id Attachment ID.
+	 *
+	 * @return string[]
+	 */
+	private function get_paths( int $attachment_id ): array {
+		// TODO: make sure we're not trying to compress already compressed images.
+		$original  = wp_get_original_image_path( $attachment_id );
+		$image_dir = dirname( $original );
+		$metadata  = wp_get_attachment_metadata( $attachment_id, true );
+
+		$paths = array(
+			'full' => path_join( wp_get_upload_dir()['basedir'], $metadata['file'] ),
+		);
+
+		if ( ! empty( $metadata['sizes'] ) ) {
+			foreach ( $metadata['sizes'] as $size => $image_meta ) {
+				if ( apply_filters( 'cf_images_skip_compress_size', false, $size, $attachment_id ) ) {
+					continue;
+				}
+
+				$file_path = path_join( $image_dir, $image_meta['file'] );
+
+				if ( ! file_exists( $file_path ) ) {
+					continue;
+				}
+
+				$paths[ $size ] = $file_path;
+			}
+		}
+
+		// Full size will often be a '-scaled' image, make sure we always have the original.
+		if ( isset( $paths['full'] ) && $paths['full'] !== $original ) {
+			$paths['original'] = $original;
+		}
+
+		return $paths;
+	}
+
+	/**
+	 * Convert stats header into an array of values.
+	 *
+	 * @param string $stats Stats header.
+	 *
+	 * @return array {
+	 *     @type int $o Original file size.
+	 *     @type int $c Compressed file size.
+	 * }
+	 */
+	private function get_stats( string $stats ): array {
+		$result = array();
+
+		if ( empty( $stats ) ) {
+			return $result;
+		}
+
+		$pairs = explode( ',', $stats );
+		foreach ( $pairs as $pair ) {
+			list( $key, $value ) = explode( '=', $pair );
+
+			$result[ $key ] = (int) $value;
+		}
+
+		return $result;
 	}
 
 	/**
@@ -113,25 +254,48 @@ class Image_Compress extends Module {
 	 * @param string $original_path Original image path.
 	 * @param string $new_image     New image data.
 	 *
-	 * @throws Exception Error writing file.
+	 * @return bool
 	 */
-	private function write_file( string $original_path, string $new_image ) {
+	private function write_file( string $original_path, string $new_image ): bool {
 		$temp_file = wp_tempnam( basename( $original_path ) );
 
 		if ( ! $temp_file ) {
-			throw new Exception( esc_html__( 'Could not create temporary file.', 'cf-images' ) );
+			return false;
 		}
 
 		file_put_contents( $temp_file, $new_image ); // phpcs:ignore WordPress.WP.AlternativeFunctions
 
-		// TODO: remove .bak extension.
-		$success = rename( $temp_file, $original_path . '.bak' ); // phpcs:ignore WordPress.WP.AlternativeFunctions
+		$success = rename( $temp_file, $original_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions
 		if ( ! $success ) {
-			copy( $temp_file, $original_path . '.bak' ); // TODO: remove .bak extension.
+			copy( $temp_file, $original_path );
 		}
 
 		if ( file_exists( $temp_file ) ) {
 			wp_delete_file( $temp_file );
 		}
+
+		return true;
+	}
+
+	/**
+	 * Convert bytes to a readable format.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param int $bytes     Bytes.
+	 * @param int $precision Precision.
+	 *
+	 * @return string
+	 */
+	private function format_bytes( int $bytes, int $precision = 2 ): string {
+		$units = array( 'B', 'KB', 'MB', 'GB', 'TB' );
+
+		$bytes = max( $bytes, 0 );
+		$pow   = floor( ( $bytes ? log( $bytes ) : 0 ) / log( 1024 ) );
+		$pow   = min( $pow, count( $units ) - 1 );
+
+		$bytes /= ( 1 << ( 10 * $pow ) );
+
+		return round( $bytes, $precision ) . ' ' . $units[ $pow ];
 	}
 }

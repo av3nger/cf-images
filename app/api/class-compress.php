@@ -12,8 +12,6 @@
 
 namespace CF_Images\App\Api;
 
-use Exception;
-
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -23,7 +21,7 @@ if ( ! defined( 'WPINC' ) ) {
  *
  * @since 1.5.0
  */
-class Compress extends Api {
+class Compress extends API_Multi {
 	/**
 	 * Fuzion API URL.
 	 *
@@ -32,15 +30,6 @@ class Compress extends Api {
 	 * @var string
 	 */
 	protected $api_url = 'https://images.getfuzion.io';
-
-	/**
-	 * Headers.
-	 *
-	 * @since 1.5.0
-	 * @access private
-	 * @var array
-	 */
-	private $headers = array();
 
 	/**
 	 * Get arguments for request.
@@ -52,45 +41,38 @@ class Compress extends Api {
 	protected function get_args(): array {
 		$args = parent::get_args();
 
-		$args['headers'] = array_merge(
-			array(
-				'apiKey' => get_option( 'cf-image-ai-api-key', '' ),
-			),
-			$this->headers
-		);
+		$args['headers']['apiKey'] = get_option( 'cf-image-ai-api-key', '' );
 
 		return $args;
 	}
 
 	/**
-	 * Set additional headers.
+	 * Compress images.
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param string $header Header.
-	 * @param string $value  Header value.
+	 * @param array  $images    All image sizes for a selected attachment ID.
+	 * @param string $mime_type Mime type.
+	 *
+	 * @return array
 	 */
-	private function set_header( string $header, string $value ) {
-		$this->headers[ $header ] = $value;
-	}
-
-	/**
-	 * Compress an image.
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param string $image_path Image path.
-	 * @param string $mime_type  Image mime type.
-	 *
-	 * @return string
-	 * @throws Exception If error.
-	 */
-	public function optimize( string $image_path, string $mime_type ): string {
+	public function optimize( array $images, string $mime_type ): array {
 		$this->set_header( 'Content-Type', $mime_type );
-		$this->set_request_body( file_get_contents( $image_path ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions
 		$this->set_timeout( 30 );
+		$this->set_data( $images );
 
-		wp_raise_memory_limit( 'image' );
-		return $this->request( false );
+		$results = array();
+		foreach ( $this->requests() as $id => $response ) {
+			if ( ! isset( $response->success ) || ! $response->success ) {
+				continue;
+			}
+
+			$results[ $id ] = array(
+				'stats' => $response->headers->getValues( 'fuzion-stats' )[0] ?? '',
+				'image' => $response->body,
+			);
+		}
+
+		return $results;
 	}
 }

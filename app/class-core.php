@@ -150,6 +150,7 @@ class Core {
 
 		// API classes.
 		require_once __DIR__ . '/api/class-api.php';
+		require_once __DIR__ . '/api/class-api-multi.php';
 		require_once __DIR__ . '/api/class-cloudflare.php';
 		require_once __DIR__ . '/api/class-fuzion.php';
 		require_once __DIR__ . '/api/class-ai.php';
