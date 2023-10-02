@@ -132,6 +132,7 @@ class Media {
 		}
 		?>
 		<span class="status">
+			<?php esc_html_e( 'Status:', 'cf-images' ); ?>
 			<?php echo esc_html( implode( ' | ', $status ) ); ?>
 			<?php do_action( 'cf_images_media_custom_column', (int) $post_id ); ?>
 		</span>

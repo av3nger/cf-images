@@ -118,6 +118,11 @@ class Image_Compress extends Module {
 			return;
 		}
 
+		$mime_type = get_post_mime_type( $attachment_id );
+		if ( ! in_array( $mime_type, array( 'image/jpeg', 'image/png' ), true ) ) {
+			return;
+		}
+
 		$stats    = get_post_meta( $attachment_id, 'cf_images_compressed', true );
 		$metadata = wp_get_attachment_metadata( $attachment_id, true );
 
