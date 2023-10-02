@@ -87,7 +87,7 @@ class Media {
 	 * @return array
 	 */
 	public function media_columns( array $posts_columns ): array {
-		$posts_columns['cf-images-status'] = __( 'Offload status', 'cf-images' );
+		$posts_columns['cf-images-status'] = __( 'Optimization', 'cf-images' );
 		return $posts_columns;
 	}
 
@@ -111,7 +111,9 @@ class Media {
 		// Check if supported format.
 		$supported_mimes = array( 'image/jpeg', 'image/png', 'image/gif', 'image/webp' );
 		if ( ! in_array( get_post_mime_type( $post_id ), $supported_mimes, true ) ) {
-			esc_html_e( 'Unsupported format', 'cf-images' );
+			?>
+			<span class="status"><?php esc_html_e( 'Unsupported format', 'cf-images' ); ?></span>
+			<?php
 			return;
 		}
 
