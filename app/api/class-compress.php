@@ -12,6 +12,8 @@
 
 namespace CF_Images\App\Api;
 
+use Exception;
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -55,6 +57,7 @@ class Compress extends API_Multi {
 	 * @param string $mime_type Mime type.
 	 *
 	 * @return array
+	 * @throws Exception If API request failed.
 	 */
 	public function optimize( array $images, string $mime_type ): array {
 		$this->set_header( 'Content-Type', $mime_type );
@@ -62,8 +65,13 @@ class Compress extends API_Multi {
 		$this->set_data( $images );
 
 		$results = array();
+		$errors  = array();
 		foreach ( $this->requests() as $id => $response ) {
 			if ( ! isset( $response->success ) || ! $response->success ) {
+				// Get the error code and message.
+				if ( isset( $response->status_code ) && isset( $response->body ) ) {
+					$errors[ $response->status_code ] = $response->body;
+				}
 				continue;
 			}
 
@@ -71,6 +79,11 @@ class Compress extends API_Multi {
 				'stats' => $response->headers->getValues( 'fuzion-stats' )[0] ?? '',
 				'image' => $response->body,
 			);
+		}
+
+		if ( empty( $results ) && ! empty( $errors ) ) {
+			$error_code = array_key_first( $errors );
+			throw new Exception( $errors[ $error_code ], (int) $error_code );
 		}
 
 		return $results;

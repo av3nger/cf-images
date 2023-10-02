@@ -33,19 +33,6 @@ class Image_Compress extends Module {
 	use Traits\Helpers;
 
 	/**
-	 * Default `cf_images_compressed` meta values.
-	 *
-	 * @since 1.5.0
-	 */
-	const DEFAULTS = array(
-		'stats' => array(
-			'size_before' => 0,
-			'size_after'  => 0,
-		),
-		'sizes' => array(),
-	);
-
-	/**
 	 * Register UI components.
 	 *
 	 * @since 1.4.0
@@ -143,16 +130,9 @@ class Image_Compress extends Module {
 			$results = ( new Compress() )->optimize( $images, $mime_type );
 
 			$db_stats = get_post_meta( $attachment_id, 'cf_images_compressed', true );
-			if ( empty( $db_stats ) ) {
-				$db_stats = self::DEFAULTS;
-			}
 
 			foreach ( $results as $size => $response ) {
-				if ( ! isset( $images[ $size ] ) ) {
-					continue;
-				}
-
-				if ( ! $this->write_file( $images[ $size ], $response['image'] ) ) {
+				if ( ! isset( $images[ $size ] ) || ! $this->write_file( $images[ $size ], $response['image'] ) ) {
 					continue;
 				}
 
@@ -169,7 +149,6 @@ class Image_Compress extends Module {
 			}
 
 			update_post_meta( $attachment_id, 'cf_images_compressed', $db_stats );
-
 			wp_send_json_success( $this->media()->get_response_data( $attachment_id ) );
 		} catch ( Exception $e ) {
 			wp_send_json_error( $e->getMessage() );
