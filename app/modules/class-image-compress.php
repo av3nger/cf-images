@@ -68,6 +68,7 @@ class Image_Compress extends Module {
 	 */
 	public function init() {
 		add_action( 'cf_images_media_custom_column', array( $this, 'add_stats_to_media_library' ) );
+		add_action( 'cf_images_media_module_actions', array( $this, 'media_lib_actions' ) );
 
 		if ( wp_doing_ajax() ) {
 			add_action( 'wp_ajax_cf_images_compress', array( $this, 'ajax_compress' ) );
@@ -94,13 +95,49 @@ class Image_Compress extends Module {
 
 		echo '<br>';
 
-		// TODO: the percentage is not calculated correctly, we don't have all the file sizes.
+		$metadata      = wp_get_attachment_metadata( $attachment_id, true );
+		$original_size = array_sum( wp_list_pluck( $metadata['sizes'], 'filesize' ) ) + $metadata['filesize'];
+
 		$savings = $stats['stats']['size_before'] - $stats['stats']['size_after'];
 		printf( /* translators: %1$s - savings, %2$s - savings in percent */
 			esc_html__( 'Savings: %1$s (%2$s)', 'cf-images' ),
 			esc_html( $this->format_bytes( $savings ) ),
-			esc_html( round( $savings / $stats['stats']['size_before'] * 100, 1 ) ) . '%'
+			esc_html( round( $savings / $original_size * 100, 1 ) ) . '%'
 		);
+	}
+
+	/**
+	 * Add media library action to dropdown menu.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param int $attachment_id Attachment ID.
+	 */
+	public function media_lib_actions( int $attachment_id ) {
+		if ( ! apply_filters( 'cf_images_module_enabled', false, 'image-compress' ) ) {
+			return;
+		}
+
+		$stats    = get_post_meta( $attachment_id, 'cf_images_compressed', true );
+		$metadata = wp_get_attachment_metadata( $attachment_id, true );
+
+		$can_compress = false;
+		if ( empty( $stats ) ) {
+			$can_compress = true;
+		} elseif ( ! empty( $stats['sizes'] ) && ! empty( $metadata['sizes'] ) ) {
+			$attachment_sizes = count( $metadata['sizes'] ) + isset( $metadata['file'] ) + isset( $metadata['original_image'] );
+			$can_compress     = $attachment_sizes > count( $stats['sizes'] );
+		}
+
+		if ( ! $can_compress ) {
+			return;
+		}
+		?>
+		<li><a href="#" class="cf-images-compress" data-id="<?php echo esc_attr( $attachment_id ); ?>">
+			<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/minimize.svg' ); ?>" alt="<?php esc_attr_e( 'Compress image', 'cf-images' ); ?>" />
+			<?php esc_html_e( 'Compress image', 'cf-images' ); ?>
+			</a></li>
+		<?php
 	}
 
 	/**
