@@ -207,18 +207,24 @@ class Image_Compress extends Module {
 	 * @return string[]
 	 */
 	private function get_paths( int $attachment_id ): array {
-		// TODO: make sure we're not trying to compress already compressed images.
 		$original  = wp_get_original_image_path( $attachment_id );
 		$image_dir = dirname( $original );
 		$metadata  = wp_get_attachment_metadata( $attachment_id, true );
+		$db_stats  = get_post_meta( $attachment_id, 'cf_images_compressed', true );
 
-		$paths = array(
-			'full' => path_join( wp_get_upload_dir()['basedir'], $metadata['file'] ),
-		);
+		if ( ! isset( $db_stats['sizes'] ) || ! isset( $db_stats['sizes']['full'] ) ) {
+			$paths = array(
+				'full' => path_join( wp_get_upload_dir()['basedir'], $metadata['file'] ),
+			);
+		}
 
 		if ( ! empty( $metadata['sizes'] ) ) {
 			foreach ( $metadata['sizes'] as $size => $image_meta ) {
 				if ( apply_filters( 'cf_images_skip_compress_size', false, $size, $attachment_id ) ) {
+					continue;
+				}
+
+				if ( isset( $db_stats['sizes'][ $size ] ) ) {
 					continue;
 				}
 
@@ -233,11 +239,11 @@ class Image_Compress extends Module {
 		}
 
 		// Full size will often be a '-scaled' image, make sure we always have the original.
-		if ( isset( $paths['full'] ) && $paths['full'] !== $original ) {
+		if ( isset( $paths['full'] ) && $paths['full'] !== $original && ! isset( $db_stats['sizes']['original'] ) ) {
 			$paths['original'] = $original;
 		}
 
-		return $paths;
+		return $paths ?? array();
 	}
 
 	/**
