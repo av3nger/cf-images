@@ -95,14 +95,10 @@ class Image_Compress extends Module {
 
 		echo '<br>';
 
-		$metadata      = wp_get_attachment_metadata( $attachment_id, true );
-		$original_size = array_sum( wp_list_pluck( $metadata['sizes'], 'filesize' ) ) + $metadata['filesize'];
-
 		$savings = $stats['stats']['size_before'] - $stats['stats']['size_after'];
 		printf( /* translators: %1$s - savings, %2$s - savings in percent */
-			esc_html__( 'Savings: %1$s (%2$s)', 'cf-images' ),
-			esc_html( $this->format_bytes( $savings ) ),
-			esc_html( round( $savings / $original_size * 100, 1 ) ) . '%'
+			esc_html__( 'Savings: %1$s', 'cf-images' ),
+			esc_html( $this->format_bytes( $savings ) )
 		);
 	}
 
