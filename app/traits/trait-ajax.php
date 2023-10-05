@@ -78,6 +78,6 @@ trait Ajax {
 			$args['meta_key'] = '_cloudflare_image_id'; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 		}
 
-		return $args;
+		return apply_filters( 'cf_images_wp_query_args', $args, $action );
 	}
 }

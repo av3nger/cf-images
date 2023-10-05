@@ -11,7 +11,9 @@ import '../css/app.scss';
 import { toggleModal } from './helpers/modal';
 import { showNotice } from './helpers/notice';
 import { post } from './helpers/post';
+import { runProgressBar } from './helpers/progress';
 import './modules/image-ai.js';
+import './modules/compress.js';
 
 ( function( $ ) {
 	'use strict';
@@ -156,49 +158,6 @@ import './modules/image-ai.js';
 	$( '#custom_domain' ).on( 'change', function( e ) {
 		$( 'input[name="custom_domain_input"]' ).toggleClass( 'hidden', ! e.target.checked );
 	} );
-
-	/**
-	 * Run progress bar (remove or upload all images).
-	 *
-	 * @since 1.0.0
-	 * @param {string} action      AJAX action.
-	 * @param {number} currentStep Current step.
-	 * @param {number} totalSteps  Total steps.
-	 * @param {number} progress    Progress in percent.
-	 */
-	const runProgressBar = function( action, currentStep = 0, totalSteps = 0, progress = 0 ) {
-		$( '.cf-images-progress.' + action ).show();
-		$( '.cf-images-progress.' + action + ' > progress' ).val( progress );
-
-		const args = {
-			currentStep,
-			totalSteps,
-			action
-		};
-
-		post( 'cf_images_bulk_process', args )
-			.then( ( response ) => {
-				if ( ! response.success ) {
-					$( '.cf-images-progress.' + action ).hide();
-					$( '.media_page_cf-images [role=button]' ).attr( 'disabled', false );
-					showNotice( response.data, 'error' );
-					return;
-				}
-
-				progress = Math.round( 100 / response.data.totalSteps * response.data.currentStep );
-				$( '.cf-images-progress.' + action + ' > progress' ).val( progress );
-				$( '.cf-images-progress.' + action + ' > p > small' ).html( response.data.status );
-
-				if ( response.data.currentStep < response.data.totalSteps ) {
-					runProgressBar( action, response.data.currentStep, response.data.totalSteps, progress );
-				} else if ( 'upload' === action ) {
-					window.location.search += '&updated=true';
-				} else {
-					window.location.search += '&deleted=true';
-				}
-			} )
-			.catch( window.console.log );
-	};
 
 	/**
 	 * Register Ajax actions.

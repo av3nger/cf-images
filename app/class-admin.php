@@ -53,6 +53,7 @@ class Admin {
 
 		add_action( 'admin_menu', array( $this, 'register_menu' ) );
 		add_action( 'admin_notices', array( $this, 'show_notice' ) );
+		add_action( 'cf_images_render_notice', array( $this, 'render_notice' ), 10, 2 );
 		add_filter( 'plugin_action_links_cf-images/cf-images.php', array( $this, 'settings_link' ) );
 
 		if ( wp_doing_ajax() ) {
@@ -219,7 +220,7 @@ class Admin {
 	 * @param string $message Notice message.
 	 * @param string $type    Notice type.
 	 */
-	private function render_notice( string $message, string $type = 'success' ) {
+	public function render_notice( string $message, string $type = 'success' ) {
 		?>
 		<div class="cf-images-notifications">
 			<div class="notice notice-<?php echo esc_attr( $type ); ?>" id="cf-images-notice">

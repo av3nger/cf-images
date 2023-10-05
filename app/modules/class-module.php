@@ -175,7 +175,7 @@ abstract class Module {
 		}
 		?>
 
-		<div class="cf-form-item">
+		<div class="cf-form-item <?php echo esc_attr( $this->module ); ?>">
 			<?php if ( ! empty( $this->icon ) ) : ?>
 				<span class="dashicons dashicons-<?php echo esc_attr( $this->icon ); ?>"></span>
 			<?php endif; ?>

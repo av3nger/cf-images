@@ -18,6 +18,7 @@ namespace CF_Images\App\Modules;
 use CF_Images\App\Api\Compress;
 use CF_Images\App\Traits;
 use Exception;
+use WP_Error;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -35,7 +36,7 @@ class Image_Compress extends Module {
 	/**
 	 * Register UI components.
 	 *
-	 * @since 1.4.0
+	 * @since 1.5.0
 	 */
 	protected function register_ui() {
 		$this->icon  = 'media-archive';
@@ -58,6 +59,17 @@ class Image_Compress extends Module {
 		<p>
 			<?php esc_html_e( 'Compress JPEG/PNG images and reduce the file size. Requires the Image AI API to be connected.', 'cf-images' ); ?>
 		</p>
+		<?php if ( $this->is_enabled() ) : ?>
+			<div>
+				<div class="cf-images-progress compress">
+					<progress value="0" max="100" style="width: 80%"></progress>
+					<p><small><?php esc_html_e( 'Initializing...', 'cf-images' ); ?></small></p>
+				</div>
+				<a href="#" role="button" class="outline" id="cf-images-compress-all">
+					<?php esc_html_e( 'Bulk Compress', 'cf-images' ); ?>
+				</a>
+			</div>
+		<?php endif; ?>
 		<?php
 	}
 
@@ -69,6 +81,12 @@ class Image_Compress extends Module {
 	public function init() {
 		add_action( 'cf_images_media_custom_column', array( $this, 'add_stats_to_media_library' ) );
 		add_action( 'cf_images_media_module_actions', array( $this, 'media_lib_actions' ) );
+
+		// Bulk compress actions.
+		add_filter( 'cf_images_bulk_actions', array( $this, 'add_bulk_action' ) );
+		add_filter( 'cf_images_wp_query_args', array( $this, 'add_wp_query_args' ), 10, 2 );
+		add_action( 'cf_images_bulk_step', array( $this, 'bulk_step' ), 10, 2 );
+		add_action( 'admin_notices', array( $this, 'show_notice' ) );
 
 		if ( wp_doing_ajax() ) {
 			add_action( 'wp_ajax_cf_images_compress', array( $this, 'ajax_compress' ) );
@@ -83,7 +101,7 @@ class Image_Compress extends Module {
 	 * @param int $attachment_id Attachment ID.
 	 */
 	public function add_stats_to_media_library( int $attachment_id ) {
-		$stats = get_post_meta( $attachment_id, 'cf_images_compressed', true );
+		$stats = get_post_meta( $attachment_id, 'cf_images_stats', true );
 
 		if ( ! $stats ) {
 			return;
@@ -119,18 +137,7 @@ class Image_Compress extends Module {
 			return;
 		}
 
-		$stats    = get_post_meta( $attachment_id, 'cf_images_compressed', true );
-		$metadata = wp_get_attachment_metadata( $attachment_id, true );
-
-		$can_compress = false;
-		if ( empty( $stats ) ) {
-			$can_compress = true;
-		} elseif ( ! empty( $stats['sizes'] ) && ! empty( $metadata['sizes'] ) ) {
-			$attachment_sizes = count( $metadata['sizes'] ) + isset( $metadata['file'] ) + isset( $metadata['original_image'] );
-			$can_compress     = $attachment_sizes > count( $stats['sizes'] );
-		}
-
-		if ( ! $can_compress ) {
+		if ( $this->all_sizes_compressed( $attachment_id ) ) {
 			return;
 		}
 		?>
@@ -139,6 +146,102 @@ class Image_Compress extends Module {
 			<?php esc_html_e( 'Compress image', 'cf-images' ); ?>
 			</a></li>
 		<?php
+	}
+
+	/**
+	 * Check if all image sizes have been compressed.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param int $attachment_id Attachment ID.
+	 *
+	 * @return bool
+	 */
+	private function all_sizes_compressed( int $attachment_id ): bool {
+		$stats = get_post_meta( $attachment_id, 'cf_images_stats', true );
+		if ( empty( $stats ) ) {
+			return false;
+		}
+
+		$metadata = wp_get_attachment_metadata( $attachment_id, true );
+
+		$attachment_sizes = count( $metadata['sizes'] ) + isset( $metadata['file'] ) + isset( $metadata['original_image'] );
+		return count( $stats['sizes'] ) === $attachment_sizes;
+	}
+
+	/**
+	 * Extend bulk action so that the AJAX callback accepts the bulk compress requests.
+	 *
+	 * @since 1.5.0
+	 * @see Media::ajax_bulk_process()
+	 *
+	 * @param array $actions Supported actions.
+	 *
+	 * @return array
+	 */
+	public function add_bulk_action( array $actions ): array {
+		if ( ! in_array( 'compress', $actions, true ) ) {
+			$actions[] = 'compress';
+		}
+
+		return $actions;
+	}
+
+	/**
+	 * Adjust the WP_Query args for bulk compress action.
+	 *
+	 * @since 1.5.0
+	 * @see Ajax::get_wp_query_args()
+	 *
+	 * @param array  $args   WP_Query args.
+	 * @param string $action Executing action.
+	 *
+	 * @return array
+	 */
+	public function add_wp_query_args( array $args, string $action ): array {
+		if ( 'compress' !== $action ) {
+			return $args;
+		}
+
+		$args['meta_key']     = 'cf_images_compressed'; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+		$args['meta_compare'] = 'NOT EXISTS';
+		return $args;
+	}
+
+	/**
+	 * Perform bulk step.
+	 *
+	 * @since 1.5.0
+	 * @see Media::ajax_bulk_process()
+	 *
+	 * @param int    $attachment_id Attachment ID.
+	 * @param string $action        Executing action.
+	 */
+	public function bulk_step( int $attachment_id, string $action ) {
+		if ( 'compress' !== $action ) {
+			return;
+		}
+
+		$results = $this->compress( $attachment_id );
+		if ( is_wp_error( $results ) ) {
+			do_action( 'cf_images_error', $results->get_error_code(), $results->get_error_message() );
+		}
+	}
+
+	/**
+	 * Notice on bulk compress completion.
+	 *
+	 * @since 1.5.0
+	 */
+	public function show_notice() {
+		if ( false !== $this->get_error() ) {
+			return;
+		}
+
+		if ( filter_input( INPUT_GET, 'compress', FILTER_VALIDATE_BOOLEAN ) ) {
+			$message = __( 'All images have been compressed.', 'cf-images' );
+			do_action( 'cf_images_render_notice', $message, 'success' );
+		}
 	}
 
 	/**
@@ -156,18 +259,45 @@ class Image_Compress extends Module {
 			return;
 		}
 
+		$results = $this->compress( $attachment_id );
+		if ( is_wp_error( $results ) ) {
+			wp_send_json_error( $results->get_error_message() );
+			return;
+		}
+
+		wp_send_json_success( $this->media()->get_response_data( $attachment_id ) );
+	}
+
+	/**
+	 * Do compression on single image.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param int $attachment_id Attachment ID.
+	 *
+	 * @return true|WP_Error Returns true on success or WP_Error on failure.
+	 */
+	private function compress( int $attachment_id ) {
 		// Check if supported format.
 		$mime_type = get_post_mime_type( $attachment_id );
 		if ( ! in_array( $mime_type, array( 'image/jpeg', 'image/png' ), true ) ) {
-			wp_send_json_error( __( 'Unsupported format.', 'cf-images' ) );
-			return;
+			return new WP_Error( 'unsupported_format', __( 'Unsupported format.', 'cf-images' ) );
 		}
 
 		try {
 			$images  = $this->get_paths( $attachment_id );
 			$results = ( new Compress() )->optimize( $images, $mime_type );
 
-			$db_stats = get_post_meta( $attachment_id, 'cf_images_compressed', true );
+			$db_stats = get_post_meta( $attachment_id, 'cf_images_stats', true );
+
+			if ( empty( $db_stats ) ) {
+				$db_stats = array(
+					'stats' => array(
+						'size_before' => 0,
+						'size_after'  => 0,
+					),
+				);
+			}
 
 			foreach ( $results as $size => $response ) {
 				if ( ! isset( $images[ $size ] ) || ! $this->write_file( $images[ $size ], $response['image'] ) ) {
@@ -186,10 +316,16 @@ class Image_Compress extends Module {
 				);
 			}
 
-			update_post_meta( $attachment_id, 'cf_images_compressed', $db_stats );
-			wp_send_json_success( $this->media()->get_response_data( $attachment_id ) );
+			update_post_meta( $attachment_id, 'cf_images_stats', $db_stats );
+
+			// Mark as compressed.
+			if ( $this->all_sizes_compressed( $attachment_id ) ) {
+				update_post_meta( $attachment_id, 'cf_images_compressed', true );
+			}
+
+			return true;
 		} catch ( Exception $e ) {
-			wp_send_json_error( $e->getMessage() );
+			return new WP_Error( 'compress_error', $e->getMessage() );
 		}
 	}
 
@@ -206,7 +342,7 @@ class Image_Compress extends Module {
 		$original  = wp_get_original_image_path( $attachment_id );
 		$image_dir = dirname( $original );
 		$metadata  = wp_get_attachment_metadata( $attachment_id, true );
-		$db_stats  = get_post_meta( $attachment_id, 'cf_images_compressed', true );
+		$db_stats  = get_post_meta( $attachment_id, 'cf_images_stats', true );
 
 		if ( ! isset( $db_stats['sizes'] ) || ! isset( $db_stats['sizes']['full'] ) ) {
 			$paths = array(
