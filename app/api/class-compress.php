@@ -71,7 +71,12 @@ class Compress extends API_Multi {
 				// Get the error code and message.
 				if ( isset( $response->status_code ) && isset( $response->body ) ) {
 					$errors[ $response->status_code ] = $response->body;
+				} elseif ( isset( $response->status_code ) && 401 === $response->status_code ) {
+					$errors[401] = esc_html__( 'Rate limits enforced', 'cf-images' );
+				} else {
+					$errors[500] = esc_html__( 'Unknown API error. Please try again later.', 'cf-images' );
 				}
+
 				continue;
 			}
 

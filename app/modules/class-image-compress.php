@@ -34,6 +34,14 @@ class Image_Compress extends Module {
 	use Traits\Helpers;
 
 	/**
+	 * Default stats values.
+	 */
+	const STATS = array(
+		'size_before' => 0,
+		'size_after'  => 0,
+	);
+
+	/**
 	 * Register UI components.
 	 *
 	 * @since 1.5.0
@@ -203,8 +211,17 @@ class Image_Compress extends Module {
 			return $args;
 		}
 
-		$args['meta_key']     = 'cf_images_compressed'; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
-		$args['meta_compare'] = 'NOT EXISTS';
+		$args['meta_query'] = array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+			array(
+				'key'     => '_cf_images_compressed',
+				'compare' => 'NOT EXISTS',
+			),
+			array(
+				'key'     => '_cf_images_skip_compress',
+				'compare' => 'NOT EXISTS',
+			),
+		);
+
 		return $args;
 	}
 
@@ -224,7 +241,7 @@ class Image_Compress extends Module {
 
 		$results = $this->compress( $attachment_id );
 		if ( is_wp_error( $results ) ) {
-			do_action( 'cf_images_error', $results->get_error_code(), $results->get_error_message() );
+			update_post_meta( $attachment_id, '_cf_images_skip_compress', true );
 		}
 	}
 
@@ -275,7 +292,7 @@ class Image_Compress extends Module {
 	 *
 	 * @param int $attachment_id Attachment ID.
 	 *
-	 * @return true|WP_Error Returns true on success or WP_Error on failure.
+	 * @return void|WP_Error Returns true on success or WP_Error on failure.
 	 */
 	private function compress( int $attachment_id ) {
 		// Check if supported format.
@@ -288,16 +305,13 @@ class Image_Compress extends Module {
 			$images  = $this->get_paths( $attachment_id );
 			$results = ( new Compress() )->optimize( $images, $mime_type );
 
-			$db_stats = get_post_meta( $attachment_id, 'cf_images_stats', true );
-
-			if ( empty( $db_stats ) ) {
-				$db_stats = array(
-					'stats' => array(
-						'size_before' => 0,
-						'size_after'  => 0,
-					),
-				);
+			// Nothing optimized - return.
+			if ( empty( $results ) ) {
+				return;
 			}
+
+			$image_stats  = get_post_meta( $attachment_id, 'cf_images_stats', self::STATS );
+			$global_stats = get_option( 'cf-images-compress-stats', self::STATS );
 
 			foreach ( $results as $size => $response ) {
 				if ( ! isset( $images[ $size ] ) || ! $this->write_file( $images[ $size ], $response['image'] ) ) {
@@ -307,23 +321,24 @@ class Image_Compress extends Module {
 				// Only save stats if we were able to save the file.
 				$stats = $this->get_stats( $response['stats'] );
 
-				$db_stats['stats']['size_before'] += $stats['o'] ?? 0;
-				$db_stats['stats']['size_after']  += $stats['c'] ?? 0;
+				$image_stats['size_before']  += $stats['o'] ?? 0;
+				$image_stats['size_after']   += $stats['c'] ?? 0;
+				$global_stats['size_before'] += $stats['o'] ?? 0;
+				$global_stats['size_after']  += $stats['c'] ?? 0;
 
-				$db_stats['sizes'][ $size ] = array(
+				$image_stats['sizes'][ $size ] = array(
 					'size_before' => $stats['o'] ?? 0,
 					'size_after'  => $stats['c'] ?? 0,
 				);
 			}
 
-			update_post_meta( $attachment_id, 'cf_images_stats', $db_stats );
+			update_option( 'cf-images-compress-stats', $global_stats );
+			update_post_meta( $attachment_id, 'cf_images_stats', $image_stats );
 
 			// Mark as compressed.
 			if ( $this->all_sizes_compressed( $attachment_id ) ) {
 				update_post_meta( $attachment_id, 'cf_images_compressed', true );
 			}
-
-			return true;
 		} catch ( Exception $e ) {
 			return new WP_Error( 'compress_error', $e->getMessage() );
 		}
@@ -371,7 +386,7 @@ class Image_Compress extends Module {
 		}
 
 		// Full size will often be a '-scaled' image, make sure we always have the original.
-		if ( isset( $paths['full'] ) && $paths['full'] !== $original && ! isset( $db_stats['sizes']['original'] ) ) {
+		if ( ( ! isset( $paths['full'] ) || $paths['full'] !== $original ) && ! isset( $db_stats['sizes']['original'] ) ) {
 			$paths['original'] = $original;
 		}
 
