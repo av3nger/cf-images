@@ -115,13 +115,13 @@ class Image_Compress extends Module {
 			return;
 		}
 
-		if ( ! isset( $stats['stats']['size_before'] ) || ! isset( $stats['stats']['size_after'] ) ) {
+		if ( ! isset( $stats['size_before'] ) || ! isset( $stats['size_after'] ) ) {
 			return;
 		}
 
 		echo '<br>';
 
-		$savings = $stats['stats']['size_before'] - $stats['stats']['size_after'];
+		$savings = $stats['size_before'] - $stats['size_after'];
 		printf( /* translators: %1$s - savings, %2$s - savings in percent */
 			esc_html__( 'Savings: %1$s', 'cf-images' ),
 			esc_html( $this->format_bytes( $savings ) )
@@ -310,37 +310,55 @@ class Image_Compress extends Module {
 				return;
 			}
 
-			$image_stats  = get_post_meta( $attachment_id, 'cf_images_stats', self::STATS );
-			$global_stats = get_option( 'cf-images-compress-stats', self::STATS );
-
-			foreach ( $results as $size => $response ) {
-				if ( ! isset( $images[ $size ] ) || ! $this->write_file( $images[ $size ], $response['image'] ) ) {
-					continue;
-				}
-
-				// Only save stats if we were able to save the file.
-				$stats = $this->get_stats( $response['stats'] );
-
-				$image_stats['size_before']  += $stats['o'] ?? 0;
-				$image_stats['size_after']   += $stats['c'] ?? 0;
-				$global_stats['size_before'] += $stats['o'] ?? 0;
-				$global_stats['size_after']  += $stats['c'] ?? 0;
-
-				$image_stats['sizes'][ $size ] = array(
-					'size_before' => $stats['o'] ?? 0,
-					'size_after'  => $stats['c'] ?? 0,
-				);
-			}
-
-			update_option( 'cf-images-compress-stats', $global_stats );
-			update_post_meta( $attachment_id, 'cf_images_stats', $image_stats );
-
-			// Mark as compressed.
-			if ( $this->all_sizes_compressed( $attachment_id ) ) {
-				update_post_meta( $attachment_id, 'cf_images_compressed', true );
-			}
+			$this->update_images_and_stats( $attachment_id, $images, $results );
 		} catch ( Exception $e ) {
 			return new WP_Error( 'compress_error', $e->getMessage() );
+		}
+	}
+
+	/**
+	 * Update image files and stats.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param int   $attachment_id Attachment ID.
+	 * @param array $images        Image paths.
+	 * @param array $results       Results.
+	 */
+	private function update_images_and_stats( int $attachment_id, array $images, array $results ) {
+		$image_stats  = get_post_meta( $attachment_id, 'cf_images_stats', true );
+		$global_stats = get_option( 'cf-images-stats', self::STATS );
+
+		if ( ! $image_stats ) {
+			$image_stats = self::STATS;
+		}
+
+		foreach ( $results as $size => $response ) {
+			if ( ! isset( $images[ $size ] ) || ! $this->write_file( $images[ $size ], $response['image'] ) ) {
+				continue;
+			}
+
+			// Only save stats if we were able to save the file.
+			$stats = $this->get_stats( $response['stats'] );
+
+			$image_stats['size_before'] += $stats['o'] ?? 0;
+			$image_stats['size_after']  += $stats['c'] ?? 0;
+
+			$global_stats['size_before'] = ( $global_stats['size_before'] ?? 0 ) + ( $stats['o'] ?? 0 );
+			$global_stats['size_after']  = ( $global_stats['size_after'] ?? 0 ) + ( $stats['c'] ?? 0 );
+
+			$image_stats['sizes'][ $size ] = array(
+				'size_before' => $stats['o'] ?? 0,
+				'size_after'  => $stats['c'] ?? 0,
+			);
+		}
+
+		update_option( 'cf-images-stats', $global_stats );
+		update_post_meta( $attachment_id, 'cf_images_stats', $image_stats );
+
+		// Mark as compressed.
+		if ( $this->all_sizes_compressed( $attachment_id ) ) {
+			update_post_meta( $attachment_id, 'cf_images_compressed', true );
 		}
 	}
 

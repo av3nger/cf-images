@@ -45,7 +45,6 @@ delete_option( 'cf-images-full-offload' );
 delete_option( 'cf-images-image-ai' );
 delete_option( 'cf-image-ai-api-key' );
 delete_option( 'cf-images-image-compress' );
-delete_option( 'cf-images-compress-stats' );
 
 // Remove defines from wp-config.php file.
 require_once __DIR__ . '/app/traits/trait-ajax.php';
