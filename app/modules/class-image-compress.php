@@ -68,6 +68,17 @@ class Image_Compress extends Module {
 			<?php esc_html_e( 'Compress JPEG/PNG images and reduce the file size. Requires the Image AI API to be connected.', 'cf-images' ); ?>
 		</p>
 		<?php if ( $this->is_enabled() ) : ?>
+			<?php $stats = get_option( 'cf-images-stats', self::STATS ); ?>
+			<?php $savings = $stats['size_before'] - $stats['size_after']; ?>
+			<p>
+				<strong><?php esc_html_e( 'Stats:', 'cf-images' ); ?></strong>
+				<?php
+				printf( /* translators: %s - savings */
+					esc_html__( 'Saved %s', 'cf-images' ),
+					esc_html( $this->format_bytes( $savings ) )
+				);
+				?>
+			</p>
 			<div>
 				<div class="cf-images-progress compress">
 					<progress value="0" max="100" style="width: 80%"></progress>
