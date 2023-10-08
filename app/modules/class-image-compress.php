@@ -120,7 +120,7 @@ class Image_Compress extends Module {
 	 * @param int $attachment_id Attachment ID.
 	 */
 	public function add_stats_to_media_library( int $attachment_id ) {
-		$stats = get_post_meta( $attachment_id, 'cf_images_stats', true );
+		$stats = get_post_meta( $attachment_id, '_cf_images_stats', true );
 
 		if ( ! $stats ) {
 			return;
@@ -177,7 +177,7 @@ class Image_Compress extends Module {
 	 * @return bool
 	 */
 	private function all_sizes_compressed( int $attachment_id ): bool {
-		$stats = get_post_meta( $attachment_id, 'cf_images_stats', true );
+		$stats = get_post_meta( $attachment_id, '_cf_images_stats', true );
 		if ( empty( $stats ) ) {
 			return false;
 		}
@@ -337,7 +337,7 @@ class Image_Compress extends Module {
 	 * @param array $results       Results.
 	 */
 	private function update_images_and_stats( int $attachment_id, array $images, array $results ) {
-		$image_stats  = get_post_meta( $attachment_id, 'cf_images_stats', true );
+		$image_stats  = get_post_meta( $attachment_id, '_cf_images_stats', true );
 		$global_stats = get_option( 'cf-images-stats', self::STATS );
 
 		if ( ! $image_stats ) {
@@ -365,11 +365,11 @@ class Image_Compress extends Module {
 		}
 
 		update_option( 'cf-images-stats', $global_stats );
-		update_post_meta( $attachment_id, 'cf_images_stats', $image_stats );
+		update_post_meta( $attachment_id, '_cf_images_stats', $image_stats );
 
 		// Mark as compressed.
 		if ( $this->all_sizes_compressed( $attachment_id ) ) {
-			update_post_meta( $attachment_id, 'cf_images_compressed', true );
+			update_post_meta( $attachment_id, '_cf_images_compressed', true );
 		}
 	}
 
@@ -386,7 +386,7 @@ class Image_Compress extends Module {
 		$original  = wp_get_original_image_path( $attachment_id );
 		$image_dir = dirname( $original );
 		$metadata  = wp_get_attachment_metadata( $attachment_id, true );
-		$db_stats  = get_post_meta( $attachment_id, 'cf_images_stats', true );
+		$db_stats  = get_post_meta( $attachment_id, '_cf_images_stats', true );
 
 		if ( ! isset( $db_stats['sizes'] ) || ! isset( $db_stats['sizes']['full'] ) ) {
 			$paths = array(
