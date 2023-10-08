@@ -10,10 +10,10 @@
     "optimization"
   ],
   "devDependencies": {
-    "@wordpress/eslint-plugin": "^16.0.0",
+    "@wordpress/eslint-plugin": "^17.0.0",
     "css-loader": "^6.8.1",
     "mini-css-extract-plugin": "^2.7.6",
-    "sass": "^1.68.0",
+    "sass": "^1.69.0",
     "sass-loader": "^13.3.2",
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4"
