@@ -84,7 +84,7 @@ class Admin {
 		if ( 'media_page_cf-images' === $hook ) {
 			wp_enqueue_style(
 				$this->get_slug(),
-				CF_IMAGES_DIR_URL . 'assets/dist/app.min.css',
+				CF_IMAGES_DIR_URL . 'assets/css/cf-images.min.css',
 				array(),
 				CF_IMAGES_VERSION
 			);
@@ -106,8 +106,8 @@ class Admin {
 
 		wp_enqueue_script(
 			$this->get_slug(),
-			CF_IMAGES_DIR_URL . 'assets/dist/app.min.js',
-			array( 'wp-i18n' ),
+			CF_IMAGES_DIR_URL . 'assets/js/cf-images.min.js',
+			array( 'react', 'react-dom', 'wp-i18n' ),
 			CF_IMAGES_VERSION,
 			true
 		);

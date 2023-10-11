@@ -14,7 +14,6 @@
 
 namespace CF_Images\App\Modules;
 
-use CF_Images\App\Core;
 use CF_Images\App\Traits\Helpers;
 
 if ( ! defined( 'WPINC' ) ) {
