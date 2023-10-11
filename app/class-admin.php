@@ -228,8 +228,10 @@ class Admin {
 	 * @since 1.0.0
 	 */
 	public function render_page() {
-		echo '<div id="cf-images"></div>';
-
+		?>
+		<div id="cf-images"></div>
+		<?php
+		return;
 		$this->view( 'header' );
 
 		if ( ! $this->is_set_up() ) {

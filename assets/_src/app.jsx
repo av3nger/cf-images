@@ -1,12 +1,14 @@
 /**
- * Internal dependencies
+ * External dependencies
  */
 import { createRoot } from 'react-dom/client';
 
 /**
- * WordPress dependencies
+ * Internal dependencies
  */
-import { __ } from '@wordpress/i18n';
+import './app.scss';
+import Card from './components/card/index.jsx';
+import Nav from './components/nav/index.jsx';
 
 /**
  * App
@@ -15,7 +17,15 @@ import { __ } from '@wordpress/i18n';
  */
 const App = () => {
 	return (
-		<h1>{ __( 'Offload. Store. Resize. Image Optimize', 'cf-images' ) }</h1>
+		<div className="columns">
+			<div className="column is-one-fifth">
+				<Nav />
+			</div>
+
+			<div className="column">
+				<Card />
+			</div>
+		</div>
 	);
 };
 
