@@ -89,16 +89,6 @@ class Admin {
 				CF_IMAGES_VERSION
 			);
 		}
-
-		// Run only on media library pages.
-		if ( 'upload.php' === $hook ) {
-			wp_enqueue_style(
-				$this->get_slug(),
-				CF_IMAGES_DIR_URL . 'assets/dist/media.min.css',
-				array(),
-				CF_IMAGES_VERSION
-			);
-		}
 	}
 
 	/**

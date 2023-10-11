@@ -74,6 +74,13 @@ class Media {
 			CF_IMAGES_VERSION,
 			true
 		);
+
+		wp_enqueue_style(
+			$this->get_slug(),
+			CF_IMAGES_DIR_URL . 'assets/dist/media.min.css',
+			array(),
+			CF_IMAGES_VERSION
+		);
 	}
 
 	/**
