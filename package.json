@@ -15,12 +15,13 @@
     "sass": "^1.69.1",
     "vite": "^4.4.11"
   },
-  "type": "module",
   "scripts": {
     "build": "vite build",
     "translate": "wp i18n make-pot . languages/cf-images.pot"
   },
   "dependencies": {
-    "@picocss/pico": "^1.5.10"
+    "@picocss/pico": "^1.5.10",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   }
 }

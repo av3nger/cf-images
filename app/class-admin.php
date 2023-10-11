@@ -107,7 +107,7 @@ class Admin {
 		wp_enqueue_script(
 			$this->get_slug(),
 			CF_IMAGES_DIR_URL . 'assets/dist/app.min.js',
-			array(),
+			array( 'wp-i18n' ),
 			CF_IMAGES_VERSION,
 			true
 		);
@@ -228,6 +228,8 @@ class Admin {
 	 * @since 1.0.0
 	 */
 	public function render_page() {
+		echo '<div id="cf-images"></div>';
+
 		$this->view( 'header' );
 
 		if ( ! $this->is_set_up() ) {
