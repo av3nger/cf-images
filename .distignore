@@ -5,8 +5,8 @@
 /assets/_src
 
 .distignore
-.eslintrc.js
+.eslintrc.json
 .gitignore
 package.json
 package-lock.json
-webpack.config.js
+vite.config.js

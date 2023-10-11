@@ -1,0 +1,21 @@
+{
+  "extends": [ "plugin:@wordpress/eslint-plugin/recommended-with-formatting" ],
+  "plugins": [],
+  "parserOptions": {
+    "ecmaVersion": 2022,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "env": {
+    "es6": true,
+    "browser": true,
+    "node": true
+  },
+  "rules": {
+    "no-invalid-this": 0,
+    "@wordpress/i18n-ellipsis": 0,
+    "comma-dangle": 0
+  }
+}

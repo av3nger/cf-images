@@ -10,17 +10,14 @@
     "optimization"
   ],
   "devDependencies": {
+    "@vitejs/plugin-react": "^4.1.0",
     "@wordpress/eslint-plugin": "^17.0.0",
-    "css-loader": "^6.8.1",
-    "mini-css-extract-plugin": "^2.7.6",
-    "sass": "^1.69.0",
-    "sass-loader": "^13.3.2",
-    "webpack": "^5.88.2",
-    "webpack-cli": "^5.1.4"
+    "sass": "^1.69.1",
+    "vite": "^4.4.11"
   },
+  "type": "module",
   "scripts": {
-    "watch": "webpack --watch",
-    "build": "webpack --progress",
+    "build": "vite build",
     "translate": "wp i18n make-pot . languages/cf-images.pot"
   },
   "dependencies": {
