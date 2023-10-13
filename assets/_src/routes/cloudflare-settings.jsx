@@ -4,6 +4,7 @@
 import AutoOffload from '../modules/auto-offload';
 import CustomId from '../modules/custom-id';
 import CustomDomain from '../modules/custom-domain';
+import DisableAsync from '../modules/disable-async';
 
 /**
  * Cloudflare Images settings routes.
@@ -17,6 +18,7 @@ const CloudflareSettings = () => {
 			<AutoOffload />
 			<CustomId />
 			<CustomDomain />
+			<DisableAsync />
 		</div>
 	);
 };

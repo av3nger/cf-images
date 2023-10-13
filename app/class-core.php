@@ -71,15 +71,6 @@ class Core {
 	private $admin;
 
 	/**
-	 * Async upload instance.
-	 *
-	 * @since 1.1.5
-	 * @access private
-	 * @var Async\Upload $upload
-	 */
-	private $upload;
-
-	/**
 	 * CDN domain.
 	 *
 	 * @since 1.2.0
@@ -157,12 +148,6 @@ class Core {
 		require_once __DIR__ . '/api/class-compress.php';
 		require_once __DIR__ . '/api/class-image.php';
 		require_once __DIR__ . '/api/class-variant.php';
-
-		if ( ! get_option( 'cf-images-disable-async', false ) ) {
-			require_once __DIR__ . '/async/class-task.php';
-			require_once __DIR__ . '/async/class-upload.php';
-			$this->upload = new Async\Upload();
-		}
 	}
 
 	/**
