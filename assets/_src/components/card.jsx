@@ -13,6 +13,7 @@ import { __ } from '@wordpress/i18n';
  * Internal dependencies
  */
 import SettingsContext from '../context/settings';
+import classNames from 'classnames';
 
 /**
  * Card component.
@@ -31,13 +32,15 @@ const Card = ( { children, icon, id, title } ) => {
 	return (
 		<div className="column is-half-tablet is-one-third-desktop">
 			<div className="card is-flex is-flex-direction-column">
-				<div className="card-content">
+				<div className={ classNames( 'card-content', { 'has-text-grey-light': ! modules[ id ] } ) }>
 					<div className="media is-align-content-center is-align-items-center">
 						<div className="media-left">
 							<Icon path={ icon } size={ 2 } />
 						</div>
 						<div className="media-content">
-							<p className="title is-4">{ title }</p>
+							<p className={ classNames( 'title is-4', { 'has-text-grey-light': ! modules[ id ] } ) }>
+								{ title }
+							</p>
 						</div>
 					</div>
 

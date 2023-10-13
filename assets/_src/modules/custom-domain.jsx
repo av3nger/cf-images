@@ -1,8 +1,11 @@
+/* global CFImages */
+
 /**
  * External dependencies
  */
 import { useContext, useState } from 'react';
-import { mdiLinkVariant } from '@mdi/js';
+import Icon from '@mdi/react';
+import { mdiCheck, mdiLinkVariant } from '@mdi/js';
 
 /**
  * WordPress dependencies
@@ -18,7 +21,8 @@ import SettingsContext from '../context/settings';
 import classNames from 'classnames';
 
 const CustomDomain = () => {
-	const [ domain, setDomain ] = useState( '' );
+	const [ done, setDone ] = useState( false );
+	const [ domain, setDomain ] = useState( CFImages.domain );
 	const [ error, setError ] = useState( '' );
 	const [ saving, setSaving ] = useState( false );
 
@@ -36,6 +40,10 @@ const CustomDomain = () => {
 
 				if ( ! response.success && response.data ) {
 					setError( response.data );
+					setTimeout( () => setError( '' ), 10000 );
+				} else {
+					setDone( true );
+					setTimeout( () => setDone( false ), 2000 );
 				}
 			} )
 			.catch( window.console.log );
@@ -53,18 +61,23 @@ const CustomDomain = () => {
 
 				{ moduleId in modules && modules[ moduleId ] && (
 					<div className="field has-addons">
-						<div className="control is-expanded">
+						<div className={ classNames( 'control is-expanded', { 'has-icons-right': done } ) }>
 							<label htmlFor="custom-domain" className="screen-reader-text">
 								{ __( 'Set custom domain', 'cf-images' ) }
 							</label>
 							<input
-								className={ classNames( 'input is-fullwidth', { 'is-danger': error } ) }
+								className={ classNames( 'input is-fullwidth', { 'is-danger': error, 'is-success': done } ) }
 								id="custom-domain"
 								onChange={ ( e ) => setDomain( e.target.value ) }
 								placeholder="https://cdn.example.com"
 								type="text"
 								value={ domain }
 							/>
+							{ done && (
+								<span className="icon is-small is-right">
+									<Icon path={ mdiCheck } size={ 1 } />
+								</span>
+							) }
 							{ error && (
 								<p className="help is-danger">{ error }</p>
 							) }

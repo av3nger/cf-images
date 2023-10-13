@@ -193,7 +193,7 @@ class Settings {
 		}
 
 		// Remove custom domain option, if the module is disabled.
-		if ( ! isset( $data['custom-domain'] ) ) {
+		if ( ! isset( $data['custom-domain'] ) || ! filter_var( $data['custom-domain'], FILTER_VALIDATE_BOOLEAN ) ) {
 			delete_option( 'cf-images-custom-domain' );
 		}
 

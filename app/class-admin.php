@@ -135,6 +135,7 @@ class Admin {
 					'login'         => esc_html__( 'Login', 'cf-images' ),
 				),
 				'settings' => get_option( 'cf-images-settings', Settings::DEFAULTS ),
+				'domain'   => get_option( 'cf-images-custom-domain', '' ),
 			)
 		);
 	}
@@ -238,11 +239,12 @@ class Admin {
 	 */
 	public function render_page() {
 		?>
-		<div id="cf-images" class="columns"></div>
+		<div class="wrap cf-images">
+			<?php $this->view( 'header' ); ?>
+			<div id="cf-images" class="columns"></div>
+		</div>
 		<?php
 		return;
-		$this->view( 'header' );
-
 		if ( ! $this->is_set_up() ) {
 			$this->view( 'setup' );
 			return;
