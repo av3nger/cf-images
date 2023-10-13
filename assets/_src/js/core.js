@@ -26,7 +26,6 @@ import './modules/compress.js';
 	 * @type {{settings: string, setup: string}}
 	 */
 	const forms = {
-		settings: 'cf_images_save_settings',
 		setup: 'cf_images_do_setup'
 	};
 

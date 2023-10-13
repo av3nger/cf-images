@@ -13,7 +13,7 @@ import CustomDomain from '../modules/custom-domain';
  */
 const CloudflareSettings = () => {
 	return (
-		<div className="card-content columns is-multiline">
+		<div className="columns is-multiline">
 			<AutoOffload />
 			<CustomId />
 			<CustomDomain />

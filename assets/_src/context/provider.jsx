@@ -8,7 +8,7 @@ import { useState } from 'react';
 /**
  * Internal dependencies
  */
-import { post } from '../utils/helpers';
+import { post } from '../js/helpers/post';
 import SettingsContext from './settings';
 
 /**
@@ -24,11 +24,9 @@ const SettingsProvider = ( { children } ) => {
 
 	const setModule = ( module, value ) => {
 		const newSettings = { ...modules };
-		console.log( newSettings, module, value );
 		newSettings[ module ] = value;
-		console.log( newSettings );
 
-		post( 'cf_images_update_settings', { data: newSettings } )
+		post( 'cf_images_update_settings', newSettings )
 			.then( () => setModules( newSettings ) )
 			.catch( window.console.log );
 	};

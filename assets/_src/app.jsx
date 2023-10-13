@@ -25,14 +25,12 @@ const App = () => {
 			</div>
 
 			<div className="column">
-				<div className="card">
+				<div className="box">
 					<SettingsProvider>
-
 						<Routes>
 							<Route index element={ <CloudflareSettings /> } />
 							<Route path="/main/experimental" element={ <div>Test</div> } />
 						</Routes>
-
 					</SettingsProvider>
 				</div>
 			</div>

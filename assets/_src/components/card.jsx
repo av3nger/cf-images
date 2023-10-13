@@ -32,7 +32,7 @@ const Card = ( { children, icon, id, title } ) => {
 		<div className="column is-half-tablet is-one-third-desktop">
 			<div className="card is-flex is-flex-direction-column">
 				<div className="card-content">
-					<div className="media is-align-content-center">
+					<div className="media is-align-content-center is-align-items-center">
 						<div className="media-left">
 							<Icon path={ icon } size={ 2 } />
 						</div>

@@ -1,5 +1,6 @@
 /* global CFImages */
 /* global ajaxurl */
+/* global jQuery */
 
 /**
  * Do AJAX request to WordPress.
