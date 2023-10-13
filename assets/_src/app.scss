@@ -24,17 +24,13 @@ $switch-background-active: $blue;
 	@import "bulma/sass/components/card";
 	@import "bulma/sass/components/media";
 	@import "bulma/sass/components/menu";
-	@import "bulma/sass/helpers/color";
-	@import "bulma/sass/helpers/flexbox";
-	@import "bulma/sass/helpers/spacing";
-	@import "bulma/sass/helpers/typography";
-	@import "bulma/sass/helpers/visibility";
-	@import "bulma/sass/helpers/float";
+	@import "bulma/sass/helpers/_all";
 
 	h1 {
 		line-height: 1.3em;
 	}
 
+	// Make cards same height.
 	& .card {
 		height: 100%;
 		margin-top: revert;
@@ -45,7 +41,27 @@ $switch-background-active: $blue;
 		box-sizing: border-box;
 	}
 
+	// Fix bulma-switch issues.
 	& .switch[type=checkbox]+label {
 		padding-top: 0;
 	}
+
+	& input[type="checkbox"]:disabled,
+	& input[type="checkbox"]:disabled:checked:before {
+		display: none;
+	}
 }
+
+// Remove extra WordPress stuff.
+.media_page_cf-images {
+
+	& #wpbody-content {
+		padding-bottom: 0;
+	}
+
+	& #wpfooter {
+		display: none;
+	}
+}
+
+

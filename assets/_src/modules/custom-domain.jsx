@@ -4,6 +4,7 @@
  * External dependencies
  */
 import { useContext, useState } from 'react';
+import classNames from 'classnames';
 import Icon from '@mdi/react';
 import { mdiCheck, mdiLinkVariant } from '@mdi/js';
 
@@ -18,7 +19,6 @@ import { __ } from '@wordpress/i18n';
 import { post } from '../js/helpers/post';
 import Card from '../components/card';
 import SettingsContext from '../context/settings';
-import classNames from 'classnames';
 
 const CustomDomain = () => {
 	const [ done, setDone ] = useState( false );

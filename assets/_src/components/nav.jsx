@@ -54,8 +54,11 @@ const Nav = () => {
 			</p>
 
 			<ul className="menu-list">
-				<li><a>Support</a></li>
-				<li><a>Pro Features</a></li>
+				<li>
+					<NavLink to="/misc/support" className={ ( { isActive } ) => getClass( isActive ) }>
+						{ __( 'Support', 'cf-images' ) }
+					</NavLink>
+				</li>
 			</ul>
 		</aside>
 	);
