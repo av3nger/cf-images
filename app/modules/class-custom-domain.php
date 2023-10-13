@@ -23,17 +23,6 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Custom_Domain extends Module {
 	/**
-	 * Register UI components.
-	 *
-	 * @since 1.4.0
-	 */
-	protected function register_ui() {
-		$this->icon  = 'admin-links';
-		$this->order = 20;
-		$this->title = esc_html__( 'Serve from custom domain', 'cf-images' );
-	}
-
-	/**
 	 * Render module description.
 	 *
 	 * @since 1.4.0

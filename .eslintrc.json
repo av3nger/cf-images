@@ -17,5 +17,12 @@
     "no-invalid-this": 0,
     "@wordpress/i18n-ellipsis": 0,
     "comma-dangle": 0
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [ ".js", ".jsx" ]
+      }
+    }
   }
 }

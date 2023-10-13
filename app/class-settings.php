@@ -24,8 +24,52 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.0.0
  */
 class Settings {
-
 	use Traits\Ajax;
+
+	/**
+	 * Default settings.
+	 *
+	 * @since 1.5.0
+	 */
+	const DEFAULTS = array(
+		'auto-offload'       => false,
+		'auto-resize'        => false,
+		'custom-id'          => false,
+		'disable-async'      => false,
+		'disable-generation' => false,
+		'full-offload'       => false,
+		'image-ai'           => false,
+		'image-compress'     => false,
+		'page-parser'        => false,
+	);
+
+	public function __construct() {
+		if ( wp_doing_ajax() ) {
+			add_action( 'wp_ajax_cf_images_update_settings', array( $this, 'ajax_update_settings' ) );
+		}
+	}
+
+	public function ajax_update_settings() {
+		$this->check_ajax_request();
+
+		// Nonce checked in check_ajax_request(), data sanitized later in code.
+		$data = filter_input( INPUT_POST, 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+
+		$settings = get_option( 'cf-images-settings', self::DEFAULTS );
+
+		foreach ( $settings as $key => $value ) {
+			// Skip unsupported settings.
+			if ( ! isset( $data[ $key ] ) ) {
+				continue;
+			}
+
+			$settings[ $key ] = filter_var( $data[ $key ], FILTER_VALIDATE_BOOLEAN );
+		}
+
+		update_option( 'cf-images-settings', $settings, false );
+		wp_send_json_success();
+	}
+
 
 	/**
 	 * Do initial setup by storing user provided Cloudflare account ID and API key in wp-config.php file.
@@ -36,7 +80,7 @@ class Settings {
 		$this->check_ajax_request();
 
 		// Nonce checked in check_ajax_request(), data sanitized later in code.
-		parse_str( wp_unslash( $_POST['data'] ), $form ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+		parse_str( wp_unslash( $_POST['data'] ), $form ); // phpcs:ignore WordPress.Security
 
 		if ( ! isset( $form['account-id'] ) || ! isset( $form['api-key'] ) ) {
 			wp_die();
@@ -60,8 +104,9 @@ class Settings {
 		$this->check_ajax_request();
 
 		// Nonce checked in check_ajax_request(), data sanitized later in code.
-		parse_str( wp_unslash( $_POST['data'] ), $form ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+		parse_str( wp_unslash( $_POST['data'] ), $form ); // phpcs:ignore WordPress.Security
 
+		// TODO: These have changed to a single array of settings.
 		// List of settings. The key corresponds to the name of the form field, the value corresponds to the name of the option.
 		$options = array(
 			'auto-offload'       => 'cf-images-auto-offload',

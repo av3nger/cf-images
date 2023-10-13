@@ -2,13 +2,15 @@
  * External dependencies
  */
 import { createRoot } from 'react-dom/client';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 
 /**
  * Internal dependencies
  */
 import './app.scss';
-import Card from './components/card/index.jsx';
-import Nav from './components/nav/index.jsx';
+import Nav from './components/nav';
+import CloudflareSettings from './routes/cloudflare-settings';
+import SettingsProvider from './context/provider';
 
 /**
  * App
@@ -17,15 +19,24 @@ import Nav from './components/nav/index.jsx';
  */
 const App = () => {
 	return (
-		<div className="columns">
+		<HashRouter>
 			<div className="column is-one-fifth">
 				<Nav />
 			</div>
 
 			<div className="column">
-				<Card />
+				<div className="card">
+					<SettingsProvider>
+
+						<Routes>
+							<Route index element={ <CloudflareSettings /> } />
+							<Route path="/main/experimental" element={ <div>Test</div> } />
+						</Routes>
+
+					</SettingsProvider>
+				</div>
 			</div>
-		</div>
+		</HashRouter>
 	);
 };
 

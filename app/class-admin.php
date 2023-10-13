@@ -104,10 +104,19 @@ class Admin {
 			return;
 		}
 
+		// Core scripts that handle media library actions.
+		wp_enqueue_script(
+			$this->get_slug() . '-core',
+			CF_IMAGES_DIR_URL . 'assets/js/cf-images-core.min.js',
+			array(),
+			CF_IMAGES_VERSION,
+			true
+		);
+
 		wp_enqueue_script(
 			$this->get_slug(),
 			CF_IMAGES_DIR_URL . 'assets/js/cf-images.min.js',
-			array( 'react', 'react-dom', 'wp-i18n' ),
+			array( 'jquery', 'react', 'react-dom', 'wp-i18n' ),
 			CF_IMAGES_VERSION,
 			true
 		);
@@ -116,8 +125,8 @@ class Admin {
 			$this->get_slug(),
 			'CFImages',
 			array(
-				'nonce'   => wp_create_nonce( 'cf-images-nonce' ),
-				'strings' => array(
+				'nonce'    => wp_create_nonce( 'cf-images-nonce' ),
+				'strings'  => array(
 					'disconnecting' => esc_html__( 'Disconnecting...', 'cf-images' ),
 					'saveChange'    => esc_html__( 'Save Changes', 'cf-images' ),
 					'save'          => esc_html__( 'Save', 'cf-images' ),
@@ -126,6 +135,7 @@ class Admin {
 					'savingChanges' => esc_html__( 'Saving...', 'cf-images' ),
 					'login'         => esc_html__( 'Login', 'cf-images' ),
 				),
+				'settings' => get_option( 'cf-images-settings', Settings::DEFAULTS ),
 			)
 		);
 	}
@@ -229,7 +239,7 @@ class Admin {
 	 */
 	public function render_page() {
 		?>
-		<div id="cf-images"></div>
+		<div id="cf-images" class="columns"></div>
 		<?php
 		return;
 		$this->view( 'header' );

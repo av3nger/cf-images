@@ -7,7 +7,6 @@
 
 /* global CFImages */
 
-import '../css/app.scss';
 import { toggleModal } from './helpers/modal';
 import { showNotice } from './helpers/notice';
 import { post } from './helpers/post';

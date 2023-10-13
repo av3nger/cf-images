@@ -12,7 +12,7 @@
 
 namespace CF_Images\App\Traits;
 
-use CF_images\App\Core;
+use CF_Images\App\Core;
 use CF_Images\App\Media;
 use WP_Error;
 

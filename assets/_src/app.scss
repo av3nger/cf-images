@@ -1,20 +1,28 @@
+@charset "utf-8";
+
+/**
+ * Local overrides.
+ */
+$blue: #4597de;
+$switch-background-active: $blue;
+
 @import 'bulma';
+@import 'bulma-switch';
 
 #cf-images {
-	width: 100%;
-
-	& > .columns {
-		margin: 0;
-		width: 100%;
-	}
+	margin: 0;
 
 	h1 {
 		line-height: 1.3em;
 	}
 
 	& .card {
+		height: 100%;
 		margin-top: revert;
 		padding: revert;
 	}
 
+	& .switch[type=checkbox]+label {
+		padding-top: 0;
+	}
 }

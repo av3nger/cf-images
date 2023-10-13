@@ -6,8 +6,8 @@ module.exports = {
 
 	entry: {
 		'cf-images': path.resolve( __dirname, 'assets/_src/app.jsx' ),
-		//'cf-images-app': path.resolve( __dirname, 'assets/_src/js/app.js' ),
-		//'cf-images-media': path.resolve( __dirname, 'assets/_src/js/media.js' ),
+		'cf-images-core': path.resolve( __dirname, 'assets/_src/js/core.js' ),
+		'cf-images-media': path.resolve( __dirname, 'assets/_src/js/media.js' ),
 	},
 
 	output: {
@@ -52,6 +52,10 @@ module.exports = {
 		react: 'React',
 		'react-dom': 'ReactDOM',
 		'@wordpress/i18n': 'wp.i18n',
+	},
+
+	resolve: {
+		extensions: [ '.js', '.jsx' ],
 	},
 
 	plugins: [
