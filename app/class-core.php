@@ -198,7 +198,6 @@ class Core {
 	 * @see Modules\Custom_Id
 	 * @see Modules\Disable_Async
 	 * @see Modules\Disable_Generation
-	 * @see Modules\Full_Offload
 	 * @see Modules\Image_Ai
 	 * @see Modules\Image_Compress
 	 * @see Modules\Page_Parser
@@ -212,7 +211,6 @@ class Core {
 		$loader->module( 'custom-id' );
 		$loader->module( 'disable-async' );
 		$loader->module( 'disable-generation' );
-		$loader->module( 'full-offload' );
 		$loader->module( 'image-ai' );
 		$loader->module( 'image-compress' );
 		$loader->module( 'page-parser' );

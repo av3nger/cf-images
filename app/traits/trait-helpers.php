@@ -83,17 +83,6 @@ trait Helpers {
 	}
 
 	/**
-	 * Check if full offload is enabled.
-	 *
-	 * @since 1.2.1
-	 *
-	 * @return bool
-	 */
-	public function full_offload_enabled(): bool {
-		return (bool) get_option( 'cf-images-full-offload', false );
-	}
-
-	/**
 	 * Check if Fuzion API is connected.
 	 *
 	 * @since 1.5.0

@@ -9,8 +9,9 @@ import { HashRouter, Routes, Route } from 'react-router-dom';
  */
 import './app.scss';
 import Nav from './components/nav';
-import CloudflareSettings from './routes/cloudflare-settings';
 import SettingsProvider from './context/provider';
+import CloudflareSettings from './routes/cloudflare-settings';
+import CloudflareExperimental from './routes/cloudflare-experimental';
 
 /**
  * App
@@ -29,7 +30,7 @@ const App = () => {
 					<SettingsProvider>
 						<Routes>
 							<Route index element={ <CloudflareSettings /> } />
-							<Route path="/main/experimental" element={ <div>Test</div> } />
+							<Route path="/main/experimental" element={ <CloudflareExperimental /> } />
 						</Routes>
 					</SettingsProvider>
 				</div>

@@ -159,7 +159,7 @@ class Media {
 								<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/download.svg' ); ?>" alt="<?php esc_attr_e( 'Restore in media library', 'cf-images' ); ?>" />
 								<?php esc_html_e( 'Restore in media library', 'cf-images' ); ?>
 							</a></li>
-						<?php elseif ( $this->full_offload_enabled() ) : ?>
+						<?php elseif ( apply_filters( 'cf_images_module_enabled', false, 'full-offload' ) ) : ?>
 							<li><a href="#" class="cf-images-delete" data-id="<?php echo esc_attr( $post_id ); ?>">
 								<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/delete.svg' ); ?>" alt="<?php esc_attr_e( 'Remove from media library', 'cf-images' ); ?>" />
 								<?php esc_html_e( 'Delete files on WordPress', 'cf-images' ); ?>
