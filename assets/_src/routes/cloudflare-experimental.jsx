@@ -20,8 +20,8 @@ const CloudflareExperimental = () => {
 		<div className="columns is-multiline">
 			<div className="column is-full">
 				<div className="notification is-danger">
-					<p>{ __( 'These features are experimental and have undergone only limited testing.' ) }</p>
-					<p>{ __( 'Please make sure you have a backup of all your files, before enabling any of these features.' ) }</p>
+					<p>{ __( 'These features are experimental and have undergone only limited testing.', 'cf-images' ) }</p>
+					<p>{ __( 'Please make sure you have a backup of all your files, before enabling any of these features.', 'cf-images' ) }</p>
 				</div>
 			</div>
 			<DisableGeneration />

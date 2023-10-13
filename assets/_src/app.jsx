@@ -2,7 +2,7 @@
  * External dependencies
  */
 import { createRoot } from 'react-dom/client';
-import { HashRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Navigate, Routes, Route } from 'react-router-dom';
 
 /**
  * Internal dependencies
@@ -12,6 +12,7 @@ import Nav from './components/nav';
 import SettingsProvider from './context/provider';
 import CloudflareSettings from './routes/cloudflare-settings';
 import CloudflareExperimental from './routes/cloudflare-experimental';
+import Support from './routes/support';
 
 /**
  * App
@@ -21,20 +22,22 @@ import CloudflareExperimental from './routes/cloudflare-experimental';
 const App = () => {
 	return (
 		<HashRouter>
-			<div className="column is-one-fifth">
-				<Nav />
-			</div>
+			<SettingsProvider>
+				<div className="column is-one-fifth">
+					<Nav />
+				</div>
 
-			<div className="column">
-				<div className="box">
-					<SettingsProvider>
+				<div className="column">
+					<div className="box">
 						<Routes>
 							<Route index element={ <CloudflareSettings /> } />
 							<Route path="/main/experimental" element={ <CloudflareExperimental /> } />
+							<Route path="/misc/support" element={ <Support /> } />
+							<Route path="*" element={ <Navigate to="/" replace /> } />
 						</Routes>
-					</SettingsProvider>
+					</div>
 				</div>
-			</div>
+			</SettingsProvider>
 		</HashRouter>
 	);
 };

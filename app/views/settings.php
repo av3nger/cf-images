@@ -123,10 +123,6 @@ $api_stats = sprintf( /* translators: %1$d - uploaded image count, %2$d - allowe
 			</a>
 		</footer>
 	</article>
-
-	<?php if ( ! get_site_option( 'cf-images-hide-sidebar' ) ) : ?>
-		<?php $this->view( 'sidebar' ); ?>
-	<?php endif; ?>
 </main>
 
 <?php $this->view( 'modals/confirm' ); ?>

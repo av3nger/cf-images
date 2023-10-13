@@ -21,6 +21,7 @@ import SettingsContext from './settings';
  */
 const SettingsProvider = ( { children } ) => {
 	const [ modules, setModules ] = useState( CFImages.settings );
+	const [ noticeHidden, hideNotice ] = useState( CFImages.hideSidebar );
 
 	const setModule = ( module, value ) => {
 		const newSettings = { ...modules };
@@ -32,7 +33,7 @@ const SettingsProvider = ( { children } ) => {
 	};
 
 	return (
-		<SettingsContext.Provider value={ { modules, setModule } }>
+		<SettingsContext.Provider value={ { modules, setModule, noticeHidden, hideNotice } }>
 			{ children }
 		</SettingsContext.Provider>
 	);

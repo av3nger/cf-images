@@ -124,8 +124,8 @@ class Admin {
 			$this->get_slug(),
 			'CFImages',
 			array(
-				'nonce'    => wp_create_nonce( 'cf-images-nonce' ),
-				'strings'  => array(
+				'nonce'       => wp_create_nonce( 'cf-images-nonce' ),
+				'strings'     => array(
 					'disconnecting' => esc_html__( 'Disconnecting...', 'cf-images' ),
 					'saveChange'    => esc_html__( 'Save Changes', 'cf-images' ),
 					'save'          => esc_html__( 'Save', 'cf-images' ),
@@ -134,8 +134,9 @@ class Admin {
 					'savingChanges' => esc_html__( 'Saving...', 'cf-images' ),
 					'login'         => esc_html__( 'Login', 'cf-images' ),
 				),
-				'settings' => get_option( 'cf-images-settings', Settings::DEFAULTS ),
-				'domain'   => get_option( 'cf-images-custom-domain', '' ),
+				'settings'    => get_option( 'cf-images-settings', Settings::DEFAULTS ),
+				'domain'      => get_option( 'cf-images-custom-domain', '' ),
+				'hideSidebar' => get_site_option( 'cf-images-hide-sidebar' ),
 			)
 		);
 	}

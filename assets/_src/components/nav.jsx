@@ -1,6 +1,7 @@
 /**
  * External dependencies
  */
+import { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 
 /**
@@ -8,7 +9,15 @@ import { NavLink } from 'react-router-dom';
  */
 import { __ } from '@wordpress/i18n';
 
+/**
+ * Internal dependencies
+ */
+import SettingsContext from '../context/settings';
+
 const Nav = () => {
+	const { noticeHidden } = useContext( SettingsContext );
+	console.log( noticeHidden );
+
 	const getClass = ( status ) => {
 		return status ? 'is-active' : '';
 	};
@@ -49,17 +58,21 @@ const Nav = () => {
 				</li>
 			</ul>
 
-			<p className="menu-label">
-				{ __( 'Misc', 'cf-images' ) }
-			</p>
+			{ ! noticeHidden && (
+				<>
+					<p className="menu-label">
+						{ __( 'Misc', 'cf-images' ) }
+					</p>
 
-			<ul className="menu-list">
-				<li>
-					<NavLink to="/misc/support" className={ ( { isActive } ) => getClass( isActive ) }>
-						{ __( 'Support', 'cf-images' ) }
-					</NavLink>
-				</li>
-			</ul>
+					<ul className="menu-list">
+						<li>
+							<NavLink to="/misc/support" className={ ( { isActive } ) => getClass( isActive ) }>
+								{ __( 'Support', 'cf-images' ) }
+							</NavLink>
+						</li>
+					</ul>
+				</>
+			) }
 		</aside>
 	);
 };
