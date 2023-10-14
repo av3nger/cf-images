@@ -11,7 +11,6 @@ import { toggleModal } from './helpers/modal';
 import { showNotice } from './helpers/notice';
 import { post } from './helpers/post';
 import { runProgressBar } from './helpers/progress';
-import './modules/image-ai.js';
 import './modules/compress.js';
 
 ( function( $ ) {

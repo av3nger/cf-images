@@ -16,7 +16,6 @@ import SettingsContext from '../context/settings';
 
 const Nav = () => {
 	const { noticeHidden } = useContext( SettingsContext );
-	console.log( noticeHidden );
 
 	const getClass = ( status ) => {
 		return status ? 'is-active' : '';
@@ -29,31 +28,39 @@ const Nav = () => {
 				{ __( 'Image Optimize', 'cf-images' ) }
 			</h1>
 
+			<ul className="menu-list">
+				<li>
+					<NavLink to="/" className={ ( { isActive } ) => getClass( isActive ) }>
+						{ __( 'Dashboard', 'cf-images' ) }
+					</NavLink>
+				</li>
+			</ul>
+
 			<p className="menu-label">
 				{ __( 'Cloudflare Images', 'cf-images' ) }
 			</p>
 
 			<ul className="menu-list">
 				<li>
-					<NavLink to="/" className={ ( { isActive } ) => getClass( isActive ) }>
+					<NavLink to="/cf/settings" className={ ( { isActive } ) => getClass( isActive ) }>
 						{ __( 'Settings', 'cf-images' ) }
 					</NavLink>
 				</li>
 				<li>
-					<NavLink to="/main/experimental" className={ ( { isActive } ) => getClass( isActive ) }>
+					<NavLink to="/cf/experimental" className={ ( { isActive } ) => getClass( isActive ) }>
 						{ __( 'Experimental', 'cf-images' ) }
 					</NavLink>
 				</li>
 			</ul>
 
 			<p className="menu-label">
-				{ __( 'Image Optimization', 'cf-images' ) }
+				{ __( 'Image Tools', 'cf-images' ) }
 			</p>
 
 			<ul className="menu-list">
 				<li>
-					<NavLink to="/image/settings" className={ ( { isActive } ) => getClass( isActive ) }>
-						{ __( 'Settings', 'cf-images' ) }
+					<NavLink to="/tools/settings" className={ ( { isActive } ) => getClass( isActive ) }>
+						{ __( 'AI & Compression', 'cf-images' ) }
 					</NavLink>
 				</li>
 			</ul>

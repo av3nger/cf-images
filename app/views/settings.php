@@ -61,8 +61,6 @@ $api_stats = sprintf( /* translators: %1$d - uploaded image count, %2$d - allowe
 		</header>
 
 		<form id="cf-images-form" data-type="settings" onsubmit="event.preventDefault()">
-			<?php do_action( 'cf_images_render_setting' ); ?>
-
 			<div class="cf-form-item">
 				<span class="dashicons dashicons-cloud-upload"></span>
 				<label for="cf-images-upload-all">
@@ -114,10 +112,6 @@ $api_stats = sprintf( /* translators: %1$d - uploaded image count, %2$d - allowe
 		</form>
 
 		<footer>
-			<a href="#" role="button" aria-busy="false" id="save-settings">
-				<?php esc_html_e( 'Save Changes', 'cf-images' ); ?>
-			</a>
-
 			<a href="#" class="secondary" role="button" aria-busy="false" id="cf-images-disconnect">
 				<?php esc_html_e( 'Disconnect', 'cf-images' ); ?>
 			</a>

@@ -42,17 +42,6 @@ class Image_Compress extends Module {
 	);
 
 	/**
-	 * Register UI components.
-	 *
-	 * @since 1.5.0
-	 */
-	protected function register_ui() {
-		$this->icon  = 'media-archive';
-		$this->new   = true;
-		$this->title = esc_html__( 'Image Optimization', 'cf-images' );
-	}
-
-	/**
 	 * Render module description.
 	 *
 	 * @since 1.5.0

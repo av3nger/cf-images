@@ -6,8 +6,8 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import DisableGeneration from '../modules/disable-generation';
-import FullOffload from '../modules/full-offload';
+import DisableGeneration from '../../modules/disable-generation';
+import FullOffload from '../../modules/full-offload';
 
 /**
  * Cloudflare Images experimental settings routes.

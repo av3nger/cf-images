@@ -10,9 +10,11 @@ import { HashRouter, Navigate, Routes, Route } from 'react-router-dom';
 import './app.scss';
 import Nav from './components/nav';
 import SettingsProvider from './context/provider';
-import CloudflareSettings from './routes/cloudflare-settings';
-import CloudflareExperimental from './routes/cloudflare-experimental';
+import CloudflareSettings from './routes/cloudflare/settings';
+import CloudflareExperimental from './routes/cloudflare/experimental';
 import Support from './routes/support';
+import ToolsSettings from './routes/tools/settings';
+import Home from './routes/home';
 
 /**
  * App
@@ -30,8 +32,10 @@ const App = () => {
 				<div className="column">
 					<div className="box">
 						<Routes>
-							<Route index element={ <CloudflareSettings /> } />
-							<Route path="/main/experimental" element={ <CloudflareExperimental /> } />
+							<Route index element={ <Home /> } />
+							<Route path="/cf/settings" element={ <CloudflareSettings /> } />
+							<Route path="/cf/experimental" element={ <CloudflareExperimental /> } />
+							<Route path="/tools/settings" element={ <ToolsSettings /> } />
 							<Route path="/misc/support" element={ <Support /> } />
 							<Route path="*" element={ <Navigate to="/" replace /> } />
 						</Routes>
