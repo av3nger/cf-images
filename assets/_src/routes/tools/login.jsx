@@ -14,8 +14,8 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import { post } from '../js/helpers/post';
-import SettingsContext from '../context/settings';
+import { post } from '../../js/helpers/post';
+import SettingsContext from '../../context/settings';
 
 /**
  * Login component.
@@ -139,6 +139,7 @@ const Login = () => {
 											id="password"
 											name="password"
 											placeholder="********"
+											required
 											type="password"
 										/>
 										<span className="icon is-small is-left">

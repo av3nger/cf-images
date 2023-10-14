@@ -17,18 +17,6 @@ import './modules/compress.js';
 	'use strict';
 
 	/**
-	 * Available forms.
-	 *
-	 * Form ID corresponds to `data-type` value on a form, value is the AJAX callback.
-	 *
-	 * @since 1.0.0
-	 * @type {{settings: string, setup: string}}
-	 */
-	const forms = {
-		setup: 'cf_images_do_setup'
-	};
-
-	/**
 	 * List of ajaxActions.
 	 * The first parameter is the Ajax callback, the second is which element to map the click event to.
 	 *
@@ -51,48 +39,6 @@ import './modules/compress.js';
 	 */
 	$( document ).ready( function() {
 		setTimeout( () => $( '#cf-images-notice' ).slideUp( 'slow' ), 5000 );
-	} );
-
-	/**
-	 * Process form submits.
-	 *
-	 * Currently, processes the setup and settings forms.
-	 *
-	 * @since 1.0.0
-	 */
-	$( '#save-settings' ).on( 'click', function( e ) {
-		e.preventDefault();
-
-		const form = $( 'form#cf-images-form' );
-		const action = forms[ form.data( 'type' ) ];
-
-		if ( undefined === action ) {
-			return;
-		}
-
-		const { inProgress, saveChange } = CFImages.strings;
-
-		$( this )
-			.attr( 'aria-busy', true )
-			.html( inProgress + '...' );
-
-		post( action, form.serialize() )
-			.then( ( response ) => {
-				if ( ! response.success ) {
-					$( this )
-						.attr( 'aria-busy', false )
-						.html( saveChange );
-
-					if ( 'undefined' !== typeof response.data ) {
-						showNotice( response.data, 'error' );
-					}
-
-					return;
-				}
-
-				window.location.search += '&saved=true';
-			} )
-			.catch( window.console.log );
 	} );
 
 	/**

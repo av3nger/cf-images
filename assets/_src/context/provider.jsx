@@ -20,9 +20,11 @@ import SettingsContext from './settings';
  * @class
  */
 const SettingsProvider = ( { children } ) => {
-	const [ modules, setModules ] = useState( CFImages.settings );
-	const [ noticeHidden, hideNotice ] = useState( CFImages.hideSidebar );
-	const [ hasFuzion, setFuzion ] = useState( CFImages.fuzion );
+	const { cfStatus, fuzion, hideSidebar, settings } = CFImages;
+	const [ modules, setModules ] = useState( settings );
+	const [ noticeHidden, hideNotice ] = useState( hideSidebar );
+	const [ hasFuzion, setFuzion ] = useState( fuzion );
+	const [ cfConnected, setCfConnected ] = useState( cfStatus );
 
 	const setModule = ( module, value ) => {
 		const newSettings = { ...modules };
@@ -34,7 +36,7 @@ const SettingsProvider = ( { children } ) => {
 	};
 
 	return (
-		<SettingsContext.Provider value={ { modules, setModule, noticeHidden, hideNotice, hasFuzion, setFuzion } }>
+		<SettingsContext.Provider value={ { modules, setModule, noticeHidden, hideNotice, hasFuzion, setFuzion, cfConnected, setCfConnected } }>
 			{ children }
 		</SettingsContext.Provider>
 	);

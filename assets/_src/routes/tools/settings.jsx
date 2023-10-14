@@ -15,7 +15,7 @@ import { post } from '../../js/helpers/post';
 import SettingsContext from '../../context/settings';
 import ImageAI from '../../modules/image-ai';
 import ImageCompress from '../../modules/image-compress';
-import Login from '../../components/login';
+import Login from './login';
 
 /**
  * Cloudflare Images settings routes.

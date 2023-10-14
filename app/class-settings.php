@@ -64,8 +64,7 @@ class Settings {
 	public function ajax_do_setup() {
 		$this->check_ajax_request();
 
-		// Nonce checked in check_ajax_request(), data sanitized later in code.
-		parse_str( wp_unslash( $_POST['data'] ), $form ); // phpcs:ignore WordPress.Security
+		$form = filter_input( INPUT_POST, 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 
 		if ( ! isset( $form['account-id'] ) || ! isset( $form['api-key'] ) ) {
 			wp_die();
