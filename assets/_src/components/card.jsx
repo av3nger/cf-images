@@ -32,13 +32,13 @@ const Card = ( { children, icon, id, title } ) => {
 	return (
 		<div className="column is-half-tablet is-one-third-desktop">
 			<div className="card is-flex is-flex-direction-column">
-				<div className={ classNames( 'card-content', { 'has-text-grey-light is-unselectable': ! modules[ id ] } ) }>
+				<div className={ classNames( 'card-content', { 'has-text-grey-light is-unselectable': id && ! modules[ id ] } ) }>
 					<div className="media is-align-content-center is-align-items-center">
 						<div className="media-left">
 							<Icon path={ icon } size={ 2 } />
 						</div>
 						<div className="media-content">
-							<p className={ classNames( 'title is-4', { 'has-text-grey-light': ! modules[ id ] } ) }>
+							<p className={ classNames( 'title is-4', { 'has-text-grey-light': id && ! modules[ id ] } ) }>
 								{ title }
 							</p>
 						</div>
@@ -46,21 +46,23 @@ const Card = ( { children, icon, id, title } ) => {
 
 					{ children }
 				</div>
-				<div className="card-footer mt-auto">
-					<div className="field card-footer-item">
-						<input
-							checked={ modules[ id ] }
-							className="switch is-rtl is-rounded"
-							id={ `cf-images-${ id }` }
-							name={ `cf-images-${ id }` }
-							onChange={ ( e ) => setModule( id, e.target.checked ) }
-							type="checkbox"
-						/>
-						<label htmlFor={ `cf-images-${ id }` }>
-							{ __( 'Enable feature', 'cf-images' ) }
-						</label>
+				{ id && (
+					<div className="card-footer mt-auto">
+						<div className="field card-footer-item">
+							<input
+								checked={ modules[ id ] }
+								className="switch is-rtl is-rounded"
+								id={ `cf-images-${ id }` }
+								name={ `cf-images-${ id }` }
+								onChange={ ( e ) => setModule( id, e.target.checked ) }
+								type="checkbox"
+							/>
+							<label htmlFor={ `cf-images-${ id }` }>
+								{ __( 'Enable feature', 'cf-images' ) }
+							</label>
+						</div>
 					</div>
-				</div>
+				) }
 			</div>
 		</div>
 	);

@@ -134,7 +134,8 @@ class Admin {
 				'cfStatus'    => $this->is_set_up(),
 				'domain'      => get_option( 'cf-images-custom-domain', '' ),
 				'hideSidebar' => get_site_option( 'cf-images-hide-sidebar' ),
-				'fuzion'      => (bool) get_option( 'cf-image-ai-api-key', false ),
+				'fuzion'      => $this->is_fuzion_api_connected(),
+				'stats'       => get_option( 'cf-images-stats', array( 'synced' => 0 ) ),
 			)
 		);
 	}

@@ -14,6 +14,7 @@ import DisableAsync from '../../modules/disable-async';
 import PageParser from '../../modules/page-parser';
 import CloudflareLogin from './login';
 import Disconnect from './disconnect';
+import CloudflareStats from '../../modules/cf-stats';
 
 /**
  * Cloudflare Images settings routes.
@@ -27,6 +28,7 @@ const CloudflareSettings = () => {
 	if ( cfConnected ) {
 		return (
 			<div className="columns is-multiline">
+				<CloudflareStats />
 				<AutoOffload />
 				<CustomId />
 				<CustomDomain />

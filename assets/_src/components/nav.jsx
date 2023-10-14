@@ -28,21 +28,13 @@ const Nav = () => {
 				{ __( 'Image Optimize', 'cf-images' ) }
 			</h1>
 
-			<ul className="menu-list">
-				<li>
-					<NavLink to="/" className={ ( { isActive } ) => getClass( isActive ) }>
-						{ __( 'Dashboard', 'cf-images' ) }
-					</NavLink>
-				</li>
-			</ul>
-
 			<p className="menu-label">
 				{ __( 'Cloudflare Images', 'cf-images' ) }
 			</p>
 
 			<ul className="menu-list">
 				<li>
-					<NavLink to="/cf/settings" className={ ( { isActive } ) => getClass( isActive ) }>
+					<NavLink to="/" className={ ( { isActive } ) => getClass( isActive ) }>
 						{ __( 'Settings', 'cf-images' ) }
 					</NavLink>
 				</li>

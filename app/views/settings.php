@@ -18,48 +18,10 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-$stats = get_option( 'cf-images-stats', array( 'synced' => 0 ) );
-
-$api_stats = sprintf( /* translators: %1$d - uploaded image count, %2$d - allowed image count */
-	esc_html__( 'API stats: %1$d/%2$d', 'cf-images' ),
-	$stats['api_current'] ?? absint( $stats['synced'] ),
-	$stats['api_allowed'] ?? 100000
-);
-
 ?>
 
 <main class="cf-images-settings">
 	<article>
-		<header>
-			<nav>
-				<ul>
-					<li>
-						<h3><?php esc_html_e( 'Offload Images to Cloudflare', 'cf-images' ); ?></h3>
-					</li>
-				</ul>
-				<ul>
-					<li>
-						<?php esc_html_e( 'Cloudflare status', 'cf-images' ); ?>:
-						<span style="color: green">
-							<?php esc_html_e( 'Connected', 'cf-images' ); ?>
-						</span>
-					</li>
-					<li>
-						<?php esc_html_e( 'AI & Optimization API', 'cf-images' ); ?>:
-						<span style="color: <?php echo $this->is_fuzion_api_connected() ? 'green' : 'red'; ?>">
-							<?php
-							if ( $this->is_fuzion_api_connected() ) {
-								esc_html_e( 'Connected', 'cf-images' );
-							} else {
-								esc_html_e( 'Disconnected', 'cf-images' );
-							}
-							?>
-						</span>
-					</li>
-				</ul>
-			</nav>
-		</header>
-
 		<form id="cf-images-form" data-type="settings" onsubmit="event.preventDefault()">
 			<div class="cf-form-item">
 				<span class="dashicons dashicons-cloud-upload"></span>
@@ -78,10 +40,6 @@ $api_stats = sprintf( /* translators: %1$d - uploaded image count, %2$d - allowe
 
 					<p>
 						<?php esc_html_e( 'You can either manually upload individual images from the media library, or bulk upload/remove all existing images using the buttons below.', 'cf-images' ); ?>
-					</p>
-
-					<p class="stats">
-						<?php esc_html_e( 'Offloaded', 'cf-images' ); ?>: <em data-tooltip="<?php echo esc_attr( $api_stats ); ?>"><?php echo absint( $stats['synced'] ); ?> <?php esc_html_e( 'images', 'cf-images' ); ?></em>
 					</p>
 				</div>
 			</div>
