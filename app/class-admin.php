@@ -244,12 +244,6 @@ class Admin {
 			<div id="cf-images" class="columns"></div>
 		</div>
 		<?php
-		if ( ! $this->is_set_up() ) {
-			$this->view( 'setup' );
-			return;
-		}
-
-		$this->view( 'settings' );
 	}
 
 	/**
