@@ -110,12 +110,6 @@ $api_stats = sprintf( /* translators: %1$d - uploaded image count, %2$d - allowe
 				</div>
 			</div>
 		</form>
-
-		<footer>
-			<a href="#" class="secondary" role="button" aria-busy="false" id="cf-images-disconnect">
-				<?php esc_html_e( 'Disconnect', 'cf-images' ); ?>
-			</a>
-		</footer>
 	</article>
 </main>
 

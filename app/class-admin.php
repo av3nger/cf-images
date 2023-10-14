@@ -126,9 +126,8 @@ class Admin {
 			array(
 				'nonce'       => wp_create_nonce( 'cf-images-nonce' ),
 				'strings'     => array(
-					'disconnecting' => esc_html__( 'Disconnecting...', 'cf-images' ),
-					'inProgress'    => esc_html__( 'Processing', 'cf-images' ),
-					'offloadError'  => esc_html__( 'Processing error', 'cf-images' ),
+					'inProgress'   => esc_html__( 'Processing', 'cf-images' ),
+					'offloadError' => esc_html__( 'Processing error', 'cf-images' ),
 				),
 				'dirURL'      => CF_IMAGES_DIR_URL,
 				'settings'    => get_option( 'cf-images-settings', Settings::DEFAULTS ),

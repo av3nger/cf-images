@@ -8,6 +8,7 @@ import { __ } from '@wordpress/i18n';
  */
 import DisableGeneration from '../../modules/disable-generation';
 import FullOffload from '../../modules/full-offload';
+import Disconnect from './disconnect';
 
 /**
  * Cloudflare Images experimental settings routes.
@@ -26,6 +27,7 @@ const CloudflareExperimental = () => {
 			</div>
 			<DisableGeneration />
 			<FullOffload />
+			<Disconnect />
 		</div>
 	);
 };

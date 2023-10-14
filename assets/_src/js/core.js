@@ -78,22 +78,6 @@ import './modules/compress.js';
 	} );
 
 	/**
-	 * Disconnect from Cloudflare.
-	 *
-	 * @since 1.1.2
-	 */
-	$( '#cf-images-disconnect' ).on( 'click', function( e ) {
-		e.preventDefault();
-
-		const { disconnecting } = CFImages.strings;
-
-		$( this ).attr( 'aria-busy', true ).html( disconnecting );
-		post( 'cf_images_disconnect' )
-			.then( () => window.location.reload() )
-			.catch( window.console.log );
-	} );
-
-	/**
 	 * Toggle custom domain input.
 	 *
 	 * @since 1.1.2

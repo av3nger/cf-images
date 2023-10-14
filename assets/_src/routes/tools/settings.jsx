@@ -11,8 +11,8 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import { post } from '../../js/helpers/post';
 import SettingsContext from '../../context/settings';
+import { post } from '../../js/helpers/post';
 import ImageAI from '../../modules/image-ai';
 import ImageCompress from '../../modules/image-compress';
 import Login from './login';
