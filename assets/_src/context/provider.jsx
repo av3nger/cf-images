@@ -21,6 +21,7 @@ import SettingsContext from './settings';
  */
 const SettingsProvider = ( { children } ) => {
 	const { cfStatus, fuzion, hideSidebar, settings } = CFImages;
+	const [ stats, setStats ] = useState( CFImages.stats );
 	const [ modules, setModules ] = useState( settings );
 	const [ noticeHidden, hideNotice ] = useState( hideSidebar );
 	const [ hasFuzion, setFuzion ] = useState( fuzion );
@@ -42,7 +43,8 @@ const SettingsProvider = ( { children } ) => {
 			noticeHidden, hideNotice,
 			hasFuzion, setFuzion,
 			cfConnected, setCfConnected,
-			inProgress, setInProgress
+			inProgress, setInProgress,
+			stats, setStats
 		} }>
 			{ children }
 		</SettingsContext.Provider>

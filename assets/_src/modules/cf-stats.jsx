@@ -1,5 +1,3 @@
-/* global CFImages */
-
 /**
  * External dependencies
  */
@@ -20,8 +18,7 @@ import ProgressBar from '../components/progress';
 
 const CloudflareStats = () => {
 	const [ action, setAction ] = useState( '' );
-	const { inProgress, setInProgress } = useContext( SettingsContext );
-	const { stats } = CFImages;
+	const { inProgress, setInProgress, stats } = useContext( SettingsContext );
 
 	const runAction = ( e, actionName ) => {
 		e.preventDefault();

@@ -25,6 +25,7 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Admin {
 	use Traits\Helpers;
+	use Traits\Stats;
 
 	/**
 	 * Media class instance.
@@ -135,7 +136,7 @@ class Admin {
 				'domain'      => get_option( 'cf-images-custom-domain', '' ),
 				'hideSidebar' => get_site_option( 'cf-images-hide-sidebar' ),
 				'fuzion'      => $this->is_fuzion_api_connected(),
-				'stats'       => get_option( 'cf-images-stats', array( 'synced' => 0 ) ),
+				'stats'       => $this->get_stats(),
 			)
 		);
 	}

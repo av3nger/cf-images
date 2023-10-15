@@ -107,4 +107,15 @@ trait Stats {
 
 		update_option( 'cf-images-stats', $stats, false );
 	}
+
+	/**
+	 * Stats getter.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @return array
+	 */
+	private function get_stats(): array {
+		return get_option( 'cf-images-stats', $this->default_stats );
+	}
 }

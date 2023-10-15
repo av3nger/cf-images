@@ -335,6 +335,7 @@ class Media {
 		$response = array(
 			'step'  => $step,
 			'total' => $total,
+			'stats' => $this->get_stats(),
 		);
 
 		wp_send_json_success( $response );

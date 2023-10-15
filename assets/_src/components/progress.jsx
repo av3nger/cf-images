@@ -20,8 +20,7 @@ const ProgressBar = ( { action } ) => {
 	const [ totalSteps, setTotalSteps ] = useState( 0 );
 	const [ error, setError ] = useState( '' );
 	const [ success, setSuccess ] = useState( false );
-
-	const { inProgress, setInProgress } = useContext( SettingsContext );
+	const { inProgress, setInProgress, setStats } = useContext( SettingsContext );
 
 	useEffect( () => {
 		const resetProgressBar = () => {
@@ -43,8 +42,9 @@ const ProgressBar = ( { action } ) => {
 						return;
 					}
 
-					const { step, total } = response.data;
+					const { step, total, stats } = response.data;
 					setProgress( Math.round( ( 100 / total ) * step ) );
+					setStats( stats );
 
 					if ( step < total ) {
 						setCurrentStep( step );
