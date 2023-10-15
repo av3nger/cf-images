@@ -113,16 +113,8 @@ class Admin {
 			true
 		);
 
-		wp_enqueue_script(
-			$this->get_slug(),
-			CF_IMAGES_DIR_URL . 'assets/js/cf-images.min.js',
-			array( 'jquery', 'react', 'react-dom', 'wp-i18n' ),
-			CF_IMAGES_VERSION,
-			true
-		);
-
 		wp_localize_script(
-			$this->get_slug(),
+			$this->get_slug() . '-core',
 			'CFImages',
 			array(
 				'nonce'       => wp_create_nonce( 'cf-images-nonce' ),
@@ -138,6 +130,18 @@ class Admin {
 				'fuzion'      => $this->is_fuzion_api_connected(),
 				'stats'       => $this->get_stats(),
 			)
+		);
+
+		if ( 'media_page_cf-images' !== $hook ) {
+			return;
+		}
+
+		wp_enqueue_script(
+			$this->get_slug(),
+			CF_IMAGES_DIR_URL . 'assets/js/cf-images.min.js',
+			array( 'jquery', 'react', 'react-dom', 'wp-i18n' ),
+			CF_IMAGES_VERSION,
+			true
 		);
 	}
 

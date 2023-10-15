@@ -70,7 +70,7 @@ class Media {
 		wp_enqueue_script(
 			$this->get_slug() . '-media',
 			CF_IMAGES_DIR_URL . 'assets/js/cf-images-media.min.js',
-			array( $this->get_slug(), 'media-views' ),
+			array( $this->get_slug() . '-core', 'media-views' ),
 			CF_IMAGES_VERSION,
 			true
 		);

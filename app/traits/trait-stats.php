@@ -37,6 +37,8 @@ trait Stats {
 		'synced'      => 0,
 		'api_current' => 0,
 		'api_allowed' => 100000,
+		'size_before' => 0, // Compress module.
+		'size_after'  => 0, // Compress module.
 	);
 
 	/**

@@ -32,6 +32,7 @@ if ( ! defined( 'WPINC' ) ) {
 class Image_Compress extends Module {
 	use Traits\Ajax;
 	use Traits\Helpers;
+	use Traits\Stats;
 
 	/**
 	 * Default stats values.
@@ -40,46 +41,6 @@ class Image_Compress extends Module {
 		'size_before' => 0,
 		'size_after'  => 0,
 	);
-
-	/**
-	 * Render module description.
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param string $module Module ID.
-	 */
-	public function render_description( string $module ) {
-		if ( $module !== $this->module ) {
-			return;
-		}
-		?>
-		<p>
-			<?php esc_html_e( 'Compress JPEG/PNG images and reduce the file size. Requires the Image AI API to be connected.', 'cf-images' ); ?>
-		</p>
-		<?php if ( $this->is_module_enabled() ) : ?>
-			<?php $stats = get_option( 'cf-images-stats', self::STATS ); ?>
-			<?php $savings = $stats['size_before'] - $stats['size_after']; ?>
-			<p>
-				<strong><?php esc_html_e( 'Stats:', 'cf-images' ); ?></strong>
-				<?php
-				printf( /* translators: %s - savings */
-					esc_html__( 'Saved %s', 'cf-images' ),
-					esc_html( $this->format_bytes( $savings ) )
-				);
-				?>
-			</p>
-			<div>
-				<div class="cf-images-progress compress">
-					<progress value="0" max="100" style="width: 80%"></progress>
-					<p><small><?php esc_html_e( 'Initializing...', 'cf-images' ); ?></small></p>
-				</div>
-				<a href="#" role="button" class="outline" id="cf-images-compress-all">
-					<?php esc_html_e( 'Bulk Compress', 'cf-images' ); ?>
-				</a>
-			</div>
-		<?php endif; ?>
-		<?php
-	}
 
 	/**
 	 * Init the module.
@@ -327,7 +288,7 @@ class Image_Compress extends Module {
 	 */
 	private function update_images_and_stats( int $attachment_id, array $images, array $results ) {
 		$image_stats  = get_post_meta( $attachment_id, '_cf_images_stats', true );
-		$global_stats = get_option( 'cf-images-stats', self::STATS );
+		$global_stats = $this->get_stats();
 
 		if ( ! $image_stats ) {
 			$image_stats = self::STATS;
@@ -339,7 +300,7 @@ class Image_Compress extends Module {
 			}
 
 			// Only save stats if we were able to save the file.
-			$stats = $this->get_stats( $response['stats'] );
+			$stats = $this->get_stats_from_response( $response['stats'] );
 
 			$image_stats['size_before'] += $stats['o'] ?? 0;
 			$image_stats['size_after']  += $stats['c'] ?? 0;
@@ -421,7 +382,7 @@ class Image_Compress extends Module {
 	 *     @type int $c Compressed file size.
 	 * }
 	 */
-	private function get_stats( string $stats ): array {
+	private function get_stats_from_response( string $stats ): array {
 		$result = array();
 
 		if ( empty( $stats ) ) {

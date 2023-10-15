@@ -7,9 +7,7 @@
 
 /* global CFImages */
 
-import { toggleModal } from './helpers/modal';
 import { post } from './helpers/post';
-import './modules/compress.js';
 
 ( function( $ ) {
 	'use strict';
@@ -37,25 +35,6 @@ import './modules/compress.js';
 	 */
 	$( document ).ready( function() {
 		setTimeout( () => $( '#cf-images-notice' ).slideUp( 'slow' ), 5000 );
-	} );
-
-	/**
-	 * Show confirm modal.
-	 *
-	 * @since 1.2.0
-	 */
-	$( '#cf-images-show-modal' ).on( 'click', function( e ) {
-		e.preventDefault();
-		toggleModal( e );
-	} );
-
-	/**
-	 * Toggle custom domain input.
-	 *
-	 * @since 1.1.2
-	 */
-	$( '#custom_domain' ).on( 'change', function( e ) {
-		$( 'input[name="custom_domain_input"]' ).toggleClass( 'hidden', ! e.target.checked );
 	} );
 
 	/**
