@@ -70,9 +70,21 @@ class Media {
 		wp_enqueue_script(
 			$this->get_slug() . '-media',
 			CF_IMAGES_DIR_URL . 'assets/js/cf-images-media.min.js',
-			array( $this->get_slug() . '-core', 'media-views' ),
+			array( 'media-views' ),
 			CF_IMAGES_VERSION,
 			true
+		);
+
+		wp_localize_script(
+			$this->get_slug() . '-media',
+			'CFImages',
+			array(
+				'nonce'   => wp_create_nonce( 'cf-images-nonce' ),
+				'strings' => array(
+					'inProgress'   => esc_html__( 'Processing', 'cf-images' ),
+					'offloadError' => esc_html__( 'Processing error', 'cf-images' ),
+				),
+			)
 		);
 
 		wp_enqueue_style(

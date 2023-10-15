@@ -6,7 +6,6 @@ module.exports = {
 
 	entry: {
 		'cf-images': path.resolve( __dirname, 'assets/_src/app.jsx' ),
-		'cf-images-core': path.resolve( __dirname, 'assets/_src/js/core.js' ),
 		'cf-images-media': path.resolve( __dirname, 'assets/_src/js/media.js' ),
 	},
 

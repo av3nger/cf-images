@@ -100,38 +100,6 @@ class Admin {
 	 */
 	public function enqueue_scripts( string $hook ) {
 		// Run only on plugin pages.
-		if ( 'media_page_cf-images' !== $hook && 'upload.php' !== $hook ) {
-			return;
-		}
-
-		// Core scripts that handle media library actions.
-		wp_enqueue_script(
-			$this->get_slug() . '-core',
-			CF_IMAGES_DIR_URL . 'assets/js/cf-images-core.min.js',
-			array(),
-			CF_IMAGES_VERSION,
-			true
-		);
-
-		wp_localize_script(
-			$this->get_slug() . '-core',
-			'CFImages',
-			array(
-				'nonce'       => wp_create_nonce( 'cf-images-nonce' ),
-				'strings'     => array(
-					'inProgress'   => esc_html__( 'Processing', 'cf-images' ),
-					'offloadError' => esc_html__( 'Processing error', 'cf-images' ),
-				),
-				'dirURL'      => CF_IMAGES_DIR_URL,
-				'settings'    => get_option( 'cf-images-settings', Settings::DEFAULTS ),
-				'cfStatus'    => $this->is_set_up(),
-				'domain'      => get_option( 'cf-images-custom-domain', '' ),
-				'hideSidebar' => get_site_option( 'cf-images-hide-sidebar' ),
-				'fuzion'      => $this->is_fuzion_api_connected(),
-				'stats'       => $this->get_stats(),
-			)
-		);
-
 		if ( 'media_page_cf-images' !== $hook ) {
 			return;
 		}
@@ -142,6 +110,21 @@ class Admin {
 			array( 'jquery', 'react', 'react-dom', 'wp-i18n' ),
 			CF_IMAGES_VERSION,
 			true
+		);
+
+		wp_localize_script(
+			$this->get_slug(),
+			'CFImages',
+			array(
+				'nonce'       => wp_create_nonce( 'cf-images-nonce' ),
+				'dirURL'      => CF_IMAGES_DIR_URL,
+				'settings'    => get_option( 'cf-images-settings', Settings::DEFAULTS ),
+				'cfStatus'    => $this->is_set_up(),
+				'domain'      => get_option( 'cf-images-custom-domain', '' ),
+				'hideSidebar' => get_site_option( 'cf-images-hide-sidebar' ),
+				'fuzion'      => $this->is_fuzion_api_connected(),
+				'stats'       => $this->get_stats(),
+			)
 		);
 	}
 
