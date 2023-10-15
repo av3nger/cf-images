@@ -1,5 +1,4 @@
 import { post } from './post';
-import { showNotice } from './notice';
 
 /**
  * Run progress bar (remove or upload all images).
@@ -25,7 +24,6 @@ export const runProgressBar = function( action, currentStep = 0, totalSteps = 0,
 			if ( ! response.success ) {
 				jQuery( '.cf-images-progress.' + action ).hide();
 				jQuery( '.media_page_cf-images [role=button]' ).attr( 'disabled', false );
-				showNotice( response.data, 'error' );
 				return;
 			}
 

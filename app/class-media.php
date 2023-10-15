@@ -288,7 +288,6 @@ class Media {
 			// No available images found.
 			if ( 0 === $images->found_posts ) {
 				if ( in_array( $action, array( 'upload', 'remove' ), true ) ) {
-					$this->update_stats( 0, false ); // Reset stats.
 					$this->fetch_stats( new Api\Image() );
 				}
 				wp_send_json_error( __( 'No images found', 'cf-images' ) );
@@ -334,13 +333,8 @@ class Media {
 		}
 
 		$response = array(
-			'currentStep' => $step,
-			'totalSteps'  => $total,
-			'status'      => sprintf( /* translators: %1$d - current image, %2$d - total number of images */
-				esc_html__( 'Processing image %1$d out of %2$d...', 'cf-images' ),
-				(int) $step,
-				$total
-			),
+			'step'  => $step,
+			'total' => $total,
 		);
 
 		wp_send_json_success( $response );

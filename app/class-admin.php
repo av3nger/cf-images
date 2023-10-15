@@ -188,27 +188,6 @@ class Admin {
 			);
 
 			$this->render_notice( $message, 'error' );
-			return;
-		}
-
-		// Called from setup screen, when all defines have been set.
-		if ( filter_input( INPUT_GET, 'saved', FILTER_VALIDATE_BOOLEAN ) ) {
-			$this->render_notice( __( 'Settings saved.', 'cf-images' ) );
-		}
-
-		// Called on success after removing all images from Cloudflare.
-		if ( filter_input( INPUT_GET, 'deleted', FILTER_VALIDATE_BOOLEAN ) ) {
-			$this->render_notice( __( 'All images have been successfully removed from Cloudflare Images.', 'cf-images' ) );
-		}
-
-		// Called on success after uploading all images to Cloudflare.
-		if ( filter_input( INPUT_GET, 'updated', FILTER_VALIDATE_BOOLEAN ) ) {
-			$this->render_notice( __( 'All images have been successfully uploaded to Cloudflare Images.', 'cf-images' ) );
-		}
-
-		// Logged in.
-		if ( filter_input( INPUT_GET, 'login', FILTER_VALIDATE_BOOLEAN ) ) {
-			$this->render_notice( __( 'API key generated', 'cf-images' ) );
 		}
 	}
 
@@ -240,7 +219,6 @@ class Admin {
 	public function render_page() {
 		?>
 		<div class="wrap cf-images">
-			<?php $this->view( 'header' ); ?>
 			<div id="cf-images" class="columns"></div>
 		</div>
 		<?php

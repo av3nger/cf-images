@@ -20,13 +20,14 @@ import SettingsContext from '../context/settings';
  *
  * @param {Object} props
  * @param {Object} props.children
+ * @param {Object} props.footer
  * @param {string} props.icon
  * @param {string} props.id
  * @param {string} props.title
  * @return {JSX.Element} Card component.
  * @class
  */
-const Card = ( { children, icon, id, title } ) => {
+const Card = ( { children, footer, icon, id, title } ) => {
 	const { modules, setModule } = useContext( SettingsContext );
 
 	return (
@@ -63,6 +64,7 @@ const Card = ( { children, icon, id, title } ) => {
 						</div>
 					</div>
 				) }
+				{ footer }
 			</div>
 		</div>
 	);

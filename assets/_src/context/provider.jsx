@@ -25,6 +25,7 @@ const SettingsProvider = ( { children } ) => {
 	const [ noticeHidden, hideNotice ] = useState( hideSidebar );
 	const [ hasFuzion, setFuzion ] = useState( fuzion );
 	const [ cfConnected, setCfConnected ] = useState( cfStatus );
+	const [ inProgress, setInProgress ] = useState( false );
 
 	const setModule = ( module, value ) => {
 		const newSettings = { ...modules };
@@ -36,7 +37,13 @@ const SettingsProvider = ( { children } ) => {
 	};
 
 	return (
-		<SettingsContext.Provider value={ { modules, setModule, noticeHidden, hideNotice, hasFuzion, setFuzion, cfConnected, setCfConnected } }>
+		<SettingsContext.Provider value={ {
+			modules, setModule,
+			noticeHidden, hideNotice,
+			hasFuzion, setFuzion,
+			cfConnected, setCfConnected,
+			inProgress, setInProgress
+		} }>
 			{ children }
 		</SettingsContext.Provider>
 	);

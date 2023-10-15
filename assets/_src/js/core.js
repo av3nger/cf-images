@@ -8,9 +8,7 @@
 /* global CFImages */
 
 import { toggleModal } from './helpers/modal';
-import { showNotice } from './helpers/notice';
 import { post } from './helpers/post';
-import { runProgressBar } from './helpers/progress';
 import './modules/compress.js';
 
 ( function( $ ) {
@@ -39,32 +37,6 @@ import './modules/compress.js';
 	 */
 	$( document ).ready( function() {
 		setTimeout( () => $( '#cf-images-notice' ).slideUp( 'slow' ), 5000 );
-	} );
-
-	/**
-	 * Upload all images to Cloudflare.
-	 *
-	 * @since 1.0.0
-	 */
-	$( '#cf-images-upload-all' ).on( 'click', function( e ) {
-		e.preventDefault();
-
-		$( '.media_page_cf-images [role=button]' ).attr( 'disabled', true );
-		runProgressBar( 'upload' );
-	} );
-
-	/**
-	 * Remove all images from Cloudflare.
-	 *
-	 * @since 1.0.0
-	 */
-	$( '#cf-images-remove-all' ).on( 'click', function( e ) {
-		e.preventDefault();
-
-		toggleModal( e );
-		$( '.media_page_cf-images form#cf-images-form [role=button]' ).attr( 'disabled', true );
-
-		runProgressBar( 'remove' );
 	} );
 
 	/**
