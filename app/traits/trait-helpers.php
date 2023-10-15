@@ -12,7 +12,7 @@
 
 namespace CF_Images\App\Traits;
 
-use CF_images\App\Core;
+use CF_Images\App\Core;
 use CF_Images\App\Media;
 use WP_Error;
 
@@ -80,17 +80,6 @@ trait Helpers {
 	 */
 	public function get_cdn_domain(): string {
 		return Core::get_instance()->get_cdn_domain();
-	}
-
-	/**
-	 * Check if full offload is enabled.
-	 *
-	 * @since 1.2.1
-	 *
-	 * @return bool
-	 */
-	public function full_offload_enabled(): bool {
-		return (bool) get_option( 'cf-images-full-offload', false );
 	}
 
 	/**

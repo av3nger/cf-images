@@ -15,7 +15,6 @@
 namespace CF_Images\App\Modules;
 
 use CF_Images\App\Traits\Helpers;
-use CF_Images\App\Traits\Settings;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -28,7 +27,6 @@ if ( ! defined( 'WPINC' ) ) {
  */
 abstract class Module {
 	use Helpers;
-	use Settings;
 
 	/**
 	 * This is a core module, meaning it can't be enabled/disabled via options.
@@ -68,14 +66,11 @@ abstract class Module {
 	 */
 	public function __construct( string $module ) {
 		$this->module = $module;
-		$this->register_ui();
 		$this->pre_init();
 
 		add_filter( 'cf_images_module_enabled', array( $this, 'is_module_enabled' ), 10, 2 );
-		add_action( 'cf_images_render_setting', array( $this, 'render_setting' ), $this->order );
-		add_action( 'cf_images_setting_description', array( $this, 'render_description' ) );
 
-		if ( ! $this->is_set_up() || ! $this->is_enabled() ) {
+		if ( ! $this->is_set_up() || ! $this->is_module_enabled() ) {
 			return;
 		}
 
@@ -100,22 +95,6 @@ abstract class Module {
 	 * @since 1.2.1
 	 */
 	protected function pre_init() {}
-
-	/**
-	 * Check if module is enabled via plugin settings.
-	 *
-	 * @since 1.3.0
-	 *
-	 * @return bool
-	 */
-	protected function is_enabled(): bool {
-		// Core modules cannot be disabled.
-		if ( $this->core ) {
-			return true;
-		}
-
-		return (bool) get_option( 'cf-images-' . $this->module, false );
-	}
 
 	/**
 	 * Check if we can run the plugin. Not all images should be converted, for example,
@@ -165,64 +144,27 @@ abstract class Module {
 	}
 
 	/**
-	 * Render module setting.
-	 *
-	 * @since 1.4.0
-	 */
-	public function render_setting() {
-		if ( ! $this->title ) {
-			return;
-		}
-		?>
-
-		<div class="cf-form-item <?php echo esc_attr( $this->module ); ?>">
-			<?php if ( ! empty( $this->icon ) ) : ?>
-				<span class="dashicons dashicons-<?php echo esc_attr( $this->icon ); ?>"></span>
-			<?php endif; ?>
-			<?php if ( ! empty( $this->title ) ) : ?>
-				<label for="<?php echo esc_html( str_replace( '-', '_', $this->module ) ); ?>">
-					<?php echo esc_html( $this->title ); ?>
-					<?php if ( $this->experimental || $this->new ) : ?>
-						<span class="cf-images-badge">
-							<?php if ( $this->experimental ) : ?>
-								<?php esc_html_e( 'Experimental', 'cf-images' ); ?>
-							<?php endif; ?>
-							<?php if ( $this->new ) : ?>
-								<?php esc_html_e( 'New', 'cf-images' ); ?>
-							<?php endif; ?>
-						</span>
-					<?php endif; ?>
-				</label>
-			<?php endif; ?>
-			<div>
-				<input type="checkbox" value="1" role="switch"
-					name="<?php echo esc_html( $this->module ); ?>"
-					id="<?php echo esc_html( str_replace( '-', '_', $this->module ) ); ?>"
-					<?php checked( (bool) get_option( 'cf-images-' . $this->module, false ) ); ?>
-				>
-				<?php do_action( 'cf_images_setting_description', $this->module ); ?>
-			</div>
-		</div>
-
-		<?php
-	}
-
-	/**
 	 * Filter callback to check if a specific module is enabled.
 	 *
 	 * @since 1.4.0
 	 *
-	 * @param bool   $enabled Status.
-	 * @param string $module  Module ID.
+	 * @param bool   $fallback Default status.
+	 * @param string $module   Module ID.
 	 *
 	 * @return bool
 	 */
-	public function is_module_enabled( bool $enabled, string $module ): bool {
+	public function is_module_enabled( bool $fallback = false, string $module = '' ): bool {
 		// Core modules cannot be disabled.
 		if ( $this->core ) {
 			return true;
 		}
 
-		return (bool) get_option( 'cf-images-' . $module, false );
+		if ( empty( $module ) ) {
+			$module = $this->module;
+		}
+
+		$settings = get_option( 'cf-images-settings', \CF_Images\App\Settings::DEFAULTS );
+
+		return $settings[ $module ] ?? $fallback;
 	}
 }

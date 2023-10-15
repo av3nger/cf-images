@@ -70,9 +70,28 @@ class Media {
 		wp_enqueue_script(
 			$this->get_slug() . '-media',
 			CF_IMAGES_DIR_URL . 'assets/js/cf-images-media.min.js',
-			array( $this->get_slug(), 'media-views' ),
+			array( 'media-views' ),
 			CF_IMAGES_VERSION,
 			true
+		);
+
+		wp_localize_script(
+			$this->get_slug() . '-media',
+			'CFImages',
+			array(
+				'nonce'   => wp_create_nonce( 'cf-images-nonce' ),
+				'strings' => array(
+					'inProgress'   => esc_html__( 'Processing', 'cf-images' ),
+					'offloadError' => esc_html__( 'Processing error', 'cf-images' ),
+				),
+			)
+		);
+
+		wp_enqueue_style(
+			$this->get_slug(),
+			CF_IMAGES_DIR_URL . 'assets/css/cf-images-media.min.css',
+			array(),
+			CF_IMAGES_VERSION
 		);
 	}
 
@@ -152,7 +171,7 @@ class Media {
 								<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/download.svg' ); ?>" alt="<?php esc_attr_e( 'Restore in media library', 'cf-images' ); ?>" />
 								<?php esc_html_e( 'Restore in media library', 'cf-images' ); ?>
 							</a></li>
-						<?php elseif ( $this->full_offload_enabled() ) : ?>
+						<?php elseif ( apply_filters( 'cf_images_module_enabled', false, 'full-offload' ) ) : ?>
 							<li><a href="#" class="cf-images-delete" data-id="<?php echo esc_attr( $post_id ); ?>">
 								<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/delete.svg' ); ?>" alt="<?php esc_attr_e( 'Remove from media library', 'cf-images' ); ?>" />
 								<?php esc_html_e( 'Delete files on WordPress', 'cf-images' ); ?>
@@ -281,7 +300,6 @@ class Media {
 			// No available images found.
 			if ( 0 === $images->found_posts ) {
 				if ( in_array( $action, array( 'upload', 'remove' ), true ) ) {
-					$this->update_stats( 0, false ); // Reset stats.
 					$this->fetch_stats( new Api\Image() );
 				}
 				wp_send_json_error( __( 'No images found', 'cf-images' ) );
@@ -327,13 +345,9 @@ class Media {
 		}
 
 		$response = array(
-			'currentStep' => $step,
-			'totalSteps'  => $total,
-			'status'      => sprintf( /* translators: %1$d - current image, %2$d - total number of images */
-				esc_html__( 'Processing image %1$d out of %2$d...', 'cf-images' ),
-				(int) $step,
-				$total
-			),
+			'step'  => $step,
+			'total' => $total,
+			'stats' => $this->get_stats(),
 		);
 
 		wp_send_json_success( $response );

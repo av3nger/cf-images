@@ -30,38 +30,6 @@ class Auto_Resize extends Module {
 	use Helpers;
 
 	/**
-	 * Register UI components.
-	 *
-	 * @since 1.4.0
-	 */
-	protected function register_ui() {
-		$this->icon  = 'editor-expand';
-		$this->order = 40;
-		$this->title = esc_html__( 'Auto resize images on front-end', 'cf-images' );
-	}
-
-	/**
-	 * Render module description.
-	 *
-	 * @since 1.4.0
-	 *
-	 * @param string $module Module ID.
-	 */
-	public function render_description( string $module ) {
-		if ( $module !== $this->module ) {
-			return;
-		}
-		?>
-		<p>
-			<?php esc_html_e( 'Make images responsive by adding missing image sizes to the srcset attribute.', 'cf-images' ); ?>
-		</p>
-		<p>
-			<?php esc_html_e( 'Requires the "Parse page for images" module to be enabled.', 'cf-images' ); ?>
-		</p>
-		<?php
-	}
-
-	/**
 	 * Should the module only run on front-end?
 	 *
 	 * @since 1.3.0

@@ -31,7 +31,7 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Image_Compress extends Module {
 	use Traits\Ajax;
-	use Traits\Helpers;
+	use Traits\Stats;
 
 	/**
 	 * Default stats values.
@@ -40,57 +40,6 @@ class Image_Compress extends Module {
 		'size_before' => 0,
 		'size_after'  => 0,
 	);
-
-	/**
-	 * Register UI components.
-	 *
-	 * @since 1.5.0
-	 */
-	protected function register_ui() {
-		$this->icon  = 'media-archive';
-		$this->new   = true;
-		$this->title = esc_html__( 'Image Optimization', 'cf-images' );
-	}
-
-	/**
-	 * Render module description.
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param string $module Module ID.
-	 */
-	public function render_description( string $module ) {
-		if ( $module !== $this->module ) {
-			return;
-		}
-		?>
-		<p>
-			<?php esc_html_e( 'Compress JPEG/PNG images and reduce the file size. Requires the Image AI API to be connected.', 'cf-images' ); ?>
-		</p>
-		<?php if ( $this->is_enabled() ) : ?>
-			<?php $stats = get_option( 'cf-images-stats', self::STATS ); ?>
-			<?php $savings = $stats['size_before'] - $stats['size_after']; ?>
-			<p>
-				<strong><?php esc_html_e( 'Stats:', 'cf-images' ); ?></strong>
-				<?php
-				printf( /* translators: %s - savings */
-					esc_html__( 'Saved %s', 'cf-images' ),
-					esc_html( $this->format_bytes( $savings ) )
-				);
-				?>
-			</p>
-			<div>
-				<div class="cf-images-progress compress">
-					<progress value="0" max="100" style="width: 80%"></progress>
-					<p><small><?php esc_html_e( 'Initializing...', 'cf-images' ); ?></small></p>
-				</div>
-				<a href="#" role="button" class="outline" id="cf-images-compress-all">
-					<?php esc_html_e( 'Bulk Compress', 'cf-images' ); ?>
-				</a>
-			</div>
-		<?php endif; ?>
-		<?php
-	}
 
 	/**
 	 * Init the module.
@@ -105,7 +54,6 @@ class Image_Compress extends Module {
 		add_filter( 'cf_images_bulk_actions', array( $this, 'add_bulk_action' ) );
 		add_filter( 'cf_images_wp_query_args', array( $this, 'add_wp_query_args' ), 10, 2 );
 		add_action( 'cf_images_bulk_step', array( $this, 'bulk_step' ), 10, 2 );
-		add_action( 'admin_notices', array( $this, 'show_notice' ) );
 
 		if ( wp_doing_ajax() ) {
 			add_action( 'wp_ajax_cf_images_compress', array( $this, 'ajax_compress' ) );
@@ -257,22 +205,6 @@ class Image_Compress extends Module {
 	}
 
 	/**
-	 * Notice on bulk compress completion.
-	 *
-	 * @since 1.5.0
-	 */
-	public function show_notice() {
-		if ( false !== $this->get_error() ) {
-			return;
-		}
-
-		if ( filter_input( INPUT_GET, 'compress', FILTER_VALIDATE_BOOLEAN ) ) {
-			$message = __( 'All images have been compressed.', 'cf-images' );
-			do_action( 'cf_images_render_notice', $message, 'success' );
-		}
-	}
-
-	/**
 	 * Compress image.
 	 *
 	 * @since 1.5.0
@@ -338,7 +270,7 @@ class Image_Compress extends Module {
 	 */
 	private function update_images_and_stats( int $attachment_id, array $images, array $results ) {
 		$image_stats  = get_post_meta( $attachment_id, '_cf_images_stats', true );
-		$global_stats = get_option( 'cf-images-stats', self::STATS );
+		$global_stats = $this->get_stats();
 
 		if ( ! $image_stats ) {
 			$image_stats = self::STATS;
@@ -350,7 +282,7 @@ class Image_Compress extends Module {
 			}
 
 			// Only save stats if we were able to save the file.
-			$stats = $this->get_stats( $response['stats'] );
+			$stats = $this->get_stats_from_response( $response['stats'] );
 
 			$image_stats['size_before'] += $stats['o'] ?? 0;
 			$image_stats['size_after']  += $stats['c'] ?? 0;
@@ -432,7 +364,7 @@ class Image_Compress extends Module {
 	 *     @type int $c Compressed file size.
 	 * }
 	 */
-	private function get_stats( string $stats ): array {
+	private function get_stats_from_response( string $stats ): array {
 		$result = array();
 
 		if ( empty( $stats ) ) {

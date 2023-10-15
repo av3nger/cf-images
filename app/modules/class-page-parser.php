@@ -37,34 +37,6 @@ class Page_Parser extends Module {
 	protected $only_frontend = true;
 
 	/**
-	 * Register UI components.
-	 *
-	 * @since 1.4.0
-	 */
-	protected function register_ui() {
-		$this->icon  = 'format-gallery';
-		$this->title = esc_html__( 'Parse page for images', 'cf-images' );
-	}
-
-	/**
-	 * Render module description.
-	 *
-	 * @since 1.4.0
-	 *
-	 * @param string $module Module ID.
-	 */
-	public function render_description( string $module ) {
-		if ( $module !== $this->module ) {
-			return;
-		}
-		?>
-		<p>
-			<?php esc_html_e( 'Compatibility module to support themes that do not use WordPress hooks and filters. If the images are not replaced on the site, try enabling this module', 'cf-images' ); ?>
-		</p>
-		<?php
-	}
-
-	/**
 	 * Init the module.
 	 *
 	 * @since 1.4.0
