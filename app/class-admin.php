@@ -54,7 +54,6 @@ class Admin {
 
 		add_action( 'admin_menu', array( $this, 'register_menu' ) );
 		add_action( 'admin_notices', array( $this, 'show_notice' ) );
-		add_action( 'cf_images_render_notice', array( $this, 'render_notice' ), 10, 2 );
 		add_filter( 'plugin_action_links_cf-images/cf-images.php', array( $this, 'settings_link' ) );
 
 		if ( wp_doing_ajax() ) {
@@ -210,23 +209,6 @@ class Admin {
 			<div id="cf-images" class="columns"></div>
 		</div>
 		<?php
-	}
-
-	/**
-	 * Load an admin view.
-	 *
-	 * @param string $file View file name.
-	 */
-	public function view( string $file ) {
-		$view = __DIR__ . '/views/' . $file . '.php';
-
-		if ( ! file_exists( $view ) ) {
-			return;
-		}
-
-		ob_start();
-		include_once $view;
-		echo ob_get_clean(); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped */
 	}
 
 	/**

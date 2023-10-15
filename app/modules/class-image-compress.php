@@ -31,7 +31,6 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Image_Compress extends Module {
 	use Traits\Ajax;
-	use Traits\Helpers;
 	use Traits\Stats;
 
 	/**
@@ -55,7 +54,6 @@ class Image_Compress extends Module {
 		add_filter( 'cf_images_bulk_actions', array( $this, 'add_bulk_action' ) );
 		add_filter( 'cf_images_wp_query_args', array( $this, 'add_wp_query_args' ), 10, 2 );
 		add_action( 'cf_images_bulk_step', array( $this, 'bulk_step' ), 10, 2 );
-		add_action( 'admin_notices', array( $this, 'show_notice' ) );
 
 		if ( wp_doing_ajax() ) {
 			add_action( 'wp_ajax_cf_images_compress', array( $this, 'ajax_compress' ) );
@@ -203,22 +201,6 @@ class Image_Compress extends Module {
 		$results = $this->compress( $attachment_id );
 		if ( is_wp_error( $results ) ) {
 			update_post_meta( $attachment_id, '_cf_images_skip_compress', true );
-		}
-	}
-
-	/**
-	 * Notice on bulk compress completion.
-	 *
-	 * @since 1.5.0
-	 */
-	public function show_notice() {
-		if ( false !== $this->get_error() ) {
-			return;
-		}
-
-		if ( filter_input( INPUT_GET, 'compress', FILTER_VALIDATE_BOOLEAN ) ) {
-			$message = __( 'All images have been compressed.', 'cf-images' );
-			do_action( 'cf_images_render_notice', $message, 'success' );
 		}
 	}
 
