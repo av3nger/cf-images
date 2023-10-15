@@ -70,9 +70,28 @@ class Media {
 		wp_enqueue_script(
 			$this->get_slug() . '-media',
 			CF_IMAGES_DIR_URL . 'assets/js/cf-images-media.min.js',
-			array( $this->get_slug(), 'media-views' ),
+			array( 'media-views' ),
 			CF_IMAGES_VERSION,
 			true
+		);
+
+		wp_localize_script(
+			$this->get_slug() . '-media',
+			'CFImages',
+			array(
+				'nonce'   => wp_create_nonce( 'cf-images-nonce' ),
+				'strings' => array(
+					'inProgress'   => esc_html__( 'Processing', 'cf-images' ),
+					'offloadError' => esc_html__( 'Processing error', 'cf-images' ),
+				),
+			)
+		);
+
+		wp_enqueue_style(
+			$this->get_slug(),
+			CF_IMAGES_DIR_URL . 'assets/css/cf-images-media.min.css',
+			array(),
+			CF_IMAGES_VERSION
 		);
 	}
 
@@ -87,7 +106,7 @@ class Media {
 	 * @return array
 	 */
 	public function media_columns( array $posts_columns ): array {
-		$posts_columns['cf-images-status'] = __( 'Offload status', 'cf-images' );
+		$posts_columns['cf-images-status'] = __( 'Optimization', 'cf-images' );
 		return $posts_columns;
 	}
 
@@ -111,7 +130,9 @@ class Media {
 		// Check if supported format.
 		$supported_mimes = array( 'image/jpeg', 'image/png', 'image/gif', 'image/webp' );
 		if ( ! in_array( get_post_mime_type( $post_id ), $supported_mimes, true ) ) {
-			esc_html_e( 'Unsupported format', 'cf-images' );
+			?>
+			<span class="status"><?php esc_html_e( 'Unsupported format', 'cf-images' ); ?></span>
+			<?php
 			return;
 		}
 
@@ -131,7 +152,11 @@ class Media {
 			$status[] = esc_html__( 'Not offloaded', 'cf-images' );
 		}
 		?>
-		<span class="status"><?php echo esc_html( implode( ' | ', $status ) ); ?></span>
+		<span class="status">
+			<?php esc_html_e( 'Status:', 'cf-images' ); ?>
+			<?php echo esc_html( implode( ' | ', $status ) ); ?>
+			<?php do_action( 'cf_images_media_custom_column', (int) $post_id ); ?>
+		</span>
 		<ul>
 			<li role="list" dir="rtl">
 				<a href="#" aria-haspopup="listbox"><?php esc_html_e( 'Actions', 'cf-images' ); ?></a>
@@ -146,7 +171,7 @@ class Media {
 								<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/download.svg' ); ?>" alt="<?php esc_attr_e( 'Restore in media library', 'cf-images' ); ?>" />
 								<?php esc_html_e( 'Restore in media library', 'cf-images' ); ?>
 							</a></li>
-						<?php elseif ( $this->full_offload_enabled() ) : ?>
+						<?php elseif ( apply_filters( 'cf_images_module_enabled', false, 'full-offload' ) ) : ?>
 							<li><a href="#" class="cf-images-delete" data-id="<?php echo esc_attr( $post_id ); ?>">
 								<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/delete.svg' ); ?>" alt="<?php esc_attr_e( 'Remove from media library', 'cf-images' ); ?>" />
 								<?php esc_html_e( 'Delete files on WordPress', 'cf-images' ); ?>
@@ -175,6 +200,7 @@ class Media {
 							<?php esc_html_e( 'Generate alt text', 'cf-images' ); ?>
 						</a></li>
 					<?php endif; ?>
+					<?php do_action( 'cf_images_media_module_actions', (int) $post_id ); ?>
 				</ul>
 			</li>
 		</ul>
@@ -259,7 +285,8 @@ class Media {
 
 		$action = sanitize_text_field( $progress['action'] );
 
-		if ( ! in_array( $action, array( 'upload', 'remove' ), true ) ) {
+		$supported_actions = apply_filters( 'cf_images_bulk_actions', array( 'upload', 'remove' ) );
+		if ( ! in_array( $action, $supported_actions, true ) ) {
 			wp_send_json_error( esc_html__( 'Unsupported action', 'cf-images' ) );
 		}
 
@@ -272,8 +299,9 @@ class Media {
 
 			// No available images found.
 			if ( 0 === $images->found_posts ) {
-				$this->update_stats( 0, false ); // Reset stats.
-				$this->fetch_stats( new Api\Image() );
+				if ( in_array( $action, array( 'upload', 'remove' ), true ) ) {
+					$this->fetch_stats( new Api\Image() );
+				}
 				wp_send_json_error( __( 'No images found', 'cf-images' ) );
 			}
 
@@ -305,23 +333,21 @@ class Media {
 					do_action( 'cf_images_error', 0, '' ); // Reset the error.
 				}
 			}
-		} else {
+		} elseif ( 'remove' === $action ) {
 			$this->remove_from_cloudflare( $image->post->ID );
 		}
 
+		do_action( 'cf_images_bulk_step', $image->post->ID, $action );
+
 		// On final step - update API stats.
-		if ( $step === $total ) {
+		if ( $step === $total && in_array( $action, array( 'upload', 'remove' ), true ) ) {
 			$this->fetch_stats( new Api\Image() );
 		}
 
 		$response = array(
-			'currentStep' => $step,
-			'totalSteps'  => $total,
-			'status'      => sprintf( /* translators: %1$d - current image, %2$d - total number of images */
-				esc_html__( 'Processing image %1$d out of %2$d...', 'cf-images' ),
-				(int) $step,
-				$total
-			),
+			'step'  => $step,
+			'total' => $total,
+			'stats' => $this->get_stats(),
 		);
 
 		wp_send_json_success( $response );
@@ -550,7 +576,7 @@ class Media {
 	 *
 	 * @return string
 	 */
-	private function get_response_data( int $attachment_id ): string {
+	public function get_response_data( int $attachment_id ): string {
 		ob_start();
 		$this->media_custom_column( 'cf-images-status', $attachment_id );
 		return ob_get_clean();

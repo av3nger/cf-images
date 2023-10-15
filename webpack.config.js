@@ -5,7 +5,7 @@ module.exports = {
 	mode: 'production',
 
 	entry: {
-		'cf-images': path.resolve( __dirname, 'assets/_src/js/app.js' ),
+		'cf-images': path.resolve( __dirname, 'assets/_src/app.jsx' ),
 		'cf-images-media': path.resolve( __dirname, 'assets/_src/js/media.js' ),
 	},
 
@@ -19,6 +19,16 @@ module.exports = {
 
 	module: {
 		rules: [
+			{
+				test: /\.(jsx)$/,
+				exclude: /node_modules/,
+				use: {
+					loader: 'babel-loader',
+					options: {
+						presets: [ '@babel/preset-env' ],
+					},
+				},
+			},
 			{
 				test: /\.s[ac]ss$/i,
 				use: [
@@ -35,6 +45,16 @@ module.exports = {
 	watchOptions: {
 		ignored: /node_modules/,
 		poll: 1000,
+	},
+
+	externals: {
+		react: 'React',
+		'react-dom': 'ReactDOM',
+		'@wordpress/i18n': 'wp.i18n',
+	},
+
+	resolve: {
+		extensions: [ '.js', '.jsx' ],
 	},
 
 	plugins: [

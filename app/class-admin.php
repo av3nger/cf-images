@@ -25,6 +25,7 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Admin {
 	use Traits\Helpers;
+	use Traits\Stats;
 
 	/**
 	 * Media class instance.
@@ -58,7 +59,6 @@ class Admin {
 		if ( wp_doing_ajax() ) {
 			$settings = new Settings();
 			add_action( 'wp_ajax_cf_images_do_setup', array( $settings, 'ajax_do_setup' ) );
-			add_action( 'wp_ajax_cf_images_save_settings', array( $settings, 'ajax_save_settings' ) );
 			add_action( 'wp_ajax_cf_images_disconnect', array( $settings, 'ajax_disconnect' ) );
 			add_action( 'wp_ajax_cf_images_hide_sidebar', array( $settings, 'ajax_hide_sidebar' ) );
 
@@ -88,16 +88,6 @@ class Admin {
 				CF_IMAGES_VERSION
 			);
 		}
-
-		// Run only on media library pages.
-		if ( 'upload.php' === $hook ) {
-			wp_enqueue_style(
-				$this->get_slug(),
-				CF_IMAGES_DIR_URL . 'assets/css/cf-images-media.min.css',
-				array(),
-				CF_IMAGES_VERSION
-			);
-		}
 	}
 
 	/**
@@ -109,14 +99,14 @@ class Admin {
 	 */
 	public function enqueue_scripts( string $hook ) {
 		// Run only on plugin pages.
-		if ( 'media_page_cf-images' !== $hook && 'upload.php' !== $hook ) {
+		if ( 'media_page_cf-images' !== $hook ) {
 			return;
 		}
 
 		wp_enqueue_script(
 			$this->get_slug(),
 			CF_IMAGES_DIR_URL . 'assets/js/cf-images.min.js',
-			array(),
+			array( 'jquery', 'react', 'react-dom', 'wp-i18n' ),
 			CF_IMAGES_VERSION,
 			true
 		);
@@ -125,15 +115,14 @@ class Admin {
 			$this->get_slug(),
 			'CFImages',
 			array(
-				'nonce'   => wp_create_nonce( 'cf-images-nonce' ),
-				'strings' => array(
-					'disconnecting' => esc_html__( 'Disconnecting...', 'cf-images' ),
-					'saveChange'    => esc_html__( 'Save Changes', 'cf-images' ),
-					'inProgress'    => esc_html__( 'Processing', 'cf-images' ),
-					'offloadError'  => esc_html__( 'Processing error', 'cf-images' ),
-					'savingChanges' => esc_html__( 'Saving...', 'cf-images' ),
-					'login'         => esc_html__( 'Login', 'cf-images' ),
-				),
+				'nonce'       => wp_create_nonce( 'cf-images-nonce' ),
+				'dirURL'      => CF_IMAGES_DIR_URL,
+				'settings'    => get_option( 'cf-images-settings', Settings::DEFAULTS ),
+				'cfStatus'    => $this->is_set_up(),
+				'domain'      => get_option( 'cf-images-custom-domain', '' ),
+				'hideSidebar' => get_site_option( 'cf-images-hide-sidebar' ),
+				'fuzion'      => $this->is_fuzion_api_connected(),
+				'stats'       => $this->get_stats(),
 			)
 		);
 	}
@@ -186,27 +175,6 @@ class Admin {
 			);
 
 			$this->render_notice( $message, 'error' );
-			return;
-		}
-
-		// Called from setup screen, when all defines have been set.
-		if ( filter_input( INPUT_GET, 'saved', FILTER_VALIDATE_BOOLEAN ) ) {
-			$this->render_notice( __( 'Settings saved.', 'cf-images' ) );
-		}
-
-		// Called on success after removing all images from Cloudflare.
-		if ( filter_input( INPUT_GET, 'deleted', FILTER_VALIDATE_BOOLEAN ) ) {
-			$this->render_notice( __( 'All images have been successfully removed from Cloudflare Images.', 'cf-images' ) );
-		}
-
-		// Called on success after uploading all images to Cloudflare.
-		if ( filter_input( INPUT_GET, 'updated', FILTER_VALIDATE_BOOLEAN ) ) {
-			$this->render_notice( __( 'All images have been successfully uploaded to Cloudflare Images.', 'cf-images' ) );
-		}
-
-		// Logged in.
-		if ( filter_input( INPUT_GET, 'login', FILTER_VALIDATE_BOOLEAN ) ) {
-			$this->render_notice( __( 'API key generated', 'cf-images' ) );
 		}
 	}
 
@@ -218,7 +186,7 @@ class Admin {
 	 * @param string $message Notice message.
 	 * @param string $type    Notice type.
 	 */
-	private function render_notice( string $message, string $type = 'success' ) {
+	public function render_notice( string $message, string $type = 'success' ) {
 		?>
 		<div class="cf-images-notifications">
 			<div class="notice notice-<?php echo esc_attr( $type ); ?>" id="cf-images-notice">
@@ -236,31 +204,11 @@ class Admin {
 	 * @since 1.0.0
 	 */
 	public function render_page() {
-		$this->view( 'header' );
-
-		if ( ! $this->is_set_up() ) {
-			$this->view( 'setup' );
-			return;
-		}
-
-		$this->view( 'settings' );
-	}
-
-	/**
-	 * Load an admin view.
-	 *
-	 * @param string $file View file name.
-	 */
-	public function view( string $file ) {
-		$view = __DIR__ . '/views/' . $file . '.php';
-
-		if ( ! file_exists( $view ) ) {
-			return;
-		}
-
-		ob_start();
-		include_once $view;
-		echo ob_get_clean(); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped */
+		?>
+		<div class="wrap cf-images">
+			<div id="cf-images" class="columns"></div>
+		</div>
+		<?php
 	}
 
 	/**

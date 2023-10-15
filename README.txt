@@ -96,6 +96,8 @@ If something is still not working for you, please let me know by creating a supp
 = 1.5.0 =
 
 Added:
+* New and improved React-based UI
+* Image compression module: optimize the size of your media library images
 * WP CLI support via the "wp cf-images" commands (bulk & individual offload)
 
 Changed:
@@ -104,6 +106,7 @@ Changed:
 Fixed:
 * Compatibility with latest WordPress coding standards
 * PHP warnings with page parser module on pages with no images
+* Link for adding API key for AI module was not working
 
 = 1.4.1 - 21.08.2023 =
 

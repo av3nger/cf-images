@@ -37,6 +37,8 @@ trait Stats {
 		'synced'      => 0,
 		'api_current' => 0,
 		'api_allowed' => 100000,
+		'size_before' => 0, // Compress module.
+		'size_after'  => 0, // Compress module.
 	);
 
 	/**
@@ -94,22 +96,28 @@ trait Stats {
 	 * @since 1.0.1
 	 * @since 1.2.0 Moved out to this trait from class-core.php
 	 *
-	 * @param int  $count Add or subtract number from `synced` image count.
-	 * @param bool $add   By default, we will add the required number of images. If set to false - replace the value.
+	 * @param int $count Add or subtract number from `synced` image count.
 	 */
-	private function update_stats( int $count, bool $add = true ) {
+	private function update_stats( int $count ) {
 		$stats = get_option( 'cf-images-stats', $this->default_stats );
 
-		if ( $add ) {
-			$stats['synced'] += $count;
-		} else {
-			$stats['synced'] = $count;
-		}
+		$stats['synced'] += $count;
 
 		if ( $stats['synced'] < 0 ) {
 			$stats['synced'] = 0;
 		}
 
 		update_option( 'cf-images-stats', $stats, false );
+	}
+
+	/**
+	 * Stats getter.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @return array
+	 */
+	private function get_stats(): array {
+		return get_option( 'cf-images-stats', $this->default_stats );
 	}
 }

@@ -14,7 +14,7 @@
 
 namespace CF_Images\App\Modules;
 
-use CF_Images\App\Core;
+use CF_Images\App\Traits\Helpers;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -26,36 +26,7 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.3.0
  */
 class Auto_Offload extends Module {
-	/**
-	 * Register UI components.
-	 *
-	 * @since 1.4.0
-	 */
-	protected function register_ui() {
-		$this->icon  = 'admin-site';
-		$this->title = esc_html__( 'Auto offload new images', 'cf-images' );
-	}
-
-	/**
-	 * Render module description.
-	 *
-	 * @since 1.4.0
-	 *
-	 * @param string $module Module ID.
-	 */
-	public function render_description( string $module ) {
-		if ( $module !== $this->module ) {
-			return;
-		}
-		?>
-		<p>
-			<?php esc_html_e( 'Enable this option if you want to enable automatic offloading for newly uploaded images.', 'cf-images' ); ?>
-		</p>
-		<p>
-			<?php esc_html_e( 'By default, new images will not be auto offloaded to Cloudflare Images.', 'cf-images' ); ?>
-		</p>
-		<?php
-	}
+	use Helpers;
 
 	/**
 	 * Init the module.
@@ -72,13 +43,11 @@ class Auto_Offload extends Module {
 	 * @since 1.3.0
 	 */
 	public function auto_offload() {
-		$media = Core::get_instance()->admin()->media();
-
 		// If async uploads are disabled, use the default hook.
-		if ( get_option( 'cf-images-disable-async', false ) ) {
-			add_filter( 'wp_generate_attachment_metadata', array( $media, 'upload_image' ), 10, 2 );
+		if ( $this->is_module_enabled( false, 'disable-async' ) ) {
+			add_filter( 'wp_generate_attachment_metadata', array( $this->media(), 'upload_image' ), 10, 2 );
 		} else {
-			add_filter( 'wp_async_wp_generate_attachment_metadata', array( $media, 'upload_image' ), 10, 2 );
+			add_filter( 'wp_async_wp_generate_attachment_metadata', array( $this->media(), 'upload_image' ), 10, 2 );
 		}
 	}
 }

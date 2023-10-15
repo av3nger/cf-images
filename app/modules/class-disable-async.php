@@ -13,6 +13,8 @@
 
 namespace CF_Images\App\Modules;
 
+use CF_Images\App\Async;
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -24,41 +26,23 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Disable_Async extends Module {
 	/**
-	 * Register UI components.
-	 *
-	 * @since 1.4.0
-	 */
-	protected function register_ui() {
-		$this->icon  = 'randomize';
-		$this->order = 70;
-		$this->title = esc_html__( 'Disable async processing', 'cf-images' );
-	}
-
-	/**
-	 * Render module description.
-	 *
-	 * @since 1.4.0
-	 *
-	 * @param string $module Module ID.
-	 */
-	public function render_description( string $module ) {
-		if ( $module !== $this->module ) {
-			return;
-		}
-		?>
-		<p>
-			<?php esc_html_e( 'By default, the plugin will try to offload images in asynchronous mode, meaning that the processing will be done in the background. If, for some reason, the host does not allow async processing, disable this option for backward compatibility.', 'cf-images' ); ?>
-		</p>
-		<p>
-			<?php esc_html_e( 'Note: disabling this option will increase the time to upload new images to the media library.', 'cf-images' ); ?>
-		</p>
-		<?php
-	}
-
-	/**
 	 * Init the module.
 	 *
 	 * @since 1.4.0
 	 */
 	public function init() {}
+
+	/**
+	 * Because the actions need to run if this module is disabled (which is reverse of a typical module),
+	 * we need to hook into the pre_init() method.
+	 *
+	 * @since 1.5.0
+	 */
+	public function pre_init() {
+		if ( ! $this->is_module_enabled() ) {
+			require_once __DIR__ . '/../async/class-task.php';
+			require_once __DIR__ . '/../async/class-upload.php';
+			new Async\Upload();
+		}
+	}
 }

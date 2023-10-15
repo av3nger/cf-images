@@ -78,7 +78,7 @@ class Cloudflare_Images extends Module {
 	 * @since 1.2.1
 	 */
 	protected function pre_init() {
-		if ( $this->full_offload_enabled() ) {
+		if ( $this->is_module_enabled( false, 'full-offload' ) ) {
 			$this->only_frontend = false;
 		}
 	}

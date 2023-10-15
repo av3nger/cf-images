@@ -71,15 +71,6 @@ class Core {
 	private $admin;
 
 	/**
-	 * Async upload instance.
-	 *
-	 * @since 1.1.5
-	 * @access private
-	 * @var Async\Upload $upload
-	 */
-	private $upload;
-
-	/**
 	 * CDN domain.
 	 *
 	 * @since 1.2.0
@@ -150,17 +141,13 @@ class Core {
 
 		// API classes.
 		require_once __DIR__ . '/api/class-api.php';
+		require_once __DIR__ . '/api/class-api-multi.php';
 		require_once __DIR__ . '/api/class-cloudflare.php';
 		require_once __DIR__ . '/api/class-fuzion.php';
 		require_once __DIR__ . '/api/class-ai.php';
+		require_once __DIR__ . '/api/class-compress.php';
 		require_once __DIR__ . '/api/class-image.php';
 		require_once __DIR__ . '/api/class-variant.php';
-
-		if ( ! get_option( 'cf-images-disable-async', false ) ) {
-			require_once __DIR__ . '/async/class-task.php';
-			require_once __DIR__ . '/async/class-upload.php';
-			$this->upload = new Async\Upload();
-		}
 	}
 
 	/**
@@ -208,12 +195,11 @@ class Core {
 	 * @see Modules\Auto_Offload
 	 * @see Modules\Auto_Resize
 	 * @see Modules\Cloudflare_Images
-	 * @see Modules\Custom_Domain
 	 * @see Modules\Custom_Id
 	 * @see Modules\Disable_Async
 	 * @see Modules\Disable_Generation
-	 * @see Modules\Full_Offload
 	 * @see Modules\Image_Ai
+	 * @see Modules\Image_Compress
 	 * @see Modules\Page_Parser
 	 */
 	private function load_modules() {
@@ -222,12 +208,11 @@ class Core {
 		$loader->module( 'auto-offload' );
 		$loader->module( 'auto-resize' );
 		$loader->module( 'cloudflare-images' ); // Core module.
-		$loader->module( 'custom-domain' );
 		$loader->module( 'custom-id' );
 		$loader->module( 'disable-async' );
 		$loader->module( 'disable-generation' );
-		$loader->module( 'full-offload' );
 		$loader->module( 'image-ai' );
+		$loader->module( 'image-compress' );
 		$loader->module( 'page-parser' );
 	}
 

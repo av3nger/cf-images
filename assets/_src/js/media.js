@@ -1,6 +1,7 @@
 /* global _ */
 
 import '../css/media.scss';
+import './core';
 
 ( function( _ ) {
 	'use strict';

@@ -12,7 +12,8 @@
 
 namespace CF_Images\App\Traits;
 
-use CF_images\App\Core;
+use CF_Images\App\Core;
+use CF_Images\App\Media;
 use WP_Error;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -82,13 +83,24 @@ trait Helpers {
 	}
 
 	/**
-	 * Check if full offload is enabled.
+	 * Check if Fuzion API is connected.
 	 *
-	 * @since 1.2.1
+	 * @since 1.5.0
 	 *
 	 * @return bool
 	 */
-	public function full_offload_enabled(): bool {
-		return (bool) get_option( 'cf-images-full-offload', false );
+	public function is_fuzion_api_connected(): bool {
+		return (bool) get_option( 'cf-image-ai-api-key', false );
+	}
+
+	/**
+	 * Media getter.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @return Media
+	 */
+	public function media(): Media {
+		return Core::get_instance()->admin()->media();
 	}
 }
