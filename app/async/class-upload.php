@@ -60,6 +60,12 @@ class Upload extends Task {
 			'current'  => $data[0], // Current image data, sent out to WordPress in Task::launch().
 		);
 
+		// Add compatibility with Media Replace plugin.
+		$action = filter_input( INPUT_GET, 'action' );
+		if ( 'media_replace_upload' === $action ) {
+			$out_data['cf_action'] = 'replace';
+		}
+
 		if ( ! empty( $this->body_data['images'] ) ) {
 			$out_data['images']   = $this->body_data['images'];
 			$out_data['metadata'] = $this->body_data['metadata'];
@@ -79,17 +85,18 @@ class Upload extends Task {
 	 */
 	protected function run_action() {
 		$image_ids = wp_parse_id_list( $_POST['images'] ); // phpcs:ignore
+		$cf_action = sanitize_text_field( filter_input( INPUT_POST, 'cf_action' ) );
 
 		array_walk(
 			$image_ids,
-			function ( $attachment_id ) {
+			function ( $attachment_id ) use ( $cf_action ) {
 				if ( ! wp_attachment_is_image( $attachment_id ) ) {
 					return;
 				}
 
 				$metadata = $_POST['metadata'][ $attachment_id ]; // phpcs:ignore
 				if ( $metadata ) {
-					do_action( "wp_async_$this->action", $metadata, $attachment_id );
+					do_action( "wp_async_$this->action", $metadata, $attachment_id, $cf_action );
 				}
 			}
 		);

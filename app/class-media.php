@@ -373,12 +373,13 @@ class Media {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param mixed $metadata      An array of attachment meta data.
-	 * @param int   $attachment_id Current attachment ID.
+	 * @param mixed  $metadata      An array of attachment meta data.
+	 * @param int    $attachment_id Current attachment ID.
+	 * @param string $action        Image action.
 	 *
 	 * @return array
 	 */
-	public function upload_image( $metadata, int $attachment_id ): array {
+	public function upload_image( $metadata, int $attachment_id, string $action = '' ): array {
 		if ( ! isset( $metadata['file'] ) ) {
 			do_action( 'cf_images_error', 404, __( 'Media file not found', 'cf-images' ) );
 			return $metadata;
@@ -403,6 +404,12 @@ class Media {
 		$name = trailingslashit( $host ) . str_replace( trailingslashit( $dir['basedir'] ), '', $path );
 
 		try {
+			// This allows us to replace the image on Cloudflare.
+			if ( 'replace' === $action ) {
+				// But first, we must remove it.
+				$this->remove_from_cloudflare( $attachment_id );
+			}
+
 			$results = $image->upload( $path, $attachment_id, $name );
 			$this->update_stats( 1 );
 			update_post_meta( $attachment_id, '_cloudflare_image_id', $results->id );
