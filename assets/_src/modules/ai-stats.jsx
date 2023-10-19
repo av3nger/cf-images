@@ -19,7 +19,7 @@ import { formatBytes } from '../js/helpers/format';
 
 const CompressionStats = () => {
 	const [ action, setAction ] = useState( '' );
-	const { inProgress, setInProgress, stats } = useContext( SettingsContext );
+	const { inProgress, setInProgress, modules, stats } = useContext( SettingsContext );
 
 	const runAction = ( e, actionName ) => {
 		e.preventDefault();
@@ -30,13 +30,24 @@ const CompressionStats = () => {
 	const getFooter = () => {
 		return (
 			<div className="card-footer mt-auto">
-				<a
-					className="card-footer-item"
-					href="#"
-					onClick={ ( e ) => runAction( e, 'compress' ) }
-				>
-					{ __( 'Bulk compress', 'cf-images' ) }
-				</a>
+				{ modules[ 'image-ai' ] && (
+					<a
+						className="card-footer-item"
+						href="#"
+						onClick={ ( e ) => runAction( e, 'alt-tags' ) }
+					>
+						{ __( 'Bulk add ALT tags', 'cf-images' ) }
+					</a>
+				) }
+				{ modules[ 'image-compress' ] && (
+					<a
+						className="card-footer-item"
+						href="#"
+						onClick={ ( e ) => runAction( e, 'compress' ) }
+					>
+						{ __( 'Bulk compress', 'cf-images' ) }
+					</a>
+				) }
 			</div>
 		);
 	};
@@ -51,7 +62,13 @@ const CompressionStats = () => {
 				<div className="level">
 					<div className="level-item has-text-centered">
 						<div>
-							<p className="heading">{ __( 'Saved', 'cf-images' ) }</p>
+							<p className="heading">{ __( 'ALT tags generated', 'cf-images' ) }</p>
+							<p className="title">{ stats.alt_tags ?? 0 }</p>
+						</div>
+					</div>
+					<div className="level-item has-text-centered">
+						<div>
+							<p className="heading">{ __( 'Compression savings', 'cf-images' ) }</p>
 							<p className="title">{ formatBytes( ( stats.size_before ?? 0 ) - ( stats.size_after ?? 0 ) ) }</p>
 						</div>
 					</div>

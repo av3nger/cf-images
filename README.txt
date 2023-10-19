@@ -100,6 +100,7 @@ Added:
 * Image compression module: optimize the size of your media library images
 * WP CLI support via the "wp cf-images" commands (bulk & individual offload)
 * Compatibility with the "Enable Media Replace" plugin
+* Option to bulk add image captions
 
 Changed:
 * The "Auto resize images on front-end" module has been refactored to prevent double loading of images

@@ -22,6 +22,7 @@ const ImageAI = () => {
 		>
 			<div className="content">
 				<p>{ __( 'Use the power of AI to tag and caption your images.', 'cf-images' ) }</p>
+				<p>{ __( 'Only images that are publicly accessible can be captioned.', 'cf-images' ) }</p>
 			</div>
 		</Card>
 	);
