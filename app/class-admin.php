@@ -103,10 +103,22 @@ class Admin {
 			return;
 		}
 
+		wp_dequeue_script( 'react' );
+		wp_dequeue_script( 'react-dom' );
+
+		// We want the latest version of React.
+		wp_enqueue_script(
+			'react-latest',
+			CF_IMAGES_DIR_URL . 'assets/js/cf-images-react.min.js',
+			array(),
+			CF_IMAGES_VERSION,
+			true
+		);
+
 		wp_enqueue_script(
 			$this->get_slug(),
 			CF_IMAGES_DIR_URL . 'assets/js/cf-images.min.js',
-			array( 'jquery', 'react', 'react-dom', 'wp-i18n' ),
+			array( 'jquery', 'wp-i18n', 'react-latest' ),
 			CF_IMAGES_VERSION,
 			true
 		);

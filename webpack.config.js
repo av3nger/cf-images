@@ -1,5 +1,6 @@
 const path = require( 'path' );
 const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
+const TerserPlugin = require( 'terser-webpack-plugin' );
 
 module.exports = {
 	mode: 'production',
@@ -48,8 +49,6 @@ module.exports = {
 	},
 
 	externals: {
-		react: 'React',
-		'react-dom': 'ReactDOM',
 		'@wordpress/i18n': 'wp.i18n',
 	},
 
@@ -65,4 +64,27 @@ module.exports = {
 			chunkFilename: '[id].min.css',
 		} ),
 	],
+
+	optimization: {
+		minimize: true,
+		minimizer: [
+			new TerserPlugin( {
+				extractComments: false,
+				terserOptions: {
+					output: {
+						comments: false,
+					},
+				},
+			} ),
+		],
+		splitChunks: {
+			cacheGroups: {
+				vendor: {
+					test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+					name: 'cf-images-react',
+					chunks: 'all',
+				},
+			},
+		}
+	},
 };
