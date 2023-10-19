@@ -42,6 +42,10 @@ class Page_Parser extends Module {
 	 * @since 1.4.0
 	 */
 	public function init() {
+		if ( filter_input( INPUT_GET, 'cf-images-disable' ) ) {
+			return;
+		}
+
 		add_action( 'template_redirect', array( $this, 'output_buffering' ), 1 );
 	}
 

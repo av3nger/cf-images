@@ -101,6 +101,7 @@ Added:
 * WP CLI support via the "wp cf-images" commands (bulk & individual offload)
 * Compatibility with the "Enable Media Replace" plugin
 * Option to bulk add image captions
+* Allow viewing a page with original images, using a "?cf-images-disable=true" URL query
 
 Changed:
 * The "Auto resize images on front-end" module has been refactored to prevent double loading of images
