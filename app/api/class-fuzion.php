@@ -104,7 +104,7 @@ class Fuzion extends Api {
 				$message = $this->maybe_extract_message( $body->message );
 			}
 
-			throw new Exception( esc_html( $message ) );
+			throw new Exception( esc_html( $message ), $code ?? 400 );
 		}
 
 		throw new Exception( esc_html__( 'Error doing API call. Please try again.', 'cf-images' ) );

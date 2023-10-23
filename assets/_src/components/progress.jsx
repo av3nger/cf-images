@@ -36,8 +36,8 @@ const ProgressBar = ( { action } ) => {
 
 			post( 'cf_images_bulk_process', { currentStep, totalSteps, action } )
 				.then( ( response ) => {
-					if ( ! response.success ) {
-						setError( response.data );
+					if ( ! response.success || response.data.hasOwnProperty( 'error' ) ) {
+						setError( response.data?.error ?? response.data );
 						resetProgressBar();
 						return;
 					}

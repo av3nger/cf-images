@@ -350,6 +350,10 @@ class Media {
 			'stats' => $this->get_stats(),
 		);
 
+		if ( is_wp_error( Core::get_error() ) ) {
+			$response['error'] = Core::get_error()->get_error_message();
+		}
+
 		wp_send_json_success( $response );
 	}
 
