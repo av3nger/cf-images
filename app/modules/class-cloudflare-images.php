@@ -150,6 +150,12 @@ class Cloudflare_Images extends Module {
 			return $image;
 		}
 
+		// If this is a known crop image.
+		if ( is_string( $size ) && isset( $this->registered_sizes[ $size ]['crop'] ) && true === $this->registered_sizes[ $size ]['crop'] ) {
+			$image[0] = $this->get_cdn_domain() . "/$hash/$cloudflare_image_id/w=" . $this->registered_sizes[ $size ]['width'] . ',h=' . $this->registered_sizes[ $size ]['height'] . ',fit=crop';
+			return $image;
+		}
+
 		// Image with defined dimensions.
 		if ( isset( $image[1] ) && $image[1] > 0 ) {
 			$image[0] = $this->get_cdn_domain() . "/$hash/$cloudflare_image_id/w=" . $image[1];

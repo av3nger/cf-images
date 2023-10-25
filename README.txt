@@ -107,6 +107,7 @@ Changed:
 * The "Auto resize images on front-end" module has been refactored to prevent double loading of images
 
 Fixed:
+* Cropped image detection
 * Compatibility with latest WordPress coding standards
 * PHP warnings with page parser module on pages with no images
 * Link for adding API key for AI module was not working
