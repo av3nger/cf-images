@@ -9,6 +9,7 @@
 /.distignore export-ignore
 /.gitattributes export-ignore
 /.gitignore export-ignore
-/.package.json export-ignore
-/.package-lock.json export-ignore
-/.webpack.config.js export-ignore
+/LICENSE export-ignore
+/package.json export-ignore
+/package-lock.json export-ignore
+/webpack.config.js export-ignore
