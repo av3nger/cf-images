@@ -104,6 +104,10 @@ class Image_Compress extends Module {
 			return;
 		}
 
+		if ( get_post_meta( $attachment_id, '_cf_images_compressed', true ) ) {
+			return;
+		}
+
 		if ( $this->all_sizes_compressed( $attachment_id ) ) {
 			return;
 		}

@@ -302,7 +302,7 @@ class Media {
 				if ( in_array( $action, array( 'upload', 'remove' ), true ) ) {
 					$this->fetch_stats( new Api\Image() );
 				}
-				wp_send_json_error( __( 'No images found', 'cf-images' ) );
+				wp_send_json_error( __( 'No new images to process', 'cf-images' ) );
 			}
 
 			$total = $images->found_posts;
