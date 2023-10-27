@@ -22,40 +22,34 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.2.0
  */
 trait Ajax {
-
 	/**
 	 * Check if this is a valid AJAX request coming from the user.
 	 *
 	 * @since 1.0.1
-	 * @since 1.2.0  Moved out to this trait from class-core.php
+	 * @since 1.2.0 Moved out to this trait from class-core.php
 	 *
-	 * @param bool $no_data  Request has no data.
-	 *
-	 * @return void
+	 * @param bool $no_data Request has no data.
 	 */
-	private function check_ajax_request( $no_data = false ) {
-
+	private function check_ajax_request( bool $no_data = false ) {
 		check_ajax_referer( 'cf-images-nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) || ( ! $no_data && ! isset( $_POST['data'] ) ) ) {
 			wp_die();
 		}
-
 	}
 
 	/**
 	 * Get arguments for WP_Query call.
 	 *
 	 * @since 1.0.1
-	 * @since 1.2.0  Moved out to this trait from class-core.php
+	 * @since 1.2.0 Moved out to this trait from class-core.php
 	 *
-	 * @param string $action  Action name. Accepts: upload|remove.
-	 * @param bool   $single  Fetch single entry? Default: fetch all.
+	 * @param string $action Action name. Accepts: upload|remove.
+	 * @param bool   $single Fetch single entry? Default: fetch all.
 	 *
 	 * @return string[]
 	 */
 	private function get_wp_query_args( string $action, bool $single = false ): array {
-
 		do_action( 'cf_images_before_wp_query' );
 
 		$args = array(
@@ -84,8 +78,6 @@ trait Ajax {
 			$args['meta_key'] = '_cloudflare_image_id'; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 		}
 
-		return $args;
-
+		return apply_filters( 'cf_images_wp_query_args', $args, $action );
 	}
-
 }

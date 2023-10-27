@@ -24,8 +24,8 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.0.0
  */
 class Admin {
-
 	use Traits\Helpers;
+	use Traits\Stats;
 
 	/**
 	 * Media class instance.
@@ -43,7 +43,6 @@ class Admin {
 	 * @since 1.0.0
 	 */
 	public function __construct() {
-
 		if ( ! is_admin() ) {
 			return;
 		}
@@ -60,7 +59,6 @@ class Admin {
 		if ( wp_doing_ajax() ) {
 			$settings = new Settings();
 			add_action( 'wp_ajax_cf_images_do_setup', array( $settings, 'ajax_do_setup' ) );
-			add_action( 'wp_ajax_cf_images_save_settings', array( $settings, 'ajax_save_settings' ) );
 			add_action( 'wp_ajax_cf_images_disconnect', array( $settings, 'ajax_disconnect' ) );
 			add_action( 'wp_ajax_cf_images_hide_sidebar', array( $settings, 'ajax_hide_sidebar' ) );
 
@@ -71,7 +69,6 @@ class Admin {
 			add_action( 'wp_ajax_cf_images_delete_image', array( $this->media, 'ajax_delete_image' ) );
 			add_action( 'wp_ajax_cf_images_restore_image', array( $this->media, 'ajax_restore_image' ) );
 		}
-
 	}
 
 	/**
@@ -79,12 +76,9 @@ class Admin {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $hook  The current admin page.
-	 *
-	 * @return void
+	 * @param string $hook The current admin page.
 	 */
 	public function enqueue_styles( string $hook ) {
-
 		// Run only on plugin pages.
 		if ( 'media_page_cf-images' === $hook ) {
 			wp_enqueue_style(
@@ -94,17 +88,6 @@ class Admin {
 				CF_IMAGES_VERSION
 			);
 		}
-
-		// Run only on media library pages.
-		if ( 'upload.php' === $hook ) {
-			wp_enqueue_style(
-				$this->get_slug(),
-				CF_IMAGES_DIR_URL . 'assets/css/cf-images-media.min.css',
-				array(),
-				CF_IMAGES_VERSION
-			);
-		}
-
 	}
 
 	/**
@@ -112,21 +95,30 @@ class Admin {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $hook  The current admin page.
-	 *
-	 * @return void
+	 * @param string $hook The current admin page.
 	 */
 	public function enqueue_scripts( string $hook ) {
-
 		// Run only on plugin pages.
-		if ( 'media_page_cf-images' !== $hook && 'upload.php' !== $hook ) {
+		if ( 'media_page_cf-images' !== $hook ) {
 			return;
 		}
+
+		wp_dequeue_script( 'react' );
+		wp_dequeue_script( 'react-dom' );
+
+		// We want the latest version of React.
+		wp_enqueue_script(
+			'react-latest',
+			CF_IMAGES_DIR_URL . 'assets/js/cf-images-react.min.js',
+			array(),
+			CF_IMAGES_VERSION,
+			true
+		);
 
 		wp_enqueue_script(
 			$this->get_slug(),
 			CF_IMAGES_DIR_URL . 'assets/js/cf-images.min.js',
-			array(),
+			array( 'jquery', 'wp-i18n', 'react-latest' ),
 			CF_IMAGES_VERSION,
 			true
 		);
@@ -135,18 +127,16 @@ class Admin {
 			$this->get_slug(),
 			'CFImages',
 			array(
-				'nonce'   => wp_create_nonce( 'cf-images-nonce' ),
-				'strings' => array(
-					'disconnecting' => esc_html__( 'Disconnecting...', 'cf-images' ),
-					'saveChange'    => esc_html__( 'Save Changes', 'cf-images' ),
-					'inProgress'    => esc_html__( 'Processing', 'cf-images' ),
-					'offloadError'  => esc_html__( 'Processing error', 'cf-images' ),
-					'savingChanges' => esc_html__( 'Saving...', 'cf-images' ),
-					'login'         => esc_html__( 'Login', 'cf-images' ),
-				),
+				'nonce'       => wp_create_nonce( 'cf-images-nonce' ),
+				'dirURL'      => CF_IMAGES_DIR_URL,
+				'settings'    => get_option( 'cf-images-settings', Settings::DEFAULTS ),
+				'cfStatus'    => $this->is_set_up(),
+				'domain'      => get_option( 'cf-images-custom-domain', '' ),
+				'hideSidebar' => get_site_option( 'cf-images-hide-sidebar' ),
+				'fuzion'      => $this->is_fuzion_api_connected(),
+				'stats'       => $this->get_stats(),
 			)
 		);
-
 	}
 
 	/**
@@ -154,30 +144,25 @@ class Admin {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $actions  Actions array.
+	 * @param array $actions Actions array.
 	 *
 	 * @return array
 	 */
 	public function settings_link( array $actions ): array {
-
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return $actions;
 		}
 
 		$actions['cf-images-settings'] = '<a href="' . admin_url( 'upload.php?page=cf-images' ) . '" aria-label="' . esc_attr( __( 'Settings', 'cf-images' ) ) . '">' . esc_html__( 'Settings', 'cf-images' ) . '</a>';
 		return $actions;
-
 	}
 
 	/**
 	 * Register sub-menu under the WordPress "Media" menu element.
 	 *
 	 * @since 1.0.0
-	 *
-	 * @return void
 	 */
 	public function register_menu() {
-
 		add_submenu_page(
 			'upload.php',
 			__( 'Offload Images to Cloudflare', 'cf-images' ),
@@ -186,18 +171,14 @@ class Admin {
 			$this->get_slug(),
 			array( $this, 'render_page' )
 		);
-
 	}
 
 	/**
 	 * Show notice.
 	 *
 	 * @since 1.0.0
-	 *
-	 * @return void
 	 */
 	public function show_notice() {
-
 		if ( false !== $this->get_error() ) {
 			$message = sprintf( /* translators: %1$s - error message, %2$d - error code */
 				esc_html__( '%1$s (code: %2$d)', 'cf-images' ),
@@ -206,29 +187,7 @@ class Admin {
 			);
 
 			$this->render_notice( $message, 'error' );
-			return;
 		}
-
-		// Called from setup screen, when all defines have been set.
-		if ( filter_input( INPUT_GET, 'saved', FILTER_VALIDATE_BOOLEAN ) ) {
-			$this->render_notice( __( 'Settings saved.', 'cf-images' ) );
-		}
-
-		// Called on success after removing all images from Cloudflare.
-		if ( filter_input( INPUT_GET, 'deleted', FILTER_VALIDATE_BOOLEAN ) ) {
-			$this->render_notice( __( 'All images have been successfully removed from Cloudflare Images.', 'cf-images' ) );
-		}
-
-		// Called on success after uploading all images to Cloudflare.
-		if ( filter_input( INPUT_GET, 'updated', FILTER_VALIDATE_BOOLEAN ) ) {
-			$this->render_notice( __( 'All images have been successfully uploaded to Cloudflare Images.', 'cf-images' ) );
-		}
-
-		// Logged in.
-		if ( filter_input( INPUT_GET, 'login', FILTER_VALIDATE_BOOLEAN ) ) {
-			$this->render_notice( __( 'API key generated', 'cf-images' ) );
-		}
-
 	}
 
 	/**
@@ -236,13 +195,10 @@ class Admin {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $message  Notice message.
-	 * @param string $type     Notice type.
-	 *
-	 * @return void
+	 * @param string $message Notice message.
+	 * @param string $type    Notice type.
 	 */
-	private function render_notice( string $message, string $type = 'success' ) {
-
+	public function render_notice( string $message, string $type = 'success' ) {
 		?>
 		<div class="cf-images-notifications">
 			<div class="notice notice-<?php echo esc_attr( $type ); ?>" id="cf-images-notice">
@@ -252,48 +208,19 @@ class Admin {
 			</div>
 		</div>
 		<?php
-
 	}
 
 	/**
 	 * Render page.
 	 *
 	 * @since 1.0.0
-	 *
-	 * @return void
 	 */
 	public function render_page() {
-
-		$this->view( 'header' );
-
-		if ( ! $this->is_set_up() ) {
-			$this->view( 'setup' );
-			return;
-		}
-
-		$this->view( 'settings' );
-
-	}
-
-	/**
-	 * Load an admin view.
-	 *
-	 * @param string $file  View file name.
-	 *
-	 * @return void
-	 */
-	public function view( string $file ) {
-
-		$view = __DIR__ . '/views/' . $file . '.php';
-
-		if ( ! file_exists( $view ) ) {
-			return;
-		}
-
-		ob_start();
-		include_once $view;
-		echo ob_get_clean(); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped */
-
+		?>
+		<div class="wrap cf-images">
+			<div id="cf-images" class="columns"></div>
+		</div>
+		<?php
 	}
 
 	/**
@@ -306,5 +233,4 @@ class Admin {
 	public function media(): Media {
 		return $this->media;
 	}
-
 }

@@ -1,12 +1,12 @@
 === Offload, Store, Resize & Optimize with Cloudflare Images ===
 Plugin Name: Offload, Store, Resize & Optimize with Cloudflare Images
 Contributors: vanyukov
-Tags: cdn, cloudflare images, offload images, cloudflare, optimize
+Tags: cdn, cloudflare images, offload images, compress, cloudflare, optimize
 Donate link: https://www.paypal.com/donate/?business=JRR6QPRGTZ46N&no_recurring=0&item_name=Help+support+the+development+of+the+Cloudflare+Images+plugin+for+WordPress&currency_code=AUD
 Requires at least: 5.6
 Requires PHP: 7.0
-Tested up to: 6.3
-Stable tag: %%VERSION%%
+Tested up to: 6.4
+Stable tag: 1.5.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,6 +32,7 @@ Offload your media library to Cloudflare Images! Let our plugin take charge:
 = But wait, there's more! =
 
 Image AI - tag and caption your images using AI.
+Compression - optimize JPEG/PNG images to decrease file size without compromising visual quality.
 
 = A Developer's Promise =
 
@@ -92,6 +93,25 @@ If something is still not working for you, please let me know by creating a supp
 2. Quick and easy setup wizard
 
 == Changelog ==
+
+= 1.5.0 - 27.10.2023 =
+
+Added:
+* New and improved React-based UI
+* Image compression module: optimize the size of your media library images
+* WP CLI support via the "wp cf-images" commands (bulk & individual offload)
+* Compatibility with the "Enable Media Replace" plugin
+* Option to bulk add image captions
+* Allow viewing a page with original images, using a "?cf-images-disable=true" URL query
+
+Changed:
+* The "Auto resize images on front-end" module has been refactored to prevent double loading of images
+
+Fixed:
+* Cropped image detection
+* Compatibility with latest WordPress coding standards
+* PHP warnings with page parser module on pages with no images
+* Link for adding API key for AI module was not working
 
 = 1.4.1 - 21.08.2023 =
 
@@ -268,6 +288,9 @@ First release
 * Support for custom domains
 
 == Upgrade Notice ==
+
+= 1.5.0 =
+Huge update with lots of improvements and new features, new UI and image compression module.
 
 = 1.4.0 =
 Image AI - tag and caption your images using AI. Page parser module - improved compatibility with themes and plugins.

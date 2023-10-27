@@ -24,7 +24,6 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.1.5
  */
 class Spectra {
-
 	/**
 	 * Class constructor.
 	 *
@@ -41,13 +40,12 @@ class Spectra {
 	 * @since 1.1.3
 	 * @since 1.1.5 Moved to the Spectra integration class.
 	 *
-	 * @param int    $attachment_id   The image attachment ID. May be 0 in case the image is not an attachment.
-	 * @param string $filtered_image  Full img tag with attributes that will replace the source img tag.
+	 * @param int    $attachment_id  The image attachment ID. May be 0 in case the image is not an attachment.
+	 * @param string $filtered_image Full img tag with attributes that will replace the source img tag.
 	 *
 	 * @return int
 	 */
 	public function detect_image_id( int $attachment_id, string $filtered_image ): int {
-
 		if ( 0 !== $attachment_id ) {
 			return $attachment_id;
 		}
@@ -59,7 +57,5 @@ class Spectra {
 		}
 
 		return $attachment_id;
-
 	}
-
 }

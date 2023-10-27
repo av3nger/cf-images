@@ -27,7 +27,6 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.4.0
  */
 class Fuzion extends Api {
-
 	/**
 	 * Fuzion API URL.
 	 *
@@ -45,7 +44,6 @@ class Fuzion extends Api {
 	 * @return array
 	 */
 	protected function get_args(): array {
-
 		$args = parent::get_args();
 
 		$args['headers'] = array(
@@ -55,7 +53,6 @@ class Fuzion extends Api {
 		);
 
 		return $args;
-
 	}
 
 	/**
@@ -66,14 +63,12 @@ class Fuzion extends Api {
 	 * @return string
 	 */
 	protected function get_url(): string {
-
 		$url = $this->api_url;
 		if ( defined( 'FUZION_API_URL' ) && constant( 'FUZION_API_URL' ) ) {
 			$url = trailingslashit( constant( 'FUZION_API_URL' ) );
 		}
 
 		return $url . $this->endpoint;
-
 	}
 
 	/**
@@ -81,17 +76,16 @@ class Fuzion extends Api {
 	 *
 	 * @since 1.4.0
 	 *
-	 * @param string $body    Response body.
-	 * @param int    $code    Response code.
-	 * @param bool   $decode  JSON decode the response.
-	 * @param array  $args    Arguments array.
+	 * @param string $body   Response body.
+	 * @param int    $code   Response code.
+	 * @param bool   $decode JSON decode the response.
+	 * @param array  $args   Arguments array.
 	 *
-	 * @throws Exception  Exception during API call.
+	 * @throws Exception Exception during API call.
 	 *
 	 * @return stdClass
 	 */
 	protected function process_response( string $body, int $code, bool $decode, array $args ): stdClass {
-
 		$body = json_decode( $body );
 
 		if ( 200 === $code || 201 === $code ) {
@@ -99,7 +93,7 @@ class Fuzion extends Api {
 		}
 
 		if ( 422 === $code && isset( $body->message ) ) {
-			throw new Exception( $body->message );
+			throw new Exception( esc_html( $body->message ) );
 		}
 
 		if ( isset( $body->message ) ) {
@@ -110,11 +104,10 @@ class Fuzion extends Api {
 				$message = $this->maybe_extract_message( $body->message );
 			}
 
-			throw new Exception( $message );
+			throw new Exception( esc_html( $message ), $code ?? 400 );
 		}
 
-		throw new Exception( __( 'Error doing API call. Please try again.', 'cf-images' ) );
-
+		throw new Exception( esc_html__( 'Error doing API call. Please try again.', 'cf-images' ) );
 	}
 
 	/**
@@ -126,12 +119,11 @@ class Fuzion extends Api {
 	 *
 	 * @since 1.4.0
 	 *
-	 * @param string $message  Error message.
+	 * @param string $message Error message.
 	 *
 	 * @return string
 	 */
 	private function maybe_extract_message( string $message ): string {
-
 		// Extract the JSON part from the message.
 		$json_start = strpos( $message, '{' );
 		$inner_json = substr( $message, $json_start );
@@ -144,7 +136,5 @@ class Fuzion extends Api {
 		}
 
 		return $message;
-
 	}
-
 }

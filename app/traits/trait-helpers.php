@@ -12,7 +12,8 @@
 
 namespace CF_Images\App\Traits;
 
-use CF_images\App\Core;
+use CF_Images\App\Core;
+use CF_Images\App\Media;
 use WP_Error;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -25,7 +26,6 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.0.0
  */
 trait Helpers {
-
 	/**
 	 * Get plugin slug.
 	 *
@@ -45,7 +45,6 @@ trait Helpers {
 	 * @return bool
 	 */
 	public function is_set_up(): bool {
-
 		if ( get_option( 'cf-images-auth-error', false ) ) {
 			return false;
 		}
@@ -55,7 +54,6 @@ trait Helpers {
 		$defines_found  = defined( 'CF_IMAGES_ACCOUNT_ID' ) && defined( 'CF_IMAGES_KEY_TOKEN' );
 
 		return ( $config_written && $saved ) || $defines_found;
-
 	}
 
 	/**
@@ -66,13 +64,11 @@ trait Helpers {
 	 * @return bool|WP_Error
 	 */
 	public function get_error() {
-
 		if ( get_option( 'cf-images-auth-error', false ) ) {
 			return new WP_Error( 401, esc_html__( 'Authentication error. Check and update Cloudflare API key.', 'cf-images' ) );
 		}
 
 		return Core::get_error();
-
 	}
 
 	/**
@@ -87,14 +83,24 @@ trait Helpers {
 	}
 
 	/**
-	 * Check if full offload is enabled.
+	 * Check if Fuzion API is connected.
 	 *
-	 * @since 1.2.1
+	 * @since 1.5.0
 	 *
 	 * @return bool
 	 */
-	public function full_offload_enabled(): bool {
-		return (bool) get_option( 'cf-images-full-offload', false );
+	public function is_fuzion_api_connected(): bool {
+		return (bool) get_option( 'cf-image-ai-api-key', false );
 	}
 
+	/**
+	 * Media getter.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @return Media
+	 */
+	public function media(): Media {
+		return Core::get_instance()->admin()->media();
+	}
 }

@@ -24,14 +24,12 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.0.0
  */
 class Activator {
-
 	/**
 	 * Activation hook.
 	 *
 	 * @since 1.0.0
 	 */
 	public static function activate() {
-
 		$activate = filter_input( INPUT_POST, 'action', FILTER_UNSAFE_RAW );
 		$checked  = filter_input( INPUT_POST, 'checked', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 
@@ -40,7 +38,6 @@ class Activator {
 		}
 
 		set_transient( 'cf-images-admin-redirect', 5 * MINUTE_IN_SECONDS );
-
 	}
 
 	/**
@@ -55,11 +52,8 @@ class Activator {
 	 * Check if we need to perform any upgrade actions.
 	 *
 	 * @sicne 1.2.0
-	 *
-	 * @return void
 	 */
 	public static function maybe_upgrade() {
-
 		$version = get_site_option( 'cf-images-version' );
 
 		if ( CF_IMAGES_VERSION === $version ) {
@@ -70,8 +64,38 @@ class Activator {
 			delete_option( 'cf-images-install-notice' );
 		}
 
-		update_site_option( 'cf-images-version', CF_IMAGES_VERSION );
+		if ( version_compare( $version, '1.5.0' ) ) {
+			self::upgrade_150();
+		}
 
+		update_site_option( 'cf-images-version', CF_IMAGES_VERSION );
 	}
 
+	/**
+	 * Upgrade to version 1.5.0.
+	 *
+	 * @since 1.5.0
+	 */
+	private static function upgrade_150() {
+		// We are now storing all the settings in a single option.
+		$options = array(
+			'auto-offload'       => 'cf-images-auto-offload',
+			'auto-resize'        => 'cf-images-auto-resize',
+			'custom-id'          => 'cf-images-custom-id',
+			'disable-async'      => 'cf-images-disable-async',
+			'disable-generation' => 'cf-images-disable-generation',
+			'full-offload'       => 'cf-images-full-offload',
+			'image-ai'           => 'cf-images-image-ai',
+			'image-compress'     => 'cf-images-image-compress',
+			'page-parser'        => 'cf-images-page-parser',
+		);
+
+		$settings = array_fill_keys( array_keys( $options ), false );
+		foreach ( $options as $option_id => $option_key ) {
+			$settings[ $option_id ] = (bool) get_option( $option_key );
+			delete_option( $option_key );
+		}
+
+		update_option( 'cf-images-settings', $settings, false );
+	}
 }

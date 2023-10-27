@@ -24,22 +24,47 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.0.0
  */
 class Settings {
-
 	use Traits\Ajax;
+
+	/**
+	 * Default settings.
+	 *
+	 * @since 1.5.0
+	 */
+	const DEFAULTS = array(
+		'auto-offload'       => false,
+		'auto-resize'        => false,
+		'custom-domain'      => false,
+		'custom-id'          => false,
+		'disable-async'      => false,
+		'disable-generation' => false,
+		'full-offload'       => false,
+		'image-ai'           => false,
+		'image-compress'     => false,
+		'page-parser'        => false,
+	);
+
+	/**
+	 * Class constructor.
+	 *
+	 * @since 1.5.0
+	 */
+	public function __construct() {
+		if ( wp_doing_ajax() ) {
+			add_action( 'wp_ajax_cf_images_update_settings', array( $this, 'ajax_update_settings' ) );
+			add_action( 'wp_ajax_cf_images_set_custom_domain', array( $this, 'ajax_set_custom_domain' ) );
+		}
+	}
 
 	/**
 	 * Do initial setup by storing user provided Cloudflare account ID and API key in wp-config.php file.
 	 *
 	 * @since 1.0.0
-	 *
-	 * @return void
 	 */
 	public function ajax_do_setup() {
-
 		$this->check_ajax_request();
 
-		// Nonce checked in check_ajax_request(), data sanitized later in code.
-		parse_str( wp_unslash( $_POST['data'] ), $form ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+		$form = filter_input( INPUT_POST, 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 
 		if ( ! isset( $form['account-id'] ) || ! isset( $form['api-key'] ) ) {
 			wp_die();
@@ -52,59 +77,6 @@ class Settings {
 		delete_option( 'cf-images-auth-error' );
 
 		wp_send_json_success();
-
-	}
-
-	/**
-	 * Save settings.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return void
-	 */
-	public function ajax_save_settings() {
-
-		$this->check_ajax_request();
-
-		// Nonce checked in check_ajax_request(), data sanitized later in code.
-		parse_str( wp_unslash( $_POST['data'] ), $form ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
-
-		// List of settings. The key corresponds to the name of the form field, the value corresponds to the name of the option.
-		$options = array(
-			'auto-offload'       => 'cf-images-auto-offload',
-			'auto-resize'        => 'cf-images-auto-resize',
-			'custom-id'          => 'cf-images-custom-id',
-			'disable-async'      => 'cf-images-disable-async',
-			'disable-generation' => 'cf-images-disable-generation',
-			'full-offload'       => 'cf-images-full-offload',
-			'image-ai'           => 'cf-images-image-ai',
-			'page-parser'        => 'cf-images-page-parser',
-		);
-
-		foreach ( $options as $key => $option ) {
-			if ( ! isset( $form[ $key ] ) ) {
-				delete_option( $option );
-			} else {
-				update_option( $option, (bool) $form[ $key ], false );
-			}
-		}
-
-		if ( ! isset( $form['custom-domain'] ) ) {
-			delete_option( 'cf-images-custom-domain' );
-		} else {
-			$value = (bool) $form['custom-domain'];
-			if ( isset( $form['custom_domain_input'] ) ) {
-				$url = esc_url( $form['custom_domain_input'] );
-				if ( wp_http_validate_url( $url ) ) {
-					$value = $url;
-				}
-			}
-
-			update_option( 'cf-images-custom-domain', $value, false );
-		}
-
-		wp_send_json_success();
-
 	}
 
 	/**
@@ -114,14 +86,11 @@ class Settings {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $name       Name of the constant to add.
-	 * @param string $value      Value of the constant to add.
-	 * @param bool   $overwrite  Overwrite the current value. Default: false.
-	 *
-	 * @return void
+	 * @param string $name      Name of the constant to add.
+	 * @param string $value     Value of the constant to add.
+	 * @param bool   $overwrite Overwrite the current value. Default: false.
 	 */
 	public function write_config( string $name, string $value = '', bool $overwrite = false ) {
-
 		$path_to_wp_config = ABSPATH . 'wp-config.php';
 
 		// wp-config.php file not found - exit early.
@@ -155,7 +124,6 @@ class Settings {
 
 		// On some hosts, the wp-config.php updates take several seconds to "un-cache".
 		sleep( 2 );
-
 	}
 
 	/**
@@ -163,28 +131,21 @@ class Settings {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $wp_config_path  Path to wp-config.php file.
-	 * @param array  $content         Array of lines to add to the file.
-	 *
-	 * @return void
+	 * @param string $wp_config_path Path to wp-config.php file.
+	 * @param array  $content        Array of lines to add to the file.
 	 */
 	private function write( string $wp_config_path, array $content ) {
-
-		$handle = fopen( $wp_config_path, 'w' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fopen
-		fwrite( $handle, implode( '', $content ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fwrite
-		fclose( $handle ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fclose
-
+		$handle = fopen( $wp_config_path, 'w' ); // phpcs:ignore WordPress.WP.AlternativeFunctions
+		fwrite( $handle, implode( '', $content ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions
+		fclose( $handle ); // phpcs:ignore WordPress.WP.AlternativeFunctions
 	}
 
 	/**
 	 * Disconnect from Cloudflare.
 	 *
 	 * @since 1.1.2
-	 *
-	 * @return void
 	 */
 	public function ajax_disconnect() {
-
 		delete_site_option( 'cf-images-hash' );
 		delete_option( 'cf-images-setup-done' );
 		delete_option( 'cf-images-config-written' );
@@ -195,18 +156,71 @@ class Settings {
 		$this->write_config( 'CF_IMAGES_KEY_TOKEN' );
 
 		wp_send_json_success();
-
 	}
 
 	/**
 	 * Hide sidebar.
 	 *
 	 * @since 1.3.0
-	 *
-	 * @return void
 	 */
 	public function ajax_hide_sidebar() {
 		update_site_option( 'cf-images-hide-sidebar', true );
 	}
 
+	/**
+	 * Update settings from React app.
+	 *
+	 * @since 1.5.0
+	 */
+	public function ajax_update_settings() {
+		$this->check_ajax_request();
+
+		$data = filter_input( INPUT_POST, 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+
+		$settings = get_option( 'cf-images-settings', self::DEFAULTS );
+
+		// Make sure we add any options that have been added to the DEFAULTS array.
+		$settings = wp_parse_args( $settings, self::DEFAULTS );
+
+		foreach ( $settings as $key => $value ) {
+			// Skip unsupported settings.
+			if ( ! isset( $data[ $key ] ) ) {
+				continue;
+			}
+
+			$settings[ $key ] = filter_var( $data[ $key ], FILTER_VALIDATE_BOOLEAN );
+		}
+
+		// Remove custom domain option, if the module is disabled.
+		if ( ! isset( $data['custom-domain'] ) || ! filter_var( $data['custom-domain'], FILTER_VALIDATE_BOOLEAN ) ) {
+			delete_option( 'cf-images-custom-domain' );
+		}
+
+		update_option( 'cf-images-settings', $settings, false );
+		wp_send_json_success();
+	}
+
+	/**
+	 * Update custom domain value.
+	 *
+	 * @since 1.5.0
+	 */
+	public function ajax_set_custom_domain() {
+		$this->check_ajax_request();
+
+		$data = filter_input( INPUT_POST, 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+
+		if ( ! isset( $data['domain'] ) ) {
+			delete_option( 'cf-images-custom-domain' );
+		} else {
+			$url = esc_url( $data['domain'] );
+			if ( ! wp_http_validate_url( $url ) ) {
+				wp_send_json_error( esc_html__( 'Please enter a valid domain', 'cf-images' ) );
+			}
+
+			update_option( 'cf-images-custom-domain', $url, false );
+		}
+
+		wp_send_json_success();
+	}
 }

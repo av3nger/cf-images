@@ -25,12 +25,11 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.2.0
  */
 trait Stats {
-
 	/**
 	 * Default stats.
 	 *
 	 * @since 1.1.0
-	 * @since 1.2.0  Moved out to this trait from class-core.php
+	 * @since 1.2.0 Moved out to this trait from class-core.php
 	 * @access private
 	 * @var int[]
 	 */
@@ -38,6 +37,9 @@ trait Stats {
 		'synced'      => 0,
 		'api_current' => 0,
 		'api_allowed' => 100000,
+		'size_before' => 0, // Compress module.
+		'size_after'  => 0, // Compress module.
+		'alt_tags'    => 0, // Alt tags generated.
 	);
 
 	/**
@@ -45,12 +47,9 @@ trait Stats {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $variants  Saved variants.
-	 *
-	 * @return void
+	 * @param array $variants Saved variants.
 	 */
 	private function maybe_save_hash( array $variants ) {
-
 		$hash = get_site_option( 'cf-images-hash', '' );
 
 		if ( ! empty( $hash ) || ! isset( $variants[0] ) ) {
@@ -62,21 +61,17 @@ trait Stats {
 		if ( isset( $hash[1] ) && ! empty( $hash[1][1] ) ) {
 			update_site_option( 'cf-images-hash', $hash[1][1] );
 		}
-
 	}
 
 	/**
 	 * Fetch API stats.
 	 *
 	 * @since 1.1.0
-	 * @since 1.2.0  Moved out to this trait from class-core.php
+	 * @since 1.2.0 Moved out to this trait from class-core.php
 	 *
-	 * @param Image $image  Image API object.
-	 *
-	 * @return void
+	 * @param Image $image Image API object.
 	 */
 	private function fetch_stats( Image $image ) {
-
 		try {
 			$count = $image->stats();
 
@@ -94,36 +89,36 @@ trait Stats {
 		} catch ( Exception $e ) {
 			do_action( 'cf_images_error', $e->getCode(), $e->getMessage() );
 		}
-
 	}
 
 	/**
 	 * Update image stats.
 	 *
 	 * @since 1.0.1
-	 * @since 1.2.0  Moved out to this trait from class-core.php
+	 * @since 1.2.0 Moved out to this trait from class-core.php
 	 *
-	 * @param int  $count  Add or subtract number from `synced` image count.
-	 * @param bool $add    By default, we will add the required number of images. If set to false - replace the value.
-	 *
-	 * @return void
+	 * @param int $count Add or subtract number from `synced` image count.
 	 */
-	private function update_stats( int $count, bool $add = true ) {
-
+	private function update_stats( int $count ) {
 		$stats = get_option( 'cf-images-stats', $this->default_stats );
 
-		if ( $add ) {
-			$stats['synced'] += $count;
-		} else {
-			$stats['synced'] = $count;
-		}
+		$stats['synced'] += $count;
 
 		if ( $stats['synced'] < 0 ) {
 			$stats['synced'] = 0;
 		}
 
 		update_option( 'cf-images-stats', $stats, false );
-
 	}
 
+	/**
+	 * Stats getter.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @return array
+	 */
+	private function get_stats(): array {
+		return get_option( 'cf-images-stats', $this->default_stats );
+	}
 }

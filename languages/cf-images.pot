@@ -2,16 +2,16 @@
 # This file is distributed under the GPL-2.0+.
 msgid ""
 msgstr ""
-"Project-Id-Version: Offload Media to Cloudflare Images 1.1.5-beta.1\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/cloudflare-images\n"
+"Project-Id-Version: Offload Media to Cloudflare Images 1.5.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/cf-images\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-02-04T05:33:24+00:00\n"
+"POT-Creation-Date: 2023-10-27T06:56:32+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.6.0\n"
+"X-Generator: WP-CLI 2.9.0-alpha-046a4f7\n"
 "X-Domain: cf-images\n"
 
 #. Plugin Name of the plugin
@@ -19,6 +19,7 @@ msgid "Offload Media to Cloudflare Images"
 msgstr ""
 
 #. Plugin URI of the plugin
+#. Author URI of the plugin
 msgid "https://vcore.au"
 msgstr ""
 
@@ -30,1081 +31,784 @@ msgstr ""
 msgid "Anton Vanyukov"
 msgstr ""
 
-#. Author URI of the plugin
-msgid "https://vanyukov.su"
+#: app/api/class-ai.php:70
+msgid "Unable to caption image."
 msgstr ""
 
-#: app/api/class-api.php:194
-#: build/cf-images/App/Api/Api.php:194
-#: build/svn/tags/1.0.2/App/Api/Api.php:187
-#: build/svn/tags/1.0.3/App/Api/Api.php:191
-#: build/svn/tags/1.1.0/App/Api/Api.php:194
-#: build/svn/tags/1.1.1/App/Api/Api.php:194
-#: build/svn/tags/1.1.2/App/Api/Api.php:194
-#: build/svn/tags/1.1.3/App/Api/Api.php:194
-#: build/svn/tags/1.1.4/App/Api/Api.php:194
-#: build/svn/trunk/App/Api/Api.php:194
+#: app/api/class-api.php:188
 msgid "Unsupported API call method"
 msgstr ""
 
-#: app/class-admin.php:128
-#: build/cf-images/App/Admin.php:128
-#: build/svn/tags/1.1.2/App/Admin.php:128
-#: build/svn/tags/1.1.3/App/Admin.php:128
-#: build/svn/tags/1.1.4/App/Admin.php:128
-#: build/svn/trunk/App/Admin.php:128
-msgid "Disconnecting..."
+#: app/api/class-compress.php:82
+msgid "Rate limits enforced"
 msgstr ""
 
-#: app/class-admin.php:129
-#: app/views/settings.php:155
-#: app/views/setup.php:180
-#: build/cf-images/App/Admin.php:129
-#: build/cf-images/App/Views/Settings.php:155
-#: build/cf-images/App/Views/Setup.php:180
-#: build/svn/tags/1.0.2/App/Views/Settings.php:87
-#: build/svn/tags/1.0.2/App/Views/Setup.php:178
-#: build/svn/tags/1.0.3/App/Views/Settings.php:87
-#: build/svn/tags/1.0.3/App/Views/Setup.php:178
-#: build/svn/tags/1.1.0/App/Admin.php:127
-#: build/svn/tags/1.1.0/App/Views/Settings.php:149
-#: build/svn/tags/1.1.0/App/Views/Setup.php:180
-#: build/svn/tags/1.1.1/App/Admin.php:127
-#: build/svn/tags/1.1.1/App/Views/Settings.php:149
-#: build/svn/tags/1.1.1/App/Views/Setup.php:180
-#: build/svn/tags/1.1.2/App/Admin.php:129
-#: build/svn/tags/1.1.2/App/Views/Settings.php:155
-#: build/svn/tags/1.1.2/App/Views/Setup.php:180
-#: build/svn/tags/1.1.3/App/Admin.php:129
-#: build/svn/tags/1.1.3/App/Views/Settings.php:155
-#: build/svn/tags/1.1.3/App/Views/Setup.php:180
-#: build/svn/tags/1.1.4/App/Admin.php:129
-#: build/svn/tags/1.1.4/App/Views/Settings.php:155
-#: build/svn/tags/1.1.4/App/Views/Setup.php:180
-#: build/svn/trunk/App/Admin.php:129
-#: build/svn/trunk/App/Views/Settings.php:155
-#: build/svn/trunk/App/Views/Setup.php:180
-msgid "Save Changes"
+#: app/api/class-compress.php:84
+msgid "Unknown API error. Please try again later."
 msgstr ""
 
-#: app/class-admin.php:130
-#: build/cf-images/App/Admin.php:130
-#: build/svn/tags/1.0.2/App/Admin.php:119
-#: build/svn/tags/1.0.3/App/Admin.php:119
-#: build/svn/tags/1.1.0/App/Admin.php:128
-#: build/svn/tags/1.1.1/App/Admin.php:128
-#: build/svn/tags/1.1.2/App/Admin.php:130
-#: build/svn/tags/1.1.3/App/Admin.php:130
-#: build/svn/tags/1.1.4/App/Admin.php:130
-#: build/svn/trunk/App/Admin.php:130
-msgid "Processing"
+#: app/api/class-fuzion.php:102
+msgid "Expired or invalid API key. Please update your API key on the setting page."
 msgstr ""
 
-#: app/class-admin.php:131
-#: build/cf-images/App/Admin.php:131
-#: build/svn/tags/1.0.2/App/Admin.php:120
-#: build/svn/tags/1.0.3/App/Admin.php:120
-#: build/svn/tags/1.1.0/App/Admin.php:129
-#: build/svn/tags/1.1.1/App/Admin.php:129
-#: build/svn/tags/1.1.2/App/Admin.php:131
-#: build/svn/tags/1.1.3/App/Admin.php:131
-#: build/svn/tags/1.1.4/App/Admin.php:131
-#: build/svn/trunk/App/Admin.php:131
-msgid "Error during offload"
+#: app/api/class-fuzion.php:110
+msgid "Error doing API call. Please try again."
 msgstr ""
 
-#: app/class-admin.php:132
-#: app/class-admin.php:312
-#: app/views/settings.php:124
-#: build/cf-images/App/Admin.php:132
-#: build/cf-images/App/Admin.php:312
-#: build/cf-images/App/Views/Settings.php:124
-#: build/svn/tags/1.0.2/App/Admin.php:121
-#: build/svn/tags/1.0.2/App/Admin.php:300
-#: build/svn/tags/1.0.3/App/Admin.php:121
-#: build/svn/tags/1.0.3/App/Admin.php:300
-#: build/svn/tags/1.1.0/App/Admin.php:130
-#: build/svn/tags/1.1.0/App/Admin.php:309
-#: build/svn/tags/1.1.0/App/Views/Settings.php:118
-#: build/svn/tags/1.1.1/App/Admin.php:130
-#: build/svn/tags/1.1.1/App/Admin.php:309
-#: build/svn/tags/1.1.1/App/Views/Settings.php:118
-#: build/svn/tags/1.1.2/App/Admin.php:132
-#: build/svn/tags/1.1.2/App/Admin.php:312
-#: build/svn/tags/1.1.2/App/Views/Settings.php:124
-#: build/svn/tags/1.1.3/App/Admin.php:132
-#: build/svn/tags/1.1.3/App/Admin.php:312
-#: build/svn/tags/1.1.3/App/Views/Settings.php:124
-#: build/svn/tags/1.1.4/App/Admin.php:132
-#: build/svn/tags/1.1.4/App/Admin.php:312
-#: build/svn/tags/1.1.4/App/Views/Settings.php:124
-#: build/svn/trunk/App/Admin.php:132
-#: build/svn/trunk/App/Admin.php:312
-#: build/svn/trunk/App/Views/Settings.php:124
-msgid "Offloaded"
-msgstr ""
-
-#: app/class-admin.php:133
-#: app/class-admin.php:325
-#: build/cf-images/App/Admin.php:133
-#: build/cf-images/App/Admin.php:325
-#: build/svn/tags/1.0.2/App/Admin.php:313
-#: build/svn/tags/1.0.3/App/Admin.php:313
-#: build/svn/tags/1.1.0/App/Admin.php:322
-#: build/svn/tags/1.1.1/App/Admin.php:322
-#: build/svn/tags/1.1.2/App/Admin.php:133
-#: build/svn/tags/1.1.2/App/Admin.php:325
-#: build/svn/tags/1.1.3/App/Admin.php:133
-#: build/svn/tags/1.1.3/App/Admin.php:325
-#: build/svn/tags/1.1.4/App/Admin.php:133
-#: build/svn/tags/1.1.4/App/Admin.php:325
-#: build/svn/trunk/App/Admin.php:133
-#: build/svn/trunk/App/Admin.php:325
-msgid "Skipped from processing"
-msgstr ""
-
-#: app/class-admin.php:155
-#: app/views/settings.php:39
-#: build/cf-images/App/Admin.php:155
-#: build/cf-images/App/Views/Settings.php:39
-#: build/svn/tags/1.0.2/App/Admin.php:143
-#: build/svn/tags/1.0.2/App/Views/Settings.php:32
-#: build/svn/tags/1.0.3/App/Admin.php:143
-#: build/svn/tags/1.0.3/App/Views/Settings.php:32
-#: build/svn/tags/1.1.0/App/Admin.php:152
-#: build/svn/tags/1.1.0/App/Views/Settings.php:39
-#: build/svn/tags/1.1.1/App/Admin.php:152
-#: build/svn/tags/1.1.1/App/Views/Settings.php:39
-#: build/svn/tags/1.1.2/App/Admin.php:155
-#: build/svn/tags/1.1.2/App/Views/Settings.php:39
-#: build/svn/tags/1.1.3/App/Admin.php:155
-#: build/svn/tags/1.1.3/App/Views/Settings.php:39
-#: build/svn/tags/1.1.4/App/Admin.php:155
-#: build/svn/tags/1.1.4/App/Views/Settings.php:39
-#: build/svn/trunk/App/Admin.php:155
-#: build/svn/trunk/App/Views/Settings.php:39
+#: app/class-admin.php:156
+#: assets/_src/components/nav.jsx:38
+#: assets/js/cf-images.min.js:6579
 msgid "Settings"
 msgstr ""
 
-#: app/class-admin.php:171
-#: app/views/settings.php:32
-#: app/views/setup.php:24
-#: build/cf-images/App/Admin.php:171
-#: build/cf-images/App/Views/Settings.php:32
-#: build/cf-images/App/Views/Setup.php:24
-#: build/svn/tags/1.0.2/App/Admin.php:159
-#: build/svn/tags/1.0.2/App/Views/Settings.php:26
-#: build/svn/tags/1.0.3/App/Admin.php:159
-#: build/svn/tags/1.0.3/App/Views/Settings.php:26
-#: build/svn/tags/1.1.0/App/Admin.php:168
-#: build/svn/tags/1.1.0/App/Views/Settings.php:32
-#: build/svn/tags/1.1.0/App/Views/Setup.php:24
-#: build/svn/tags/1.1.1/App/Admin.php:168
-#: build/svn/tags/1.1.1/App/Views/Settings.php:32
-#: build/svn/tags/1.1.1/App/Views/Setup.php:24
-#: build/svn/tags/1.1.2/App/Admin.php:171
-#: build/svn/tags/1.1.2/App/Views/Settings.php:32
-#: build/svn/tags/1.1.2/App/Views/Setup.php:24
-#: build/svn/tags/1.1.3/App/Admin.php:171
-#: build/svn/tags/1.1.3/App/Views/Settings.php:32
-#: build/svn/tags/1.1.3/App/Views/Setup.php:24
-#: build/svn/tags/1.1.4/App/Admin.php:171
-#: build/svn/tags/1.1.4/App/Views/Settings.php:32
-#: build/svn/tags/1.1.4/App/Views/Setup.php:24
-#: build/svn/trunk/App/Admin.php:171
-#: build/svn/trunk/App/Views/Settings.php:32
-#: build/svn/trunk/App/Views/Setup.php:24
+#: app/class-admin.php:168
 msgid "Offload Images to Cloudflare"
 msgstr ""
 
-#: app/class-admin.php:172
-#: build/cf-images/App/Admin.php:172
-#: build/svn/tags/1.0.2/App/Admin.php:160
-#: build/svn/tags/1.0.3/App/Admin.php:160
-#: build/svn/tags/1.1.0/App/Admin.php:169
-#: build/svn/tags/1.1.1/App/Admin.php:169
-#: build/svn/tags/1.1.2/App/Admin.php:172
-#: build/svn/tags/1.1.3/App/Admin.php:172
-#: build/svn/tags/1.1.4/App/Admin.php:172
-#: build/svn/trunk/App/Admin.php:172
+#: app/class-admin.php:169
 msgid "Offload Settings"
 msgstr ""
 
 #. translators: %1$s - error message, %2$d - error code
-#: app/class-admin.php:191
-#: build/cf-images/App/Admin.php:191
-#: build/svn/tags/1.0.2/App/Admin.php:179
-#: build/svn/tags/1.0.3/App/Admin.php:179
-#: build/svn/tags/1.1.0/App/Admin.php:188
-#: build/svn/tags/1.1.1/App/Admin.php:188
-#: build/svn/tags/1.1.2/App/Admin.php:191
-#: build/svn/tags/1.1.3/App/Admin.php:191
-#: build/svn/tags/1.1.4/App/Admin.php:191
-#: build/svn/trunk/App/Admin.php:191
+#: app/class-admin.php:184
 msgid "%1$s (code: %2$d)"
 msgstr ""
 
-#: app/class-admin.php:202
-#: build/cf-images/App/Admin.php:202
-#: build/svn/tags/1.0.2/App/Admin.php:190
-#: build/svn/tags/1.0.3/App/Admin.php:190
-#: build/svn/tags/1.1.0/App/Admin.php:199
-#: build/svn/tags/1.1.1/App/Admin.php:199
-#: build/svn/tags/1.1.2/App/Admin.php:202
-#: build/svn/tags/1.1.3/App/Admin.php:202
-#: build/svn/tags/1.1.4/App/Admin.php:202
-#: build/svn/trunk/App/Admin.php:202
-msgid "Settings saved."
+#: app/class-cli.php:58
+msgid "Plugin is not connected to Cloudflare."
 msgstr ""
 
-#: app/class-admin.php:207
-#: build/cf-images/App/Admin.php:207
-#: build/svn/tags/1.0.2/App/Admin.php:195
-#: build/svn/tags/1.0.3/App/Admin.php:195
-#: build/svn/tags/1.1.0/App/Admin.php:204
-#: build/svn/tags/1.1.1/App/Admin.php:204
-#: build/svn/tags/1.1.2/App/Admin.php:207
-#: build/svn/tags/1.1.3/App/Admin.php:207
-#: build/svn/tags/1.1.4/App/Admin.php:207
-#: build/svn/trunk/App/Admin.php:207
-msgid "All images have been successfully removed from Cloudflare Images."
+#. translators: %d - attachment ID
+#: app/class-cli.php:80
+msgid "Offloading image with ID %d."
 msgstr ""
 
-#: app/class-admin.php:212
-#: build/cf-images/App/Admin.php:212
-#: build/svn/tags/1.0.2/App/Admin.php:200
-#: build/svn/tags/1.0.3/App/Admin.php:200
-#: build/svn/tags/1.1.0/App/Admin.php:209
-#: build/svn/tags/1.1.1/App/Admin.php:209
-#: build/svn/tags/1.1.2/App/Admin.php:212
-#: build/svn/tags/1.1.3/App/Admin.php:212
-#: build/svn/tags/1.1.4/App/Admin.php:212
-#: build/svn/trunk/App/Admin.php:212
-msgid "All images have been successfully uploaded to Cloudflare Images."
+#: app/class-cli.php:87
+msgid "Image metadata not found."
 msgstr ""
 
-#: app/class-admin.php:289
-#: build/cf-images/App/Admin.php:289
-#: build/svn/tags/1.0.2/App/Admin.php:277
-#: build/svn/tags/1.0.3/App/Admin.php:277
-#: build/svn/tags/1.1.0/App/Admin.php:286
-#: build/svn/tags/1.1.1/App/Admin.php:286
-#: build/svn/tags/1.1.2/App/Admin.php:289
-#: build/svn/tags/1.1.3/App/Admin.php:289
-#: build/svn/tags/1.1.4/App/Admin.php:289
-#: build/svn/trunk/App/Admin.php:289
-msgid "Offload status"
+#: app/class-cli.php:96
+msgid "Image offloaded."
 msgstr ""
 
-#: app/class-admin.php:319
-#: build/cf-images/App/Admin.php:319
-#: build/svn/tags/1.0.2/App/Admin.php:307
-#: build/svn/tags/1.0.3/App/Admin.php:307
-#: build/svn/tags/1.1.0/App/Admin.php:316
-#: build/svn/tags/1.1.1/App/Admin.php:316
-#: build/svn/tags/1.1.2/App/Admin.php:319
-#: build/svn/tags/1.1.3/App/Admin.php:319
-#: build/svn/tags/1.1.4/App/Admin.php:319
-#: build/svn/trunk/App/Admin.php:319
+#: app/class-cli.php:112
+msgid "All images have already been offloaded."
+msgstr ""
+
+#: app/class-cli.php:117
+msgid "Offloading images"
+msgstr ""
+
+#. translators: %d - attachment ID
+#: app/class-cli.php:123
+msgid "Image metadata not found (attachment ID: %d)."
+msgstr ""
+
+#. translators: %1$s - error message, %2$d - attachment ID
+#: app/class-cli.php:131
+msgid "%1$s (attachment ID: %2$d)."
+msgstr ""
+
+#: app/class-cli.php:144
+msgid "All images offloaded"
+msgstr ""
+
+#: app/class-media.php:84
+msgid "Processing"
+msgstr ""
+
+#: app/class-media.php:85
+msgid "Processing error"
+msgstr ""
+
+#: app/class-media.php:109
+msgid "Optimization"
+msgstr ""
+
+#: app/class-media.php:134
 msgid "Unsupported format"
 msgstr ""
 
-#. translators: %1$s - opening <a> tag, %2$s - closing </a> tag
-#: app/class-admin.php:328
-#: build/cf-images/App/Admin.php:328
-#: build/svn/tags/1.0.2/App/Admin.php:316
-#: build/svn/tags/1.0.3/App/Admin.php:316
-#: build/svn/tags/1.1.0/App/Admin.php:325
-#: build/svn/tags/1.1.1/App/Admin.php:325
-#: build/svn/tags/1.1.2/App/Admin.php:328
-#: build/svn/tags/1.1.3/App/Admin.php:328
-#: build/svn/tags/1.1.4/App/Admin.php:328
-#: build/svn/trunk/App/Admin.php:328
-msgid "%1$sRetry offload%2$s"
+#: app/class-media.php:145
+msgid "Offloaded"
 msgstr ""
 
-#. translators: %1$s - opening <a> tag, %2$s - closing </a> tag
-#: app/class-admin.php:336
-#: build/cf-images/App/Admin.php:336
-#: build/svn/tags/1.0.2/App/Admin.php:324
-#: build/svn/tags/1.0.3/App/Admin.php:324
-#: build/svn/tags/1.1.0/App/Admin.php:333
-#: build/svn/tags/1.1.1/App/Admin.php:333
-#: build/svn/tags/1.1.2/App/Admin.php:336
-#: build/svn/tags/1.1.3/App/Admin.php:336
-#: build/svn/tags/1.1.4/App/Admin.php:336
-#: build/svn/trunk/App/Admin.php:336
-msgid "%1$sOffload%2$s"
+#: app/class-media.php:147
+msgid "Removed from media library"
+msgstr ""
+
+#: app/class-media.php:150
+msgid "Skipped"
+msgstr ""
+
+#: app/class-media.php:152
+msgid "Not offloaded"
+msgstr ""
+
+#: app/class-media.php:156
+msgid "Status:"
+msgstr ""
+
+#: app/class-media.php:162
+msgid "Actions"
+msgstr ""
+
+#: app/class-media.php:166
+#: app/class-media.php:167
+msgid "Remove from Cloudflare"
+msgstr ""
+
+#: app/class-media.php:171
+#: app/class-media.php:172
+msgid "Restore in media library"
+msgstr ""
+
+#: app/class-media.php:176
+msgid "Remove from media library"
+msgstr ""
+
+#: app/class-media.php:177
+msgid "Delete files on WordPress"
+msgstr ""
+
+#: app/class-media.php:183
+#: app/class-media.php:184
+msgid "Re-upload to Cloudflare"
+msgstr ""
+
+#: app/class-media.php:186
+#: app/class-media.php:187
+msgid "Upload to Cloudflare"
+msgstr ""
+
+#: app/class-media.php:192
+#: app/class-media.php:193
+msgid "Ignore and skip image"
+msgstr ""
+
+#: app/class-media.php:199
+#: app/class-media.php:200
+msgid "Generate alt text"
 msgstr ""
 
 #. translators: %1$s - opening <a> tag, %2$s - closing </a> tag.
-#: app/class-core.php:300
-#: build/cf-images/App/Core.php:277
-#: build/svn/tags/1.1.2/App/Core.php:258
-#: build/svn/tags/1.1.3/App/Core.php:277
-#: build/svn/tags/1.1.4/App/Core.php:277
-#: build/svn/trunk/App/Core.php:277
+#: app/class-media.php:245
 msgid "Image metadata not found. %1$sSkip image%2$s"
 msgstr ""
 
-#: app/class-core.php:335
-#: build/cf-images/App/Core.php:312
-#: build/svn/tags/1.0.2/App/Core.php:263
-#: build/svn/tags/1.0.3/App/Core.php:263
-#: build/svn/tags/1.1.0/App/Core.php:280
-#: build/svn/tags/1.1.1/App/Core.php:286
-#: build/svn/tags/1.1.2/App/Core.php:293
-#: build/svn/tags/1.1.3/App/Core.php:312
-#: build/svn/tags/1.1.4/App/Core.php:312
-#: build/svn/trunk/App/Core.php:312
+#: app/class-media.php:276
 msgid "Incorrect action call"
 msgstr ""
 
-#: app/class-core.php:339
-#: build/cf-images/App/Core.php:316
-#: build/svn/tags/1.0.2/App/Core.php:267
-#: build/svn/tags/1.0.3/App/Core.php:267
-#: build/svn/tags/1.1.0/App/Core.php:284
-#: build/svn/tags/1.1.1/App/Core.php:290
-#: build/svn/tags/1.1.2/App/Core.php:297
-#: build/svn/tags/1.1.3/App/Core.php:316
-#: build/svn/tags/1.1.4/App/Core.php:316
-#: build/svn/trunk/App/Core.php:316
+#: app/class-media.php:280
 msgid "No current step or total steps defined"
 msgstr ""
 
-#: app/class-core.php:348
-#: build/cf-images/App/Core.php:325
-#: build/svn/tags/1.0.2/App/Core.php:276
-#: build/svn/tags/1.0.3/App/Core.php:276
-#: build/svn/tags/1.1.0/App/Core.php:293
-#: build/svn/tags/1.1.1/App/Core.php:299
-#: build/svn/tags/1.1.2/App/Core.php:306
-#: build/svn/tags/1.1.3/App/Core.php:325
-#: build/svn/tags/1.1.4/App/Core.php:325
-#: build/svn/trunk/App/Core.php:325
+#: app/class-media.php:290
 msgid "Unsupported action"
 msgstr ""
 
-#: app/class-core.php:362
-#: build/cf-images/App/Core.php:339
-#: build/svn/tags/1.0.2/App/Core.php:288
-#: build/svn/tags/1.0.3/App/Core.php:288
-#: build/svn/tags/1.1.0/App/Core.php:307
-#: build/svn/tags/1.1.1/App/Core.php:313
-#: build/svn/tags/1.1.2/App/Core.php:320
-#: build/svn/tags/1.1.3/App/Core.php:339
-#: build/svn/tags/1.1.4/App/Core.php:339
-#: build/svn/trunk/App/Core.php:339
-msgid "No images found"
+#: app/class-media.php:305
+msgid "No new images to process"
 msgstr ""
 
-#: app/class-core.php:372
-#: build/cf-images/App/Core.php:349
-#: build/svn/tags/1.0.2/App/Core.php:298
-#: build/svn/tags/1.0.3/App/Core.php:298
-#: build/svn/tags/1.1.0/App/Core.php:317
-#: build/svn/tags/1.1.1/App/Core.php:323
-#: build/svn/tags/1.1.2/App/Core.php:330
-#: build/svn/tags/1.1.3/App/Core.php:349
-#: build/svn/tags/1.1.4/App/Core.php:349
-#: build/svn/trunk/App/Core.php:349
+#: app/class-media.php:315
 msgid "Step error"
 msgstr ""
 
-#. translators: %1$d - current image, %2$d - total number of images
-#: app/class-core.php:406
-#: build/cf-images/App/Core.php:383
-#: build/svn/tags/1.0.2/App/Core.php:322
-#: build/svn/tags/1.0.3/App/Core.php:322
-#: build/svn/tags/1.1.0/App/Core.php:346
-#: build/svn/tags/1.1.1/App/Core.php:357
-#: build/svn/tags/1.1.2/App/Core.php:364
-#: build/svn/tags/1.1.3/App/Core.php:383
-#: build/svn/tags/1.1.4/App/Core.php:383
-#: build/svn/trunk/App/Core.php:383
-msgid "Processing image %1$d out of %2$d..."
-msgstr ""
-
-#: app/class-core.php:574
-#: build/cf-images/App/Core.php:551
-#: build/svn/tags/1.0.2/App/Core.php:467
-#: build/svn/tags/1.0.3/App/Core.php:467
-#: build/svn/tags/1.1.0/App/Core.php:491
-#: build/svn/tags/1.1.1/App/Core.php:502
-#: build/svn/tags/1.1.2/App/Core.php:532
-#: build/svn/tags/1.1.3/App/Core.php:551
-#: build/svn/tags/1.1.4/App/Core.php:551
-#: build/svn/trunk/App/Core.php:551
+#: app/class-media.php:388
 msgid "Media file not found"
 msgstr ""
 
-#: app/class-core.php:579
-#: build/cf-images/App/Core.php:556
-#: build/svn/tags/1.0.2/App/Core.php:472
-#: build/svn/tags/1.0.3/App/Core.php:472
-#: build/svn/tags/1.1.0/App/Core.php:496
-#: build/svn/tags/1.1.1/App/Core.php:507
-#: build/svn/tags/1.1.2/App/Core.php:537
-#: build/svn/tags/1.1.3/App/Core.php:556
-#: build/svn/tags/1.1.4/App/Core.php:556
-#: build/svn/trunk/App/Core.php:556
+#: app/class-media.php:393
 msgid "Unsupported media type"
 msgstr ""
 
-#: app/traits/trait-helpers.php:82
-#: build/cf-images/App/Traits/Helpers.php:82
-#: build/svn/tags/1.0.2/App/Traits/Helpers.php:81
-#: build/svn/tags/1.0.3/App/Traits/Helpers.php:81
-#: build/svn/tags/1.1.0/App/Traits/Helpers.php:82
-#: build/svn/tags/1.1.1/App/Traits/Helpers.php:82
-#: build/svn/tags/1.1.2/App/Traits/Helpers.php:82
-#: build/svn/tags/1.1.3/App/Traits/Helpers.php:82
-#: build/svn/tags/1.1.4/App/Traits/Helpers.php:82
-#: build/svn/trunk/App/Traits/Helpers.php:82
+#: app/class-media.php:500
+msgid "Cannot map local image to image on Cloudflare."
+msgstr ""
+
+#: app/class-media.php:504
+msgid "Cannot remove image, scaled image offloaded."
+msgstr ""
+
+#: app/class-media.php:618
+msgid "Image already exists in the media library."
+msgstr ""
+
+#: app/class-settings.php:218
+msgid "Please enter a valid domain"
+msgstr ""
+
+#: app/modules/class-image-ai.php:76
+msgid "Please provide a valid email address."
+msgstr ""
+
+#: app/modules/class-image-ai.php:80
+msgid "Password cannot be empty."
+msgstr ""
+
+#: app/modules/class-image-ai.php:120
+#: app/modules/class-image-compress.php:222
+msgid "Attachment ID not defined."
+msgstr ""
+
+#. translators: %s - alt text
+#: app/modules/class-image-ai.php:165
+msgid "Alt text: %s"
+msgstr ""
+
+#: app/modules/class-image-ai.php:186
+msgid "API key cannot be empty."
+msgstr ""
+
+#. translators: %1$s - savings, %2$s - savings in percent
+#: app/modules/class-image-compress.php:85
+msgid "Savings: %1$s"
+msgstr ""
+
+#: app/modules/class-image-compress.php:116
+#: app/modules/class-image-compress.php:117
+msgid "Compress image"
+msgstr ""
+
+#: app/modules/class-image-compress.php:248
+msgid "Unsupported format."
+msgstr ""
+
+#: app/traits/trait-helpers.php:68
 msgid "Authentication error. Check and update Cloudflare API key."
 msgstr ""
 
-#: app/views/header.php:29
-#: build/cf-images/App/Views/Header.php:29
-#: build/svn/tags/1.0.2/App/Views/Header.php:29
-#: build/svn/tags/1.0.3/App/Views/Header.php:29
-#: build/svn/tags/1.1.0/App/Views/Header.php:29
-#: build/svn/tags/1.1.1/App/Views/Header.php:29
-#: build/svn/tags/1.1.2/App/Views/Header.php:29
-#: build/svn/tags/1.1.3/App/Views/Header.php:29
-#: build/svn/tags/1.1.4/App/Views/Header.php:29
-#: build/svn/trunk/App/Views/Header.php:29
-msgid "Thank you for installing the plugin. This is the first release, not all plugins/themes might be supported. Please report all issues on the wp.org support forums for the plugin, and I will try to fix everything ASAP."
+#: assets/_src/components/card.jsx:62
+#: assets/_src/modules/page-parser.jsx:47
+#: assets/js/cf-images.min.js:14137
+#: assets/js/cf-images.min.js:14393
+msgid "Enable feature"
 msgstr ""
 
-#. translators: %1$d - uploaded image count, %2$d - allowed image count
-#: app/views/settings.php:24
-#: build/cf-images/App/Views/Settings.php:24
-#: build/svn/tags/1.1.0/App/Views/Settings.php:24
-#: build/svn/tags/1.1.1/App/Views/Settings.php:24
-#: build/svn/tags/1.1.2/App/Views/Settings.php:24
-#: build/svn/tags/1.1.3/App/Views/Settings.php:24
-#: build/svn/tags/1.1.4/App/Views/Settings.php:24
-#: build/svn/trunk/App/Views/Settings.php:24
-msgid "API stats: %1$d/%2$d"
+#: assets/_src/components/nav.jsx:27
+#: assets/js/cf-images.min.js:6568
+msgid "Offload. Store. Resize."
 msgstr ""
 
-#: app/views/settings.php:44
-#: build/cf-images/App/Views/Settings.php:44
-#: build/svn/tags/1.1.0/App/Views/Settings.php:44
-#: build/svn/tags/1.1.1/App/Views/Settings.php:44
-#: build/svn/tags/1.1.2/App/Views/Settings.php:44
-#: build/svn/tags/1.1.3/App/Views/Settings.php:44
-#: build/svn/tags/1.1.4/App/Views/Settings.php:44
-#: build/svn/trunk/App/Views/Settings.php:44
-msgid "Status"
+#: assets/_src/components/nav.jsx:28
+#: assets/js/cf-images.min.js:6569
+msgid "Image Optimize"
 msgstr ""
 
-#: app/views/settings.php:44
-#: build/cf-images/App/Views/Settings.php:44
-#: build/svn/tags/1.1.0/App/Views/Settings.php:44
-#: build/svn/tags/1.1.1/App/Views/Settings.php:44
-#: build/svn/tags/1.1.2/App/Views/Settings.php:44
-#: build/svn/tags/1.1.3/App/Views/Settings.php:44
-#: build/svn/tags/1.1.4/App/Views/Settings.php:44
-#: build/svn/trunk/App/Views/Settings.php:44
-msgid "Connected"
+#: assets/_src/components/nav.jsx:32
+#: assets/js/cf-images.min.js:6573
+msgid "Cloudflare Images"
 msgstr ""
 
-#: app/views/settings.php:53
-#: build/cf-images/App/Views/Settings.php:53
-#: build/svn/tags/1.1.0/App/Views/Settings.php:53
-#: build/svn/tags/1.1.1/App/Views/Settings.php:53
-#: build/svn/tags/1.1.2/App/Views/Settings.php:53
-#: build/svn/tags/1.1.3/App/Views/Settings.php:53
-#: build/svn/tags/1.1.4/App/Views/Settings.php:53
-#: build/svn/trunk/App/Views/Settings.php:53
+#: assets/_src/components/nav.jsx:43
+#: assets/js/cf-images.min.js:6584
+msgid "Experimental"
+msgstr ""
+
+#: assets/_src/components/nav.jsx:49
+#: assets/js/cf-images.min.js:6590
+msgid "Image Tools"
+msgstr ""
+
+#: assets/_src/components/nav.jsx:55
+#: assets/js/cf-images.min.js:6596
+msgid "AI & Compression"
+msgstr ""
+
+#: assets/_src/components/nav.jsx:63
+#: assets/js/cf-images.min.js:6604
+msgid "Misc"
+msgstr ""
+
+#: assets/_src/components/nav.jsx:69
+#: assets/js/cf-images.min.js:6610
+msgid "Support"
+msgstr ""
+
+#: assets/_src/components/progress.jsx:78
+#: assets/js/cf-images.min.js:14742
+msgid "All images processed"
+msgstr ""
+
+#: assets/_src/components/progress.jsx:90
+#: assets/js/cf-images.min.js:14754
+msgid "Processing first image..."
+msgstr ""
+
+#. translators: %d - current step, %d - total steps
+#: assets/_src/components/progress.jsx:92
+#: assets/js/cf-images.min.js:14756
+msgid "Processing %1$d of %2$d images..."
+msgstr ""
+
+#: assets/_src/modules/ai-stats.jsx:39
+#: assets/js/cf-images.min.js:15423
+msgid "Bulk add ALT tags"
+msgstr ""
+
+#: assets/_src/modules/ai-stats.jsx:49
+#: assets/js/cf-images.min.js:15433
+msgid "Bulk compress"
+msgstr ""
+
+#: assets/_src/modules/ai-stats.jsx:60
+#: assets/_src/modules/cf-stats.jsx:55
+#: assets/js/cf-images.min.js:14822
+#: assets/js/cf-images.min.js:15444
+msgid "Info & stats"
+msgstr ""
+
+#: assets/_src/modules/ai-stats.jsx:67
+#: assets/js/cf-images.min.js:15451
+msgid "ALT tags generated"
+msgstr ""
+
+#: assets/_src/modules/ai-stats.jsx:73
+#: assets/js/cf-images.min.js:15457
+msgid "Compression savings"
+msgstr ""
+
+#: assets/_src/modules/auto-offload.jsx:21
+#: assets/js/cf-images.min.js:14170
 msgid "Auto offload new images"
 msgstr ""
 
-#: app/views/settings.php:58
-#: build/cf-images/App/Views/Settings.php:58
-#: build/svn/tags/1.1.0/App/Views/Settings.php:58
-#: build/svn/tags/1.1.1/App/Views/Settings.php:58
-#: build/svn/tags/1.1.2/App/Views/Settings.php:58
-#: build/svn/tags/1.1.3/App/Views/Settings.php:58
-#: build/svn/tags/1.1.4/App/Views/Settings.php:58
-#: build/svn/trunk/App/Views/Settings.php:58
+#: assets/_src/modules/auto-offload.jsx:24
+#: assets/js/cf-images.min.js:14173
 msgid "Enable this option if you want to enable automatic offloading for newly uploaded images."
 msgstr ""
 
-#: app/views/settings.php:61
-#: build/cf-images/App/Views/Settings.php:61
-#: build/svn/tags/1.1.0/App/Views/Settings.php:61
-#: build/svn/tags/1.1.1/App/Views/Settings.php:61
-#: build/svn/tags/1.1.2/App/Views/Settings.php:61
-#: build/svn/tags/1.1.3/App/Views/Settings.php:61
-#: build/svn/tags/1.1.4/App/Views/Settings.php:61
-#: build/svn/trunk/App/Views/Settings.php:61
+#: assets/_src/modules/auto-offload.jsx:25
+#: assets/js/cf-images.min.js:14174
 msgid "By default, new images will not be auto offloaded to Cloudflare Images."
 msgstr ""
 
-#: app/views/settings.php:69
-#: build/cf-images/App/Views/Settings.php:69
-#: build/svn/tags/1.0.2/App/Views/Settings.php:40
-#: build/svn/tags/1.0.3/App/Views/Settings.php:40
-#: build/svn/tags/1.1.0/App/Views/Settings.php:69
-#: build/svn/tags/1.1.1/App/Views/Settings.php:69
-#: build/svn/tags/1.1.2/App/Views/Settings.php:69
-#: build/svn/tags/1.1.3/App/Views/Settings.php:69
-#: build/svn/tags/1.1.4/App/Views/Settings.php:69
-#: build/svn/trunk/App/Views/Settings.php:69
-msgid "Serve from custom domain"
-msgstr ""
-
-#: app/views/settings.php:75
-#: build/cf-images/App/Views/Settings.php:75
-#: build/svn/tags/1.1.2/App/Views/Settings.php:75
-#: build/svn/tags/1.1.3/App/Views/Settings.php:75
-#: build/svn/tags/1.1.4/App/Views/Settings.php:75
-#: build/svn/trunk/App/Views/Settings.php:75
-msgid "Use the current site domain instead of `imagedelivery.net`, or specify a custom domain."
-msgstr ""
-
-#: app/views/settings.php:78
-#: build/cf-images/App/Views/Settings.php:78
-#: build/svn/tags/1.1.2/App/Views/Settings.php:78
-#: build/svn/tags/1.1.3/App/Views/Settings.php:78
-#: build/svn/tags/1.1.4/App/Views/Settings.php:78
-#: build/svn/trunk/App/Views/Settings.php:78
-msgid "Note: The domain must be linked with Cloudflare in order to work correctly."
-msgstr ""
-
-#: app/views/settings.php:82
-#: build/cf-images/App/Views/Settings.php:82
-#: build/svn/tags/1.1.2/App/Views/Settings.php:82
-#: build/svn/tags/1.1.3/App/Views/Settings.php:82
-#: build/svn/tags/1.1.4/App/Views/Settings.php:82
-#: build/svn/trunk/App/Views/Settings.php:82
-msgid "Custom domain"
-msgstr ""
-
-#: app/views/settings.php:91
-#: build/cf-images/App/Views/Settings.php:91
-#: build/svn/tags/1.0.2/App/Views/Settings.php:63
-#: build/svn/tags/1.0.2/App/Views/Settings.php:68
-#: build/svn/tags/1.0.3/App/Views/Settings.php:63
-#: build/svn/tags/1.0.3/App/Views/Settings.php:68
-#: build/svn/tags/1.1.0/App/Views/Settings.php:85
-#: build/svn/tags/1.1.1/App/Views/Settings.php:85
-#: build/svn/tags/1.1.2/App/Views/Settings.php:91
-#: build/svn/tags/1.1.3/App/Views/Settings.php:91
-#: build/svn/tags/1.1.4/App/Views/Settings.php:91
-#: build/svn/trunk/App/Views/Settings.php:91
-msgid "Disable WordPress image sizes"
-msgstr ""
-
-#: app/views/settings.php:96
-#: build/cf-images/App/Views/Settings.php:96
-#: build/svn/tags/1.0.2/App/Views/Settings.php:76
-#: build/svn/tags/1.0.3/App/Views/Settings.php:76
-#: build/svn/tags/1.1.0/App/Views/Settings.php:90
-#: build/svn/tags/1.1.1/App/Views/Settings.php:90
-#: build/svn/tags/1.1.2/App/Views/Settings.php:96
-#: build/svn/tags/1.1.3/App/Views/Settings.php:96
-#: build/svn/tags/1.1.4/App/Views/Settings.php:96
-#: build/svn/trunk/App/Views/Settings.php:96
-msgid "Setting this option will disable generation of `-scaled` images and other image sizes. Only the original image will be stored in the media library. Only for newly uploaded files, current images will not be affected."
-msgstr ""
-
-#: app/views/settings.php:99
-#: build/cf-images/App/Views/Settings.php:99
-#: build/svn/tags/1.0.2/App/Views/Settings.php:79
-#: build/svn/tags/1.0.3/App/Views/Settings.php:79
-#: build/svn/tags/1.1.0/App/Views/Settings.php:93
-#: build/svn/tags/1.1.1/App/Views/Settings.php:93
-#: build/svn/tags/1.1.2/App/Views/Settings.php:99
-#: build/svn/tags/1.1.3/App/Views/Settings.php:99
-#: build/svn/tags/1.1.4/App/Views/Settings.php:99
-#: build/svn/trunk/App/Views/Settings.php:99
-msgid "Note: This feature is experimental. All the image sizes can be restored with the `Regenerate Thumbnails` plugin."
-msgstr ""
-
-#: app/views/settings.php:107
-#: build/cf-images/App/Views/Settings.php:107
-#: build/svn/tags/1.1.0/App/Views/Settings.php:101
-#: build/svn/tags/1.1.1/App/Views/Settings.php:101
-#: build/svn/tags/1.1.2/App/Views/Settings.php:107
-#: build/svn/tags/1.1.3/App/Views/Settings.php:107
-#: build/svn/tags/1.1.4/App/Views/Settings.php:107
-#: build/svn/trunk/App/Views/Settings.php:107
-msgid "Bulk upload images"
-msgstr ""
-
-#: app/views/settings.php:111
-#: build/cf-images/App/Views/Settings.php:111
-#: build/svn/tags/1.0.2/App/Views/Settings.php:121
-#: build/svn/tags/1.0.3/App/Views/Settings.php:121
-#: build/svn/tags/1.1.0/App/Views/Settings.php:105
-#: build/svn/tags/1.1.1/App/Views/Settings.php:105
-#: build/svn/tags/1.1.2/App/Views/Settings.php:111
-#: build/svn/tags/1.1.3/App/Views/Settings.php:111
-#: build/svn/tags/1.1.4/App/Views/Settings.php:111
-#: build/svn/trunk/App/Views/Settings.php:111
-msgid "Upload"
-msgstr ""
-
-#: app/views/settings.php:116
-#: app/views/settings.php:141
-#: build/cf-images/App/Views/Settings.php:116
-#: build/cf-images/App/Views/Settings.php:141
-#: build/svn/tags/1.0.2/App/Views/Settings.php:114
-#: build/svn/tags/1.0.3/App/Views/Settings.php:114
-#: build/svn/tags/1.1.0/App/Views/Settings.php:110
-#: build/svn/tags/1.1.0/App/Views/Settings.php:135
-#: build/svn/tags/1.1.1/App/Views/Settings.php:110
-#: build/svn/tags/1.1.1/App/Views/Settings.php:135
-#: build/svn/tags/1.1.2/App/Views/Settings.php:116
-#: build/svn/tags/1.1.2/App/Views/Settings.php:141
-#: build/svn/tags/1.1.3/App/Views/Settings.php:116
-#: build/svn/tags/1.1.3/App/Views/Settings.php:141
-#: build/svn/tags/1.1.4/App/Views/Settings.php:116
-#: build/svn/tags/1.1.4/App/Views/Settings.php:141
-#: build/svn/trunk/App/Views/Settings.php:116
-#: build/svn/trunk/App/Views/Settings.php:141
-msgid "Initializing..."
-msgstr ""
-
-#: app/views/settings.php:120
-#: build/cf-images/App/Views/Settings.php:120
-#: build/svn/tags/1.0.2/App/Views/Settings.php:117
-#: build/svn/tags/1.0.3/App/Views/Settings.php:117
-#: build/svn/tags/1.1.0/App/Views/Settings.php:114
-#: build/svn/tags/1.1.1/App/Views/Settings.php:114
-#: build/svn/tags/1.1.2/App/Views/Settings.php:120
-#: build/svn/tags/1.1.3/App/Views/Settings.php:120
-#: build/svn/tags/1.1.4/App/Views/Settings.php:120
-#: build/svn/trunk/App/Views/Settings.php:120
-msgid "You can either manually upload individual images from the media library, or bulk upload/remove all the images using the buttons below."
-msgstr ""
-
-#: app/views/settings.php:124
-#: build/cf-images/App/Views/Settings.php:124
-#: build/svn/tags/1.1.0/App/Views/Settings.php:118
-#: build/svn/tags/1.1.1/App/Views/Settings.php:118
-#: build/svn/tags/1.1.2/App/Views/Settings.php:124
-#: build/svn/tags/1.1.3/App/Views/Settings.php:124
-#: build/svn/tags/1.1.4/App/Views/Settings.php:124
-#: build/svn/trunk/App/Views/Settings.php:124
-msgid "images"
-msgstr ""
-
-#: app/views/settings.php:132
-#: build/cf-images/App/Views/Settings.php:132
-#: build/svn/tags/1.1.0/App/Views/Settings.php:126
-#: build/svn/tags/1.1.1/App/Views/Settings.php:126
-#: build/svn/tags/1.1.2/App/Views/Settings.php:132
-#: build/svn/tags/1.1.3/App/Views/Settings.php:132
-#: build/svn/tags/1.1.4/App/Views/Settings.php:132
-#: build/svn/trunk/App/Views/Settings.php:132
+#: assets/_src/modules/cf-stats.jsx:37
+#: assets/js/cf-images.min.js:14804
 msgid "Bulk remove"
 msgstr ""
 
-#: app/views/settings.php:136
-#: build/cf-images/App/Views/Settings.php:136
-#: build/svn/tags/1.0.2/App/Views/Settings.php:122
-#: build/svn/tags/1.0.3/App/Views/Settings.php:122
-#: build/svn/tags/1.1.0/App/Views/Settings.php:130
-#: build/svn/tags/1.1.1/App/Views/Settings.php:130
-#: build/svn/tags/1.1.2/App/Views/Settings.php:136
-#: build/svn/tags/1.1.3/App/Views/Settings.php:136
-#: build/svn/tags/1.1.4/App/Views/Settings.php:136
-#: build/svn/trunk/App/Views/Settings.php:136
-msgid "Remove"
+#: assets/_src/modules/cf-stats.jsx:45
+#: assets/js/cf-images.min.js:14812
+msgid "Bulk offload"
 msgstr ""
 
-#: app/views/settings.php:145
-#: build/cf-images/App/Views/Settings.php:145
-#: build/svn/tags/1.1.0/App/Views/Settings.php:139
-#: build/svn/tags/1.1.1/App/Views/Settings.php:139
-#: build/svn/tags/1.1.2/App/Views/Settings.php:145
-#: build/svn/tags/1.1.3/App/Views/Settings.php:145
-#: build/svn/tags/1.1.4/App/Views/Settings.php:145
-#: build/svn/trunk/App/Views/Settings.php:145
-msgid "Remove all previously uploaded images."
+#: assets/_src/modules/cf-stats.jsx:62
+#: assets/js/cf-images.min.js:14829
+msgid "Images offloaded"
 msgstr ""
 
-#: app/views/settings.php:148
-#: build/cf-images/App/Views/Settings.php:148
-#: build/svn/tags/1.0.2/App/Views/Settings.php:119
-#: build/svn/tags/1.0.3/App/Views/Settings.php:119
-#: build/svn/tags/1.1.0/App/Views/Settings.php:142
-#: build/svn/tags/1.1.1/App/Views/Settings.php:142
-#: build/svn/tags/1.1.2/App/Views/Settings.php:148
-#: build/svn/tags/1.1.3/App/Views/Settings.php:148
-#: build/svn/tags/1.1.4/App/Views/Settings.php:148
-#: build/svn/trunk/App/Views/Settings.php:148
-msgid "Note: If `Disable WordPress image sizes` option has been selected above, you will need to regenerate all the image sizes manually."
+#: assets/_src/modules/cf-stats.jsx:68
+#: assets/js/cf-images.min.js:14835
+msgid "Images on Cloudflare"
 msgstr ""
 
-#: app/views/settings.php:159
-#: build/cf-images/App/Views/Settings.php:159
-#: build/svn/tags/1.1.2/App/Views/Settings.php:159
-#: build/svn/tags/1.1.3/App/Views/Settings.php:159
-#: build/svn/tags/1.1.4/App/Views/Settings.php:159
-#: build/svn/trunk/App/Views/Settings.php:159
-msgid "Disconnect"
+#: assets/_src/modules/custom-domain.jsx:56
+#: assets/js/cf-images.min.js:14269
+msgid "Serve from custom domain"
 msgstr ""
 
-#: app/views/setup.php:28
-#: build/cf-images/App/Views/Setup.php:28
-#: build/svn/tags/1.1.0/App/Views/Setup.php:28
-#: build/svn/tags/1.1.1/App/Views/Setup.php:28
-#: build/svn/tags/1.1.2/App/Views/Setup.php:28
-#: build/svn/tags/1.1.3/App/Views/Setup.php:28
-#: build/svn/tags/1.1.4/App/Views/Setup.php:28
-#: build/svn/trunk/App/Views/Setup.php:28
-msgid "Setup"
+#: assets/_src/modules/custom-domain.jsx:59
+#: assets/js/cf-images.min.js:14272
+msgid "Use the current site domain instead of `imagedelivery.net`, or specify a custom domain."
 msgstr ""
 
-#: app/views/setup.php:34
-#: build/cf-images/App/Views/Setup.php:34
-#: build/svn/tags/1.0.2/App/Views/Setup.php:43
-#: build/svn/tags/1.0.3/App/Views/Setup.php:43
-#: build/svn/tags/1.1.0/App/Views/Setup.php:34
-#: build/svn/tags/1.1.1/App/Views/Setup.php:34
-#: build/svn/tags/1.1.2/App/Views/Setup.php:34
-#: build/svn/tags/1.1.3/App/Views/Setup.php:34
-#: build/svn/tags/1.1.4/App/Views/Setup.php:34
-#: build/svn/trunk/App/Views/Setup.php:34
-msgid "It appears there is something wrong with the API token, and the plugin is not able to authenticate on the Cloudflare API. Please check the details below and update the API token and/or account ID."
+#: assets/_src/modules/custom-domain.jsx:60
+#: assets/js/cf-images.min.js:14273
+msgid "Note: The domain must be linked with Cloudflare in order to work correctly."
 msgstr ""
 
-#: app/views/setup.php:40
-#: build/cf-images/App/Views/Setup.php:40
-#: build/svn/tags/1.0.2/App/Views/Setup.php:26
-#: build/svn/tags/1.0.3/App/Views/Setup.php:26
-#: build/svn/tags/1.1.0/App/Views/Setup.php:40
-#: build/svn/tags/1.1.1/App/Views/Setup.php:40
-#: build/svn/tags/1.1.2/App/Views/Setup.php:40
-#: build/svn/tags/1.1.3/App/Views/Setup.php:40
-#: build/svn/tags/1.1.4/App/Views/Setup.php:40
-#: build/svn/trunk/App/Views/Setup.php:40
+#: assets/_src/modules/custom-domain.jsx:66
+#: assets/js/cf-images.min.js:14279
+msgid "Set custom domain"
+msgstr ""
+
+#: assets/_src/modules/custom-domain.jsx:90
+#: assets/js/cf-images.min.js:14303
+msgid "Set"
+msgstr ""
+
+#: assets/_src/modules/custom-id.jsx:21
+#: assets/js/cf-images.min.js:14202
+msgid "Keep media library structure"
+msgstr ""
+
+#: assets/_src/modules/custom-id.jsx:24
+#: assets/js/cf-images.min.js:14205
+msgid "Preserve the WordPress media library paths, when uploading images to Cloudflare Images, instead of the path automatically generated by Cloudflare Images’ Universal Unique Identifier (UUID)."
+msgstr ""
+
+#: assets/_src/modules/custom-id.jsx:25
+#: assets/js/cf-images.min.js:14206
+msgid "This does not convert already uploaded images. To change all the images to the new format (or back), you will need to perform bulk remove & upload."
+msgstr ""
+
+#: assets/_src/modules/disable-async.jsx:21
+#: assets/js/cf-images.min.js:14335
+msgid "Disable async processing"
+msgstr ""
+
+#: assets/_src/modules/disable-async.jsx:24
+#: assets/js/cf-images.min.js:14338
+msgid "By default, the plugin will try to offload images in asynchronous mode, meaning that the processing will be done in the background. If, for some reason, the host does not allow async processing, disable this option for backward compatibility."
+msgstr ""
+
+#: assets/_src/modules/disable-async.jsx:25
+#: assets/js/cf-images.min.js:14339
+msgid "Note: disabling this option will increase the time to upload new images to the media library."
+msgstr ""
+
+#: assets/_src/modules/disable-generation.jsx:21
+#: assets/js/cf-images.min.js:14917
+msgid "Disable WordPress image sizes"
+msgstr ""
+
+#: assets/_src/modules/disable-generation.jsx:24
+#: assets/js/cf-images.min.js:14920
+msgid "Setting this option will disable generation of `-scaled` images and other image sizes. Only the original image will be stored in the media library. Only for newly uploaded files, current images will not be affected."
+msgstr ""
+
+#: assets/_src/modules/disable-generation.jsx:25
+#: assets/js/cf-images.min.js:14921
+msgid "Note: This feature is experimental. All the image sizes can be restored with the `Regenerate Thumbnails` plugin."
+msgstr ""
+
+#: assets/_src/modules/full-offload.jsx:21
+#: assets/js/cf-images.min.js:14949
+msgid "Full offload"
+msgstr ""
+
+#: assets/_src/modules/full-offload.jsx:24
+#: assets/js/cf-images.min.js:14952
+msgid "Setting this option will allow removing original images from the media library."
+msgstr ""
+
+#: assets/_src/modules/full-offload.jsx:25
+#: assets/js/cf-images.min.js:14953
+msgid "By enabling this feature, you understand the potential risks of removing media files from the media library. Please ensure you have a backup of your media library."
+msgstr ""
+
+#: assets/_src/modules/image-ai.jsx:21
+#: assets/js/cf-images.min.js:15136
+msgid "Image AI"
+msgstr ""
+
+#: assets/_src/modules/image-ai.jsx:24
+#: assets/js/cf-images.min.js:15139
+msgid "Use the power of AI to tag and caption your images."
+msgstr ""
+
+#: assets/_src/modules/image-ai.jsx:25
+#: assets/js/cf-images.min.js:15140
+msgid "Only images that are publicly accessible can be captioned. Limit of 20 images per month."
+msgstr ""
+
+#: assets/_src/modules/image-compress.jsx:21
+#: assets/js/cf-images.min.js:15168
+msgid "Image Optimization"
+msgstr ""
+
+#: assets/_src/modules/image-compress.jsx:24
+#: assets/js/cf-images.min.js:15171
+msgid "Optimize JPEG/PNG images to significantly decrease file size without compromising visual quality."
+msgstr ""
+
+#: assets/_src/modules/page-parser.jsx:28
+#: assets/js/cf-images.min.js:14374
+msgid "Parse page for images"
+msgstr ""
+
+#: assets/_src/modules/page-parser.jsx:31
+#: assets/js/cf-images.min.js:14377
+msgid "Compatibility module to support themes that do not use WordPress hooks and filters. If images are not replaced on the site, try enabling this module."
+msgstr ""
+
+#: assets/_src/modules/page-parser.jsx:33
+#: assets/js/cf-images.min.js:14379
+msgid "Auto resize images on front-end"
+msgstr ""
+
+#: assets/_src/modules/page-parser.jsx:34
+#: assets/js/cf-images.min.js:14380
+msgid "Make images responsive by adding missing image sizes to the srcset attribute."
+msgstr ""
+
+#: assets/_src/routes/cloudflare/disconnect.jsx:37
+#: assets/_src/routes/tools/settings.jsx:53
+#: assets/js/cf-images.min.js:14657
+#: assets/js/cf-images.min.js:15537
+msgid "Disconnect from API"
+msgstr ""
+
+#: assets/_src/routes/cloudflare/experimental.jsx:39
+#: assets/js/cf-images.min.js:14999
+msgid "These features are experimental and have undergone only limited testing."
+msgstr ""
+
+#: assets/_src/routes/cloudflare/experimental.jsx:40
+#: assets/js/cf-images.min.js:15000
+msgid "Please make sure you have a backup of all your files, before enabling any of these features."
+msgstr ""
+
+#: assets/_src/routes/cloudflare/login.jsx:62
+#: assets/js/cf-images.min.js:14464
 msgid "For proper functionality, the plugin requires access to Cloudflare Images API."
 msgstr ""
 
-#. translators: %1$s - opening <code> tag, %2$s - closing </code> tag
-#: app/views/setup.php:46
-#: build/cf-images/App/Views/Setup.php:46
-#: build/svn/tags/1.0.2/App/Views/Setup.php:31
-#: build/svn/tags/1.0.3/App/Views/Setup.php:31
-#: build/svn/tags/1.1.0/App/Views/Setup.php:46
-#: build/svn/tags/1.1.1/App/Views/Setup.php:46
-#: build/svn/tags/1.1.2/App/Views/Setup.php:46
-#: build/svn/tags/1.1.3/App/Views/Setup.php:46
-#: build/svn/tags/1.1.4/App/Views/Setup.php:46
-#: build/svn/trunk/App/Views/Setup.php:46
-msgid "To do this, either set %1$sdefine( 'CF_IMAGES_ACCOUNT_ID', '<ACCOUNT ID>' );%2$s and %1$sdefine( 'CF_IMAGES_KEY_TOKEN', '<API KEY>' );%2$s manually in wp-config.php file or use the form with instructions below."
+#: assets/_src/routes/cloudflare/login.jsx:64
+#: assets/js/cf-images.min.js:14466
+msgid "Manual setup"
 msgstr ""
 
-#: app/views/setup.php:54
-#: build/cf-images/App/Views/Setup.php:54
-#: build/svn/tags/1.0.2/App/Views/Setup.php:38
-#: build/svn/tags/1.0.3/App/Views/Setup.php:38
-#: build/svn/tags/1.1.0/App/Views/Setup.php:54
-#: build/svn/tags/1.1.1/App/Views/Setup.php:54
-#: build/svn/tags/1.1.2/App/Views/Setup.php:54
-#: build/svn/tags/1.1.3/App/Views/Setup.php:54
-#: build/svn/tags/1.1.4/App/Views/Setup.php:54
-#: build/svn/trunk/App/Views/Setup.php:54
-msgid "Note: The form will attempt to automatically set the required defines in wp-config.php file."
+#: assets/_src/routes/cloudflare/login.jsx:67
+#: assets/js/cf-images.min.js:14469
+msgid "Add the following defines to you wp-config.php file:"
 msgstr ""
 
-#: app/views/setup.php:60
-#: build/cf-images/App/Views/Setup.php:60
-#: build/svn/tags/1.0.2/App/Views/Setup.php:55
-#: build/svn/tags/1.0.3/App/Views/Setup.php:55
-#: build/svn/tags/1.1.0/App/Views/Setup.php:60
-#: build/svn/tags/1.1.1/App/Views/Setup.php:60
-#: build/svn/tags/1.1.2/App/Views/Setup.php:60
-#: build/svn/tags/1.1.3/App/Views/Setup.php:60
-#: build/svn/tags/1.1.4/App/Views/Setup.php:60
-#: build/svn/trunk/App/Views/Setup.php:60
+#: assets/_src/routes/cloudflare/login.jsx:77
+#: assets/js/cf-images.min.js:14479
+msgid "Auto setup"
+msgstr ""
+
+#: assets/_src/routes/cloudflare/login.jsx:79
+#: assets/js/cf-images.min.js:14481
+msgid "The form will attempt to automatically set the required defines in wp-config.php file."
+msgstr ""
+
+#: assets/_src/routes/cloudflare/login.jsx:84
+#: assets/js/cf-images.min.js:14486
 msgid "Cloudflare Account ID"
 msgstr ""
 
-#: app/views/setup.php:63
-#: build/cf-images/App/Views/Setup.php:63
-#: build/svn/tags/1.0.2/App/Views/Setup.php:59
-#: build/svn/tags/1.0.3/App/Views/Setup.php:59
-#: build/svn/tags/1.1.0/App/Views/Setup.php:63
-#: build/svn/tags/1.1.1/App/Views/Setup.php:63
-#: build/svn/tags/1.1.2/App/Views/Setup.php:63
-#: build/svn/tags/1.1.3/App/Views/Setup.php:63
-#: build/svn/tags/1.1.4/App/Views/Setup.php:63
-#: build/svn/trunk/App/Views/Setup.php:63
+#: assets/_src/routes/cloudflare/login.jsx:93
+#: assets/js/cf-images.min.js:14495
 msgid "Paste your Cloudflare ID here"
 msgstr ""
 
-#. translators: %1$s - opening <a> tag, %2$s - closing </a> tag
-#: app/views/setup.php:67
-#: build/cf-images/App/Views/Setup.php:67
-#: build/svn/tags/1.0.2/App/Views/Setup.php:63
-#: build/svn/tags/1.0.3/App/Views/Setup.php:63
-#: build/svn/tags/1.1.0/App/Views/Setup.php:67
-#: build/svn/tags/1.1.1/App/Views/Setup.php:67
-#: build/svn/tags/1.1.2/App/Views/Setup.php:67
-#: build/svn/tags/1.1.3/App/Views/Setup.php:67
-#: build/svn/tags/1.1.4/App/Views/Setup.php:67
-#: build/svn/trunk/App/Views/Setup.php:67
-msgid "Log in to the %1$sCloudflare dashboard%2$s, and select your account and website."
-msgstr ""
-
-#. translators: %1$s - opening <strong> tag, %2$s - closing </strong> tag
-#: app/views/setup.php:76
-#: build/cf-images/App/Views/Setup.php:76
-#: build/svn/tags/1.0.2/App/Views/Setup.php:72
-#: build/svn/tags/1.0.3/App/Views/Setup.php:72
-#: build/svn/tags/1.1.0/App/Views/Setup.php:76
-#: build/svn/tags/1.1.1/App/Views/Setup.php:76
-#: build/svn/tags/1.1.2/App/Views/Setup.php:76
-#: build/svn/tags/1.1.3/App/Views/Setup.php:76
-#: build/svn/tags/1.1.4/App/Views/Setup.php:76
-#: build/svn/trunk/App/Views/Setup.php:76
-msgid "In %1$sOverview%2$s, scroll down to find your Account ID."
-msgstr ""
-
-#: app/views/setup.php:88
-#: build/cf-images/App/Views/Setup.php:88
-#: build/svn/tags/1.0.2/App/Views/Setup.php:84
-#: build/svn/tags/1.0.3/App/Views/Setup.php:84
-#: build/svn/tags/1.1.0/App/Views/Setup.php:88
-#: build/svn/tags/1.1.1/App/Views/Setup.php:88
-#: build/svn/tags/1.1.2/App/Views/Setup.php:88
-#: build/svn/tags/1.1.3/App/Views/Setup.php:88
-#: build/svn/tags/1.1.4/App/Views/Setup.php:88
-#: build/svn/trunk/App/Views/Setup.php:88
+#: assets/_src/routes/cloudflare/login.jsx:105
+#: assets/js/cf-images.min.js:14507
 msgid "Cloudflare API Token"
 msgstr ""
 
-#: app/views/setup.php:91
-#: build/cf-images/App/Views/Setup.php:91
-#: build/svn/tags/1.0.2/App/Views/Setup.php:88
-#: build/svn/tags/1.0.3/App/Views/Setup.php:88
-#: build/svn/tags/1.1.0/App/Views/Setup.php:91
-#: build/svn/tags/1.1.1/App/Views/Setup.php:91
-#: build/svn/tags/1.1.2/App/Views/Setup.php:91
-#: build/svn/tags/1.1.3/App/Views/Setup.php:91
-#: build/svn/tags/1.1.4/App/Views/Setup.php:91
-#: build/svn/trunk/App/Views/Setup.php:91
+#: assets/_src/routes/cloudflare/login.jsx:114
+#: assets/js/cf-images.min.js:14516
 msgid "Paste your Cloudflare API key here"
 msgstr ""
 
-#. translators: %1$s - opening <code> tag, %2$s - closing </code> tag
-#: app/views/setup.php:95
-#: build/cf-images/App/Views/Setup.php:95
-#: build/svn/tags/1.0.2/App/Views/Setup.php:92
-#: build/svn/tags/1.0.3/App/Views/Setup.php:92
-#: build/svn/tags/1.1.0/App/Views/Setup.php:95
-#: build/svn/tags/1.1.1/App/Views/Setup.php:95
-#: build/svn/tags/1.1.2/App/Views/Setup.php:95
-#: build/svn/tags/1.1.3/App/Views/Setup.php:95
-#: build/svn/tags/1.1.4/App/Views/Setup.php:95
-#: build/svn/trunk/App/Views/Setup.php:95
-msgid "To use Cloudflare Images you need to create a custom token with the correct %1$sRead%2$s and %1$sUpdate%2$s permissions:"
+#: assets/_src/routes/cloudflare/login.jsx:129
+#: assets/js/cf-images.min.js:14531
+msgid "Save changes"
 msgstr ""
 
-#. translators: %1$s - opening <a> tag, %2$s - closing </a> tag, %3$s - opening <strong> tag, %4$s - closing </strong> tag
-#: app/views/setup.php:104
-#: build/cf-images/App/Views/Setup.php:104
-#: build/svn/tags/1.0.2/App/Views/Setup.php:101
-#: build/svn/tags/1.0.3/App/Views/Setup.php:101
-#: build/svn/tags/1.1.0/App/Views/Setup.php:104
-#: build/svn/tags/1.1.1/App/Views/Setup.php:104
-#: build/svn/tags/1.1.2/App/Views/Setup.php:104
-#: build/svn/tags/1.1.3/App/Views/Setup.php:104
-#: build/svn/tags/1.1.4/App/Views/Setup.php:104
-#: build/svn/trunk/App/Views/Setup.php:104
-msgid "In the Cloudflare dashboard, locate %1$sAPI Tokens%2$s under %3$sMy Profile > API Tokens%4$s."
+#: assets/_src/routes/cloudflare/login.jsx:133
+#: assets/js/cf-images.min.js:14535
+msgid "How to get account ID and API token?"
 msgstr ""
 
-#. translators: %1$s - opening <strong> tag, %2$s - closing </strong> tag
-#: app/views/setup.php:115
-#: build/cf-images/App/Views/Setup.php:115
-#: build/svn/tags/1.0.2/App/Views/Setup.php:112
-#: build/svn/tags/1.0.3/App/Views/Setup.php:112
-#: build/svn/tags/1.1.0/App/Views/Setup.php:115
-#: build/svn/tags/1.1.1/App/Views/Setup.php:115
-#: build/svn/tags/1.1.2/App/Views/Setup.php:115
-#: build/svn/tags/1.1.3/App/Views/Setup.php:115
-#: build/svn/tags/1.1.4/App/Views/Setup.php:115
-#: build/svn/trunk/App/Views/Setup.php:115
-msgid "Select %1$sCreate Token%2$s."
+#: assets/_src/routes/cloudflare/login.jsx:136
+#: assets/js/cf-images.min.js:14538
+msgid "A detailed guide on how to setup the plugin can be found here: "
 msgstr ""
 
-#. translators: %1$s - opening <strong> tag, %2$s - closing </strong> tag
-#: app/views/setup.php:124
-#: build/cf-images/App/Views/Setup.php:124
-#: build/svn/tags/1.0.2/App/Views/Setup.php:121
-#: build/svn/tags/1.0.3/App/Views/Setup.php:121
-#: build/svn/tags/1.1.0/App/Views/Setup.php:124
-#: build/svn/tags/1.1.1/App/Views/Setup.php:124
-#: build/svn/tags/1.1.2/App/Views/Setup.php:124
-#: build/svn/tags/1.1.3/App/Views/Setup.php:124
-#: build/svn/tags/1.1.4/App/Views/Setup.php:124
-#: build/svn/trunk/App/Views/Setup.php:124
-msgid "In Custom token, select %1$sGet started%2$s."
+#: assets/_src/routes/cloudflare/login.jsx:143
+#: assets/_src/routes/support.jsx:49
+#: assets/js/cf-images.min.js:14545
+#: assets/js/cf-images.min.js:15060
+msgid "How-to Guide"
 msgstr ""
 
-#: app/views/setup.php:131
-#: build/cf-images/App/Views/Setup.php:131
-#: build/svn/tags/1.0.2/App/Views/Setup.php:128
-#: build/svn/tags/1.0.3/App/Views/Setup.php:128
-#: build/svn/tags/1.1.0/App/Views/Setup.php:131
-#: build/svn/tags/1.1.1/App/Views/Setup.php:131
-#: build/svn/tags/1.1.2/App/Views/Setup.php:131
-#: build/svn/tags/1.1.3/App/Views/Setup.php:131
-#: build/svn/tags/1.1.4/App/Views/Setup.php:131
-#: build/svn/trunk/App/Views/Setup.php:131
-msgid "Give your custom token a name."
+#: assets/_src/routes/cloudflare/login.jsx:150
+#: assets/js/cf-images.min.js:14552
+msgid "Log in to the Cloudflare dashboard, and select your account and website"
 msgstr ""
 
-#. translators: %1$s - opening <strong> tag, %2$s - closing </strong> tag
-#: app/views/setup.php:136
-#: build/cf-images/App/Views/Setup.php:136
-#: build/svn/tags/1.0.2/App/Views/Setup.php:133
-#: build/svn/tags/1.0.3/App/Views/Setup.php:133
-#: build/svn/tags/1.1.0/App/Views/Setup.php:136
-#: build/svn/tags/1.1.1/App/Views/Setup.php:136
-#: build/svn/tags/1.1.2/App/Views/Setup.php:136
-#: build/svn/tags/1.1.3/App/Views/Setup.php:136
-#: build/svn/tags/1.1.4/App/Views/Setup.php:136
-#: build/svn/trunk/App/Views/Setup.php:136
-msgid "Scroll to %1$sPermissions%2$s."
+#: assets/_src/routes/cloudflare/login.jsx:158
+#: assets/_src/routes/cloudflare/login.jsx:177
+#: assets/js/cf-images.min.js:14560
+#: assets/js/cf-images.min.js:14579
+msgid "link"
 msgstr ""
 
-#. translators: %1$s - opening <em> tag, %2$s - closing </em> tag
-#: app/views/setup.php:145
-#: build/cf-images/App/Views/Setup.php:145
-#: build/svn/tags/1.0.2/App/Views/Setup.php:142
-#: build/svn/tags/1.0.3/App/Views/Setup.php:142
-#: build/svn/tags/1.1.0/App/Views/Setup.php:145
-#: build/svn/tags/1.1.1/App/Views/Setup.php:145
-#: build/svn/tags/1.1.2/App/Views/Setup.php:145
-#: build/svn/tags/1.1.3/App/Views/Setup.php:145
-#: build/svn/tags/1.1.4/App/Views/Setup.php:145
-#: build/svn/trunk/App/Views/Setup.php:145
-msgid "On the %1$sSelect item…%2$s drop-down menu, choose %1$sCloudflare Images%2$s."
+#: assets/_src/routes/cloudflare/login.jsx:163
+#: assets/js/cf-images.min.js:14565
+msgid "In the \"Overview\" section, scroll down to find your Account ID and paste it in the form above"
 msgstr ""
 
-#. translators: %1$s - opening <em> tag, %2$s - closing </em> tag
-#: app/views/setup.php:154
-#: build/cf-images/App/Views/Setup.php:154
-#: build/svn/tags/1.0.2/App/Views/Setup.php:151
-#: build/svn/tags/1.0.3/App/Views/Setup.php:151
-#: build/svn/tags/1.1.0/App/Views/Setup.php:154
-#: build/svn/tags/1.1.1/App/Views/Setup.php:154
-#: build/svn/tags/1.1.2/App/Views/Setup.php:154
-#: build/svn/tags/1.1.3/App/Views/Setup.php:154
-#: build/svn/tags/1.1.4/App/Views/Setup.php:154
-#: build/svn/trunk/App/Views/Setup.php:154
-msgid "In the next drop-down menu, choose %1$sEdit%2$s."
+#: assets/_src/routes/cloudflare/login.jsx:166
+#: assets/js/cf-images.min.js:14568
+msgid "Next, create a custom token with the correct \"Read\" and \"Update\" permissions"
 msgstr ""
 
-#: app/views/setup.php:161
-#: build/cf-images/App/Views/Setup.php:161
-#: build/svn/tags/1.0.2/App/Views/Setup.php:158
-#: build/svn/tags/1.0.3/App/Views/Setup.php:158
-#: build/svn/tags/1.1.0/App/Views/Setup.php:161
-#: build/svn/tags/1.1.1/App/Views/Setup.php:161
-#: build/svn/tags/1.1.2/App/Views/Setup.php:161
-#: build/svn/tags/1.1.3/App/Views/Setup.php:161
-#: build/svn/tags/1.1.4/App/Views/Setup.php:161
-#: build/svn/trunk/App/Views/Setup.php:161
+#: assets/_src/routes/cloudflare/login.jsx:169
+#: assets/js/cf-images.min.js:14571
+msgid "In the Cloudflare dashboard, locate \"API Tokens\" under \"My Profile > API Tokens\""
+msgstr ""
+
+#: assets/_src/routes/cloudflare/login.jsx:182
+#: assets/js/cf-images.min.js:14584
+msgid "Select \"Create Token\""
+msgstr ""
+
+#: assets/_src/routes/cloudflare/login.jsx:185
+#: assets/js/cf-images.min.js:14587
+msgid "In Custom token, select \"Get started\""
+msgstr ""
+
+#: assets/_src/routes/cloudflare/login.jsx:188
+#: assets/js/cf-images.min.js:14590
+msgid "Give your custom token a name"
+msgstr ""
+
+#: assets/_src/routes/cloudflare/login.jsx:191
+#: assets/js/cf-images.min.js:14593
+msgid "Scroll to \"Permissions\""
+msgstr ""
+
+#: assets/_src/routes/cloudflare/login.jsx:194
+#: assets/js/cf-images.min.js:14596
+msgid "On the \"Select item…\" drop-down menu, choose \"Cloudflare Images\""
+msgstr ""
+
+#: assets/_src/routes/cloudflare/login.jsx:197
+#: assets/js/cf-images.min.js:14599
+msgid "In the next drop-down menu, choose \"Edit\""
+msgstr ""
+
+#: assets/_src/routes/cloudflare/login.jsx:199
+#: assets/js/cf-images.min.js:14601
 msgid "How to create a custom token for Cloudflare images"
 msgstr ""
 
-#. translators: %1$s - opening <strong> tag, %2$s - closing </strong> tag
-#: app/views/setup.php:166
-#: build/cf-images/App/Views/Setup.php:166
-#: build/svn/tags/1.0.2/App/Views/Setup.php:163
-#: build/svn/tags/1.0.3/App/Views/Setup.php:163
-#: build/svn/tags/1.1.0/App/Views/Setup.php:166
-#: build/svn/tags/1.1.1/App/Views/Setup.php:166
-#: build/svn/tags/1.1.2/App/Views/Setup.php:166
-#: build/svn/tags/1.1.3/App/Views/Setup.php:166
-#: build/svn/tags/1.1.4/App/Views/Setup.php:166
-#: build/svn/trunk/App/Views/Setup.php:166
-msgid "Select %1$sContinue to summary > Create Token%2$s."
+#: assets/_src/routes/cloudflare/login.jsx:204
+#: assets/js/cf-images.min.js:14606
+msgid "Select \"Continue to summary > Create Token\""
 msgstr ""
 
-#: app/views/setup.php:173
-#: build/cf-images/App/Views/Setup.php:173
-#: build/svn/tags/1.0.2/App/Views/Setup.php:170
-#: build/svn/tags/1.0.3/App/Views/Setup.php:170
-#: build/svn/tags/1.1.0/App/Views/Setup.php:173
-#: build/svn/tags/1.1.1/App/Views/Setup.php:173
-#: build/svn/tags/1.1.2/App/Views/Setup.php:173
-#: build/svn/tags/1.1.3/App/Views/Setup.php:173
-#: build/svn/tags/1.1.4/App/Views/Setup.php:173
-#: build/svn/trunk/App/Views/Setup.php:173
-msgid "Your token for Cloudflare Images is now created."
+#: assets/_src/routes/cloudflare/login.jsx:207
+#: assets/js/cf-images.min.js:14609
+msgid "Your token for Cloudflare Images is now created, paste it in the form above."
 msgstr ""
 
-#: build/svn/tags/1.0.2/App/Views/Settings.php:36
-#: build/svn/tags/1.0.3/App/Views/Settings.php:36
-msgid "Settings table"
+#: assets/_src/routes/support.jsx:42
+#: assets/js/cf-images.min.js:15053
+msgid "Additional resources"
 msgstr ""
 
-#: build/svn/tags/1.0.2/App/Views/Settings.php:45
-#: build/svn/tags/1.0.3/App/Views/Settings.php:45
-msgid "Serve images from custom domains"
+#: assets/_src/routes/support.jsx:44
+#: assets/js/cf-images.min.js:15055
+msgid "Below is a list of links to resources that will help you get started or get additional help:"
 msgstr ""
 
-#: build/svn/tags/1.0.2/App/Views/Settings.php:49
-#: build/svn/tags/1.0.2/App/Views/Settings.php:72
-#: build/svn/tags/1.0.3/App/Views/Settings.php:49
-#: build/svn/tags/1.0.3/App/Views/Settings.php:72
-msgid "Enable"
+#: assets/_src/routes/support.jsx:50
+#: assets/js/cf-images.min.js:15061
+msgid "step-by-step instructions with screenshots for setting up the plugin."
 msgstr ""
 
-#: build/svn/tags/1.0.2/App/Views/Settings.php:53
-#: build/svn/tags/1.0.3/App/Views/Settings.php:53
-#: build/svn/tags/1.1.0/App/Views/Settings.php:74
-#: build/svn/tags/1.1.1/App/Views/Settings.php:74
-msgid "Use the current site domain instead of `imagedelivery.net`."
+#: assets/_src/routes/support.jsx:54
+#: assets/js/cf-images.min.js:15065
+msgid "WordPress support forums"
 msgstr ""
 
-#: build/svn/tags/1.0.2/App/Views/Settings.php:56
-#: build/svn/tags/1.0.3/App/Views/Settings.php:56
-#: build/svn/tags/1.1.0/App/Views/Settings.php:77
-#: build/svn/tags/1.1.1/App/Views/Settings.php:77
-msgid "Note: Image delivery is supported from all customer domains under the same Cloudflare account."
+#: assets/_src/routes/support.jsx:55
+#: assets/js/cf-images.min.js:15066
+msgid "engage with the community and find answers to common queries."
 msgstr ""
 
-#: build/svn/tags/1.0.2/App/Views/Settings.php:96
-#: build/svn/tags/1.0.3/App/Views/Settings.php:96
-msgid "Stats"
+#: assets/_src/routes/support.jsx:59
+#: assets/js/cf-images.min.js:15070
+msgid "Contact me"
 msgstr ""
 
-#. translators: %d - number of offloaded images
-#: build/svn/tags/1.0.2/App/Views/Settings.php:101
-#: build/svn/tags/1.0.3/App/Views/Settings.php:101
-msgid "Offloaded images: %d"
+#: assets/_src/routes/support.jsx:60
+#: assets/js/cf-images.min.js:15071
+msgid "should you have specific concerns, reach out directly through my contact form."
 msgstr ""
 
-#: build/svn/tags/1.0.2/App/Views/Settings.php:107
-#: build/svn/tags/1.0.3/App/Views/Settings.php:107
-msgid "Bulk options"
+#: assets/_src/routes/support.jsx:64
+#: assets/js/cf-images.min.js:15075
+msgid "Support the project"
 msgstr ""
 
-#: build/svn/tags/1.0.2/App/Views/Setup.php:24
-#: build/svn/tags/1.0.3/App/Views/Setup.php:24
-msgid "Offload Images to Cloudflare Setup"
+#: assets/_src/routes/support.jsx:66
+#: assets/js/cf-images.min.js:15077
+msgid "This is a free plugin, if you find it useful, please consider supporting it by:"
 msgstr ""
 
-#: build/svn/tags/1.0.2/App/Views/Setup.php:50
-#: build/svn/tags/1.0.3/App/Views/Setup.php:50
-msgid "Setup table"
+#: assets/_src/routes/support.jsx:70
+#: assets/js/cf-images.min.js:15081
+msgid "Share your insights and suggestions on the support forums. Your feedback drives our improvements."
 msgstr ""
 
-#: build/svn/tags/1.1.1/App/Core.php:256
-#: build/svn/tags/1.1.1/App/Core.php:334
-msgid "Image metadata not found."
+#: assets/_src/routes/support.jsx:73
+#: assets/js/cf-images.min.js:15084
+msgid "Submit a pull request: "
+msgstr ""
+
+#: assets/_src/routes/support.jsx:75
+#: assets/js/cf-images.min.js:15086
+msgid "GitHub"
+msgstr ""
+
+#: assets/_src/routes/support.jsx:84
+#: assets/js/cf-images.min.js:15095
+msgid "Buy me a coffee"
+msgstr ""
+
+#: assets/_src/routes/support.jsx:90
+#: assets/js/cf-images.min.js:15101
+msgid "Unlike many plugins out there, I will not spam your dashboard with notices, heck, I even have this nice option:"
+msgstr ""
+
+#: assets/_src/routes/support.jsx:94
+#: assets/js/cf-images.min.js:15105
+msgid "Hide this section and never show it again"
+msgstr ""
+
+#: assets/_src/routes/tools/login.jsx:86
+#: assets/_src/routes/tools/login.jsx:94
+#: assets/js/cf-images.min.js:15264
+#: assets/js/cf-images.min.js:15272
+msgid "API key"
+msgstr ""
+
+#: assets/_src/routes/tools/login.jsx:109
+#: assets/js/cf-images.min.js:15287
+msgid "Email address"
+msgstr ""
+
+#: assets/_src/routes/tools/login.jsx:118
+#: assets/js/cf-images.min.js:15296
+msgid "e.g. alex@example.com"
+msgstr ""
+
+#: assets/_src/routes/tools/login.jsx:130
+#: assets/js/cf-images.min.js:15308
+msgid "Password"
+msgstr ""
+
+#: assets/_src/routes/tools/login.jsx:160
+#: assets/js/cf-images.min.js:15338
+msgid "Save"
+msgstr ""
+
+#: assets/_src/routes/tools/login.jsx:167
+#: assets/js/cf-images.min.js:15345
+msgid "Sign in"
+msgstr ""
+
+#: assets/_src/routes/tools/login.jsx:179
+#: assets/js/cf-images.min.js:15357
+msgid "Register for a free account"
+msgstr ""
+
+#: assets/_src/routes/tools/login.jsx:192
+#: assets/js/cf-images.min.js:15370
+msgid "Login using email/password"
+msgstr ""
+
+#: assets/_src/routes/tools/login.jsx:193
+#: assets/js/cf-images.min.js:15371
+msgid "Already have an API key"
 msgstr ""

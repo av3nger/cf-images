@@ -26,7 +26,6 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.0.0
  */
 abstract class Api {
-
 	/**
 	 * API URL.
 	 *
@@ -77,9 +76,7 @@ abstract class Api {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $endpoint  Endpoint.
-	 *
-	 * @return void
+	 * @param string $endpoint Endpoint.
 	 */
 	protected function set_endpoint( string $endpoint ) {
 		$this->endpoint = $endpoint;
@@ -90,9 +87,7 @@ abstract class Api {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param null|string|array $data  JSON-encoded data or array for image uploads.
-	 *
-	 * @return void
+	 * @param null|string|array $data JSON-encoded data or array for image uploads.
 	 */
 	protected function set_request_body( $data ) {
 		$this->request_body = $data;
@@ -103,9 +98,7 @@ abstract class Api {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $method  Method.
-	 *
-	 * @return void
+	 * @param string $method Method.
 	 */
 	protected function set_method( string $method ) {
 		$this->method = $method;
@@ -116,9 +109,7 @@ abstract class Api {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $timeout  Timeout.
-	 *
-	 * @return void
+	 * @param int $timeout Timeout.
 	 */
 	protected function set_timeout( int $timeout ) {
 		$this->timeout = $timeout;
@@ -132,7 +123,6 @@ abstract class Api {
 	 * @return array
 	 */
 	protected function get_args(): array {
-
 		$args = array(
 			'method'  => $this->method,
 			'timeout' => $this->timeout,
@@ -143,7 +133,6 @@ abstract class Api {
 		}
 
 		return $args;
-
 	}
 
 	/**
@@ -163,14 +152,13 @@ abstract class Api {
 	 * @since 1.0.0
 	 * @since 1.2.1 Added $decode parameter.
 	 *
-	 * @param bool $decode  Return object. If false, will return string. Used for image blobs.
+	 * @param bool $decode Return object. If false, will return string. Used for image blobs.
 	 *
-	 * @throws Exception  Exception during API call.
+	 * @throws Exception Exception during API call.
 	 *
 	 * @return stdClass|string
 	 */
 	protected function request( bool $decode = true ) {
-
 		$url  = $this->get_url();
 		$args = $this->get_args();
 
@@ -197,7 +185,7 @@ abstract class Api {
 
 			$response = $curl->request( $url, $args );
 		} else {
-			throw new Exception( __( 'Unsupported API call method', 'cf-images' ), '404' );
+			throw new Exception( esc_html__( 'Unsupported API call method', 'cf-images' ), '404' );
 		}
 
 		$code = wp_remote_retrieve_response_code( $response );
@@ -208,7 +196,6 @@ abstract class Api {
 		$body = wp_remote_retrieve_body( $response );
 
 		return $this->process_response( $body, (int) $code, $decode, $args );
-
 	}
 
 	/**
@@ -216,15 +203,14 @@ abstract class Api {
 	 *
 	 * @since 1.4.0
 	 *
-	 * @param string $body    Response body.
-	 * @param int    $code    Response code.
-	 * @param bool   $decode  JSON decode the response.
-	 * @param array  $args    Arguments array.
+	 * @param string $body   Response body.
+	 * @param int    $code   Response code.
+	 * @param bool   $decode JSON decode the response.
+	 * @param array  $args   Arguments array.
 	 *
 	 * @return stdClass|string
 	 */
 	protected function process_response( string $body, int $code, bool $decode, array $args ) {
 		return $decode ? json_decode( $body ) : $body;
 	}
-
 }

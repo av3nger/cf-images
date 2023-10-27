@@ -18,10 +18,9 @@
  * For more information, see the following discussion:
  * https://github.com/tommcfarlin/WordPress-Plugin-Boilerplate/pull/123#issuecomment-28541913
  *
- * @link       https://vcore.au
- * @since      1.0.0
- *
- * @package    CF_Images
+ * @link https://vcore.au
+ * @since 1.0.0
+ * @package CF_Images
  */
 
 // If uninstall not called from WordPress, then exit.
@@ -32,19 +31,27 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 delete_site_option( 'cf-images-version' );
 delete_site_option( 'cf-images-hash' );
 delete_site_option( 'cf-images-hide-sidebar' );
-delete_option( 'cf-images-disable-generation' );
 delete_option( 'cf-images-custom-domain' );
 delete_option( 'cf-images-setup-done' );
 delete_option( 'cf-images-config-written' );
 delete_option( 'cf-images-stats' );
 delete_option( 'cf-images-auth-error' );
+delete_option( 'cf-image-ai-api-key' );
+delete_option( 'cf-images-settings' );
+
+/**
+ * These have been removed since version 1.4.0.
+ * Keep this just in case we need to clean an old installation.
+ */
 delete_option( 'cf-images-auto-offload' );
-delete_option( 'cf-images-disable-async' );
-delete_option( 'cf-images-custom-id' );
 delete_option( 'cf-images-auto-resize' );
+delete_option( 'cf-images-custom-id' );
+delete_option( 'cf-images-disable-async' );
+delete_option( 'cf-images-disable-generation' );
 delete_option( 'cf-images-full-offload' );
 delete_option( 'cf-images-image-ai' );
-delete_option( 'cf-image-ai-api-key' );
+delete_option( 'cf-images-page-parser' );
+delete_option( 'cf-images-image-compress' );
 
 // Remove defines from wp-config.php file.
 require_once __DIR__ . '/app/traits/trait-ajax.php';
