@@ -321,9 +321,15 @@ class Image_Compress extends Module {
 		$db_stats  = get_post_meta( $attachment_id, '_cf_images_stats', true );
 
 		if ( ! isset( $db_stats['sizes'] ) || ! isset( $db_stats['sizes']['full'] ) ) {
-			$paths = array(
-				'full' => path_join( wp_get_upload_dir()['basedir'], $metadata['file'] ),
-			);
+			/**
+			 * TODO: until there's a way to rollback - do not compress full size.
+			 * Once this is ready to be enabled - remove the if statement.
+			 */
+			if ( strpos( $metadata['file'], '-scaled' ) !== false ) {
+				$paths = array(
+					'full' => path_join( wp_get_upload_dir()['basedir'], $metadata['file'] ),
+				);
+			}
 		}
 
 		if ( ! empty( $metadata['sizes'] ) ) {
@@ -347,9 +353,11 @@ class Image_Compress extends Module {
 		}
 
 		// Full size will often be a '-scaled' image, make sure we always have the original.
+		/*
 		if ( ( ! isset( $paths['full'] ) || $paths['full'] !== $original ) && ! isset( $db_stats['sizes']['original'] ) ) {
 			$paths['original'] = $original;
 		}
+		*/
 
 		return $paths ?? array();
 	}

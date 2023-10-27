@@ -43,7 +43,7 @@ class Compress extends API_Multi {
 	protected function get_args(): array {
 		$args = parent::get_args();
 
-		$args['headers']['apiKey'] = get_option( 'cf-image-ai-api-key', '' );
+		$args['headers']['Authorization'] = 'Bearer ' . get_option( 'cf-image-ai-api-key', '' );
 
 		return $args;
 	}
@@ -60,17 +60,24 @@ class Compress extends API_Multi {
 	 * @throws Exception If API request failed.
 	 */
 	public function optimize( array $images, string $mime_type ): array {
+		$this->set_header( 'Accept', $mime_type );
 		$this->set_header( 'Content-Type', $mime_type );
 		$this->set_timeout( 30 );
 		$this->set_data( $images );
 
 		$results = array();
 		$errors  = array();
+
 		foreach ( $this->requests() as $id => $response ) {
 			if ( ! isset( $response->success ) || ! $response->success ) {
 				// Get the error code and message.
 				if ( isset( $response->status_code ) && isset( $response->body ) ) {
-					$errors[ $response->status_code ] = $response->body;
+					$error = json_decode( $response->body );
+					if ( isset( $error->status ) && isset( $error->message ) ) {
+						$errors[ $error->status ] = $error->message;
+					} else {
+						$errors[ $response->status_code ] = $response->body;
+					}
 				} elseif ( isset( $response->status_code ) && 401 === $response->status_code ) {
 					$errors[401] = esc_html__( 'Rate limits enforced', 'cf-images' );
 				} else {
@@ -81,7 +88,7 @@ class Compress extends API_Multi {
 			}
 
 			$results[ $id ] = array(
-				'stats' => $response->headers->getValues( 'fuzion-stats' )[0] ?? '',
+				'stats' => $response->headers->getValues( 'x-image-stats' )[0] ?? '',
 				'image' => $response->body,
 			);
 		}
