@@ -5,7 +5,7 @@ Tags: cdn, cloudflare images, offload images, compress, cloudflare, optimize
 Donate link: https://www.paypal.com/donate/?business=JRR6QPRGTZ46N&no_recurring=0&item_name=Help+support+the+development+of+the+Cloudflare+Images+plugin+for+WordPress&currency_code=AUD
 Requires at least: 5.6
 Requires PHP: 7.0
-Tested up to: 6.3
+Tested up to: 6.4
 Stable tag: 1.5.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -94,7 +94,7 @@ If something is still not working for you, please let me know by creating a supp
 
 == Changelog ==
 
-= 1.5.0 =
+= 1.5.0 - 27.10.2023 =
 
 Added:
 * New and improved React-based UI
@@ -288,6 +288,9 @@ First release
 * Support for custom domains
 
 == Upgrade Notice ==
+
+= 1.5.0 =
+Huge update with lots of improvements and new features, new UI and image compression module.
 
 = 1.4.0 =
 Image AI - tag and caption your images using AI. Page parser module - improved compatibility with themes and plugins.
