@@ -49,9 +49,8 @@ const Login = () => {
 					setFuzion( true );
 				}
 			} )
-			.catch( window.console.log );
-
-		setLoading( false );
+			.catch( window.console.log )
+			.finally( () => setLoading( false ) );
 	};
 
 	const login = ( e ) => {
@@ -72,9 +71,8 @@ const Login = () => {
 					setFuzion( true );
 				}
 			} )
-			.catch( window.console.log );
-
-		setLoading( false );
+			.catch( window.console.log )
+			.finally( () => setLoading( false ) );
 	};
 
 	return (
@@ -110,7 +108,7 @@ const Login = () => {
 									<label className="label" htmlFor="username">
 										{ __( 'Email address', 'cf-images' ) }
 									</label>
-									<div className="control has-icons-left">
+									<div className={ classNames( 'control has-icons-left', { 'is-loading': loading } ) }>
 										<input
 											autoComplete="username"
 											className={ classNames( 'input', { 'is-danger': loginError } ) }
@@ -131,7 +129,7 @@ const Login = () => {
 									<label className="label" htmlFor="password">
 										{ __( 'Password', 'cf-images' ) }
 									</label>
-									<div className="control has-icons-left">
+									<div className={ classNames( 'control has-icons-left', { 'is-loading': loading } ) }>
 										<input
 											autoComplete="current-password"
 											className={ classNames( 'input', { 'is-danger': loginError } ) }
@@ -153,8 +151,7 @@ const Login = () => {
 
 						{ apiKeyView ? (
 							<button
-								className="button is-primary is-fullwidth mt-5"
-								disabled={ loading }
+								className={ classNames( 'button is-primary is-fullwidth mt-5', { 'is-loading': loading } ) }
 								onClick={ ( e ) => {
 									e.preventDefault();
 									saveKey();
@@ -164,8 +161,7 @@ const Login = () => {
 							</button>
 						) : (
 							<button
-								className="button is-primary is-fullwidth mt-5"
-								disabled={ loading }
+								className={ classNames( 'button is-primary is-fullwidth mt-5', { 'is-loading': loading } ) }
 								type="submit"
 							>
 								{ __( 'Sign in', 'cf-images' ) }

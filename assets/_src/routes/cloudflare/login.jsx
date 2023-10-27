@@ -34,6 +34,7 @@ const CloudflareLogin = () => {
 	const saveCredentials = ( e ) => {
 		e.preventDefault();
 		setLoading( true );
+		console.log( loading );
 
 		const formData = new FormData( e.target );
 		const args = {
@@ -49,9 +50,8 @@ const CloudflareLogin = () => {
 					setCfConnected( true );
 				}
 			} )
-			.catch( window.console.log );
-
-		setLoading( false );
+			.catch( window.console.log )
+			.finally( () => setLoading( false ) );
 	};
 
 	return (
@@ -83,7 +83,7 @@ const CloudflareLogin = () => {
 								<label className="label" htmlFor="account-id">
 									{ __( 'Cloudflare Account ID', 'cf-images' ) }
 								</label>
-								<div className="control has-icons-left">
+								<div className={ classNames( 'control has-icons-left', { 'is-loading': loading } ) }>
 									<input
 										autoComplete="off"
 										className={ classNames( 'input', { 'is-danger': error } ) }
@@ -104,7 +104,7 @@ const CloudflareLogin = () => {
 								<label className="label" htmlFor="api-key">
 									{ __( 'Cloudflare API Token', 'cf-images' ) }
 								</label>
-								<div className="control has-icons-left">
+								<div className={ classNames( 'control has-icons-left', { 'is-loading': loading } ) }>
 									<input
 										autoComplete="off"
 										className={ classNames( 'input', { 'is-danger': error } ) }
@@ -123,8 +123,7 @@ const CloudflareLogin = () => {
 							</div>
 
 							<button
-								className="button is-primary is-fullwidth mt-5"
-								disabled={ loading }
+								className={ classNames( 'button is-primary is-fullwidth mt-5', { 'is-loading': loading } ) }
 								type="submit"
 							>
 								{ __( 'Save changes', 'cf-images' ) }

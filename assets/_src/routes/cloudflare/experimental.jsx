@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import { useContext } from 'react';
+
+/**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
@@ -6,9 +11,11 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
+import SettingsContext from '../../context/settings';
 import DisableGeneration from '../../modules/disable-generation';
 import FullOffload from '../../modules/full-offload';
 import Disconnect from './disconnect';
+import CloudflareLogin from './login';
 
 /**
  * Cloudflare Images experimental settings routes.
@@ -17,6 +24,14 @@ import Disconnect from './disconnect';
  * @class
  */
 const CloudflareExperimental = () => {
+	const { cfConnected } = useContext( SettingsContext );
+
+	if ( ! cfConnected ) {
+		return (
+			<CloudflareLogin />
+		);
+	}
+
 	return (
 		<div className="columns is-multiline">
 			<div className="column is-full">

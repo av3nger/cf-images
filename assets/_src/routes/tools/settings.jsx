@@ -1,7 +1,8 @@
 /**
  * External dependencies
  */
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
+import classNames from 'classnames';
 
 /**
  * WordPress dependencies
@@ -25,10 +26,12 @@ import CompressionStats from '../../modules/ai-stats';
  * @class
  */
 const ToolsSettings = () => {
+	const [ loading, setLoading ] = useState( false );
 	const { hasFuzion, setFuzion } = useContext( SettingsContext );
 
 	const disconnect = ( e ) => {
 		e.preventDefault();
+		setLoading( true );
 
 		post( 'cf_images_ai_disconnect' )
 			.then( () => setFuzion( false ) )
@@ -44,7 +47,7 @@ const ToolsSettings = () => {
 
 				<div className="column is-full has-text-centered">
 					<button
-						className="button is-ghost is-small"
+						className={ classNames( 'button is-ghost is-small', { 'is-loading': loading } ) }
 						onClick={ ( e ) => disconnect( e ) }
 					>
 						{ __( 'Disconnect from API', 'cf-images' ) }
