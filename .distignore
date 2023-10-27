@@ -1,11 +1,12 @@
 /.git
 /.github
 /.wordpress-org
-/node_modules
 /assets/_src
+/node_modules
 
 .distignore
 .eslintrc.json
+.gitattributes
 .gitignore
 package.json
 package-lock.json
