@@ -21,7 +21,7 @@ const ImageCompress = () => {
 			title={ __( 'Image Optimization', 'cf-images' ) }
 		>
 			<div className="content">
-				<p>{ __( 'Compress JPEG/PNG images and reduce the file size.', 'cf-images' ) }</p>
+				<p>{ __( 'Optimize JPEG/PNG images to significantly decrease file size without compromising visual quality.', 'cf-images' ) }</p>
 			</div>
 		</Card>
 	);
