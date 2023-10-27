@@ -31,22 +31,24 @@ const CompressionStats = () => {
 		return (
 			<div className="card-footer mt-auto">
 				{ modules[ 'image-ai' ] && (
-					<a
-						className="card-footer-item"
-						href="#"
-						onClick={ ( e ) => runAction( e, 'alt-tags' ) }
-					>
-						{ __( 'Bulk add ALT tags', 'cf-images' ) }
-					</a>
+					<p className="card-footer-item">
+						<button
+							className="button is-fullwidth is-small is-ghost"
+							onClick={ ( e ) => runAction( e, 'alt-tags' ) }
+						>
+							{ __( 'Bulk add ALT tags', 'cf-images' ) }
+						</button>
+					</p>
 				) }
 				{ modules[ 'image-compress' ] && (
-					<a
-						className="card-footer-item"
-						href="#"
-						onClick={ ( e ) => runAction( e, 'compress' ) }
-					>
-						{ __( 'Bulk compress', 'cf-images' ) }
-					</a>
+					<p className="card-footer-item">
+						<button
+							className="button is-fullwidth is-small is-ghost"
+							onClick={ ( e ) => runAction( e, 'compress' ) }
+						>
+							{ __( 'Bulk compress', 'cf-images' ) }
+						</button>
+					</p>
 				) }
 			</div>
 		);

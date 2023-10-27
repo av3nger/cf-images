@@ -29,20 +29,22 @@ const CloudflareStats = () => {
 	const getFooter = () => {
 		return (
 			<div className="card-footer mt-auto">
-				<a
-					className="card-footer-item"
-					href="#"
-					onClick={ ( e ) => runAction( e, 'remove' ) }
-				>
-					{ __( 'Bulk remove', 'cf-images' ) }
-				</a>
-				<a
-					className="card-footer-item"
-					href="#"
-					onClick={ ( e ) => runAction( e, 'upload' ) }
-				>
-					{ __( 'Bulk offload', 'cf-images' ) }
-				</a>
+				<p className="card-footer-item">
+					<button
+						className="button is-fullwidth is-small is-ghost"
+						onClick={ ( e ) => runAction( e, 'remove' ) }
+					>
+						{ __( 'Bulk remove', 'cf-images' ) }
+					</button>
+				</p>
+				<p className="card-footer-item">
+					<button
+						className="button is-fullwidth is-small is-ghost"
+						onClick={ ( e ) => runAction( e, 'upload' ) }
+					>
+						{ __( 'Bulk offload', 'cf-images' ) }
+					</button>
+				</p>
 			</div>
 		);
 	};

@@ -49,7 +49,7 @@ const Card = ( { children, footer, icon, id, title } ) => {
 				</div>
 				{ id && (
 					<div className="card-footer mt-auto">
-						<div className="field card-footer-item">
+						<div className="field card-footer-item py-2">
 							<input
 								checked={ modules[ id ] }
 								className="switch is-rtl is-rounded"
