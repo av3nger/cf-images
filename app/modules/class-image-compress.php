@@ -248,12 +248,11 @@ class Image_Compress extends Module {
 			$images  = $this->get_paths( $attachment_id );
 			$results = ( new Compress() )->optimize( $images, $mime_type );
 
-			// Nothing optimized - return.
-			if ( empty( $results ) ) {
-				return;
+			if ( ! empty( $results ) ) {
+				$this->update_images_and_stats( $attachment_id, $images, $results );
 			}
 
-			$this->update_images_and_stats( $attachment_id, $images, $results );
+			update_post_meta( $attachment_id, '_cf_images_compressed', true );
 		} catch ( Exception $e ) {
 			return new WP_Error( 'compress_error', $e->getMessage() );
 		}
@@ -298,11 +297,6 @@ class Image_Compress extends Module {
 
 		update_option( 'cf-images-stats', $global_stats );
 		update_post_meta( $attachment_id, '_cf_images_stats', $image_stats );
-
-		// Mark as compressed.
-		if ( $this->all_sizes_compressed( $attachment_id ) ) {
-			update_post_meta( $attachment_id, '_cf_images_compressed', true );
-		}
 	}
 
 	/**
@@ -324,6 +318,7 @@ class Image_Compress extends Module {
 			/**
 			 * TODO: until there's a way to rollback - do not compress full size.
 			 * Once this is ready to be enabled - remove the if statement.
+			 * Fix the commented out code below as well.
 			 */
 			if ( strpos( $metadata['file'], '-scaled' ) !== false ) {
 				$paths = array(
@@ -352,8 +347,7 @@ class Image_Compress extends Module {
 			}
 		}
 
-		// Full size will often be a '-scaled' image, make sure we always have the original.
-		/*
+		/** Full size will often be a '-scaled' image, make sure we always have the original.
 		if ( ( ! isset( $paths['full'] ) || $paths['full'] !== $original ) && ! isset( $db_stats['sizes']['original'] ) ) {
 			$paths['original'] = $original;
 		}
