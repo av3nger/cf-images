@@ -155,7 +155,7 @@ abstract class Module {
 	 */
 	public function is_module_enabled( bool $fallback = false, string $module = '' ): bool {
 		// Core modules cannot be disabled.
-		if ( $this->core ) {
+		if ( $this->core && empty( $module ) ) {
 			return true;
 		}
 
