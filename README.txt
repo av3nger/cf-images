@@ -96,6 +96,9 @@ If something is still not working for you, please let me know by creating a supp
 
 = 1.5.1 =
 
+Fixed:
+* Do not replace images on wp-admin if full offload module is not enabled
+
 = 1.5.0 - 27.10.2023 =
 
 Added:
