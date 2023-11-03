@@ -201,6 +201,7 @@ class Core {
 	 * @see Modules\Image_Ai
 	 * @see Modules\Image_Compress
 	 * @see Modules\Page_Parser
+	 * @see Modules\Image_Generate
 	 */
 	private function load_modules() {
 		$loader = Loader::get_instance();
@@ -214,6 +215,7 @@ class Core {
 		$loader->module( 'image-ai' );
 		$loader->module( 'image-compress' );
 		$loader->module( 'page-parser' );
+		$loader->module( 'image-generate' );
 	}
 
 	/**

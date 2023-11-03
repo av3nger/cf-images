@@ -18,6 +18,7 @@ import ImageAI from '../../modules/image-ai';
 import ImageCompress from '../../modules/image-compress';
 import Login from './login';
 import CompressionStats from '../../modules/ai-stats';
+import ImageGenerate from '../../modules/image-generate';
 
 /**
  * Cloudflare Images settings routes.
@@ -44,6 +45,7 @@ const ToolsSettings = () => {
 				<CompressionStats />
 				<ImageAI />
 				<ImageCompress />
+				<ImageGenerate />
 
 				<div className="column is-full has-text-centered">
 					<button

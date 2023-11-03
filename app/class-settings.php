@@ -42,6 +42,7 @@ class Settings {
 		'image-ai'           => false,
 		'image-compress'     => false,
 		'page-parser'        => false,
+		'image-generate'     => false,
 	);
 
 	/**
