@@ -17,7 +17,7 @@ import ToolsSettings from './routes/tools/settings';
 
 /**
  * App
- * @return {JSX.Element} App component.
+ *
  * @class
  */
 const App = () => {
@@ -31,11 +31,20 @@ const App = () => {
 				<div className="column">
 					<div className="box">
 						<Routes>
-							<Route index element={ <CloudflareSettings /> } />
-							<Route path="/cf/experimental" element={ <CloudflareExperimental /> } />
-							<Route path="/tools/settings" element={ <ToolsSettings /> } />
-							<Route path="/misc/support" element={ <Support /> } />
-							<Route path="*" element={ <Navigate to="/" replace /> } />
+							<Route index element={<CloudflareSettings />} />
+							<Route
+								path="/cf/experimental"
+								element={<CloudflareExperimental />}
+							/>
+							<Route
+								path="/tools/settings"
+								element={<ToolsSettings />}
+							/>
+							<Route path="/misc/support" element={<Support />} />
+							<Route
+								path="*"
+								element={<Navigate to="/" replace />}
+							/>
 						</Routes>
 					</div>
 				</div>
@@ -44,6 +53,6 @@ const App = () => {
 	);
 };
 
-const container = document.getElementById( 'cf-images' );
-const root = createRoot( container );
-root.render( <App /> );
+const container = document.getElementById('cf-images');
+const root = createRoot(container);
+root.render(<App />);

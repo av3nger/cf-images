@@ -19,13 +19,12 @@ import CloudflareStats from '../../modules/cf-stats';
 /**
  * Cloudflare Images settings routes.
  *
- * @return {JSX.Element} Cloudflare settings component.
  * @class
  */
 const CloudflareSettings = () => {
-	const { cfConnected } = useContext( SettingsContext );
+	const { cfConnected } = useContext(SettingsContext);
 
-	if ( cfConnected ) {
+	if (cfConnected) {
 		return (
 			<div className="columns is-multiline">
 				<CloudflareStats />
@@ -39,9 +38,7 @@ const CloudflareSettings = () => {
 		);
 	}
 
-	return (
-		<CloudflareLogin />
-	);
+	return <CloudflareLogin />;
 };
 
 export default CloudflareSettings;

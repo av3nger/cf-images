@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { useContext, useState } from 'react';
+import { MouseEvent, useContext, useState } from 'react';
 import { mdiChartBar } from '@mdi/js';
 
 /**
@@ -18,65 +18,75 @@ import ProgressBar from '../components/progress';
 import { formatBytes } from '../js/helpers/format';
 
 const CompressionStats = () => {
-	const [ action, setAction ] = useState( '' );
-	const { inProgress, setInProgress, modules, stats } = useContext( SettingsContext );
+	const [action, setAction] = useState('');
+	const { inProgress, setInProgress, modules, stats } =
+		useContext(SettingsContext);
 
-	const runAction = ( e, actionName ) => {
+	const runAction = (e: MouseEvent, actionName: string) => {
 		e.preventDefault();
-		setAction( actionName );
-		setInProgress( true );
+		setAction(actionName);
+		setInProgress(true);
 	};
 
 	const getFooter = () => {
 		return (
 			<div className="card-footer mt-auto">
-				{ modules[ 'image-ai' ] && (
+				{modules['image-ai'] && (
 					<p className="card-footer-item">
 						<button
 							className="button is-fullwidth is-small is-ghost"
-							onClick={ ( e ) => runAction( e, 'alt-tags' ) }
+							onClick={(e) => runAction(e, 'alt-tags')}
 						>
-							{ __( 'Bulk add ALT tags', 'cf-images' ) }
+							{__('Bulk add ALT tags', 'cf-images')}
 						</button>
 					</p>
-				) }
-				{ modules[ 'image-compress' ] && (
+				)}
+				{modules['image-compress'] && (
 					<p className="card-footer-item">
 						<button
 							className="button is-fullwidth is-small is-ghost"
-							onClick={ ( e ) => runAction( e, 'compress' ) }
+							onClick={(e) => runAction(e, 'compress')}
 						>
-							{ __( 'Bulk compress', 'cf-images' ) }
+							{__('Bulk compress', 'cf-images')}
 						</button>
 					</p>
-				) }
+				)}
 			</div>
 		);
 	};
 
 	return (
 		<Card
-			icon={ mdiChartBar }
-			title={ __( 'Info & stats', 'cf-images' ) }
-			footer={ getFooter() }
+			icon={mdiChartBar}
+			title={__('Info & stats', 'cf-images')}
+			footer={getFooter()}
 		>
 			<div className="content">
 				<div className="level">
 					<div className="level-item has-text-centered">
 						<div>
-							<p className="heading">{ __( 'ALT tags generated', 'cf-images' ) }</p>
-							<p className="title">{ stats.alt_tags ?? 0 }</p>
+							<p className="heading">
+								{__('ALT tags generated', 'cf-images')}
+							</p>
+							<p className="title">{stats.alt_tags ?? 0}</p>
 						</div>
 					</div>
 					<div className="level-item has-text-centered">
 						<div>
-							<p className="heading">{ __( 'Compression savings', 'cf-images' ) }</p>
-							<p className="title">{ formatBytes( ( stats.size_before ?? 0 ) - ( stats.size_after ?? 0 ) ) }</p>
+							<p className="heading">
+								{__('Compression savings', 'cf-images')}
+							</p>
+							<p className="title">
+								{formatBytes(
+									(stats.size_before ?? 0) -
+										(stats.size_after ?? 0)
+								)}
+							</p>
 						</div>
 					</div>
 				</div>
 
-				{ inProgress && <ProgressBar action={ action } /> }
+				{inProgress && <ProgressBar action={action} />}
 			</div>
 		</Card>
 	);

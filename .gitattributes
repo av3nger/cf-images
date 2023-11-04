@@ -12,4 +12,5 @@
 /LICENSE export-ignore
 /package.json export-ignore
 /package-lock.json export-ignore
+/tsconfig.json export-ignore
 /webpack.config.js export-ignore

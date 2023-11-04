@@ -1,8 +1,8 @@
 /**
  * External dependencies
  */
-import { useContext, useState } from 'react';
-import classNames from 'classnames';
+import { MouseEvent, useContext, useState } from 'react';
+import * as classNames from 'classnames';
 
 /**
  * WordPress dependencies
@@ -23,23 +23,22 @@ import ImageGenerate from '../../modules/image-generate';
 /**
  * Cloudflare Images settings routes.
  *
- * @return {JSX.Element} Cloudflare settings component.
  * @class
  */
 const ToolsSettings = () => {
-	const [ loading, setLoading ] = useState( false );
-	const { hasFuzion, setFuzion } = useContext( SettingsContext );
+	const [loading, setLoading] = useState(false);
+	const { hasFuzion, setFuzion } = useContext(SettingsContext);
 
-	const disconnect = ( e ) => {
+	const disconnect = (e: MouseEvent) => {
 		e.preventDefault();
-		setLoading( true );
+		setLoading(true);
 
-		post( 'cf_images_ai_disconnect' )
-			.then( () => setFuzion( false ) )
-			.catch( window.console.log );
+		post('cf_images_ai_disconnect')
+			.then(() => setFuzion(false))
+			.catch(window.console.log);
 	};
 
-	if ( hasFuzion ) {
+	if (hasFuzion) {
 		return (
 			<div className="columns is-multiline">
 				<CompressionStats />
@@ -49,19 +48,19 @@ const ToolsSettings = () => {
 
 				<div className="column is-full has-text-centered">
 					<button
-						className={ classNames( 'button is-ghost is-small', { 'is-loading': loading } ) }
-						onClick={ ( e ) => disconnect( e ) }
+						className={classNames('button is-ghost is-small', {
+							'is-loading': loading,
+						})}
+						onClick={(e) => disconnect(e)}
 					>
-						{ __( 'Disconnect from API', 'cf-images' ) }
+						{__('Disconnect from API', 'cf-images')}
 					</button>
 				</div>
 			</div>
 		);
 	}
 
-	return (
-		<Login />
-	);
+	return <Login />;
 };
 
 export default ToolsSettings;

@@ -1,10 +1,8 @@
-/* global CFImages */
-
 /**
  * External dependencies
  */
 import { createContext } from 'react';
 
-const SettingsContext = createContext( CFImages.settings );
+const SettingsContext = createContext<SettingsContextType | null>(null);
 
 export default SettingsContext;

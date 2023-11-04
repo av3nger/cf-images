@@ -1,13 +1,13 @@
-const path = require( 'path' );
-const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
-const TerserPlugin = require( 'terser-webpack-plugin' );
+const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
 	mode: 'production',
 
 	entry: {
-		'cf-images': path.resolve( __dirname, 'assets/_src/app.jsx' ),
-		'cf-images-media': path.resolve( __dirname, 'assets/_src/js/media.js' ),
+		'cf-images': path.resolve(__dirname, 'assets/_src/app.tsx'),
+		'cf-images-media': path.resolve(__dirname, 'assets/_src/js/media.js'),
 	},
 
 	output: {
@@ -15,28 +15,27 @@ module.exports = {
 			keep: /images/,
 		},
 		filename: '[name].min.js',
-		path: path.resolve( __dirname, 'assets/js' ),
+		path: path.resolve(__dirname, 'assets/js'),
 	},
 
 	module: {
 		rules: [
 			{
-				test: /\.(jsx)$/,
+				test: /\.(jsx|tsx|ts)$/,
 				exclude: /node_modules/,
 				use: {
 					loader: 'babel-loader',
 					options: {
-						presets: [ '@babel/preset-env' ],
+						presets: [
+							'@babel/preset-env',
+							'@babel/preset-typescript',
+						],
 					},
 				},
 			},
 			{
 				test: /\.s[ac]ss$/i,
-				use: [
-					MiniCssExtractPlugin.loader,
-					'css-loader',
-					'sass-loader'
-				],
+				use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
 			},
 		],
 	},
@@ -53,29 +52,29 @@ module.exports = {
 	},
 
 	resolve: {
-		extensions: [ '.js', '.jsx' ],
+		extensions: ['.js', '.jsx', '.tsx', '.ts'],
 	},
 
 	plugins: [
-		new MiniCssExtractPlugin( {
+		new MiniCssExtractPlugin({
 			// Options similar to the same options in webpackOptions.output
 			// both options are optional
 			filename: '../css/[name].min.css',
 			chunkFilename: '[id].min.css',
-		} ),
+		}),
 	],
 
 	optimization: {
 		minimize: true,
 		minimizer: [
-			new TerserPlugin( {
+			new TerserPlugin({
 				extractComments: false,
 				terserOptions: {
 					output: {
 						comments: false,
 					},
 				},
-			} ),
+			}),
 		],
 		splitChunks: {
 			cacheGroups: {
@@ -85,6 +84,6 @@ module.exports = {
 					chunks: 'all',
 				},
 			},
-		}
+		},
 	},
 };
