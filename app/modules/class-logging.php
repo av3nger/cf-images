@@ -13,6 +13,8 @@
 
 namespace CF_Images\App\Modules;
 
+use CF_Images\App\Traits;
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -23,6 +25,8 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.6.0
  */
 class Logging extends Module {
+	use Traits\Ajax;
+
 	/**
 	 * Log file.
 	 *
@@ -45,6 +49,10 @@ class Logging extends Module {
 		}
 
 		add_action( 'cf_images_log', array( $this, 'log' ), 10, 5 );
+
+		if ( wp_doing_ajax() ) {
+			add_action( 'wp_ajax_cf_images_get_logs', array( $this, 'ajax_get_logs' ) );
+		}
 	}
 
 	/**
@@ -95,5 +103,23 @@ class Logging extends Module {
 		fwrite( $fp, $message ); // phpcs:ignore WordPress.WP.AlternativeFunctions
 		flock( $fp, LOCK_UN );
 		fclose( $fp ); // phpcs:ignore WordPress.WP.AlternativeFunctions
+	}
+
+	/**
+	 * Get logs.
+	 *
+	 * @since 1.6.0
+	 */
+	public function ajax_get_logs() {
+		$this->check_ajax_request( true );
+
+		if ( empty( $this->log_file ) ) {
+			wp_send_json_error( __( 'Log file not found.', 'cf-images' ) );
+			return;
+		}
+
+		$content = file_get_contents( $this->log_file ); // phpcs:ignore WordPress.WP.AlternativeFunctions
+
+		wp_send_json_success( $content );
 	}
 }
