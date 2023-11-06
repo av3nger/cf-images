@@ -23,10 +23,6 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.6.0
  */
 class Logging extends Module {
-	const INFO = 1;
-	const NOTICE = 2;
-	const ERROR = 3;
-
 	/**
 	 * Log file.
 	 *
@@ -72,6 +68,9 @@ class Logging extends Module {
 	 * @since 1.6.0
 	 *
 	 * @param mixed $message Message.
+	 * @param mixed ...$args Additional arguments.
+	 *
+	 * @return void
 	 */
 	public function log( $message, ...$args ) {
 		if ( is_array( $message ) || is_object( $message ) ) {
