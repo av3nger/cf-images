@@ -94,6 +94,11 @@ If something is still not working for you, please let me know by creating a supp
 
 == Changelog ==
 
+= 1.6.0 =
+
+Fixed:
+* Settings resetting on update after using a beta version
+
 = 1.5.1 - 28.10.2023 =
 
 Fixed:

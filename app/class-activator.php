@@ -64,7 +64,7 @@ class Activator {
 			delete_option( 'cf-images-install-notice' );
 		}
 
-		if ( version_compare( $version, '1.5.0' ) ) {
+		if ( version_compare( $version, '1.5.0', '<' ) ) {
 			self::upgrade_150();
 		}
 
