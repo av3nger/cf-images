@@ -15,7 +15,6 @@
 
 namespace CF_Images\App\Modules;
 
-
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }

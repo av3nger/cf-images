@@ -216,6 +216,7 @@ class Core {
 		$loader->module( 'image-compress' );
 		$loader->module( 'page-parser' );
 		$loader->module( 'image-generate' );
+		$loader->module( 'logging' );
 	}
 
 	/**

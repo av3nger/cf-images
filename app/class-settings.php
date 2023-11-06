@@ -43,6 +43,7 @@ class Settings {
 		'image-compress'     => false,
 		'page-parser'        => false,
 		'image-generate'     => false,
+		'logging'            => false,
 	);
 
 	/**

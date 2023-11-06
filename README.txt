@@ -96,6 +96,9 @@ If something is still not working for you, please let me know by creating a supp
 
 = 1.6.0 =
 
+Added:
+* Logging module
+
 Fixed:
 * Settings resetting on update after using a beta version
 

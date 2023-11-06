@@ -15,6 +15,7 @@ import PageParser from '../../modules/page-parser';
 import CloudflareLogin from './login';
 import Disconnect from './disconnect';
 import CloudflareStats from '../../modules/cf-stats';
+import Logging from '../../modules/logging';
 
 /**
  * Cloudflare Images settings routes.
@@ -33,6 +34,7 @@ const CloudflareSettings = () => {
 				<CustomDomain />
 				<PageParser />
 				<DisableAsync />
+				<Logging />
 				<Disconnect />
 			</div>
 		);

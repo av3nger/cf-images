@@ -131,6 +131,7 @@ class Image {
 	private function get_attachment_id() {
 		if ( preg_match( '/wp-image-(\d+)/i', $this->image, $class_id ) ) {
 			$this->id = absint( $class_id[1] );
+			do_action( 'cf_images_log', 'Found attachment ID (%) from image class name.', $this->id );
 		}
 	}
 

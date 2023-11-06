@@ -15,7 +15,7 @@ import { __ } from '@wordpress/i18n';
 import SettingsContext from '../context/settings';
 
 const Nav = () => {
-	const { noticeHidden } = useContext(SettingsContext);
+	const { modules, noticeHidden } = useContext(SettingsContext);
 
 	const getClass = (status: boolean) => {
 		return status ? 'is-active' : '';
@@ -63,20 +63,38 @@ const Nav = () => {
 				</li>
 			</ul>
 
-			{!noticeHidden && (
+			{(!noticeHidden || ('logging' in modules && modules.logging)) && (
 				<>
 					<p className="menu-label">{__('Misc', 'cf-images')}</p>
+					{'logging' in modules && modules.logging && (
+						<ul className="menu-list">
+							<li>
+								<NavLink
+									to="/misc/logs"
+									className={({ isActive }) =>
+										getClass(isActive)
+									}
+								>
+									{__('Logs', 'cf-images')}
+								</NavLink>
+							</li>
+						</ul>
+					)}
 
-					<ul className="menu-list">
-						<li>
-							<NavLink
-								to="/misc/support"
-								className={({ isActive }) => getClass(isActive)}
-							>
-								{__('Support', 'cf-images')}
-							</NavLink>
-						</li>
-					</ul>
+					{!noticeHidden && (
+						<ul className="menu-list">
+							<li>
+								<NavLink
+									to="/misc/support"
+									className={({ isActive }) =>
+										getClass(isActive)
+									}
+								>
+									{__('Support', 'cf-images')}
+								</NavLink>
+							</li>
+						</ul>
+					)}
 				</>
 			)}
 		</aside>

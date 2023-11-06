@@ -141,12 +141,14 @@ class Cloudflare_Images extends Module {
 	 */
 	public function get_attachment_image_src( $image, $attachment_id, $size ) {
 		if ( ! $this->can_run() || ! $image ) {
+			do_action( 'cf_images_log', 'Cannot run get_attachment_image_src(), returning original. Attachment ID: %s. Image: %s', $attachment_id, $image );
 			return $image;
 		}
 
 		list( $hash, $cloudflare_image_id ) = self::get_hash_id_url_string( $attachment_id );
 
 		if ( empty( $cloudflare_image_id ) || empty( $hash ) ) {
+			do_action( 'cf_images_log', 'Missing Cloudflare Image ID or hash. Attachment ID: %s. Image: %s', $attachment_id, $image );
 			return $image;
 		}
 
@@ -329,6 +331,7 @@ class Cloudflare_Images extends Module {
 		preg_match( '/src=[\'"]([^\'"]+)/i', $filtered_image, $src );
 
 		if ( ! isset( $src[1] ) ) {
+			do_action( 'cf_images_log', 'Running content_img_tag(), `src` not found, returning image. Attachment ID: %s. Image: %s', $attachment_id, $filtered_image );
 			return $filtered_image;
 		}
 
