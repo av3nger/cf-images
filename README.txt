@@ -98,6 +98,7 @@ If something is still not working for you, please let me know by creating a supp
 
 Added:
 * Logging module
+* Images in media library can now be sorted by offload status
 
 Fixed:
 * Settings resetting on update after using a beta version

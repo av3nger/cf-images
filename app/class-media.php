@@ -47,11 +47,15 @@ class Media {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
 		add_filter( 'manage_media_columns', array( $this, 'media_columns' ) );
+		add_filter( 'manage_upload_sortable_columns', array( $this, 'sortable_column' ) );
 		add_action( 'manage_media_custom_column', array( $this, 'media_custom_column' ), 10, 2 );
 		add_filter( 'wp_prepare_attachment_for_js', array( $this, 'grid_layout_column' ), 15, 2 );
 
 		// Image actions.
 		add_action( 'delete_attachment', array( $this, 'remove_from_cloudflare' ) );
+
+		// Manage column sorting.
+		add_action( 'pre_get_posts', array( $this, 'orberby_column' ) );
 	}
 
 	/**
@@ -626,5 +630,25 @@ class Media {
 
 		delete_post_meta( $attachment_id, '_cloudflare_image_offloaded' );
 		wp_send_json_success( $this->get_response_data( $attachment_id ) );
+	}
+
+	/**
+	 * Add the Optimization column to sortable list.
+	 *
+	 * @since 1.6.0
+	 *
+	 * @param array $columns Columns array.
+	 *
+	 * @return array
+	 */
+	public function sortable_column( array $columns ): array {
+		$columns['cf-images-status'] = array(
+			'cf_offload_status',
+			__( 'Optimization', 'cf-images' ),
+			false,
+			__( 'Table ordered by optimization status', 'cf-images' ),
+		);
+
+		return $columns;
 	}
 }
