@@ -52,6 +52,7 @@ class Logging extends Module {
 
 		if ( wp_doing_ajax() ) {
 			add_action( 'wp_ajax_cf_images_get_logs', array( $this, 'ajax_get_logs' ) );
+			add_action( 'wp_ajax_cf_images_clear_logs', array( $this, 'ajax_clear_logs' ) );
 		}
 	}
 
@@ -118,8 +119,31 @@ class Logging extends Module {
 			return;
 		}
 
-		$content = file_get_contents( $this->log_file ); // phpcs:ignore WordPress.WP.AlternativeFunctions
+		$content = '';
+		if ( file_exists( $this->log_file ) ) {
+			$content = file_get_contents( $this->log_file ); // phpcs:ignore WordPress.WP.AlternativeFunctions
+		}
 
 		wp_send_json_success( $content );
+	}
+
+	/**
+	 * Clear logs.
+	 *
+	 * @since 1.6.0
+	 */
+	public function ajax_clear_logs() {
+		$this->check_ajax_request( true );
+
+		if ( empty( $this->log_file ) ) {
+			wp_send_json_error( __( 'Log file not found.', 'cf-images' ) );
+			return;
+		}
+
+		if ( file_exists( $this->log_file ) ) {
+			wp_delete_file( $this->log_file );
+		}
+
+		wp_send_json_success();
 	}
 }
