@@ -53,9 +53,6 @@ class Media {
 
 		// Image actions.
 		add_action( 'delete_attachment', array( $this, 'remove_from_cloudflare' ) );
-
-		// Manage column sorting.
-		add_action( 'pre_get_posts', array( $this, 'orberby_column' ) );
 	}
 
 	/**
