@@ -331,7 +331,6 @@ class Media {
 				// If there's an error with offloading, we need to mark such an image as skipped.
 				if ( is_wp_error( Core::get_error() ) ) {
 					update_post_meta( $image->post->ID, '_cloudflare_image_skip', true );
-					do_action( 'cf_images_error', 0, '' ); // Reset the error.
 				}
 			}
 		} elseif ( 'remove' === $action ) {
@@ -354,6 +353,8 @@ class Media {
 		if ( is_wp_error( Core::get_error() ) ) {
 			$response['error'] = Core::get_error()->get_error_message();
 		}
+
+		do_action( 'cf_images_error', 0, '' ); // Reset the error.
 
 		wp_send_json_success( $response );
 	}

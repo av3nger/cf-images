@@ -101,6 +101,7 @@ Added:
 * Images in media library can now be sorted by offload status
 
 Fixed:
+* Bulk processing stops if an image triggers an error during upload
 * Settings resetting on update after using a beta version
 
 = 1.5.1 - 28.10.2023 =
