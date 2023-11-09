@@ -47,9 +47,15 @@ class Media {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
 		add_filter( 'manage_media_columns', array( $this, 'media_columns' ) );
-		add_filter( 'manage_upload_sortable_columns', array( $this, 'sortable_column' ) );
 		add_action( 'manage_media_custom_column', array( $this, 'media_custom_column' ), 10, 2 );
 		add_filter( 'wp_prepare_attachment_for_js', array( $this, 'grid_layout_column' ), 15, 2 );
+
+		// Sortable columns.
+		add_filter( 'manage_upload_sortable_columns', array( $this, 'sortable_column' ) );
+
+		// Offload filters media library (list view).
+		add_action( 'restrict_manage_posts', array( $this, 'add_filter_dropdown' ) );
+		add_action( 'pre_get_posts', array( $this, 'orderby_column' ) );
 
 		// Image actions.
 		add_action( 'delete_attachment', array( $this, 'remove_from_cloudflare' ) );
@@ -418,6 +424,7 @@ class Media {
 
 			$results = $image->upload( $path, $attachment_id, $name );
 			$this->update_stats( 1 );
+			delete_post_meta( $attachment_id, '_cloudflare_image_skip' );
 			update_post_meta( $attachment_id, '_cloudflare_image_id', $results->id );
 			$this->maybe_save_hash( $results->variants );
 
@@ -648,5 +655,77 @@ class Media {
 		);
 
 		return $columns;
+	}
+
+	/**
+	 * Add filters to the media library.
+	 *
+	 * @since 1.6.0
+	 */
+	public function add_filter_dropdown() {
+		$screen = get_current_screen();
+
+		if ( 'upload' !== $screen->base ) {
+			return;
+		}
+
+		$filter = filter_input( INPUT_GET, 'cf_images_filter', FILTER_SANITIZE_SPECIAL_CHARS );
+
+		?>
+		<label for="optimization-filter" class="screen-reader-text">
+			<?php esc_html_e( 'Filter by optimization status', 'cf-images' ); ?>
+		</label>
+		<select name="cf_images_filter" id="optimization-filter">
+			<option value="" <?php selected( $filter, '' ); ?>><?php esc_html_e( 'Optimization: All images', 'cf-images' ); ?></option>
+			<option value="offloaded" <?php selected( $filter, 'offloaded' ); ?>><?php esc_html_e( 'Optimization: Offloaded', 'cf-images' ); ?></option>
+			<option value="not-offloaded" <?php selected( $filter, 'not-offloaded' ); ?>><?php esc_html_e( 'Optimization: Not offloaded', 'cf-images' ); ?></option>
+			<option value="skipped" <?php selected( $filter, 'skipped' ); ?>><?php esc_html_e( 'Optimization: Skipped', 'cf-images' ); ?></option>
+		</select>
+		<?php
+	}
+
+	/**
+	 * Intercept the query and add meta_query values for our filters.
+	 *
+	 * @since 1.6.0
+	 *
+	 * @param WP_Query $query The WP_Query instance (passed by reference).
+	 *
+	 * @return WP_Query
+	 */
+	public function orderby_column( WP_Query $query ): WP_Query {
+		global $current_screen;
+
+		// Filter only media screen.
+		if ( ! is_admin() || ( ! empty( $current_screen ) && 'upload' !== $current_screen->base ) ) {
+			return $query;
+		}
+
+		$filter = filter_input( INPUT_GET, 'cf_images_filter', FILTER_SANITIZE_SPECIAL_CHARS );
+
+		if ( empty( $filter ) ) {
+			return $query;
+		}
+
+		// Offloaded.
+		if ( 'offloaded' === $filter ) {
+			$query->set( 'meta_key', '_cloudflare_image_id' );
+			return $query;
+		}
+
+		// Not offloaded.
+		if ( 'not-offloaded' === $filter ) {
+			$args = $this->get_wp_query_args( 'upload' );
+			$query->set( 'meta_query', $args['meta_query'] );
+			return $query;
+		}
+
+		// Skipped.
+		if ( 'skipped' === $filter ) {
+			$query->set( 'meta_key', '_cloudflare_image_skip' );
+			return $query;
+		}
+
+		return $query;
 	}
 }
