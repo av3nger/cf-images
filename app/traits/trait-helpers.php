@@ -46,6 +46,7 @@ trait Helpers {
 	 */
 	public function is_set_up(): bool {
 		if ( get_option( 'cf-images-auth-error', false ) ) {
+			do_action( 'cf_images_log', 'Option cf-images-auth-error is present in the database: %s', get_option( 'cf-images-auth-error', false ) );
 			return false;
 		}
 
@@ -53,7 +54,12 @@ trait Helpers {
 		$config_written = get_option( 'cf-images-config-written', false );
 		$defines_found  = defined( 'CF_IMAGES_ACCOUNT_ID' ) && defined( 'CF_IMAGES_KEY_TOKEN' );
 
-		return ( $config_written && $saved ) || $defines_found;
+		$is_set_up = ( $config_written && $saved ) || $defines_found;
+		if ( ! $is_set_up ) {
+			do_action( 'cf_images_log', 'Plugin is not setup. Defines status: %s, config written: %s', $defines_found, $config_written );
+		}
+
+		return $is_set_up;
 	}
 
 	/**
