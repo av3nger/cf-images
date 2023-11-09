@@ -393,11 +393,13 @@ class Media {
 	 */
 	public function upload_image( $metadata, int $attachment_id, string $action = '' ): array {
 		if ( ! isset( $metadata['file'] ) ) {
+			update_post_meta( $attachment_id, '_cloudflare_image_skip', true );
 			do_action( 'cf_images_error', 404, __( 'Media file not found', 'cf-images' ) );
 			return $metadata;
 		}
 
 		if ( ! wp_attachment_is_image( $attachment_id ) ) {
+			update_post_meta( $attachment_id, '_cloudflare_image_skip', true );
 			do_action( 'cf_images_error', 415, __( 'Unsupported media type', 'cf-images' ) );
 			return $metadata;
 		}
