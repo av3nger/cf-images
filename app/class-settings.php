@@ -25,6 +25,8 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Settings {
 	use Traits\Ajax;
+	use Traits\Helpers;
+	use Traits\Stats;
 
 	/**
 	 * Default settings.
@@ -222,6 +224,20 @@ class Settings {
 
 			update_option( 'cf-images-custom-domain', $url, false );
 		}
+
+		wp_send_json_success();
+	}
+
+	/**
+	 * Check status.
+	 *
+	 * @since 1.6.0
+	 */
+	public function ajax_check_status() {
+		$this->check_ajax_request( true );
+
+		delete_option( 'cf-images-auth-error' );
+		$this->fetch_stats( new Api\Image() );
 
 		wp_send_json_success();
 	}

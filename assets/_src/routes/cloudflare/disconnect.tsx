@@ -28,6 +28,15 @@ const Disconnect = () => {
 			.catch(window.console.log);
 	};
 
+	const checkStatus = (e: MouseEvent) => {
+		e.preventDefault();
+		setLoading(true);
+
+		post('cf_images_check_status')
+			.catch(window.console.log)
+			.finally(() => setLoading(false));
+	};
+
 	return (
 		<div className="column is-full has-text-centered">
 			<button
@@ -37,6 +46,14 @@ const Disconnect = () => {
 				onClick={(e) => disconnect(e)}
 			>
 				{__('Disconnect from API', 'cf-images')}
+			</button>
+			<button
+				className={classNames('button is-ghost is-small', {
+					'is-loading': loading,
+				})}
+				onClick={(e) => checkStatus(e)}
+			>
+				{__('Re-check API status', 'cf-images')}
 			</button>
 		</div>
 	);
