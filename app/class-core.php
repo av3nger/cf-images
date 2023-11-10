@@ -176,6 +176,7 @@ class Core {
 	 * @see Integrations\Rank_Math
 	 * @see Integrations\Spectra
 	 * @see Integrations\Wpml
+	 * @see Integrations\Shortpixel
 	 */
 	private function init_integrations() {
 		$loader = Loader::get_instance();
@@ -185,6 +186,7 @@ class Core {
 		$loader->integration( 'rank-math' );
 		$loader->integration( 'acf' );
 		$loader->integration( 'wpml' );
+		$loader->integration( 'shortpixel' );
 	}
 
 	/**

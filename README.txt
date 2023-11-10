@@ -100,6 +100,7 @@ Added:
 * Generate images with AI
 * Logging module
 * Images in media library can now be sorted by offload status
+* Integration with ShortPixel
 
 Fixed:
 * Bulk processing stops if an image triggers an error during upload
