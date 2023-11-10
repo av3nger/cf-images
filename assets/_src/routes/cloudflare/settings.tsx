@@ -15,17 +15,17 @@ import PageParser from '../../modules/page-parser';
 import CloudflareLogin from './login';
 import Disconnect from './disconnect';
 import CloudflareStats from '../../modules/cf-stats';
+import Logging from '../../modules/logging';
 
 /**
  * Cloudflare Images settings routes.
  *
- * @return {JSX.Element} Cloudflare settings component.
  * @class
  */
 const CloudflareSettings = () => {
-	const { cfConnected } = useContext( SettingsContext );
+	const { cfConnected } = useContext(SettingsContext);
 
-	if ( cfConnected ) {
+	if (cfConnected) {
 		return (
 			<div className="columns is-multiline">
 				<CloudflareStats />
@@ -34,14 +34,13 @@ const CloudflareSettings = () => {
 				<CustomDomain />
 				<PageParser />
 				<DisableAsync />
+				<Logging />
 				<Disconnect />
 			</div>
 		);
 	}
 
-	return (
-		<CloudflareLogin />
-	);
+	return <CloudflareLogin />;
 };
 
 export default CloudflareSettings;

@@ -63,6 +63,11 @@ $switch-background-active: $blue;
 	& input[type="checkbox"]:disabled:checked:before {
 		display: none;
 	}
+
+	& .cf-images-logs {
+		overflow-y: scroll;
+		max-height: 400px;
+	}
 }
 
 // Remove extra WordPress stuff.

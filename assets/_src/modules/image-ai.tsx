@@ -16,13 +16,23 @@ import Card from '../components/card';
 const ImageAI = () => {
 	return (
 		<Card
-			icon={ mdiMolecule }
+			icon={mdiMolecule}
 			id="image-ai"
-			title={ __( 'Image AI', 'cf-images' ) }
+			title={__('Caption AI', 'cf-images')}
 		>
 			<div className="content">
-				<p>{ __( 'Use the power of AI to tag and caption your images.', 'cf-images' ) }</p>
-				<p>{ __( 'Only images that are publicly accessible can be captioned. Limit of 20 images per month.', 'cf-images' ) }</p>
+				<p>
+					{__(
+						'Use the power of AI to tag and caption your images.',
+						'cf-images'
+					)}
+				</p>
+				<p>
+					{__(
+						'Only images that are publicly accessible can be captioned. Limit of 20 images per month.',
+						'cf-images'
+					)}
+				</p>
 			</div>
 		</Card>
 	);

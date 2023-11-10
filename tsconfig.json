@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "rootDir": "assets/_src",
+    "jsx": "react-jsx"
+  },
+
+  "include": [ "assets/_src/**/*" ]
+}

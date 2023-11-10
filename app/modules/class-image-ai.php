@@ -153,13 +153,7 @@ class Image_Ai extends Module {
 			if ( ! empty( $caption ) ) {
 				update_post_meta( $attachment_id, '_wp_attachment_image_alt', $caption );
 
-				// Bump stats.
-				$global_stats = $this->get_stats();
-				if ( ! isset( $global_stats['alt_tags'] ) ) {
-					$global_stats['alt_tags'] = 0;
-				}
-				++$global_stats['alt_tags'];
-				update_option( 'cf-images-stats', $global_stats );
+				$this->increment_stat( 'alt_tags' );
 
 				return sprintf( /* translators: %s - alt text */
 					esc_html__( 'Alt text: %s', 'cf-images' ),

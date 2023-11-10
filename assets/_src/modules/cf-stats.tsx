@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { useContext, useState } from 'react';
+import { MouseEvent, useContext, useState } from 'react';
 import { mdiChartBar } from '@mdi/js';
 
 /**
@@ -17,13 +17,13 @@ import Card from '../components/card';
 import ProgressBar from '../components/progress';
 
 const CloudflareStats = () => {
-	const [ action, setAction ] = useState( '' );
-	const { inProgress, setInProgress, stats } = useContext( SettingsContext );
+	const [action, setAction] = useState('');
+	const { inProgress, setInProgress, stats } = useContext(SettingsContext);
 
-	const runAction = ( e, actionName ) => {
+	const runAction = (e: MouseEvent, actionName: string) => {
 		e.preventDefault();
-		setAction( actionName );
-		setInProgress( true );
+		setAction(actionName);
+		setInProgress(true);
 	};
 
 	const getFooter = () => {
@@ -32,17 +32,17 @@ const CloudflareStats = () => {
 				<p className="card-footer-item">
 					<button
 						className="button is-fullwidth is-small is-ghost"
-						onClick={ ( e ) => runAction( e, 'remove' ) }
+						onClick={(e) => runAction(e, 'remove')}
 					>
-						{ __( 'Bulk remove', 'cf-images' ) }
+						{__('Bulk remove', 'cf-images')}
 					</button>
 				</p>
 				<p className="card-footer-item">
 					<button
 						className="button is-fullwidth is-small is-ghost"
-						onClick={ ( e ) => runAction( e, 'upload' ) }
+						onClick={(e) => runAction(e, 'upload')}
 					>
-						{ __( 'Bulk offload', 'cf-images' ) }
+						{__('Bulk offload', 'cf-images')}
 					</button>
 				</p>
 			</div>
@@ -51,27 +51,33 @@ const CloudflareStats = () => {
 
 	return (
 		<Card
-			icon={ mdiChartBar }
-			title={ __( 'Info & stats', 'cf-images' ) }
-			footer={ getFooter() }
+			icon={mdiChartBar}
+			title={__('Info & stats', 'cf-images')}
+			footer={getFooter()}
 		>
 			<div className="content">
 				<div className="level">
 					<div className="level-item has-text-centered">
 						<div>
-							<p className="heading">{ __( 'Images offloaded', 'cf-images' ) }</p>
-							<p className="title">{ stats.synced ?? 0 }</p>
+							<p className="heading">
+								{__('Images offloaded', 'cf-images')}
+							</p>
+							<p className="title">{stats.synced ?? 0}</p>
 						</div>
 					</div>
 					<div className="level-item has-text-centered">
 						<div>
-							<p className="heading">{ __( 'Images on Cloudflare', 'cf-images' ) }</p>
-							<p className="title">{ stats.api_current ?? stats.synced }</p>
+							<p className="heading">
+								{__('Images on Cloudflare', 'cf-images')}
+							</p>
+							<p className="title">
+								{stats.api_current ?? stats.synced}
+							</p>
 						</div>
 					</div>
 				</div>
 
-				{ inProgress && <ProgressBar action={ action } /> }
+				{inProgress && <ProgressBar action={action} />}
 			</div>
 		</Card>
 	);
