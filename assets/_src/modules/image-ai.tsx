@@ -18,7 +18,7 @@ const ImageAI = () => {
 		<Card
 			icon={mdiMolecule}
 			id="image-ai"
-			title={__('Image AI', 'cf-images')}
+			title={__('Caption AI', 'cf-images')}
 		>
 			<div className="content">
 				<p>

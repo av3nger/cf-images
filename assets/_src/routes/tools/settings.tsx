@@ -19,6 +19,7 @@ import ImageCompress from '../../modules/image-compress';
 import Login from './login';
 import CompressionStats from '../../modules/ai-stats';
 import ImageGenerate from '../../modules/image-generate';
+import UpsellModule from '../../modules/upsell';
 
 /**
  * Cloudflare Images settings routes.
@@ -45,6 +46,7 @@ const ToolsSettings = () => {
 				<ImageAI />
 				<ImageCompress />
 				<ImageGenerate />
+				<UpsellModule />
 
 				<div className="column is-full has-text-centered">
 					<button

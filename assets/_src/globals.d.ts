@@ -41,4 +41,5 @@ interface StatsType {
     size_after: number;
     size_before: number;
     synced: number;
+    image_ai: number;
 }

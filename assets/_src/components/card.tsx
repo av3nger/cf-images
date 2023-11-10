@@ -21,6 +21,7 @@ type CardProps = {
 	icon: string;
 	id?: string;
 	title: string;
+	wide?: boolean;
 };
 
 /**
@@ -32,6 +33,7 @@ type CardProps = {
  * @param {string}       props.icon
  * @param {string}       props.id
  * @param {string}       props.title
+ * @param {boolean}      props.wide
  * @class
  */
 const Card = ({
@@ -40,11 +42,17 @@ const Card = ({
 	icon,
 	id,
 	title,
+	wide = false,
 }: CardProps): ReactElement => {
 	const { modules, setModule } = useContext(SettingsContext);
 
 	return (
-		<div className="column is-half-tablet is-one-third-desktop">
+		<div
+			className={classNames('column', {
+				'is-half-tablet is-one-third-desktop': !wide,
+				'is-full-tablet is-two-thirds-desktop': wide,
+			})}
+		>
 			<div className="card is-flex is-flex-direction-column">
 				<div
 					className={classNames('card-content', {
