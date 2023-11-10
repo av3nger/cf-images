@@ -12,8 +12,17 @@ import { __ } from '@wordpress/i18n';
  * Internal dependencies
  */
 import Card from '../components/card';
+import { useContext } from 'react';
+import SettingsContext from '../context/settings';
 
 const UpsellModule = () => {
+	const { noticeHidden } = useContext(SettingsContext);
+
+	// Everyone hates upsells, if the user has no desire to upgrade, hide the upsell and never show it again.
+	if (noticeHidden) {
+		return null;
+	}
+
 	return (
 		<Card
 			icon={mdiRocketLaunchOutline}
