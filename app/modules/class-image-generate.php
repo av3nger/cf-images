@@ -68,8 +68,9 @@ class Image_Generate extends Module {
 
 			$this->increment_stat( 'image_ai' );
 
-			$attachment_id = $this->save_image( $image, 0, $args['prompt'] );
+			$attachment_id = $this->save_image( $image );
 			$image_data    = wp_get_attachment_image_src( $attachment_id, 'large' );
+			update_post_meta( $attachment_id, '_wp_attachment_image_alt', $args['prompt'] );
 
 			$response = array(
 				'id'    => $attachment_id,
@@ -90,13 +91,12 @@ class Image_Generate extends Module {
 	 *
 	 * @param string $file    The URL of the image to download.
 	 * @param int    $post_id Optional. The post ID the media is to be associated with.
-	 * @param string $desc    Optional. Description of the image.
 	 *
 	 * @return int
 	 * @throws Exception Error from saving image in media library.
 	 */
-	private function save_image( string $file, int $post_id = 0, string $desc = '' ): int {
-		$result = media_sideload_image( $file, $post_id, $desc, 'id' );
+	private function save_image( string $file, int $post_id = 0 ): int {
+		$result = media_sideload_image( $file, $post_id, null, 'id' );
 
 		if ( is_wp_error( $result ) ) {
 			throw new Exception( $result->get_error_message(), $result->get_error_code() );
