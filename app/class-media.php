@@ -425,7 +425,7 @@ class Media {
 			}
 
 			$results = $image->upload( $path, $attachment_id, $name );
-			$this->update_stats( 1 );
+			$this->increment_stat( 'synced' );
 			delete_post_meta( $attachment_id, '_cloudflare_image_skip' );
 			update_post_meta( $attachment_id, '_cloudflare_image_id', $results->id );
 			$this->maybe_save_hash( $results->variants );
@@ -458,7 +458,7 @@ class Media {
 
 		try {
 			$image->delete( $id );
-			$this->update_stats( -1 );
+			$this->decrement_stat( 'synced' );
 			delete_post_meta( $post_id, '_cloudflare_image_id' );
 			delete_post_meta( $post_id, '_cloudflare_image_skip' );
 

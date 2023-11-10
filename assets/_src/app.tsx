@@ -15,6 +15,7 @@ import CloudflareExperimental from './routes/cloudflare/experimental';
 import Support from './routes/support';
 import ToolsSettings from './routes/tools/settings';
 import Logs from './routes/misc/logs';
+import ImageGenerateRoute from './routes/image/generate';
 
 /**
  * App
@@ -40,6 +41,10 @@ const App = () => {
 							<Route
 								path="/tools/settings"
 								element={<ToolsSettings />}
+							/>
+							<Route
+								path="/image/generate"
+								element={<ImageGenerateRoute />}
 							/>
 							<Route path="/misc/logs" element={<Logs />} />
 							<Route path="/misc/support" element={<Support />} />

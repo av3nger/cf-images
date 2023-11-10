@@ -40,6 +40,7 @@ trait Stats {
 		'size_before' => 0, // Compress module.
 		'size_after'  => 0, // Compress module.
 		'alt_tags'    => 0, // Alt tags generated.
+		'image_ai'    => 0, // Images generated.
 	);
 
 	/**
@@ -92,20 +93,42 @@ trait Stats {
 	}
 
 	/**
-	 * Update image stats.
+	 * Increment stats.
 	 *
-	 * @since 1.0.1
-	 * @since 1.2.0 Moved out to this trait from class-core.php
+	 * @since 1.6.0
 	 *
-	 * @param int $count Add or subtract number from `synced` image count.
+	 * @param string $stat Stat to increment.
 	 */
-	private function update_stats( int $count ) {
+	private function increment_stat( string $stat ) {
 		$stats = get_option( 'cf-images-stats', $this->default_stats );
 
-		$stats['synced'] += $count;
+		if ( ! isset( $stats[ $stat ] ) ) {
+			$stats[ $stat ] = 0;
+		}
 
-		if ( $stats['synced'] < 0 ) {
-			$stats['synced'] = 0;
+		++$stats[ $stat ];
+
+		update_option( 'cf-images-stats', $stats, false );
+	}
+
+	/**
+	 * Decrement stats.
+	 *
+	 * @since 1.6.0
+	 *
+	 * @param string $stat Stat to decrement.
+	 */
+	private function decrement_stat( string $stat ) {
+		$stats = get_option( 'cf-images-stats', $this->default_stats );
+
+		if ( ! isset( $stats[ $stat ] ) ) {
+			$stats[ $stat ] = 0;
+		}
+
+		--$stats[ $stat ];
+
+		if ( 0 > $stats[ $stat ] ) {
+			$stats[ $stat ] = 0;
 		}
 
 		update_option( 'cf-images-stats', $stats, false );

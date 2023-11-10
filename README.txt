@@ -97,6 +97,7 @@ If something is still not working for you, please let me know by creating a supp
 = 1.6.0 =
 
 Added:
+* Generate images with AI
 * Logging module
 * Images in media library can now be sorted by offload status
 
