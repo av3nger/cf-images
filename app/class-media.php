@@ -356,11 +356,8 @@ class Media {
 			'stats' => $this->get_stats(),
 		);
 
-		if ( is_wp_error( Core::get_error() ) ) {
-			$response['error'] = Core::get_error()->get_error_message();
-		}
-
-		do_action( 'cf_images_error', 0, '' ); // Reset the error.
+		// Eventually we should move all errors into the log module, for now - just reset the error.
+		do_action( 'cf_images_error', 0, '' );
 
 		wp_send_json_success( $response );
 	}
