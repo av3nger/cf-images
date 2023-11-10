@@ -9,7 +9,7 @@
 
 import { post } from './helpers/post';
 
-( function( $ ) {
+(function ($) {
 	'use strict';
 
 	/**
@@ -29,37 +29,30 @@ import { post } from './helpers/post';
 	};
 
 	/**
-	 * Auto hide any pending notices.
-	 *
-	 * @since 1.0.0
-	 */
-	$( document ).ready( function() {
-		setTimeout( () => $( '#cf-images-notice' ).slideUp( 'slow' ), 5000 );
-	} );
-
-	/**
 	 * Register Ajax actions.
 	 */
-	Object.keys( ajaxActions ).forEach( ( action ) => {
-		$( document ).on( 'click', ajaxActions[ action ], function( e ) {
+	Object.keys(ajaxActions).forEach((action) => {
+		$(document).on('click', ajaxActions[action], function (e) {
 			e.preventDefault();
 
 			const { inProgress, offloadError } = CFImages.strings;
 
-			const divStatus = $( this ).closest( '.cf-images-status' );
-			divStatus.html( inProgress + '<span class="spinner is-active"></span>' );
+			const divStatus = $(this).closest('.cf-images-status');
+			divStatus.html(
+				inProgress + '<span class="spinner is-active"></span>'
+			);
 
-			post( action, $( this ).data( 'id' ) )
-				.then( ( response ) => {
-					if ( ! response.success ) {
+			post(action, $(this).data('id'))
+				.then((response) => {
+					if (!response.success) {
 						const message = response.data || offloadError;
-						divStatus.html( message );
+						divStatus.html(message);
 						return;
 					}
 
-					divStatus.html( response.data );
-				} )
-				.catch( window.console.log );
-		} );
-	} );
-}( jQuery ) );
+					divStatus.html(response.data);
+				})
+				.catch(window.console.log);
+		});
+	});
+})(jQuery);

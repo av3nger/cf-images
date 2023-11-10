@@ -53,7 +53,6 @@ class Admin {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
 		add_action( 'admin_menu', array( $this, 'register_menu' ) );
-		add_action( 'admin_notices', array( $this, 'show_notice' ) );
 		add_filter( 'plugin_action_links_cf-images/cf-images.php', array( $this, 'settings_link' ) );
 
 		if ( wp_doing_ajax() ) {
@@ -171,43 +170,6 @@ class Admin {
 			$this->get_slug(),
 			array( $this, 'render_page' )
 		);
-	}
-
-	/**
-	 * Show notice.
-	 *
-	 * @since 1.0.0
-	 */
-	public function show_notice() {
-		if ( false !== $this->get_error() ) {
-			$message = sprintf( /* translators: %1$s - error message, %2$d - error code */
-				esc_html__( '%1$s (code: %2$d)', 'cf-images' ),
-				esc_html( $this->get_error()->get_error_message() ),
-				(int) $this->get_error()->get_error_code()
-			);
-
-			$this->render_notice( $message, 'error' );
-		}
-	}
-
-	/**
-	 * Render notice.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $message Notice message.
-	 * @param string $type    Notice type.
-	 */
-	public function render_notice( string $message, string $type = 'success' ) {
-		?>
-		<div class="cf-images-notifications">
-			<div class="notice notice-<?php echo esc_attr( $type ); ?>" id="cf-images-notice">
-				<p>
-					<?php echo esc_html( $message ); ?>
-				</p>
-			</div>
-		</div>
-		<?php
 	}
 
 	/**
