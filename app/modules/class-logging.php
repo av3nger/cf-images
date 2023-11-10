@@ -82,6 +82,10 @@ class Logging extends Module {
 	 * @return void
 	 */
 	public function log( $message, ...$args ) {
+		if ( empty( $message ) && empty( $args ) ) {
+			return;
+		}
+
 		if ( is_array( $message ) || is_object( $message ) ) {
 			$message = print_r( $message, true ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions
 		}
