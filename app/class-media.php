@@ -555,7 +555,7 @@ class Media {
 			}
 		}
 
-		// Set offload flag.
+		// Set fully-offloaded flag.
 		update_post_meta( $attachment_id, '_cloudflare_image_offloaded', true );
 	}
 
