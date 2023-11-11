@@ -55,6 +55,8 @@ delete_option( 'cf-images-image-compress' );
 
 // Remove defines from wp-config.php file.
 require_once __DIR__ . '/app/traits/trait-ajax.php';
+require_once __DIR__ . '/app/traits/trait-helpers.php';
+require_once __DIR__ . '/app/traits/trait-stats.php';
 require_once __DIR__ . '/app/class-settings.php';
 $settings = new CF_Images\App\Settings();
 $settings->write_config( 'CF_IMAGES_ACCOUNT_ID' );
