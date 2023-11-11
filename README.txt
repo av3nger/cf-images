@@ -102,6 +102,7 @@ Added:
 * Logging module
 * Images in media library can now be sorted by offload status
 * Integration with ShortPixel
+* Compatibility option to store credentials in the database
 
 Fixed:
 * Bulk processing stops if an image triggers an error during upload

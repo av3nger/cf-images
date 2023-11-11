@@ -46,8 +46,14 @@ class Cloudflare extends Api {
 	protected function get_args(): array {
 		$args = parent::get_args();
 
+		if ( defined( 'CF_IMAGES_KEY_TOKEN' ) ) {
+			$api_key = constant( 'CF_IMAGES_KEY_TOKEN' );
+		} else {
+			$api_key = get_site_option( 'cf-images-api-token' );
+		}
+
 		$args['headers'] = array(
-			'Authorization' => 'Bearer ' . constant( 'CF_IMAGES_KEY_TOKEN' ),
+			'Authorization' => 'Bearer ' . $api_key,
 		);
 
 		return $args;
@@ -61,7 +67,13 @@ class Cloudflare extends Api {
 	 * @return string
 	 */
 	protected function get_url(): string {
-		return $this->api_url . constant( 'CF_IMAGES_ACCOUNT_ID' ) . '/images/v1' . $this->endpoint;
+		if ( defined( 'CF_IMAGES_ACCOUNT_ID' ) ) {
+			$account_id = constant( 'CF_IMAGES_ACCOUNT_ID' );
+		} else {
+			$account_id = get_site_option( 'cf-images-account-id' );
+		}
+
+		return $this->api_url . $account_id . '/images/v1' . $this->endpoint;
 	}
 
 	/**

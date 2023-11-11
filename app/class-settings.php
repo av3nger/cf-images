@@ -74,8 +74,13 @@ class Settings {
 			wp_die();
 		}
 
-		$this->write_config( 'CF_IMAGES_ACCOUNT_ID', sanitize_text_field( $form['account-id'] ) );
-		$this->write_config( 'CF_IMAGES_KEY_TOKEN', sanitize_text_field( $form['api-key'] ) );
+		if ( empty( $form['compat'] ) ) {
+			$this->write_config( 'CF_IMAGES_ACCOUNT_ID', sanitize_text_field( $form['account-id'] ) );
+			$this->write_config( 'CF_IMAGES_KEY_TOKEN', sanitize_text_field( $form['api-key'] ) );
+		} else {
+			update_site_option( 'cf-images-account-id', sanitize_text_field( $form['account-id'] ) );
+			update_site_option( 'cf-images-api-token', sanitize_text_field( $form['api-key'] ) );
+		}
 
 		// Remove any auth errors.
 		delete_option( 'cf-images-auth-error' );
@@ -151,6 +156,8 @@ class Settings {
 	 */
 	public function ajax_disconnect() {
 		delete_site_option( 'cf-images-hash' );
+		delete_site_option( 'cf-images-account-id' );
+		delete_site_option( 'cf-images-api-token' );
 		delete_option( 'cf-images-setup-done' );
 		delete_option( 'cf-images-config-written' );
 		delete_option( 'cf-images-auth-error' );

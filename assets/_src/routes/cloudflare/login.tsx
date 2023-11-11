@@ -36,6 +36,7 @@ const CloudflareLogin = () => {
 		const args = {
 			'account-id': formData.get('account-id') ?? '',
 			'api-key': formData.get('api-key') ?? '',
+			compat: formData.get('compat-mode') ?? '',
 		};
 
 		post('cf_images_do_setup', args)
@@ -154,6 +155,22 @@ const CloudflareLogin = () => {
 										</p>
 									)}
 								</div>
+							</div>
+
+							<div className="field">
+								<input
+									className="switch is-small is-rounded"
+									disabled={loading}
+									id="compat-mode"
+									name="compat-mode"
+									type="checkbox"
+								/>
+								<label htmlFor="compat-mode">
+									{__(
+										'Store credentials in the database',
+										'cf-images'
+									)}
+								</label>
 							</div>
 
 							<button
