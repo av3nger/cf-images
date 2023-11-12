@@ -69,6 +69,7 @@ class Image extends Cloudflare {
 
 		$this->set_method( 'UPLOAD' );
 		$this->set_endpoint( '' );
+		$this->set_timeout( 15 );
 		$this->set_request_body( $data );
 
 		$results = $this->request();

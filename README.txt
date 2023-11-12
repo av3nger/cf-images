@@ -104,6 +104,9 @@ Added:
 * Integration with ShortPixel
 * Compatibility option to store credentials in the database
 
+Changed:
+* Increase timeout to 15 seconds when offloading images
+
 Fixed:
 * Bulk processing stops if an image triggers an error during upload
 * Settings resetting on update after using a beta version
