@@ -69,4 +69,30 @@ class Ai extends Fuzion {
 
 		throw new Exception( esc_html__( 'Unable to caption image.', 'cf-images' ) );
 	}
+
+	/**
+	 * Generate image.
+	 *
+	 * @since 1.6.0
+	 *
+	 * @param array $params Request arguments.
+	 *
+	 * @throws Exception Exception if unable to generate image.
+	 *
+	 * @return string
+	 */
+	public function generate( array $params ): string {
+		$this->set_method( 'POST' );
+		$this->set_timeout( 60 );
+		$this->set_endpoint( 'images/generate' );
+		$this->set_request_body( wp_json_encode( $params ) );
+
+		$response = $this->request();
+
+		if ( isset( $response->data ) ) {
+			return $response->data;
+		}
+
+		throw new Exception( esc_html__( 'Unable to generate image.', 'cf-images' ) );
+	}
 }

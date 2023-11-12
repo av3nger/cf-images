@@ -176,6 +176,7 @@ class Core {
 	 * @see Integrations\Rank_Math
 	 * @see Integrations\Spectra
 	 * @see Integrations\Wpml
+	 * @see Integrations\Shortpixel
 	 */
 	private function init_integrations() {
 		$loader = Loader::get_instance();
@@ -185,6 +186,7 @@ class Core {
 		$loader->integration( 'rank-math' );
 		$loader->integration( 'acf' );
 		$loader->integration( 'wpml' );
+		$loader->integration( 'shortpixel' );
 	}
 
 	/**
@@ -201,6 +203,8 @@ class Core {
 	 * @see Modules\Image_Ai
 	 * @see Modules\Image_Compress
 	 * @see Modules\Page_Parser
+	 * @see Modules\Image_Generate
+	 * @see Modules\Logging
 	 */
 	private function load_modules() {
 		$loader = Loader::get_instance();
@@ -214,6 +218,8 @@ class Core {
 		$loader->module( 'image-ai' );
 		$loader->module( 'image-compress' );
 		$loader->module( 'page-parser' );
+		$loader->module( 'image-generate' );
+		$loader->module( 'logging' );
 	}
 
 	/**
@@ -228,6 +234,7 @@ class Core {
 		if ( '' === $code ) {
 			self::$error = false;
 		} else {
+			do_action( 'cf_images_log', $message );
 			self::$error = new WP_Error( $code, $message );
 		}
 	}

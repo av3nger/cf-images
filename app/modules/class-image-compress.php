@@ -245,6 +245,7 @@ class Image_Compress extends Module {
 		// Check if supported format.
 		$mime_type = get_post_mime_type( $attachment_id );
 		if ( ! in_array( $mime_type, array( 'image/jpeg', 'image/png' ), true ) ) {
+			do_action( 'cf_images_log', 'Compression error: Unsupported format. Attachment ID: %s.', $attachment_id );
 			return new WP_Error( 'unsupported_format', __( 'Unsupported format.', 'cf-images' ) );
 		}
 
@@ -258,6 +259,7 @@ class Image_Compress extends Module {
 
 			update_post_meta( $attachment_id, '_cf_images_compressed', true );
 		} catch ( Exception $e ) {
+			do_action( 'cf_images_log', 'Compression error: %s Attachment ID: %s.', $e->getMessage(), $attachment_id );
 			return new WP_Error( 'compress_error', $e->getMessage() );
 		}
 	}

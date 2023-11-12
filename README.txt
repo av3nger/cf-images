@@ -1,12 +1,12 @@
-=== Offload, Store, Resize & Optimize with Cloudflare Images ===
-Plugin Name: Offload, Store, Resize & Optimize with Cloudflare Images
+=== Offload, AI & Optimize with Cloudflare Images ===
+Plugin Name: Offload, AI & Optimize with Cloudflare Images
 Contributors: vanyukov
 Tags: cdn, cloudflare images, offload images, compress, cloudflare, optimize
 Donate link: https://www.paypal.com/donate/?business=JRR6QPRGTZ46N&no_recurring=0&item_name=Help+support+the+development+of+the+Cloudflare+Images+plugin+for+WordPress&currency_code=AUD
 Requires at least: 5.6
 Requires PHP: 7.0
 Tested up to: 6.4
-Stable tag: 1.5.1
+Stable tag: 1.6.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -31,7 +31,7 @@ Offload your media library to Cloudflare Images! Let our plugin take charge:
 
 = But wait, there's more! =
 
-Image AI - tag and caption your images using AI.
+Image AI - tag, caption and generate new images using AI.
 Compression - optimize JPEG/PNG images to decrease file size without compromising visual quality.
 
 = A Developer's Promise =
@@ -90,9 +90,26 @@ If something is still not working for you, please let me know by creating a supp
 == Screenshots ==
 
 1. Plugin options and settings
-2. Quick and easy setup wizard
+2. Plugin AI modules
+3. Quick and easy setup wizard
 
 == Changelog ==
+
+= 1.6.0 - 12.11.2023 =
+
+Added:
+* Generate images with AI
+* Logging module
+* Images in media library can now be sorted by offload status
+* Integration with ShortPixel
+* Compatibility option to store credentials in the database
+
+Changed:
+* Increase timeout to 15 seconds when offloading images
+
+Fixed:
+* Bulk processing stops if an image triggers an error during upload
+* Settings resetting on update after using a beta version
 
 = 1.5.1 - 28.10.2023 =
 

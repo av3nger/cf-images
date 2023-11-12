@@ -1,5 +1,5 @@
 {
-  "extends": [ "plugin:@wordpress/eslint-plugin/recommended-with-formatting" ],
+  "extends": [ "plugin:@wordpress/eslint-plugin/recommended" ],
   "plugins": [],
   "parserOptions": {
     "ecmaVersion": 2022,
@@ -21,7 +21,7 @@
   "settings": {
     "import/resolver": {
       "node": {
-        "extensions": [ ".js", ".jsx" ]
+        "extensions": [ ".js", ".jsx", ".ts", ".tsx" ]
       }
     }
   }
