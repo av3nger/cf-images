@@ -31,7 +31,7 @@ $switch-background-active: $blue;
 	@import "bulma/sass/helpers/_all";
 	@import "bulma/sass/layout/hero";
 
-	h1 {
+	.cf-plugin-title {
 		line-height: 1.3em;
 	}
 

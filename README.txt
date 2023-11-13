@@ -95,6 +95,11 @@ If something is still not working for you, please let me know by creating a supp
 
 == Changelog ==
 
+= 1.7.0 =
+
+Fixed:
+* Notices getting injected into plugin navigation
+
 = 1.6.0 - 12.11.2023 =
 
 Added:
