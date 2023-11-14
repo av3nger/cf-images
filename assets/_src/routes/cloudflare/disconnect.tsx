@@ -16,14 +16,12 @@ import SettingsContext from '../../context/settings';
 import { post } from '../../js/helpers/post';
 
 const Disconnect = () => {
-	const [type, setType] = useState('');
-	const [loading, setLoading] = useState(false);
+	const [loading, setLoading] = useState('');
 	const { setCfConnected } = useContext(SettingsContext);
 
 	const disconnect = (e: MouseEvent) => {
 		e.preventDefault();
-		setLoading(true);
-		setType('disconnect');
+		setLoading('disconnect');
 
 		post('cf_images_disconnect')
 			.then(() => setCfConnected(false))
@@ -32,14 +30,12 @@ const Disconnect = () => {
 
 	const checkStatus = (e: MouseEvent) => {
 		e.preventDefault();
-		setLoading(true);
-		setType('status');
+		setLoading('status');
 
 		post('cf_images_check_status')
 			.catch(window.console.log)
 			.finally(() => {
-				setLoading(false);
-				setType('');
+				setLoading('');
 			});
 	};
 
@@ -47,7 +43,7 @@ const Disconnect = () => {
 		<div className="column is-full has-text-centered">
 			<button
 				className={classNames('button is-ghost is-small', {
-					'is-loading': loading && 'disconnect' === type,
+					'is-loading': 'disconnect' === loading,
 				})}
 				onClick={(e) => disconnect(e)}
 			>
@@ -55,7 +51,7 @@ const Disconnect = () => {
 			</button>
 			<button
 				className={classNames('button is-ghost is-small', {
-					'is-loading': loading && 'status' === type,
+					'is-loading': 'status' === loading,
 				})}
 				onClick={(e) => checkStatus(e)}
 			>
