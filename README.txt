@@ -100,6 +100,7 @@ If something is still not working for you, please let me know by creating a supp
 Fixed:
 * Notices getting injected into plugin navigation
 * Do not expose internal methods to WP CLI commands
+* WP CLI command only processing the first 10 images
 
 = 1.6.0 - 12.11.2023 =
 

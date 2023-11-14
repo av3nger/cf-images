@@ -103,7 +103,16 @@ class CLI extends WP_CLI_Command {
 	 * @since 1.5.0
 	 */
 	private function offload_all() {
+		$defaults = array(
+			'fields'                 => 'ids',
+			'no_found_rows'          => true,
+			'posts_per_page'         => -1,
+			'update_post_meta_cache' => false,
+			'update_post_term_cache' => false,
+		);
+
 		$args = $this->get_wp_query_args( 'upload' );
+		$args = wp_parse_args( $args, $defaults );
 
 		// Look for images that have been offloaded.
 		$images = new WP_Query( $args );
