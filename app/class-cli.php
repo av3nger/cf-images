@@ -126,20 +126,20 @@ class CLI extends WP_CLI_Command {
 		$progress = WP_CLI\Utils\make_progress_bar( __( 'Offloading images', 'cf-images' ), $images->found_posts );
 
 		foreach ( $images->posts as $attachment ) {
-			$metadata = wp_get_attachment_metadata( $attachment->ID );
+			$metadata = wp_get_attachment_metadata( $attachment );
 			if ( false === $metadata ) {
 				$errors[] = sprintf( /* translators: %d - attachment ID */
 					esc_html__( 'Image metadata not found (attachment ID: %d).', 'cf-images' ),
-					$attachment->ID
+					$attachment
 				);
 			} else {
-				( new Media() )->upload_image( $metadata, $attachment->ID );
+				( new Media() )->upload_image( $metadata, $attachment );
 
 				if ( is_wp_error( Core::get_error() ) ) {
 					$errors[] = sprintf( /* translators: %1$s - error message, %2$d - attachment ID */
 						esc_html__( '%1$s (attachment ID: %2$d).', 'cf-images' ),
 						esc_html( Core::get_error()->get_error_message() ),
-						$attachment->ID
+						$attachment
 					);
 				}
 			}
