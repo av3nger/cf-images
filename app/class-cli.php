@@ -121,7 +121,7 @@ class CLI extends WP_CLI_Command {
 			if ( false === $metadata ) {
 				$errors[] = sprintf( /* translators: %d - attachment ID */
 					esc_html__( 'Image metadata not found (attachment ID: %d).', 'cf-images' ),
-					(int) $attachment->ID
+					$attachment->ID
 				);
 			} else {
 				( new Media() )->upload_image( $metadata, $attachment->ID );
@@ -130,7 +130,7 @@ class CLI extends WP_CLI_Command {
 					$errors[] = sprintf( /* translators: %1$s - error message, %2$d - attachment ID */
 						esc_html__( '%1$s (attachment ID: %2$d).', 'cf-images' ),
 						esc_html( Core::get_error()->get_error_message() ),
-						(int) $attachment->ID
+						$attachment->ID
 					);
 				}
 			}
