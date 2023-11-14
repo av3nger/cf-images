@@ -14,7 +14,7 @@ import { __ } from '@wordpress/i18n';
 import SettingsContext from '../../context/settings';
 import DisableGeneration from '../../modules/disable-generation';
 import FullOffload from '../../modules/full-offload';
-import Disconnect from './disconnect';
+import CloudflareDisconnect from '../../modules/actions/cf-disconnect';
 import CloudflareLogin from './login';
 
 /**
@@ -49,7 +49,7 @@ const CloudflareExperimental = () => {
 			</div>
 			<DisableGeneration />
 			<FullOffload />
-			<Disconnect />
+			<CloudflareDisconnect />
 		</div>
 	);
 };

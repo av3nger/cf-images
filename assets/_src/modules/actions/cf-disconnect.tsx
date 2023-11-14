@@ -15,7 +15,7 @@ import { __ } from '@wordpress/i18n';
 import SettingsContext from '../../context/settings';
 import { post } from '../../js/helpers/post';
 
-const Disconnect = () => {
+const CloudflareDisconnect = () => {
 	const [loading, setLoading] = useState('');
 	const { setCfConnected } = useContext(SettingsContext);
 
@@ -61,4 +61,4 @@ const Disconnect = () => {
 	);
 };
 
-export default Disconnect;
+export default CloudflareDisconnect;

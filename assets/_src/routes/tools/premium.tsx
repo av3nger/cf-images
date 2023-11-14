@@ -7,20 +7,16 @@ import { useContext } from 'react';
  * Internal dependencies
  */
 import SettingsContext from '../../context/settings';
-import ImageAI from '../../modules/image-ai';
-import ImageCompress from '../../modules/image-compress';
 import Login from './login';
-import CompressionStats from '../../modules/ai-stats';
-import ImageGenerate from '../../modules/image-generate';
-import UpsellModule from '../../modules/upsell';
 import FuzionDisconnect from '../../modules/actions/ai-disconnect';
+import CustomPaths from '../../modules/premium/custom-paths';
 
 /**
- * Cloudflare Images settings routes.
+ * Premium modules.
  *
  * @class
  */
-const ToolsSettings = () => {
+const ToolsPremium = () => {
 	const { hasFuzion, setFuzion } = useContext(SettingsContext);
 
 	if (!hasFuzion) {
@@ -29,14 +25,10 @@ const ToolsSettings = () => {
 
 	return (
 		<div className="columns is-multiline">
-			<CompressionStats />
-			<ImageAI />
-			<ImageCompress />
-			<ImageGenerate />
-			<UpsellModule />
+			<CustomPaths />
 			<FuzionDisconnect />
 		</div>
 	);
 };
 
-export default ToolsSettings;
+export default ToolsPremium;
