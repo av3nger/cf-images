@@ -14,49 +14,47 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import { post } from '../../js/helpers/post';
 import Card from '../../components/card';
 import SettingsContext from '../../context/settings';
 
 const CustomPaths = () => {
 	const [done, setDone] = useState(false);
-	const [domain, setDomain] = useState(window.CFImages.domain);
 	const [error, setError] = useState('');
 	const [saving, setSaving] = useState(false);
 
 	const { modules } = useContext(SettingsContext);
 
-	const moduleId = 'custom-domain';
+	let domain = '';
+	if (window.CFImages.domain) {
+		domain = window.CFImages.domain;
+		if (!domain.endsWith('/')) {
+			domain += '/';
+		}
+		domain += 'cdn-cgi/imagedelivery/<account_hash>/<image>';
+	} else {
+		domain = 'https://imagedelivery.net/<account_hash>/<image>';
+	}
 
-	const saveDomain = () => {
-		setError('');
-		setSaving(true);
+	/*
+	let domain = window.CFImages.domain
+		? window.CFImages.domain
+		: 'https://imagedelivery.net/';
 
-		post('cf_images_set_custom_domain', { domain })
-			.then((response: ApiResponse) => {
-				setSaving(false);
-
-				if (!response.success && response.data) {
-					setError(response.data);
-					setTimeout(() => setError(''), 10000);
-				} else {
-					setDone(true);
-					setTimeout(() => setDone(false), 2000);
-				}
-			})
-			.catch(window.console.log);
-	};
-
+	if (domain.endsWith('/')) {
+		domain += 'cdn-cgi/imagedelivery/';
+	}
+	*/
 	return (
 		<Card
 			icon={mdiAlphabeticalVariant}
-			id={moduleId}
+			id="custom-domain"
 			title={__('Custom image URLs', 'cf-images')}
+			wide
 		>
 			<div className="content">
 				<p>
-					Current format:
-					https://vcore.au/cdn-cgi/imagedelivery/&lt;account_hash&gt;/image
+					Current format:&nbsp;
+					{domain}
 				</p>
 				<p>
 					{__(
@@ -65,7 +63,7 @@ const CustomPaths = () => {
 					)}
 				</p>
 
-				{moduleId in modules && modules[moduleId] && (
+				{'custom-domain' in modules && modules['custom-domain'] && (
 					<div className="field has-addons">
 						<div
 							className={classNames('control is-expanded', {
@@ -84,10 +82,9 @@ const CustomPaths = () => {
 									'is-success': done,
 								})}
 								id="custom-domain"
-								onChange={(e) => setDomain(e.target.value)}
+								onChange={(e) => console.log(e.target.value)}
 								placeholder="https://cdn.example.com"
 								type="text"
-								value={domain}
 							/>
 							{done && (
 								<span className="icon is-small is-right">
@@ -101,7 +98,6 @@ const CustomPaths = () => {
 								className={classNames('button is-info', {
 									'is-loading': saving,
 								})}
-								onClick={saveDomain}
 							>
 								{__('Set', 'cf-images')}
 							</button>
