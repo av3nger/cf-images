@@ -80,7 +80,7 @@ class Auto_Resize extends Module {
 				break;
 			}
 
-			$srcset[] = $image->get_cf_image() . 'w=' . $size . ' ' . $size . 'px';
+			$srcset[] = $image->get_cf_image() . 'w=' . $size . ' ' . $size . 'w';
 		}
 
 		unset( $size );
@@ -90,7 +90,7 @@ class Auto_Resize extends Module {
 		}
 
 		// Add the original image to the srcset.
-		$srcset[] = $image->get_cf_image() . 'w=' . $image->get_width() . ' ' . $image->get_width() . 'px';
+		$srcset[] = $image->get_cf_image() . 'w=' . $image->get_width() . ' ' . $image->get_width() . 'w';
 
 		// Check if there is already a 'sizes' attribute.
 		$sizes = strpos( $image_dom, ' sizes=' );

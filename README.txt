@@ -101,6 +101,7 @@ Fixed:
 * Notices getting injected into plugin navigation
 * Do not expose internal methods to WP CLI commands
 * WP CLI command only processing the first 10 images
+* Auto resize feature using incorrect descriptors
 
 = 1.6.0 - 12.11.2023 =
 
