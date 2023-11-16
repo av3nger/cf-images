@@ -163,7 +163,7 @@ abstract class Module {
 			$module = $this->module;
 		}
 
-		$settings = get_option( 'cf-images-settings', \CF_Images\App\Settings::DEFAULTS );
+		$settings = get_option( 'cf-images-settings', \CF_Images\App\Settings::get_defaults() );
 
 		return $settings[ $module ] ?? $fallback;
 	}

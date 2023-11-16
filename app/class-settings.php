@@ -46,7 +46,6 @@ class Settings {
 		'page-parser'        => false,
 		'image-generate'     => false,
 		'logging'            => false,
-		'custom-path'        => false,
 	);
 
 	/**
@@ -189,10 +188,10 @@ class Settings {
 
 		$data = filter_input( INPUT_POST, 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 
-		$settings = get_option( 'cf-images-settings', self::DEFAULTS );
+		$settings = get_option( 'cf-images-settings', self::get_defaults() );
 
 		// Make sure we add any options that have been added to the DEFAULTS array.
-		$settings = wp_parse_args( $settings, self::DEFAULTS );
+		$settings = wp_parse_args( $settings, self::get_defaults() );
 
 		foreach ( $settings as $key => $value ) {
 			// Skip unsupported settings.
@@ -208,10 +207,7 @@ class Settings {
 			delete_option( 'cf-images-custom-domain' );
 		}
 
-		// Remove custom path option, if the module is disabled.
-		if ( ! isset( $data['custom-path'] ) || ! filter_var( $data['custom-path'], FILTER_VALIDATE_BOOLEAN ) ) {
-			delete_option( 'cf-images-custom-path' );
-		}
+		do_action( 'cf_images_save_settings', $settings, $data );
 
 		update_option( 'cf-images-settings', $settings, false );
 		wp_send_json_success();
@@ -253,5 +249,16 @@ class Settings {
 		$this->fetch_stats( new Api\Image() );
 
 		wp_send_json_success();
+	}
+
+	/**
+	 * Get defaults.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @return bool[]
+	 */
+	public static function get_defaults(): array {
+		return apply_filters( 'cf_images_default_settings', self::DEFAULTS );
 	}
 }
