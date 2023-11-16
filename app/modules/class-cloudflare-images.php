@@ -147,20 +147,22 @@ class Cloudflare_Images extends Module {
 
 		list( $hash, $cloudflare_image_id ) = self::get_hash_id_url_string( $attachment_id );
 
-		if ( empty( $cloudflare_image_id ) || empty( $hash ) ) {
+		if ( empty( $cloudflare_image_id ) || ( empty( $hash ) && ! $this->is_module_enabled( false, 'custom-path' ) ) ) {
 			do_action( 'cf_images_log', 'Missing Cloudflare Image ID or hash. Attachment ID: %s. Image: %s', $attachment_id, $image );
 			return $image;
 		}
 
+		$cf_image = trailingslashit( $this->get_cdn_domain() . "/$hash" ) . $cloudflare_image_id;
+
 		// If this is a known crop image.
 		if ( is_string( $size ) && isset( $this->registered_sizes[ $size ]['crop'] ) && true === $this->registered_sizes[ $size ]['crop'] ) {
-			$image[0] = $this->get_cdn_domain() . "/$hash/$cloudflare_image_id/w=" . $this->registered_sizes[ $size ]['width'] . ',h=' . $this->registered_sizes[ $size ]['height'] . ',fit=crop';
+			$image[0] = $cf_image . '/w=' . $this->registered_sizes[ $size ]['width'] . ',h=' . $this->registered_sizes[ $size ]['height'] . ',fit=crop';
 			return $image;
 		}
 
 		// Image with defined dimensions.
 		if ( isset( $image[1] ) && $image[1] > 0 ) {
-			$image[0] = $this->get_cdn_domain() . "/$hash/$cloudflare_image_id/w=" . $image[1];
+			$image[0] = $cf_image . '/w=' . $image[1];
 			return $image;
 		}
 
@@ -173,18 +175,18 @@ class Cloudflare_Images extends Module {
 			$width_key  = array_search( (int) $variant_image[2], $this->widths, true );
 
 			if ( $width_key && $height_key && $width_key === $height_key && true === $this->registered_sizes[ $width_key ]['crop'] ) {
-				$image[0] = $this->get_cdn_domain() . "/$hash/$cloudflare_image_id/w=" . $variant_image[1] . ',h=' . $variant_image[2] . ',fit=crop';
+				$image[0] = $cf_image . '/w=' . $variant_image[1] . ',h=' . $variant_image[2] . ',fit=crop';
 				return $image;
 			}
 
 			// Not a cropped image.
-			$image[0] = $this->get_cdn_domain() . "/$hash/$cloudflare_image_id/w=" . $variant_image[1] . ',h=' . $variant_image[2];
+			$image[0] = $cf_image . '/w=' . $variant_image[1] . ',h=' . $variant_image[2];
 			return $image;
 		}
 
 		// Maybe it's not a scaled, but we have the size?
 		if ( is_int( $size ) ) {
-			$image[0] = $this->get_cdn_domain() . "/$hash/$cloudflare_image_id/w=" . $size;
+			$image[0] = $cf_image . '/w=' . $size;
 			return $image;
 		}
 
@@ -199,9 +201,9 @@ class Cloudflare_Images extends Module {
 			 * In both cases - use the size value.
 			 */
 			if ( ( ! $scaled_size && is_int( $size ) ) || $scaled_size === $size ) {
-				$image[0] = $this->get_cdn_domain() . "/$hash/$cloudflare_image_id/w=" . $size;
+				$image[0] = $cf_image . '/w=' . $size;
 			} else { // Fallback to scaled size.
-				$image[0] = $this->get_cdn_domain() . "/$hash/$cloudflare_image_id/w=" . $scaled_size;
+				$image[0] = $cf_image . '/w=' . $scaled_size;
 			}
 
 			return $image;
@@ -209,7 +211,7 @@ class Cloudflare_Images extends Module {
 
 		// Image without size prefix and no defined sizes - use the maximum available width.
 		if ( ! $variant_image && ! isset( $image[1] ) ) {
-			$image[0] = $this->get_cdn_domain() . "/$hash/$cloudflare_image_id/w=9999";
+			$image[0] = $cf_image . '/w=9999';
 			return $image;
 		}
 
@@ -238,7 +240,7 @@ class Cloudflare_Images extends Module {
 		 */
 		$cloudflare_image_id = apply_filters( 'cf_images_attachment_meta', $cloudflare_image_id, $attachment_id );
 
-		$hash = get_site_option( 'cf-images-hash', '' );
+		$hash = apply_filters( 'cf_images_hash', get_site_option( 'cf-images-hash', '' ) );
 
 		return array( $hash, $cloudflare_image_id );
 	}

@@ -29,17 +29,27 @@ class Custom_Path extends Module {
 	use Traits\Ajax;
 
 	/**
-	 * Init the module.
+	 * Run everything regardless of module status.
 	 *
 	 * @since 1.7.0
 	 */
-	public function init() {
+	public function pre_init() {
 		add_filter( 'cf_images_default_settings', array( $this, 'add_setting' ) );
 		add_action( 'cf_images_save_settings', array( $this, 'on_settings_update' ), 10, 2 );
+		add_filter( 'cf_images_module_status', array( $this, 'module_status' ), 15, 2 );
 
 		if ( wp_doing_ajax() ) {
 			add_action( 'wp_ajax_cf_images_set_custom_path', array( $this, 'ajax_set_custom_path' ) );
 		}
+	}
+
+	/**
+	 * Init the module if enabled.
+	 *
+	 * @since 1.7.0
+	 */
+	public function init() {
+		add_filter( 'cf_images_hash', '__return_empty_string' );
 	}
 
 	/**
@@ -71,6 +81,24 @@ class Custom_Path extends Module {
 		if ( ! isset( $data['custom-path'] ) || ! filter_var( $data['custom-path'], FILTER_VALIDATE_BOOLEAN ) ) {
 			delete_option( 'cf-images-custom-path' );
 		}
+	}
+
+	/**
+	 * This module is only considered enabled when both the option AND the custom path are set.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @param bool   $fallback Default status.
+	 * @param string $module   Module ID.
+	 *
+	 * @return bool
+	 */
+	public function module_status( bool $fallback = false, string $module = '' ): bool {
+		if ( 'custom-path' !== $module ) {
+			return $fallback;
+		}
+
+		return get_option( 'cf-images-custom-path', false );
 	}
 
 	/**

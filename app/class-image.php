@@ -258,11 +258,11 @@ class Image {
 
 		list( $hash, $this->cf_image_id ) = Cloudflare_Images::get_hash_id_url_string( $this->id );
 
-		if ( empty( $this->cf_image_id ) || empty( $hash ) ) {
+		if ( empty( $this->cf_image_id ) || ( empty( $hash ) && ! apply_filters( 'cf_images_module_enabled', false, 'custom-path' ) ) ) {
 			return false;
 		}
 
-		$this->cf_image_url = $this->get_cdn_domain() . "/$hash/$this->cf_image_id/";
+		$this->cf_image_url = trailingslashit( $this->get_cdn_domain() . "/$hash" ) . "$this->cf_image_id/";
 		return "{$this->cf_image_url}w=$width";
 	}
 
