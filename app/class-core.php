@@ -205,6 +205,7 @@ class Core {
 	 * @see Modules\Page_Parser
 	 * @see Modules\Image_Generate
 	 * @see Modules\Logging
+	 * @see Modules\Custom_Path
 	 */
 	private function load_modules() {
 		$loader = Loader::get_instance();
@@ -220,6 +221,7 @@ class Core {
 		$loader->module( 'page-parser' );
 		$loader->module( 'image-generate' );
 		$loader->module( 'logging' );
+		$loader->module( 'custom-path' );
 	}
 
 	/**

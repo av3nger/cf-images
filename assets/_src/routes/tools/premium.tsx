@@ -9,7 +9,7 @@ import { useContext } from 'react';
 import SettingsContext from '../../context/settings';
 import Login from './login';
 import FuzionDisconnect from '../../modules/actions/ai-disconnect';
-import CustomPaths from '../../modules/premium/custom-paths';
+import CustomPath from '../../modules/premium/custom-path';
 
 /**
  * Premium modules.
@@ -25,7 +25,7 @@ const ToolsPremium = () => {
 
 	return (
 		<div className="columns is-multiline">
-			<CustomPaths />
+			<CustomPath />
 			<FuzionDisconnect />
 		</div>
 	);

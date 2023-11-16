@@ -17,13 +17,16 @@ import SettingsContext from './settings';
  * @class
  */
 const SettingsProvider = ({ children }: { children: ReactElement[] }) => {
-	const { cfStatus, fuzion, hideSidebar, settings } = window.CFImages;
+	const { cfStatus, fuzion, hideSidebar, settings, customPath } =
+		window.CFImages;
+
 	const [stats, setStats] = useState(window.CFImages.stats);
 	const [modules, setModules] = useState(settings);
 	const [noticeHidden, hideNotice] = useState(hideSidebar);
 	const [hasFuzion, setFuzion] = useState(fuzion);
 	const [cfConnected, setCfConnected] = useState(cfStatus);
 	const [inProgress, setInProgress] = useState(false);
+	const [domain, setDomain] = useState(window.CFImages.domain);
 
 	const setModule = (module: string, value: boolean) => {
 		const newSettings = { ...modules };
@@ -49,6 +52,9 @@ const SettingsProvider = ({ children }: { children: ReactElement[] }) => {
 				setInProgress,
 				stats,
 				setStats,
+				domain,
+				setDomain,
+				customPath,
 			}}
 		>
 			{children}

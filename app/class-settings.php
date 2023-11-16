@@ -46,6 +46,7 @@ class Settings {
 		'page-parser'        => false,
 		'image-generate'     => false,
 		'logging'            => false,
+		'custom-path'        => false,
 	);
 
 	/**
@@ -205,6 +206,11 @@ class Settings {
 		// Remove custom domain option, if the module is disabled.
 		if ( ! isset( $data['custom-domain'] ) || ! filter_var( $data['custom-domain'], FILTER_VALIDATE_BOOLEAN ) ) {
 			delete_option( 'cf-images-custom-domain' );
+		}
+
+		// Remove custom path option, if the module is disabled.
+		if ( ! isset( $data['custom-path'] ) || ! filter_var( $data['custom-path'], FILTER_VALIDATE_BOOLEAN ) ) {
+			delete_option( 'cf-images-custom-path' );
 		}
 
 		update_option( 'cf-images-settings', $settings, false );
