@@ -14,9 +14,9 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import { post } from '../js/helpers/post';
-import Card from '../components/card';
-import SettingsContext from '../context/settings';
+import { post } from '../../js/helpers/post';
+import Card from '../../components/card';
+import SettingsContext from '../../context/settings';
 
 const CustomDomain = () => {
 	const [done, setDone] = useState(false);

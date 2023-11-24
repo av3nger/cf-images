@@ -12,8 +12,8 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import Card from '../components/card';
-import SettingsContext from '../context/settings';
+import Card from '../../components/card';
+import SettingsContext from '../../context/settings';
 
 const PageParser = () => {
 	const { modules, setModule } = useContext(SettingsContext);
