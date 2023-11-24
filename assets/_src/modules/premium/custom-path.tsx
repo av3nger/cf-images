@@ -57,7 +57,7 @@ const CustomPath = () => {
 		return (
 			<Card
 				icon={mdiAlphabeticalVariant}
-				title={__('Custom image URLs', 'cf-images')}
+				title={__('Custom image URLs & stats', 'cf-images')}
 				wide
 			>
 				<div className="content">
@@ -95,7 +95,7 @@ const CustomPath = () => {
 		<Card
 			icon={mdiAlphabeticalVariant}
 			id="custom-path"
-			title={__('Custom image URLs', 'cf-images')}
+			title={__('Custom image URLs & stats', 'cf-images')}
 			wide
 		>
 			<div className="content">
