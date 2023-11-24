@@ -49,8 +49,8 @@ const Card = ({
 	return (
 		<div
 			className={classNames('column', {
-				'is-half-tablet is-one-third-desktop': !wide,
-				'is-full-tablet is-two-thirds-desktop': wide,
+				'is-half-tablet is-one-third-fullhd': !wide,
+				'is-full-tablet is-two-thirds-fullhd': wide,
 			})}
 		>
 			<div className="card is-flex is-flex-direction-column">
