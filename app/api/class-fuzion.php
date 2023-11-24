@@ -103,7 +103,7 @@ class Fuzion extends Api {
 		if ( isset( $body->message ) ) {
 			// Invalid API key.
 			if ( str_contains( $body->message, 'Unauthenticated' ) ) {
-				$message = __( 'Expired or invalid Image Tools API key. Please disconnect the API and reconnect using a valid key.', 'cf-images' );
+				$message = __( 'Expired or invalid `Image Tools` API key. Please disconnect the API and reconnect using a valid key.', 'cf-images' );
 			} else {
 				$message = $this->maybe_extract_message( $body->message );
 			}

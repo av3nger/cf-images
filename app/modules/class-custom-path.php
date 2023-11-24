@@ -137,6 +137,15 @@ class Custom_Path extends Module {
 
 			$host = wp_parse_url( get_site_url(), PHP_URL_HOST );
 
+			/**
+			 * Allow overriding the host value.
+			 *
+			 * @since 1.7.0
+			 *
+			 * @param string $host Current site hostname.
+			 */
+			$host = apply_filters( 'cf_images_custom_path_host', $host );
+
 			// If we do not have routing setup for the domain, do not set the path, or it will break the images.
 			if ( empty( $status->domains ) || ! in_array( $host, $status->domains, true ) ) {
 				delete_option( 'cf-images-custom-path' );
