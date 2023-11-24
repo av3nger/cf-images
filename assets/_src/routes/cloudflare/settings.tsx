@@ -16,6 +16,7 @@ import CloudflareLogin from './login';
 import CloudflareDisconnect from '../../modules/actions/cf-disconnect';
 import CloudflareStats from '../../modules/cloudflare/cf-stats';
 import Logging from '../../modules/cloudflare/logging';
+import Service from '../../modules/cloudflare/service';
 
 /**
  * Cloudflare Images settings routes.
@@ -34,6 +35,7 @@ const CloudflareSettings = () => {
 				<CustomDomain />
 				<PageParser />
 				<DisableAsync />
+				<Service />
 				<Logging />
 				<CloudflareDisconnect />
 			</div>
