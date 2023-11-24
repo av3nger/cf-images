@@ -97,6 +97,13 @@ If something is still not working for you, please let me know by creating a supp
 
 = 1.7.0 =
 
+Added:
+* Custom URLs module - control your image links
+* Track stats for images served via Cloudflare Images
+
+Changed:
+* UI/UX improvements
+
 Fixed:
 * Notices getting injected into plugin navigation
 * Do not expose internal methods to WP CLI commands

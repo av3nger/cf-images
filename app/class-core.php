@@ -159,8 +159,9 @@ class Core {
 		$custom_domain = get_option( 'cf-images-custom-domain', false );
 
 		if ( $custom_domain ) {
-			$domain  = wp_http_validate_url( $custom_domain ) ? $custom_domain : get_site_url();
-			$domain .= '/cdn-cgi/imagedelivery';
+			$domain      = trailingslashit( wp_http_validate_url( $custom_domain ) ? $custom_domain : get_site_url() );
+			$custom_path = get_option( 'cf-images-custom-path', null );
+			$domain     .= $custom_path ?? 'cdn-cgi/imagedelivery';
 
 			$this->cdn_domain = $domain;
 		}
@@ -205,6 +206,7 @@ class Core {
 	 * @see Modules\Page_Parser
 	 * @see Modules\Image_Generate
 	 * @see Modules\Logging
+	 * @see Modules\Custom_Path
 	 */
 	private function load_modules() {
 		$loader = Loader::get_instance();
@@ -220,6 +222,7 @@ class Core {
 		$loader->module( 'page-parser' );
 		$loader->module( 'image-generate' );
 		$loader->module( 'logging' );
+		$loader->module( 'custom-path' );
 	}
 
 	/**

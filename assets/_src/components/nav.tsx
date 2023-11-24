@@ -61,6 +61,14 @@ const Nav = () => {
 						{__('AI & Compression', 'cf-images')}
 					</NavLink>
 				</li>
+				<li>
+					<NavLink
+						to="/tools/premium"
+						className={({ isActive }) => getClass(isActive)}
+					>
+						{__('Pro Features', 'cf-images')}
+					</NavLink>
+				</li>
 			</ul>
 
 			{(!noticeHidden || ('logging' in modules && modules.logging)) && (

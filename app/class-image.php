@@ -141,14 +141,11 @@ class Image {
 	 * @since 1.5.0
 	 */
 	private function check_if_cf_image() {
-		if (
-			false === strpos( $this->get_src(), 'imagedelivery.net' ) &&
-			false === strpos( $this->get_src(), 'cdn-cgi/imagedelivery' )
-		) {
+		$domain = $this->get_cdn_domain();
+		if ( false === strpos( $this->get_src(), $domain ) ) {
 			return;
 		}
 
-		$domain = $this->get_cdn_domain();
 		$domain = str_replace( '.', '\.', $domain );
 
 		if ( preg_match( '#(' . $domain . '/.*?/)w=(\d+)#', $this->get_src(), $matches ) ) {
@@ -219,10 +216,7 @@ class Image {
 		 * to the site URL, this will cause all images to be flagged. Instead, we check that the image is either
 		 * served from imagedelivery.net or has cdn-cgi/imagedelivery part in the URL.
 		 */
-		if (
-			false !== strpos( $image_url, 'imagedelivery.net' ) ||
-			false !== strpos( $image_url, 'cdn-cgi/imagedelivery' )
-		) {
+		if ( false !== strpos( $image_url, $this->get_cdn_domain() ) ) {
 			return false;
 		}
 
@@ -264,11 +258,11 @@ class Image {
 
 		list( $hash, $this->cf_image_id ) = Cloudflare_Images::get_hash_id_url_string( $this->id );
 
-		if ( empty( $this->cf_image_id ) || empty( $hash ) ) {
+		if ( empty( $this->cf_image_id ) || ( empty( $hash ) && ! apply_filters( 'cf_images_module_enabled', false, 'custom-path' ) ) ) {
 			return false;
 		}
 
-		$this->cf_image_url = $this->get_cdn_domain() . "/$hash/$this->cf_image_id/";
+		$this->cf_image_url = trailingslashit( $this->get_cdn_domain() . "/$hash" ) . "$this->cf_image_id/";
 		return "{$this->cf_image_url}w=$width";
 	}
 

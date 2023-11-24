@@ -13,7 +13,7 @@ import CustomDomain from '../../modules/custom-domain';
 import DisableAsync from '../../modules/disable-async';
 import PageParser from '../../modules/page-parser';
 import CloudflareLogin from './login';
-import Disconnect from './disconnect';
+import CloudflareDisconnect from '../../modules/actions/cf-disconnect';
 import CloudflareStats from '../../modules/cf-stats';
 import Logging from '../../modules/logging';
 
@@ -35,7 +35,7 @@ const CloudflareSettings = () => {
 				<PageParser />
 				<DisableAsync />
 				<Logging />
-				<Disconnect />
+				<CloudflareDisconnect />
 			</div>
 		);
 	}

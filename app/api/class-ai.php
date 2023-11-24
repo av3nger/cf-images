@@ -95,4 +95,20 @@ class Ai extends Fuzion {
 
 		throw new Exception( esc_html__( 'Unable to generate image.', 'cf-images' ) );
 	}
+
+	/**
+	 * Get Cloudflare worker status.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @throws Exception Exception if unable to get status.
+	 *
+	 * @return array
+	 */
+	public function get_cf_status(): array {
+		$this->set_method( 'GET' );
+		$this->set_endpoint( 'cf/status' );
+
+		return (array) $this->request();
+	}
 }

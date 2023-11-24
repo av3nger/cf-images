@@ -33,6 +33,8 @@ interface SettingsContextType {
     setInProgress: (status: boolean) => void;
     stats: StatsType;
     setStats: (stats: StatsType) => void;
+    domain: string;
+    setDomain: (domain: string) => void;
 }
 
 interface StatsType {
