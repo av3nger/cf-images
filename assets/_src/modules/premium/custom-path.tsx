@@ -1,10 +1,9 @@
 /**
  * External dependencies
  */
-import { useContext, useState } from 'react';
-import * as classNames from 'classnames';
+import { useContext, useEffect, useState } from 'react';
 import Icon from '@mdi/react';
-import { mdiCheck, mdiAlphabeticalVariant } from '@mdi/js';
+import { mdiOpenInNew, mdiAlphabeticalVariant } from '@mdi/js';
 
 /**
  * WordPress dependencies
@@ -19,22 +18,39 @@ import SettingsContext from '../../context/settings';
 import { post } from '../../js/helpers/post';
 
 const CustomPath = () => {
-	const { customPath, domain, modules } = useContext(SettingsContext);
+	const { domain, modules } = useContext(SettingsContext);
 
-	const [done, setDone] = useState(false);
-	const [saving, setSaving] = useState(false);
-	const [path, setPath] = useState(customPath);
+	const [error, setError] = useState('');
+	const [loading, setLoading] = useState(true);
+	const [path, setPath] = useState('');
 
-	const savePath = () => {
-		setSaving(true);
+	useEffect(() => {
+		setError('');
+		getStatus();
+	}, []);
 
-		post('cf_images_set_custom_path', { path })
-			.then(() => {
-				setSaving(false);
-				setDone(true);
-				setTimeout(() => setDone(false), 2000);
+	const getStatus = (force = false) => {
+		post('cf_images_get_cf_status', { force })
+			.then((response: ApiResponse) => {
+				if (!response.success && response.data) {
+					setError(response.data);
+					return;
+				}
+
+				if ('string' === typeof response.data) {
+					setPath(response.data);
+				} else if ('path' in response.data) {
+					setPath(response.data.path);
+				}
 			})
-			.catch(window.console.log);
+			.catch(window.console.log)
+			.finally(() => setLoading(false));
+	};
+
+	const reSyncStatus = () => {
+		setLoading(true);
+		setError('');
+		getStatus(true);
 	};
 
 	if (('custom-domain' in modules && !modules['custom-domain']) || !domain) {
@@ -54,6 +70,15 @@ const CustomPath = () => {
 							)}
 						</li>
 						<li>{__('Set a custom domain', 'cf-images')}</li>
+						<li>
+							<a
+								href="https://getfuzion.io/cloudflare"
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								{__('Set up a Cloudflare worker')}
+							</a>
+						</li>
 					</ol>
 				</div>
 			</Card>
@@ -76,7 +101,7 @@ const CustomPath = () => {
 			<div className="content">
 				<p>
 					{__('Format', 'cf-images')}:&nbsp;
-					{format}
+					{loading ? __('Updating from API...', 'cf-images') : format}
 				</p>
 				<p>
 					{__(
@@ -86,45 +111,54 @@ const CustomPath = () => {
 				</p>
 
 				{'custom-path' in modules && modules['custom-path'] && (
-					<div className="field has-addons">
-						<div
-							className={classNames('control is-expanded', {
-								'has-icons-right': done,
-							})}
-						>
-							<label
-								htmlFor="custom-path"
-								className="screen-reader-text"
+					<>
+						<div className="field has-addons">
+							<div className="control is-expanded">
+								<label
+									htmlFor="custom-path"
+									className="screen-reader-text"
+								>
+									{__('Set custom domain', 'cf-images')}
+								</label>
+								<input
+									className="input is-fullwidth"
+									disabled
+									id="custom-path"
+									onChange={(e) => setPath(e.target.value)}
+									placeholder="cf-images"
+									type="text"
+									value={path}
+								/>
+								{error && (
+									<p className="help is-danger">{error}</p>
+								)}
+							</div>
+							<div className="control">
+								<button
+									className="button is-info"
+									disabled={loading}
+									onClick={reSyncStatus}
+								>
+									{__('Re-sync', 'cf-images')}
+								</button>
+							</div>
+						</div>
+						{!loading && !path && (
+							<a
+								className="button is-link is-outlined is-small"
+								href="https://getfuzion.io/cloudflare"
+								rel="noopener noreferrer"
+								target="_blank"
 							>
-								{__('Set custom domain', 'cf-images')}
-							</label>
-							<input
-								className={classNames('input is-fullwidth', {
-									'is-success': done,
-								})}
-								id="custom-path"
-								onChange={(e) => setPath(e.target.value)}
-								placeholder="cf-images"
-								type="text"
-								value={path}
-							/>
-							{done && (
-								<span className="icon is-small is-right">
-									<Icon path={mdiCheck} size={1} />
+								<span>
+									{__('Setup Cloudflare worker', 'cf-images')}
 								</span>
-							)}
-						</div>
-						<div className="control">
-							<button
-								className={classNames('button is-info', {
-									'is-loading': saving,
-								})}
-								onClick={savePath}
-							>
-								{__('Set', 'cf-images')}
-							</button>
-						</div>
-					</div>
+								<span className="icon">
+									<Icon path={mdiOpenInNew} size={0.6} />
+								</span>
+							</a>
+						)}
+					</>
 				)}
 			</div>
 		</Card>

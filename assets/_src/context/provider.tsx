@@ -17,8 +17,7 @@ import SettingsContext from './settings';
  * @class
  */
 const SettingsProvider = ({ children }: { children: ReactElement[] }) => {
-	const { cfStatus, fuzion, hideSidebar, settings, customPath } =
-		window.CFImages;
+	const { cfStatus, fuzion, hideSidebar, settings } = window.CFImages;
 
 	const [stats, setStats] = useState(window.CFImages.stats);
 	const [modules, setModules] = useState(settings);
@@ -54,7 +53,6 @@ const SettingsProvider = ({ children }: { children: ReactElement[] }) => {
 				setStats,
 				domain,
 				setDomain,
-				customPath,
 			}}
 		>
 			{children}

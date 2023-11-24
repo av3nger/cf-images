@@ -99,6 +99,7 @@ If something is still not working for you, please let me know by creating a supp
 
 Added:
 * Custom URLs module - control your image links
+* Track stats for images served via Cloudflare Images
 
 Changed:
 * UI/UX improvements

@@ -18,7 +18,6 @@ interface CFImages {
     nonce: string;
     settings: Object;
     stats: StatsType;
-    customPath: string;
 }
 
 interface SettingsContextType {
@@ -36,7 +35,6 @@ interface SettingsContextType {
     setStats: (stats: StatsType) => void;
     domain: string;
     setDomain: (domain: string) => void;
-    customPath: string;
 }
 
 interface StatsType {

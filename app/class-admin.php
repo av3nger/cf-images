@@ -135,7 +135,6 @@ class Admin {
 				'hideSidebar' => get_site_option( 'cf-images-hide-sidebar' ),
 				'fuzion'      => $this->is_fuzion_api_connected(),
 				'stats'       => $this->get_stats(),
-				'customPath'  => get_option( 'cf-images-custom-path', '' ),
 			)
 		);
 	}

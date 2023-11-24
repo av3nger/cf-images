@@ -14,7 +14,9 @@
 
 namespace CF_Images\App\Modules;
 
+use CF_Images\App\Api\Ai;
 use CF_Images\App\Traits;
+use Exception;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -39,7 +41,7 @@ class Custom_Path extends Module {
 		add_filter( 'cf_images_module_status', array( $this, 'module_status' ), 15, 2 );
 
 		if ( wp_doing_ajax() ) {
-			add_action( 'wp_ajax_cf_images_set_custom_path', array( $this, 'ajax_set_custom_path' ) );
+			add_action( 'wp_ajax_cf_images_get_cf_status', array( $this, 'ajax_get_cloudflare_status' ) );
 		}
 	}
 
@@ -102,21 +104,53 @@ class Custom_Path extends Module {
 	}
 
 	/**
-	 * Set custom path.
+	 * Get Cloudflare workers status.
 	 *
 	 * @since 1.7.0
 	 */
-	public function ajax_set_custom_path() {
-		$this->check_ajax_request();
+	public function ajax_get_cloudflare_status() {
+		$this->check_ajax_request( true );
 
 		$data = filter_input( INPUT_POST, 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 
-		if ( ! isset( $data['path'] ) ) {
-			delete_option( 'cf-images-custom-path' );
-		} else {
-			update_option( 'cf-images-custom-path', sanitize_key( $data['path'] ), false );
+		// Exit early if we have a cached status.
+		$status = get_transient( 'cf-images-custom-path' );
+		if ( false !== $status && ! filter_var( $data['force'], FILTER_VALIDATE_BOOLEAN ) ) {
+			wp_send_json_success( $status );
+			return;
 		}
 
-		wp_send_json_success();
+		try {
+			$ai_api = new Ai();
+			$status = $ai_api->get_cf_status();
+		} catch ( Exception $e ) {
+			wp_send_json_error( $e->getMessage() );
+			return;
+		}
+
+		// Use the path from the first worker.
+		if ( empty( $status ) ) {
+			delete_option( 'cf-images-custom-path' );
+			set_transient( 'cf-images-custom-path', '', HOUR_IN_SECONDS );
+		} else {
+			$status = reset( $status );
+
+			$host = wp_parse_url( get_site_url(), PHP_URL_HOST );
+
+			// If we do not have routing setup for the domain, do not set the path, or it will break the images.
+			if ( empty( $status->domains ) || ! in_array( $host, $status->domains, true ) ) {
+				delete_option( 'cf-images-custom-path' );
+				set_transient( 'cf-images-custom-path', '', HOUR_IN_SECONDS );
+				wp_send_json_error( esc_html__( 'No routes found on Cloudflare worker. Please add a route.', 'cf-images' ) );
+				return;
+			}
+
+			if ( ! empty( $status->path ) ) {
+				update_option( 'cf-images-custom-path', $status->path, false );
+				set_transient( 'cf-images-custom-path', $status->path, HOUR_IN_SECONDS );
+			}
+		}
+
+		wp_send_json_success( $status );
 	}
 }
