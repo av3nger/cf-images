@@ -98,6 +98,7 @@ If something is still not working for you, please let me know by creating a supp
 = 1.7.0 =
 
 Added:
+* Fuzion CDN integration
 * Service tools module - reset ignored images
 * Custom URLs module - control your image links
 * Track stats for images served via Cloudflare Images
