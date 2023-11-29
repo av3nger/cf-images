@@ -208,6 +208,7 @@ class Core {
 	 * @see Modules\Logging
 	 * @see Modules\Custom_Path
 	 * @see Modules\Service
+	 * @see Modules\CDN
 	 */
 	private function load_modules() {
 		$loader = Loader::get_instance();
@@ -225,6 +226,7 @@ class Core {
 		$loader->module( 'logging' );
 		$loader->module( 'custom-path' );
 		$loader->module( 'service' );
+		$loader->module( 'cdn' );
 	}
 
 	/**

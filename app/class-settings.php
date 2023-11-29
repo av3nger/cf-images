@@ -193,6 +193,8 @@ class Settings {
 		// Make sure we add any options that have been added to the DEFAULTS array.
 		$settings = wp_parse_args( $settings, self::get_defaults() );
 
+		do_action( 'cf_images_save_settings', $settings, $data );
+
 		foreach ( $settings as $key => $value ) {
 			// Skip unsupported settings.
 			if ( ! isset( $data[ $key ] ) ) {
@@ -206,8 +208,6 @@ class Settings {
 		if ( ! isset( $data['custom-domain'] ) || ! filter_var( $data['custom-domain'], FILTER_VALIDATE_BOOLEAN ) ) {
 			delete_option( 'cf-images-custom-domain' );
 		}
-
-		do_action( 'cf_images_save_settings', $settings, $data );
 
 		update_option( 'cf-images-settings', $settings, false );
 		wp_send_json_success();

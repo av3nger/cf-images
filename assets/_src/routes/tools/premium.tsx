@@ -10,6 +10,7 @@ import SettingsContext from '../../context/settings';
 import Login from './login';
 import FuzionDisconnect from '../../modules/actions/ai-disconnect';
 import CustomPath from '../../modules/premium/custom-path';
+import CDN from '../../modules/premium/cdn';
 
 /**
  * Premium modules.
@@ -26,6 +27,7 @@ const ToolsPremium = () => {
 	return (
 		<div className="columns is-multiline">
 			<CustomPath />
+			<CDN />
 			<FuzionDisconnect />
 		</div>
 	);
