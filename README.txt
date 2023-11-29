@@ -31,6 +31,7 @@ Offload your media library to Cloudflare Images! Let our plugin take charge:
 
 = But wait, there's more! =
 
+Image CDN - deliver images from a global network of servers.
 Image AI - tag, caption and generate new images using AI.
 Compression - optimize JPEG/PNG images to decrease file size without compromising visual quality.
 
