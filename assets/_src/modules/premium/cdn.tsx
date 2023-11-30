@@ -100,8 +100,12 @@ const CDN = () => {
 			.finally(() => setPurging(false));
 	};
 
+	// Disable module if full-offload is enabled.
+	const id =
+		'full-offload' in modules && modules['full-offload'] ? null : 'cdn';
+
 	return (
-		<Card icon={mdiWeb} id="cdn" title={__('Image CDN', 'cf-images')}>
+		<Card icon={mdiWeb} id={id} title={__('Image CDN', 'cf-images')}>
 			<div className="content">
 				<p>
 					{__(
@@ -113,6 +117,17 @@ const CDN = () => {
 				{error && (
 					<div className="notification is-warning">
 						<p>{error}</p>
+					</div>
+				)}
+
+				{!id && (
+					<div className="notification is-warning">
+						<p>
+							{__(
+								'CDN will not work when the experimental "Full offload" feature is enabled.',
+								'cf-images'
+							)}
+						</p>
 					</div>
 				)}
 
