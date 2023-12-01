@@ -105,6 +105,15 @@ class Image {
 	protected $width = 9999;
 
 	/**
+	 * CDN status (based on API).
+	 *
+	 * @since 1.7.0
+	 *
+	 * @var bool|string $active CDN hostname if active, false otherwise.
+	 */
+	protected $cdn_active = false;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 1.5.0
@@ -118,6 +127,8 @@ class Image {
 		$this->src    = $src;
 		$this->srcset = $srcset;
 
+		$this->cdn_active = get_option( 'cf-images-cdn-enabled', false );
+
 		$this->get_attachment_id();
 		$this->check_if_cf_image();
 		$this->process_image();
@@ -129,6 +140,10 @@ class Image {
 	 * @since 1.5.0
 	 */
 	private function get_attachment_id() {
+		if ( $this->cdn_active ) {
+			return;
+		}
+
 		if ( preg_match( '/wp-image-(\d+)/i', $this->image, $class_id ) ) {
 			$this->id = absint( $class_id[1] );
 			do_action( 'cf_images_log', 'Found attachment ID %s from image class name.', $this->id );
@@ -141,6 +156,10 @@ class Image {
 	 * @since 1.5.0
 	 */
 	private function check_if_cf_image() {
+		if ( $this->cdn_active ) {
+			return;
+		}
+
 		$domain = $this->get_cdn_domain();
 		if ( false === strpos( $this->get_src(), $domain ) ) {
 			return;
@@ -186,15 +205,40 @@ class Image {
 		}
 
 		foreach ( $urls[0] as $link ) {
-			$src = $this->generate_url( $link, $is_src );
-			if ( $src ) {
-				$image = str_replace( $link, $src, $this->image );
+			if ( $this->cdn_active ) {
+				/**
+				 * Parsing each image individually is not required, however, if there's ever a request to add
+				 * the CDN on top of Cloudflare Images, which might be a decent idea, this prevents a refactor.
+				 */
+				$src = $this->replace_cdn_url( $link );
+			} else {
+				$src = $this->generate_url( $link, $is_src );
 			}
-		}
 
-		if ( isset( $image ) ) {
-			$this->processed = $image;
+			if ( $src ) {
+				$image = str_replace( $link, $src, $this->processed ?: $this->image ); // phpcs:ignore Universal.Operators.DisallowShortTernary
+			}
+
+			if ( isset( $image ) ) {
+				$this->processed = $image;
+			}
+
+			unset( $image );
 		}
+	}
+
+	/**
+	 * Add the CDN domain to image URLs.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @param string $image_url Image URL.
+	 *
+	 * @return string
+	 */
+	private function replace_cdn_url( string $image_url ): string {
+		$domain = wp_parse_url( get_site_url(), PHP_URL_HOST );
+		return str_replace( $domain, $this->cdn_active, $image_url );
 	}
 
 	/**

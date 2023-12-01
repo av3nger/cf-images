@@ -4,6 +4,11 @@
 import { useContext } from 'react';
 
 /**
+ * WordPress dependencies
+ */
+import { __ } from '@wordpress/i18n';
+
+/**
  * Internal dependencies
  */
 import SettingsContext from '../../context/settings';
@@ -24,11 +29,23 @@ import Service from '../../modules/cloudflare/service';
  * @class
  */
 const CloudflareSettings = () => {
-	const { cfConnected } = useContext(SettingsContext);
+	const { cfConnected, cdnEnabled } = useContext(SettingsContext);
 
 	if (cfConnected) {
 		return (
 			<div className="columns is-multiline">
+				{cdnEnabled && (
+					<div className="column is-full">
+						<div className="notification is-warning">
+							<p>
+								{__(
+									'CDN module is enabled. Cloudflare Images functionality has been disable.',
+									'cf-images'
+								)}
+							</p>
+						</div>
+					</div>
+				)}
 				<CloudflareStats />
 				<AutoOffload />
 				<CustomId />

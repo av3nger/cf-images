@@ -156,7 +156,7 @@ abstract class Module {
 	public function is_module_enabled( bool $fallback = false, string $module = '' ): bool {
 		// Core modules cannot be disabled.
 		if ( $this->core && empty( $module ) ) {
-			return true;
+			return apply_filters( 'cf_images_core_module_status', true, $this->module );
 		}
 
 		if ( empty( $module ) ) {

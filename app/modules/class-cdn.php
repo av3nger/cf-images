@@ -35,6 +35,7 @@ class CDN extends Module {
 	 */
 	public function pre_init() {
 		add_filter( 'cf_images_default_settings', array( $this, 'add_setting' ) );
+		add_filter( 'cf_images_core_module_status', array( $this, 'manage_core_modules' ), 10, 2 );
 	}
 
 	/**
@@ -43,6 +44,8 @@ class CDN extends Module {
 	 * @since 1.7.0
 	 */
 	public function init() {
+		add_filter( 'cf_images_module_status', array( $this, 'manage_modules' ), 10, 2 );
+
 		if ( wp_doing_ajax() ) {
 			add_action( 'wp_ajax_cf_image_enable_cdn', array( $this, 'enable_cdn' ) );
 			add_action( 'wp_ajax_cf_image_purge_cdn_cache', array( $this, 'purge_cache' ) );
@@ -66,6 +69,43 @@ class CDN extends Module {
 		return $defaults;
 	}
 
+
+	/**
+	 * Disable Cloudflare images, if CDN is enabled.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @param bool   $status Current status.
+	 * @param string $module Module ID.
+	 *
+	 * @return bool
+	 */
+	public function manage_core_modules( bool $status, string $module ): bool {
+		if ( 'cloudflare-images' !== $module || ! $this->is_module_enabled() ) {
+			return $status;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Page parser module is required for CDN.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @param bool   $status Current status.
+	 * @param string $module Module ID.
+	 *
+	 * @return bool
+	 */
+	public function manage_modules( bool $status, string $module ): bool {
+		if ( 'page_parser' !== $module ) {
+			return $status;
+		}
+
+		return true;
+	}
+
 	/**
 	 * Toggle CDN on settings update.
 	 *
@@ -77,7 +117,6 @@ class CDN extends Module {
 		// Exit early, if zone is already created.
 		if ( get_option( 'cf-images-cdn-enabled', false ) ) {
 			wp_send_json_success();
-			return;
 		}
 
 		try {
@@ -85,9 +124,9 @@ class CDN extends Module {
 			if ( ! isset( $response['code'] ) ) {
 				wp_send_json_error( esc_html__( 'Error enabling CDN', 'cf-images' ) );
 			} else {
-				if ( 201 === $response['code'] ) {
-					// Tracks the successful creation of the CDN zones.
-					update_option( 'cf-images-cdn-enabled', true, false );
+				// Tracks the successful creation of the CDN zones.
+				if ( 201 === $response['code'] && ! empty( $response['zone'] ) ) {
+					update_option( 'cf-images-cdn-enabled', $response['zone'], false );
 				}
 
 				wp_send_json_success( $response['code'] );

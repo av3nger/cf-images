@@ -213,6 +213,7 @@ class Core {
 	private function load_modules() {
 		$loader = Loader::get_instance();
 
+		$loader->module( 'cdn' ); // This should be loaded before other modules.
 		$loader->module( 'auto-offload' );
 		$loader->module( 'auto-resize' );
 		$loader->module( 'cloudflare-images' ); // Core module.
@@ -226,7 +227,6 @@ class Core {
 		$loader->module( 'logging' );
 		$loader->module( 'custom-path' );
 		$loader->module( 'service' );
-		$loader->module( 'cdn' );
 	}
 
 	/**

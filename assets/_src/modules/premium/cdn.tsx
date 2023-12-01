@@ -25,13 +25,13 @@ import SettingsContext from '../../context/settings';
 import { post } from '../../js/helpers/post';
 
 const CDN = () => {
-	const { modules, setModule } = useContext(SettingsContext);
+	const { cdnEnabled, modules, setModule } = useContext(SettingsContext);
 
 	const [activating, setActivating] = useState(false);
 	const [error, setError] = useState('');
 	const [done, setDone] = useState(false);
 	const [purgeSuccess, setPurgeSuccess] = useState(false);
-	const [purging, setPurging] = useState(false);
+	const [loading, setLoading] = useState(false);
 
 	// We need to skip the initial mount.
 	function useEffectAfterMount(
@@ -48,7 +48,14 @@ const CDN = () => {
 		}, dependencies);
 	}
 
-	const activate = () => {
+	/**
+	 * Activate the CDN or update the status.
+	 *
+	 * @param refresh Is this a status update?
+	 */
+	const activate = (refresh: boolean = false) => {
+		setLoading(true);
+
 		post('cf_image_enable_cdn')
 			.then((response: ApiResponse) => {
 				if (!response.success && response.data) {
@@ -61,17 +68,21 @@ const CDN = () => {
 				// Zone is active.
 				if (201 === response.data) {
 					setActivating(false);
-					setDone(true);
-					setTimeout(() => setDone(false), 5000);
+
+					if (!refresh) {
+						setDone(true);
+						setTimeout(() => setDone(false), 5000);
+					}
 				}
 
 				// Still activating. Retry in 5 seconds.
-				if (202 === response.data) {
+				if (202 === response.data && !refresh) {
 					setActivating(true);
 					setTimeout(() => activate(), 5000);
 				}
 			})
-			.catch(window.console.log);
+			.catch(window.console.log)
+			.finally(() => setLoading(false));
 	};
 
 	// Run on module status change.
@@ -82,9 +93,17 @@ const CDN = () => {
 		}
 	}, [modules]);
 
+	useEffect(() => {
+		// Update the status on each refresh, but only if cdn is active (not just enabled).
+		if ('cdn' in modules && modules.cdn && cdnEnabled && !loading) {
+			setLoading(true);
+			activate(true);
+		}
+	}, []);
+
 	const purgeCache = () => {
 		setError('');
-		setPurging(true);
+		setLoading(true);
 
 		post('cf_image_purge_cdn_cache')
 			.then((response: ApiResponse) => {
@@ -97,7 +116,7 @@ const CDN = () => {
 				}
 			})
 			.catch(window.console.log)
-			.finally(() => setPurging(false));
+			.finally(() => setLoading(false));
 	};
 
 	// Disable module if full-offload is enabled.
@@ -114,6 +133,17 @@ const CDN = () => {
 					)}
 				</p>
 
+				<p>
+					{__('Status:', 'cf-images')}&nbsp;
+					{activating && !loading && __('Activating...', 'cf-images')}
+					{loading && __('Updating status...', 'cf-images')}
+					{!activating &&
+						!loading &&
+						!done &&
+						!error &&
+						__('Active', 'cf-images')}
+				</p>
+
 				{error && (
 					<div className="notification is-warning">
 						<p>{error}</p>
@@ -125,17 +155,6 @@ const CDN = () => {
 						<p>
 							{__(
 								'CDN will not work when the experimental "Full offload" feature is enabled.',
-								'cf-images'
-							)}
-						</p>
-					</div>
-				)}
-
-				{activating && (
-					<div className="notification is-info">
-						<p>
-							{__(
-								'CDN is activating. Might take a minute...',
 								'cf-images'
 							)}
 						</p>
@@ -157,7 +176,7 @@ const CDN = () => {
 				{'cdn' in modules && modules.cdn && (
 					<button
 						className={classNames('button is-small', {
-							'is-loading': purging,
+							'is-loading': loading,
 						})}
 						onClick={purgeCache}
 					>
