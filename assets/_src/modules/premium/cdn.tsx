@@ -50,10 +50,8 @@ const CDN = () => {
 
 	/**
 	 * Activate the CDN or update the status.
-	 *
-	 * @param refresh Is this a status update?
 	 */
-	const activate = (refresh: boolean = false) => {
+	const activate = () => {
 		setLoading(true);
 
 		post('cf_image_enable_cdn')
@@ -68,15 +66,12 @@ const CDN = () => {
 				// Zone is active.
 				if (201 === response.data) {
 					setActivating(false);
-
-					if (!refresh) {
-						setDone(true);
-						setTimeout(() => setDone(false), 5000);
-					}
+					setDone(true);
+					setTimeout(() => setDone(false), 5000);
 				}
 
 				// Still activating. Retry in 5 seconds.
-				if (202 === response.data && !refresh) {
+				if (202 === response.data) {
 					setActivating(true);
 					setTimeout(() => activate(), 5000);
 				}
@@ -97,7 +92,17 @@ const CDN = () => {
 		// Update the status on each refresh, but only if cdn is active (not just enabled).
 		if ('cdn' in modules && modules.cdn && cdnEnabled && !loading) {
 			setLoading(true);
-			activate(true);
+
+			post('cf_image_cdn_status')
+				.then((response: ApiResponse) => {
+					if (!response.success && response.data) {
+						setModule('cdn', false);
+						setError(response.data);
+						setTimeout(() => setError(''), 10000);
+					}
+				})
+				.catch(window.console.log)
+				.finally(() => setLoading(false));
 		}
 	}, []);
 

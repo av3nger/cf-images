@@ -147,4 +147,22 @@ class Ai extends Fuzion {
 
 		return (array) $this->request();
 	}
+
+	/**
+	 * Get CDN status.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @param string $site Site URL.
+	 *
+	 * @return array
+	 * @throws Exception Exception on error.
+	 */
+	public function get_cdn_status( string $site ): array {
+		$this->set_method( 'GET' );
+		$this->set_endpoint( 'cdn/status' );
+		$this->set_request_body( wp_json_encode( array( 'site' => $site ) ) );
+
+		return (array) $this->request();
+	}
 }
