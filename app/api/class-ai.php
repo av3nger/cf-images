@@ -159,7 +159,7 @@ class Ai extends Fuzion {
 	 * @throws Exception Exception on error.
 	 */
 	public function get_cdn_status( string $site ): array {
-		$this->set_method( 'GET' );
+		$this->set_method( 'POST' );
 		$this->set_endpoint( 'cdn/status' );
 		$this->set_request_body( wp_json_encode( array( 'site' => $site ) ) );
 
