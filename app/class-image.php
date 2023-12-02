@@ -216,7 +216,7 @@ class Image {
 			}
 
 			if ( $src ) {
-				$image = str_replace( $link, $src, $this->processed ?: $this->image ); // phpcs:ignore Universal.Operators.DisallowShortTernary
+				$image = str_replace( $link, $src, empty( $this->processed ) ? $this->image : $this->processed );
 			}
 
 			if ( isset( $image ) ) {
