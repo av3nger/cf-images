@@ -103,7 +103,7 @@ class CDN extends Module {
 	 * @return bool
 	 */
 	public function manage_modules( bool $status, string $module ): bool {
-		if ( 'page_parser' !== $module ) {
+		if ( 'page-parser' !== $module ) {
 			return $status;
 		}
 
