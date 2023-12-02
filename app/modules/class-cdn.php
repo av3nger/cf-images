@@ -114,11 +114,6 @@ class CDN extends Module {
 	public function enable_cdn() {
 		$this->check_ajax_request( true );
 
-		// Exit early, if zone is already created.
-		if ( get_option( 'cf-images-cdn-enabled', false ) ) {
-			wp_send_json_success();
-		}
-
 		try {
 			$response = ( new Ai() )->enable_cdn( get_site_url() );
 			if ( ! isset( $response['code'] ) ) {
