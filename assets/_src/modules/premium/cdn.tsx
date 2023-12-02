@@ -133,17 +133,6 @@ const CDN = () => {
 					)}
 				</p>
 
-				<p>
-					{__('Status:', 'cf-images')}&nbsp;
-					{activating && !loading && __('Activating...', 'cf-images')}
-					{loading && __('Updating status...', 'cf-images')}
-					{!activating &&
-						!loading &&
-						!done &&
-						!error &&
-						__('Active', 'cf-images')}
-				</p>
-
 				{error && (
 					<div className="notification is-warning">
 						<p>{error}</p>
@@ -174,14 +163,27 @@ const CDN = () => {
 				)}
 
 				{'cdn' in modules && modules.cdn && (
-					<button
-						className={classNames('button is-small', {
-							'is-loading': loading,
-						})}
-						onClick={purgeCache}
-					>
-						{__('Purge cache', 'cf-images')}
-					</button>
+					<>
+						<p>
+							{__('Status:', 'cf-images')}&nbsp;
+							{activating &&
+								!loading &&
+								__('Activating...', 'cf-images')}
+							{loading && __('Updating status...', 'cf-images')}
+							{!activating &&
+								!loading &&
+								__('Active', 'cf-images')}
+						</p>
+
+						<button
+							className={classNames('button is-small', {
+								'is-loading': loading,
+							})}
+							onClick={purgeCache}
+						>
+							{__('Purge cache', 'cf-images')}
+						</button>
+					</>
 				)}
 			</div>
 		</Card>
