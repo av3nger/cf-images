@@ -121,6 +121,7 @@ class CDN extends Module {
 	public function on_settings_update( array $settings, array $data ) {
 		if ( ! isset( $data['cdn'] ) || ! filter_var( $data['cdn'], FILTER_VALIDATE_BOOLEAN ) ) {
 			self::remove_cron();
+			delete_option( 'cf-images-cdn-enabled' );
 		}
 	}
 
