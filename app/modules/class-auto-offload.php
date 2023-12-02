@@ -14,7 +14,9 @@
 
 namespace CF_Images\App\Modules;
 
+use CF_Images\App\Media;
 use CF_Images\App\Traits\Helpers;
+use WP_Post;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -35,6 +37,7 @@ class Auto_Offload extends Module {
 	 */
 	public function init() {
 		add_action( 'admin_init', array( $this, 'auto_offload' ) );
+		add_action( 'rest_insert_attachment', array( $this, 'handle_api_upload' ) );
 	}
 
 	/**
@@ -49,5 +52,31 @@ class Auto_Offload extends Module {
 		} else {
 			add_filter( 'wp_async_wp_generate_attachment_metadata', array( $this->media(), 'upload_image' ), 10, 3 );
 		}
+	}
+
+	/**
+	 * Fires after a single attachment is created or updated via the REST API.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @param WP_Post $attachment Inserted or updated attachment object.
+	 */
+	public function handle_api_upload( WP_Post $attachment ) {
+		if ( ! $this->is_module_enabled( false, 'offload-rest-api' ) ) {
+			return;
+		}
+
+		$file = get_attached_file( $attachment->ID );
+
+		if ( empty( $file ) ) {
+			return;
+		}
+
+		$metadata = array(
+			'file' => $file,
+		);
+
+		// We need to call upload_image() this way, because it is not available via $this->media().
+		( new Media() )->upload_image( $metadata, $attachment->ID );
 	}
 }

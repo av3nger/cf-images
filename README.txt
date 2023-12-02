@@ -103,6 +103,7 @@ Added:
 * Service tools module - reset ignored images
 * Custom URLs module - control your image links
 * Track stats for images served via Cloudflare Images
+* REST API integration module
 
 Changed:
 * UI/UX improvements

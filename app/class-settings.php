@@ -35,6 +35,7 @@ class Settings {
 	 */
 	const DEFAULTS = array(
 		'auto-offload'       => false,
+		'offload-rest-api'   => false,
 		'auto-resize'        => false,
 		'custom-domain'      => false,
 		'custom-id'          => false,
