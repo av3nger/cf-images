@@ -31,6 +31,7 @@ Offload your media library to Cloudflare Images! Let our plugin take charge:
 
 = But wait, there's more! =
 
+Image CDN - deliver images from a global network of servers.
 Image AI - tag, caption and generate new images using AI.
 Compression - optimize JPEG/PNG images to decrease file size without compromising visual quality.
 
@@ -98,6 +99,7 @@ If something is still not working for you, please let me know by creating a supp
 = 1.7.0 =
 
 Added:
+* Fuzion CDN integration
 * Service tools module - reset ignored images
 * Custom URLs module - control your image links
 * Track stats for images served via Cloudflare Images
@@ -110,6 +112,7 @@ Fixed:
 * Do not expose internal methods to WP CLI commands
 * WP CLI command only processing the first 10 images
 * Auto resize feature using incorrect descriptors
+* Page parser not replacing all images
 
 = 1.6.0 - 12.11.2023 =
 

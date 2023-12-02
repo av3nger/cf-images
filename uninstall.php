@@ -41,6 +41,7 @@ delete_option( 'cf-images-auth-error' );
 delete_option( 'cf-image-ai-api-key' );
 delete_option( 'cf-images-settings' );
 delete_option( 'cf-images-custom-path' );
+delete_option( 'cf-images-cdn-enabled' );
 
 /**
  * These have been removed since version 1.4.0.
@@ -64,3 +65,6 @@ require_once __DIR__ . '/app/class-settings.php';
 $settings = new CF_Images\App\Settings();
 $settings->write_config( 'CF_IMAGES_ACCOUNT_ID' );
 $settings->write_config( 'CF_IMAGES_KEY_TOKEN' );
+
+require_once __DIR__ . '/app/modules/class-cdn.php';
+CF_Images\App\Modules\CDN::remove_cron();

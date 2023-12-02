@@ -88,7 +88,7 @@ class Fuzion extends Api {
 	protected function process_response( string $body, int $code, bool $decode, array $args ): stdClass {
 		$body = json_decode( $body );
 
-		if ( 200 === $code || 201 === $code ) {
+		if ( 200 === $code || 201 === $code || 202 === $code ) {
 			if ( is_array( $body ) ) {
 				return (object) $body;
 			}
