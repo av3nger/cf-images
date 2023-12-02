@@ -180,14 +180,16 @@ const CDN = () => {
 								__('Active', 'cf-images')}
 						</p>
 
-						<button
-							className={classNames('button is-small', {
-								'is-loading': loading,
-							})}
-							onClick={purgeCache}
-						>
-							{__('Purge cache', 'cf-images')}
-						</button>
+						{!activating && (
+							<button
+								className={classNames('button is-small', {
+									'is-loading': loading,
+								})}
+								onClick={purgeCache}
+							>
+								{__('Purge cache', 'cf-images')}
+							</button>
+						)}
 					</>
 				)}
 			</div>
