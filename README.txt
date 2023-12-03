@@ -96,7 +96,7 @@ If something is still not working for you, please let me know by creating a supp
 
 == Changelog ==
 
-= 1.7.0 =
+= 1.7.0 - 03.12.2023 =
 
 Added:
 * Bunny CDN integration
@@ -179,167 +179,13 @@ Fixed:
 * When full offload is enabled, images are not displaying on front-end
 * Removing of scaled images
 
-= 1.3.0 - 24.06.2023 =
-
-Added:
-* Full offload and restore for images from the WordPress media library [beta]
-* ACF integration
-* Option to remove selected images from Cloudflare
-* Preconnect to CDN URL
-
-Changed:
-* Improved internal plugin structure
-* Improved media library status layout
-* Improved media library UI
-
-Fixed:
-* Scaled images offloaded instead of originals
-* Fatal error when uninstalling the plugin
-* Error when image metadata is not an array
-* Images not served via CDN if a custom size is used
-
-= 1.2.0 - 29.03.2023 =
-
-Added:
-* Auto image sizes on front-end
-* Option to use custom paths for images
-* Confirmation modal for bulk remove action
-* Offload status to media library grid mode
-* Detailed setup guide link in the setup wizard
-
-Changed:
-* Improved descriptions for the plugin settings
-* Improve settings layout
-* Intentionally sleep for a second after setup to allow the PHP cache to expire on setup/disconnect
-* Various UI/UX improvements
-
-Fixed:
-* Properly handle already uploaded images and duplicates
-* Prevent replacing images in wp-admin, because WordPress does not respect is_admin() checks
-* Scaled images having an empty 'w' parameter
-
-= 1.1.5 - 28.02.2023 =
-
-Added:
-* Integration with RankMath Image SEO module
-* Integration with Multisite Global Media plugin
-* Option to disable async image offloading
-
-Changed:
-* Store the Cloudflare image hash in network options on multisite installs
-* Code refactor to be fully compatible with WordPress coding standards
-
-Fixed:
-* RankMath image titles not working properly with Cloudflare images
-* TypeError in get_attachment_image_src method
-* Removed debug code
-
-= 1.1.4 - 29.01.2023 =
-
-Fixed:
-* Links in readme.txt file
-
-= 1.1.3 - 29.01.2023 =
-
-Added:
-* Compatibility with "Spectra – WordPress Gutenberg Blocks" plugin
-* cf_images_upload_meta_data filter to allow customizing the metadata sent to Cloudflare Images
-
-Changed:
-* Improve detection of image sizes, fallback to scaled image dimensions
-* Improved compatibility with RankMath - og:image tags will not be converted to Cloudflare Image URLs
-
-Fixed:
-* Image file names on subdirectory multisite installs
-
-= 1.1.2 - 19.11.2022 =
-
-Added:
-* Support for WooCommerce bulk product uploads
-* Allow defining a custom domain for the Cloudflare Images service
-* Option to skip images in media library from offloading
-* Button to disconnect from Cloudflare
-
-Changed:
-* On network installs, plugin can now only be activated on the network level
-* When bulk uploading, if no metadata is found for an image - skip the image, instead of failing the whole process
-* Minor UI/UX improvements
-* Improved compatibility with WordPress 6.1
-
-Fixed:
-* Settings redirect to media library after saving
-
-= 1.1.1 - 24.10.2022 =
-
-Changed:
-* Improved button styling
-* Allow skipping the setup wizard with CF_IMAGES_ACCOUNT_ID and CF_IMAGES_KEY_TOKEN defines
-
-Fixed:
-* Argument #1 ($metadata) must be of type array, bool given error
-
-= 1.1.0 - 09.09.2022 =
-
-Added:
-* Global API stats
-* Option to disable auto offload
-* New and improved UI
-* New plugin icon
-
-Fixed:
-* Remove autocomplete for setup form fields
-* Incorrect stats calculations
-* Reset image stats, when no offloaded images found in media library
-* Offloading images on servers with outdated SSL libraries
-
-= 1.0.3 - 05.09.2022 =
-
-Fixed:
-* Fatal error in rare cases
-
-= 1.0.2 =
-
-Added:
-* Support for scaled images
-* Detect API key changes or other auth issues
-
-Changed:
-* Improve code quality
-
-Fixed:
-* Do not replace images on the editor
-
-= 1.0.1 =
-
-Added:
-* Image statistics
-
-Changed:
-* Better handling of unsupported media types
-* Improve UI and UX
-
-Fixed:
-* Failed bulk offload if an image path is not defined in metadata
-* PHP fatal error with Spectra plugin
-* Incorrect status during bulk offload
-
-= 1.0.0 =
-
-First release
-* Offload images to Cloudflare Images
-* Option to disable WordPress image sizes
-* Support for custom domains
-
 == Upgrade Notice ==
+
+= 1.7.0 =
+EOY update. Bunny CDN integration, custom URLs and stats with Cloudflare workers and much more.
 
 = 1.5.0 =
 Huge update with lots of improvements and new features, new UI and image compression module.
 
 = 1.4.0 =
 Image AI - tag and caption your images using AI. Page parser module - improved compatibility with themes and plugins.
-
-= 1.2.0 =
-Big update with lots of improvements and new features.
-
-= 1.0.0 =
-This is the first plugin release.
