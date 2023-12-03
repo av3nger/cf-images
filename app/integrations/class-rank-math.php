@@ -14,6 +14,7 @@
 
 namespace CF_Images\App\Integrations;
 
+use CF_Images\App\Traits;
 use Exception;
 use MyThemeShop\Helpers\Str;
 use WP_Query;
@@ -29,6 +30,8 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.1.5
  */
 class Rank_Math {
+	use Traits\Helpers;
+
 	/**
 	 * Class constructor.
 	 *
@@ -93,7 +96,7 @@ class Rank_Math {
 	 * @return int|bool Image ID or false if not found.
 	 */
 	private function get_image_id_from_url( string $image ) {
-		if ( false === strpos( $image, 'cdn-cgi/imagedelivery' ) ) {
+		if ( false === strpos( $image, $this->get_cdn_domain() ) ) {
 			return false;
 		}
 

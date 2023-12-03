@@ -33,7 +33,7 @@ trait Helpers {
 	 *
 	 * @return string
 	 */
-	public function get_slug(): string {
+	protected function get_slug(): string {
 		return Core::get_instance()->get_plugin_name();
 	}
 
@@ -44,7 +44,7 @@ trait Helpers {
 	 *
 	 * @return bool
 	 */
-	public function is_set_up(): bool {
+	protected function is_set_up(): bool {
 		if ( get_option( 'cf-images-auth-error', false ) ) {
 			do_action( 'cf_images_log', 'Option cf-images-auth-error is present in the database: %s', get_option( 'cf-images-auth-error', false ) );
 			return false;
@@ -70,7 +70,7 @@ trait Helpers {
 	 *
 	 * @return bool|WP_Error
 	 */
-	public function get_error() {
+	protected function get_error() {
 		if ( get_option( 'cf-images-auth-error', false ) ) {
 			return new WP_Error( 401, esc_html__( 'Authentication error. Check and update Cloudflare API key.', 'cf-images' ) );
 		}
@@ -85,7 +85,7 @@ trait Helpers {
 	 *
 	 * @return string
 	 */
-	public function get_cdn_domain(): string {
+	protected function get_cdn_domain(): string {
 		return Core::get_instance()->get_cdn_domain();
 	}
 
@@ -96,7 +96,7 @@ trait Helpers {
 	 *
 	 * @return bool
 	 */
-	public function is_fuzion_api_connected(): bool {
+	protected function is_fuzion_api_connected(): bool {
 		return (bool) get_option( 'cf-image-ai-api-key', false );
 	}
 
@@ -107,7 +107,7 @@ trait Helpers {
 	 *
 	 * @return Media
 	 */
-	public function media(): Media {
+	protected function media(): Media {
 		return Core::get_instance()->admin()->media();
 	}
 }

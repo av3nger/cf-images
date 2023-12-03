@@ -23,11 +23,11 @@ const Nav = () => {
 
 	return (
 		<aside className="menu">
-			<h1 className="is-size-4 pb-3">
+			<span className="is-size-4 pb-3 cf-plugin-title">
 				{__('Offload. Store. Resize.', 'cf-images')}
 				<br />
 				{__('Image Optimize', 'cf-images')}
-			</h1>
+			</span>
 
 			<p className="menu-label">{__('Cloudflare Images', 'cf-images')}</p>
 
@@ -59,6 +59,14 @@ const Nav = () => {
 						className={({ isActive }) => getClass(isActive)}
 					>
 						{__('AI & Compression', 'cf-images')}
+					</NavLink>
+				</li>
+				<li>
+					<NavLink
+						to="/tools/premium"
+						className={({ isActive }) => getClass(isActive)}
+					>
+						{__('Pro Features', 'cf-images')}
 					</NavLink>
 				</li>
 			</ul>

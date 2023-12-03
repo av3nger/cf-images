@@ -14,17 +14,16 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import { post } from '../js/helpers/post';
-import Card from '../components/card';
-import SettingsContext from '../context/settings';
+import { post } from '../../js/helpers/post';
+import Card from '../../components/card';
+import SettingsContext from '../../context/settings';
 
 const CustomDomain = () => {
 	const [done, setDone] = useState(false);
-	const [domain, setDomain] = useState(window.CFImages.domain);
 	const [error, setError] = useState('');
 	const [saving, setSaving] = useState(false);
 
-	const { modules } = useContext(SettingsContext);
+	const { domain, modules, setDomain } = useContext(SettingsContext);
 
 	const moduleId = 'custom-domain';
 

@@ -140,10 +140,10 @@ class Image_Ai extends Module {
 	private function caption_image( int $attachment_id ) {
 		list( $hash, $cloudflare_image_id ) = Cloudflare_Images::get_hash_id_url_string( $attachment_id );
 
-		if ( empty( $cloudflare_image_id ) || empty( $hash ) ) {
+		if ( empty( $cloudflare_image_id ) || ( empty( $hash ) && ! $this->is_module_enabled( false, 'custom-path' ) ) ) {
 			$image = wp_get_original_image_url( $attachment_id );
 		} else {
-			$image = $this->get_cdn_domain() . "/$hash/$cloudflare_image_id/w=9999";
+			$image = trailingslashit( $this->get_cdn_domain() . "/$hash" ) . "$cloudflare_image_id/w=9999";
 		}
 
 		try {

@@ -13,10 +13,10 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import SettingsContext from '../context/settings';
-import Card from '../components/card';
-import ProgressBar from '../components/progress';
-import { formatBytes } from '../js/helpers/format';
+import SettingsContext from '../../context/settings';
+import Card from '../../components/card';
+import ProgressBar from '../../components/progress';
+import { formatBytes } from '../../js/helpers/format';
 
 const CompressionStats = () => {
 	const [action, setAction] = useState('');

@@ -16,6 +16,7 @@ import Support from './routes/support';
 import ToolsSettings from './routes/tools/settings';
 import Logs from './routes/misc/logs';
 import ImageGenerateRoute from './routes/image/generate';
+import ToolsPremium from './routes/tools/premium';
 
 /**
  * App
@@ -41,6 +42,10 @@ const App = () => {
 							<Route
 								path="/tools/settings"
 								element={<ToolsSettings />}
+							/>
+							<Route
+								path="/tools/premium"
+								element={<ToolsPremium />}
 							/>
 							<Route
 								path="/image/generate"

@@ -35,6 +35,7 @@ class Settings {
 	 */
 	const DEFAULTS = array(
 		'auto-offload'       => false,
+		'offload-rest-api'   => false,
 		'auto-resize'        => false,
 		'custom-domain'      => false,
 		'custom-id'          => false,
@@ -188,10 +189,12 @@ class Settings {
 
 		$data = filter_input( INPUT_POST, 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 
-		$settings = get_option( 'cf-images-settings', self::DEFAULTS );
+		$settings = get_option( 'cf-images-settings', self::get_defaults() );
 
 		// Make sure we add any options that have been added to the DEFAULTS array.
-		$settings = wp_parse_args( $settings, self::DEFAULTS );
+		$settings = wp_parse_args( $settings, self::get_defaults() );
+
+		do_action( 'cf_images_save_settings', $settings, $data );
 
 		foreach ( $settings as $key => $value ) {
 			// Skip unsupported settings.
@@ -247,5 +250,16 @@ class Settings {
 		$this->fetch_stats( new Api\Image() );
 
 		wp_send_json_success();
+	}
+
+	/**
+	 * Get defaults.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @return bool[]
+	 */
+	public static function get_defaults(): array {
+		return apply_filters( 'cf_images_default_settings', self::DEFAULTS );
 	}
 }

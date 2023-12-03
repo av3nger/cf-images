@@ -1,6 +1,7 @@
 /**
  * External dependencies
  */
+import { useContext } from 'react';
 import { mdiRocketLaunchOutline } from '@mdi/js';
 
 /**
@@ -11,9 +12,8 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import Card from '../components/card';
-import { useContext } from 'react';
-import SettingsContext from '../context/settings';
+import Card from '../../components/card';
+import SettingsContext from '../../context/settings';
 
 const UpsellModule = () => {
 	const { noticeHidden } = useContext(SettingsContext);

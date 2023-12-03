@@ -4,18 +4,24 @@
 import { useContext } from 'react';
 
 /**
+ * WordPress dependencies
+ */
+import { __ } from '@wordpress/i18n';
+
+/**
  * Internal dependencies
  */
 import SettingsContext from '../../context/settings';
-import AutoOffload from '../../modules/auto-offload';
-import CustomId from '../../modules/custom-id';
-import CustomDomain from '../../modules/custom-domain';
-import DisableAsync from '../../modules/disable-async';
-import PageParser from '../../modules/page-parser';
+import AutoOffload from '../../modules/cloudflare/auto-offload';
+import CustomId from '../../modules/cloudflare/custom-id';
+import CustomDomain from '../../modules/cloudflare/custom-domain';
+import DisableAsync from '../../modules/cloudflare/disable-async';
+import PageParser from '../../modules/cloudflare/page-parser';
 import CloudflareLogin from './login';
-import Disconnect from './disconnect';
-import CloudflareStats from '../../modules/cf-stats';
-import Logging from '../../modules/logging';
+import CloudflareDisconnect from '../../modules/actions/cf-disconnect';
+import CloudflareStats from '../../modules/cloudflare/cf-stats';
+import Logging from '../../modules/cloudflare/logging';
+import Service from '../../modules/cloudflare/service';
 
 /**
  * Cloudflare Images settings routes.
@@ -23,19 +29,32 @@ import Logging from '../../modules/logging';
  * @class
  */
 const CloudflareSettings = () => {
-	const { cfConnected } = useContext(SettingsContext);
+	const { cfConnected, cdnEnabled } = useContext(SettingsContext);
 
 	if (cfConnected) {
 		return (
 			<div className="columns is-multiline">
+				{cdnEnabled && (
+					<div className="column is-full">
+						<div className="notification is-warning">
+							<p>
+								{__(
+									'CDN module is enabled. Cloudflare Images functionality has been disable.',
+									'cf-images'
+								)}
+							</p>
+						</div>
+					</div>
+				)}
 				<CloudflareStats />
 				<AutoOffload />
 				<CustomId />
 				<CustomDomain />
 				<PageParser />
 				<DisableAsync />
+				<Service />
 				<Logging />
-				<Disconnect />
+				<CloudflareDisconnect />
 			</div>
 		);
 	}

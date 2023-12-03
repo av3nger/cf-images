@@ -18,6 +18,7 @@ interface CFImages {
     nonce: string;
     settings: Object;
     stats: StatsType;
+    cdnEnabled: boolean;
 }
 
 interface SettingsContextType {
@@ -33,6 +34,10 @@ interface SettingsContextType {
     setInProgress: (status: boolean) => void;
     stats: StatsType;
     setStats: (stats: StatsType) => void;
+    domain: string;
+    setDomain: (domain: string) => void;
+    cdnEnabled: boolean;
+    setCdnEnabled: (cdnEnabled: boolean) => void;
 }
 
 interface StatsType {

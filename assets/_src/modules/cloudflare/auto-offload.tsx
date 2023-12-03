@@ -2,7 +2,7 @@
  * External dependencies
  */
 import { useContext } from 'react';
-import { mdiImageSearch } from '@mdi/js';
+import { mdiAutoUpload } from '@mdi/js';
 
 /**
  * WordPress dependencies
@@ -12,35 +12,35 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import Card from '../components/card';
-import SettingsContext from '../context/settings';
+import SettingsContext from '../../context/settings';
+import Card from '../../components/card';
 
-const PageParser = () => {
+const AutoOffload = () => {
 	const { modules, setModule } = useContext(SettingsContext);
 
-	const moduleId = 'page-parser';
-	const submoduleId = 'auto-resize';
+	const moduleId = 'auto-offload';
+	const submoduleId = 'offload-rest-api';
 
 	return (
 		<Card
-			icon={mdiImageSearch}
-			id="page-parser"
-			title={__('Parse page for images', 'cf-images')}
+			icon={mdiAutoUpload}
+			id={moduleId}
+			title={__('Auto offload new images', 'cf-images')}
 		>
 			<div className="content">
 				<p>
 					{__(
-						'Compatibility module to support themes that do not use WordPress hooks and filters. If images are not replaced on the site, try enabling this module.',
+						'Enable this option if you want to enable automatic offloading for newly uploaded images.',
 						'cf-images'
 					)}
 				</p>
 
 				<p className="is-size-5 mb-2">
-					{__('Auto resize images on front-end', 'cf-images')}
+					{__('REST API integration', 'cf-images')}
 				</p>
 				<p>
 					{__(
-						'Make images responsive by adding missing image sizes to the srcset attribute.',
+						'Intercept image uploads via the REST API and automatically offload them to Cloudflare.',
 						'cf-images'
 					)}
 				</p>
@@ -68,4 +68,4 @@ const PageParser = () => {
 	);
 };
 
-export default PageParser;
+export default AutoOffload;

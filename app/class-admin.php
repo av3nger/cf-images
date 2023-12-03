@@ -129,12 +129,13 @@ class Admin {
 			array(
 				'nonce'       => wp_create_nonce( 'cf-images-nonce' ),
 				'dirURL'      => CF_IMAGES_DIR_URL,
-				'settings'    => get_option( 'cf-images-settings', Settings::DEFAULTS ),
+				'settings'    => get_option( 'cf-images-settings', Settings::get_defaults() ),
 				'cfStatus'    => $this->is_set_up(),
 				'domain'      => get_option( 'cf-images-custom-domain', '' ),
 				'hideSidebar' => get_site_option( 'cf-images-hide-sidebar' ),
 				'fuzion'      => $this->is_fuzion_api_connected(),
 				'stats'       => $this->get_stats(),
+				'cdnEnabled'  => (bool) get_option( 'cf-images-cdn-enabled', false ),
 			)
 		);
 	}

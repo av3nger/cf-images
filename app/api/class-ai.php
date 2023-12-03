@@ -95,4 +95,74 @@ class Ai extends Fuzion {
 
 		throw new Exception( esc_html__( 'Unable to generate image.', 'cf-images' ) );
 	}
+
+	/**
+	 * Get Cloudflare worker status.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @throws Exception Exception if unable to get status.
+	 *
+	 * @return array
+	 */
+	public function get_cf_status(): array {
+		$this->set_method( 'GET' );
+		$this->set_endpoint( 'cf/status' );
+
+		return (array) $this->request();
+	}
+
+	/**
+	 * Enable CDN.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @param string $site Site URL.
+	 *
+	 * @return array
+	 * @throws Exception Exception on error.
+	 */
+	public function enable_cdn( string $site ): array {
+		$this->set_method( 'POST' );
+		$this->set_endpoint( 'cdn/enable' );
+		$this->set_request_body( wp_json_encode( array( 'site' => $site ) ) );
+
+		return (array) $this->request();
+	}
+
+	/**
+	 * Purge CDN cache.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @param string $site Site URL.
+	 *
+	 * @return array
+	 * @throws Exception Exception on error.
+	 */
+	public function purge_cdn_cache( string $site ): array {
+		$this->set_method( 'POST' );
+		$this->set_endpoint( 'cdn/purge' );
+		$this->set_request_body( wp_json_encode( array( 'site' => $site ) ) );
+
+		return (array) $this->request();
+	}
+
+	/**
+	 * Get CDN status.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @param string $site Site URL.
+	 *
+	 * @return array
+	 * @throws Exception Exception on error.
+	 */
+	public function get_cdn_status( string $site ): array {
+		$this->set_method( 'POST' );
+		$this->set_endpoint( 'cdn/status' );
+		$this->set_request_body( wp_json_encode( array( 'site' => $site ) ) );
+
+		return (array) $this->request();
+	}
 }

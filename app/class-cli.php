@@ -103,7 +103,16 @@ class CLI extends WP_CLI_Command {
 	 * @since 1.5.0
 	 */
 	private function offload_all() {
+		$defaults = array(
+			'fields'                 => 'ids',
+			'no_found_rows'          => true,
+			'posts_per_page'         => -1,
+			'update_post_meta_cache' => false,
+			'update_post_term_cache' => false,
+		);
+
 		$args = $this->get_wp_query_args( 'upload' );
+		$args = wp_parse_args( $args, $defaults );
 
 		// Look for images that have been offloaded.
 		$images = new WP_Query( $args );
@@ -117,20 +126,20 @@ class CLI extends WP_CLI_Command {
 		$progress = WP_CLI\Utils\make_progress_bar( __( 'Offloading images', 'cf-images' ), $images->found_posts );
 
 		foreach ( $images->posts as $attachment ) {
-			$metadata = wp_get_attachment_metadata( $attachment->ID );
+			$metadata = wp_get_attachment_metadata( $attachment );
 			if ( false === $metadata ) {
 				$errors[] = sprintf( /* translators: %d - attachment ID */
 					esc_html__( 'Image metadata not found (attachment ID: %d).', 'cf-images' ),
-					(int) $attachment->ID
+					$attachment
 				);
 			} else {
-				( new Media() )->upload_image( $metadata, $attachment->ID );
+				( new Media() )->upload_image( $metadata, $attachment );
 
 				if ( is_wp_error( Core::get_error() ) ) {
 					$errors[] = sprintf( /* translators: %1$s - error message, %2$d - attachment ID */
 						esc_html__( '%1$s (attachment ID: %2$d).', 'cf-images' ),
 						esc_html( Core::get_error()->get_error_message() ),
-						(int) $attachment->ID
+						$attachment
 					);
 				}
 			}

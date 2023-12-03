@@ -11,7 +11,7 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import Card from '../components/card';
+import Card from '../../components/card';
 
 const DisableAsync = () => {
 	return (

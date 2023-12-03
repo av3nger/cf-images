@@ -12,9 +12,9 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import SettingsContext from '../context/settings';
-import Card from '../components/card';
-import ProgressBar from '../components/progress';
+import SettingsContext from '../../context/settings';
+import Card from '../../components/card';
+import ProgressBar from '../../components/progress';
 
 const CloudflareStats = () => {
 	const [action, setAction] = useState('');
