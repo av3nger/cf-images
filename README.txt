@@ -156,28 +156,7 @@ Fixed:
 * PHP warnings with page parser module on pages with no images
 * Link for adding API key for AI module was not working
 
-= 1.4.1 - 21.08.2023 =
-
-Fixed:
-* Cannot log in Image AI module without activating it first
-* Handling of images with "scaled" in the file name
-
-= 1.4.0 - 09.08.2023 =
-
-Added:
-* Image AI - tag and caption your images with AI
-* Page parser module
-* Compatibility with Breakdance builder (via page parser module)
-* Compatibility with WMPL
-
-Changed:
-* Improved detection of image sizes
-* Media UI refactored for better accessibility
-
-Fixed:
-* Issues with lazy loading
-* When full offload is enabled, images are not displaying on front-end
-* Removing of scaled images
+[Full changelog](https://github.com/av3nger/cf-images/blob/master/CHANGELOG.md).
 
 == Upgrade Notice ==
 
@@ -186,6 +165,3 @@ EOY update. Bunny CDN integration, custom URLs and stats with Cloudflare workers
 
 = 1.5.0 =
 Huge update with lots of improvements and new features, new UI and image compression module.
-
-= 1.4.0 =
-Image AI - tag and caption your images using AI. Page parser module - improved compatibility with themes and plugins.
