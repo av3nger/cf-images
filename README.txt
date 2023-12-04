@@ -98,6 +98,10 @@ If something is still not working for you, please let me know by creating a supp
 
 = 1.7.1 =
 
+Fixed:
+* Compatibility with Gutenberg Interactivity API
+
+
 = 1.7.0 - 03.12.2023 =
 
 Added:

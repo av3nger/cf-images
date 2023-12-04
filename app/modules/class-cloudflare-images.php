@@ -342,6 +342,11 @@ class Cloudflare_Images extends Module {
 			return $filtered_image;
 		}
 
+		// Gutenberg's interactivity module stores image data inside `data-wp-bing--src` attribute, which is caught by our regex.
+		if ( ! filter_var( $src[1], FILTER_VALIDATE_URL ) ) {
+			return $filtered_image;
+		}
+
 		// Find `width` attributes in an image.
 		preg_match( '/width=[\'"]([^\'"]+)/i', $filtered_image, $size );
 
