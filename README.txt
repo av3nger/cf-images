@@ -100,7 +100,7 @@ If something is still not working for you, please let me know by creating a supp
 
 Fixed:
 * Compatibility with Gutenberg Interactivity API
-
+* Type error when fetching image hashes
 
 = 1.7.0 - 03.12.2023 =
 

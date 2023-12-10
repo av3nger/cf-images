@@ -145,7 +145,7 @@ class Cloudflare_Images extends Module {
 			return $image;
 		}
 
-		list( $hash, $cloudflare_image_id ) = self::get_hash_id_url_string( $attachment_id );
+		list( $hash, $cloudflare_image_id ) = self::get_hash_id_url_string( (int) $attachment_id );
 
 		if ( empty( $cloudflare_image_id ) || ( empty( $hash ) && ! $this->is_module_enabled( false, 'custom-path' ) ) ) {
 			do_action( 'cf_images_log', 'Missing Cloudflare Image ID or hash. Attachment ID: %s. Image: %s', $attachment_id, $image );
