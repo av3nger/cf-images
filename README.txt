@@ -99,6 +99,7 @@ If something is still not working for you, please let me know by creating a supp
 = 1.7.1 =
 
 Fixed:
+* Do not bulk offload SVG images
 * Compatibility with Gutenberg Interactivity API
 * Type error when fetching image hashes
 
