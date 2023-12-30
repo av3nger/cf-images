@@ -395,7 +395,9 @@ class Media {
 			return $metadata;
 		}
 
-		if ( ! wp_attachment_is_image( $attachment_id ) ) {
+		$mime = get_post_mime_type( $attachment_id );
+
+		if ( ! wp_attachment_is_image( $attachment_id ) || false !== strpos( $mime, 'image/svg' ) ) {
 			update_post_meta( $attachment_id, '_cloudflare_image_skip', true );
 			do_action( 'cf_images_error', 415, __( 'Unsupported media type', 'cf-images' ) );
 			return $metadata;

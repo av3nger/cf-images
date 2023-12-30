@@ -145,7 +145,7 @@ class Cloudflare_Images extends Module {
 			return $image;
 		}
 
-		list( $hash, $cloudflare_image_id ) = self::get_hash_id_url_string( $attachment_id );
+		list( $hash, $cloudflare_image_id ) = self::get_hash_id_url_string( (int) $attachment_id );
 
 		if ( empty( $cloudflare_image_id ) || ( empty( $hash ) && ! $this->is_module_enabled( false, 'custom-path' ) ) ) {
 			do_action( 'cf_images_log', 'Missing Cloudflare Image ID or hash. Attachment ID: %s. Image: %s', $attachment_id, $image );
@@ -339,6 +339,11 @@ class Cloudflare_Images extends Module {
 
 		if ( false !== strpos( $src[1], $this->get_cdn_domain() ) ) {
 			// Image is already served via Cloudflare.
+			return $filtered_image;
+		}
+
+		// Gutenberg's interactivity module stores image data inside `data-wp-bing--src` attribute, which is caught by our regex.
+		if ( ! filter_var( $src[1], FILTER_VALIDATE_URL ) ) {
 			return $filtered_image;
 		}
 
