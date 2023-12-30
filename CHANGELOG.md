@@ -1,3 +1,11 @@
+= 1.7.1 - 31.12.2023 =
+
+Fixed:
+* Fatal error on plugin uninstall
+* Do not bulk offload SVG images
+* Compatibility with Gutenberg Interactivity API
+* Type error when fetching image hashes
+
 = 1.7.0 - 03.12.2023 =
 
 Added:
