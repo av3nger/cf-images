@@ -487,11 +487,15 @@ class Media {
 	 * Remove (physically delete the files) selected image from WordPress media library.
 	 *
 	 * @since 1.2.1
+	 *
+	 * @param int|string|null $attachment_id Attachment ID.
 	 */
-	public function ajax_delete_image() {
+	public function ajax_delete_image( $attachment_id = null ) {
 		$this->check_ajax_request();
 
-		$attachment_id = (int) filter_input( INPUT_POST, 'data', FILTER_SANITIZE_NUMBER_INT );
+		if ( empty( $attachment_id ) ) {
+			$attachment_id = (int) filter_input( INPUT_POST, 'data', FILTER_SANITIZE_NUMBER_INT );
+		}
 
 		// This is a backward compat check to make sure we have the original offloaded before removing it.
 		$metadata = wp_get_attachment_metadata( $attachment_id );
@@ -517,7 +521,9 @@ class Media {
 
 		$this->delete_image( $attachment_id );
 
-		wp_send_json_success( $this->get_response_data( $attachment_id ) );
+		if ( 'cf_images_delete_image' === filter_input( INPUT_POST, 'action', FILTER_UNSAFE_RAW ) ) {
+			wp_send_json_success( $this->get_response_data( $attachment_id ) );
+		}
 	}
 
 	/**

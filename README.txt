@@ -96,6 +96,11 @@ If something is still not working for you, please let me know by creating a supp
 
 == Changelog ==
 
+= 1.8.0 =
+
+Added:
+* Bulk full offload
+
 = 1.7.1 - 31.12.2023 =
 
 Fixed:

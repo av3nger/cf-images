@@ -209,6 +209,7 @@ class Core {
 	 * @see Modules\Custom_Path
 	 * @see Modules\Service
 	 * @see Modules\CDN
+	 * @see Modules\Full_Offload
 	 */
 	private function load_modules() {
 		$loader = Loader::get_instance();
@@ -227,6 +228,7 @@ class Core {
 		$loader->module( 'logging' );
 		$loader->module( 'custom-path' );
 		$loader->module( 'service' );
+		$loader->module( 'full-offload' );
 	}
 
 	/**

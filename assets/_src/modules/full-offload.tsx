@@ -1,6 +1,7 @@
 /**
  * External dependencies
  */
+import { MouseEvent, useContext } from 'react';
 import { mdiImageMultipleOutline } from '@mdi/js';
 
 /**
@@ -11,9 +12,13 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
+import SettingsContext from '../context/settings';
 import Card from '../components/card';
+import ProgressBar from '../components/progress';
 
 const FullOffload = () => {
+	const { inProgress, setInProgress } = useContext(SettingsContext);
+
 	return (
 		<Card
 			icon={mdiImageMultipleOutline}
@@ -33,6 +38,16 @@ const FullOffload = () => {
 						'cf-images'
 					)}
 				</p>
+
+				{inProgress && <ProgressBar action="full-remove" />}
+
+				<button
+					className="button is-small"
+					onClick={(e) => setInProgress(true)}
+					disabled={inProgress}
+				>
+					{__('Bulk delete', 'cf-images')}
+				</button>
 			</div>
 		</Card>
 	);
