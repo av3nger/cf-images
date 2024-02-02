@@ -18,7 +18,7 @@ import CDN from '../../modules/premium/cdn';
  * @class
  */
 const ToolsPremium = () => {
-	const { hasFuzion, setFuzion } = useContext(SettingsContext);
+	const { hasFuzion } = useContext(SettingsContext);
 
 	if (!hasFuzion) {
 		return <Login />;
