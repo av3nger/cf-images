@@ -1,5 +1,8 @@
 = 1.8.0 =
 
+Fixed:
+* Page parser not detecting images that have a custom title set in the media library
+
 Added:
 * Bulk full offload
 

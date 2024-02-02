@@ -324,20 +324,10 @@ class Image {
 		$post_id = wp_cache_get( $url, 'cf_images' );
 
 		if ( ! $post_id ) {
-			global $wpdb;
-
-			$filename = pathinfo( $url, PATHINFO_FILENAME );
-
-			$sql = $wpdb->prepare(
-				"SELECT ID FROM $wpdb->posts WHERE post_name = %s",
-				$filename
-			);
-
-			$results = $wpdb->get_results( $sql ); // phpcs:ignore WordPress.DB
-			$post_id = 0;
+			$results = attachment_url_to_postid( $url );
 
 			if ( $results ) {
-				$post_id = reset( $results )->ID;
+				$post_id = $results;
 				wp_cache_add( $url, $post_id, 'cf_images' );
 			}
 		}

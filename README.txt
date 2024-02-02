@@ -98,6 +98,9 @@ If something is still not working for you, please let me know by creating a supp
 
 = 1.8.0 =
 
+Fixed:
+* Page parser not detecting images that have a custom title set in the media library
+
 Added:
 * Bulk full offload
 
