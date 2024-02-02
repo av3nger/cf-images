@@ -1,10 +1,11 @@
 = 1.8.0 =
 
-Fixed:
-* Page parser not detecting images that have a custom title set in the media library
-
 Added:
 * Bulk full offload
+
+Fixed:
+* Page parser will now add the wp-image-* class to images that do not have it
+* Page parser not detecting images that have a custom title set in the media library
 
 = 1.7.1 - 31.12.2023 =
 

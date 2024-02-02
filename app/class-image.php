@@ -114,6 +114,15 @@ class Image {
 	protected $cdn_active = false;
 
 	/**
+	 * If the image needs the default WordPress wp-image-<id> class.
+	 *
+	 * @since 1.8.0
+	 *
+	 * @var bool
+	 */
+	private $needs_image_class = false;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 1.5.0
@@ -147,6 +156,8 @@ class Image {
 		if ( preg_match( '/wp-image-(\d+)/i', $this->image, $class_id ) ) {
 			$this->id = absint( $class_id[1] );
 			do_action( 'cf_images_log', 'Found attachment ID %s from image class name.', $this->id );
+		} else {
+			$this->needs_image_class = true;
 		}
 	}
 
@@ -217,6 +228,16 @@ class Image {
 
 			if ( $src ) {
 				$image = str_replace( $link, $src, empty( $this->processed ) ? $this->image : $this->processed );
+
+				// Some themes remove the default wp-image-* class, add it if missing.
+				if ( $this->needs_image_class && $this->id ) {
+					$class = $this->get_attribute( $image, 'class' );
+					if ( empty( $class ) ) {
+						$this->add_attribute( $image, 'class', "wp-image-$this->id" );
+					} else {
+						$this->add_attribute( $image, 'class', $class . " wp-image-$this->id" );
+					}
+				}
 			}
 
 			if ( isset( $image ) ) {
@@ -225,6 +246,41 @@ class Image {
 
 			unset( $image );
 		}
+	}
+
+	/**
+	 * Add attribute to selected tag.
+	 *
+	 * @since 1.8.0
+	 *
+	 * @param string $element Image element.
+	 * @param string $name    Img attribute name (srcset, size, etc).
+	 * @param string $value   Attribute value.
+	 */
+	private function add_attribute( string &$element, string $name, string $value = null ) {
+		$closing = false === strpos( $element, '/>' ) ? '>' : ' />';
+		$quotes  = false === strpos( $element, '"' ) ? '\'' : '"';
+
+		if ( ! is_null( $value ) ) {
+			$element = rtrim( $element, $closing ) . " $name=$quotes$value$quotes$closing";
+		} else {
+			$element = rtrim( $element, $closing ) . " $name$closing";
+		}
+	}
+
+	/**
+	 * Get attribute from an HTML element.
+	 *
+	 * @since 1.8.0
+	 *
+	 * @param string $element HTML element.
+	 * @param string $name    Attribute name.
+	 *
+	 * @return string
+	 */
+	private function get_attribute( string $element, string $name ): string {
+		preg_match( "/{$name}=['\"]([^'\"]+)['\"]/is", $element, $value );
+		return $value['1'] ?? '';
 	}
 
 	/**
