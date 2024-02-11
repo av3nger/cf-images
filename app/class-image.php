@@ -279,7 +279,7 @@ class Image {
 	 * @return string
 	 */
 	private function get_attribute( string $element, string $name ): string {
-		preg_match( "/{$name}=['\"]([^'\"]+)['\"]/is", $element, $value );
+		preg_match( "/$name=['\"]([^'\"]+)['\"]/is", $element, $value );
 		return $value['1'] ?? '';
 	}
 
@@ -329,18 +329,19 @@ class Image {
 			$original = $image_url;
 		}
 
-		$width = $size[1] ?? 9999;
+		$width = $this->calculate_size( 'width', $size );
+		$crop  = $this->get_crop_string( $width, $size );
 
 		/**
 		 * Keep a reference to the original width, to be used when building srcset values in the auto resize module.
 		 */
 		if ( $is_src ) {
-			$this->width = (int) $width;
+			$this->width = $width;
 		}
 
 		// We already have the image URL, just add the width parameter.
 		if ( ! empty( $this->cf_image_url ) ) {
-			return "{$this->cf_image_url}w=$width";
+			return "{$this->cf_image_url}w=$width$crop";
 		}
 
 		if ( ! $original ) {
@@ -363,7 +364,59 @@ class Image {
 		}
 
 		$this->cf_image_url = trailingslashit( $this->get_cdn_domain() . "/$hash" ) . "$this->cf_image_id/";
-		return "{$this->cf_image_url}w=$width";
+		return "{$this->cf_image_url}w=$width$crop";
+	}
+
+	/**
+	 * Get the smallest width or height of the image from the image file name vs the img width/height attribute.
+	 *
+	 * @since 1.8.0
+	 *
+	 * @param string $type Width or height. Accepts: width, height.
+	 * @param array  $size Size array.
+	 *
+	 * @return int
+	 */
+	private function calculate_size( string $type, array $size ): int {
+		$index      = 'width' === $type ? 1 : 2;
+		$size_value = $size[ $index ] ?? 9999;
+
+		if ( ! apply_filters( 'cf_images_module_enabled', false, 'smallest-size' ) ) {
+			return $size_value;
+		}
+
+		$img_attribute = $this->get_attribute( $this->image, $type );
+		if ( ! empty( $img_attribute ) ) {
+			$size_value = min( (int) $img_attribute, (int) $size_value );
+		}
+
+		return $size_value;
+	}
+
+	/**
+	 * Get crop string.
+	 *
+	 * @since 1.8.0
+	 *
+	 * @param int   $width Image width.
+	 * @param array $size  Size array.
+	 *
+	 * @return string
+	 */
+	private function get_crop_string( int $width, array $size ): string {
+		$crop_string = '';
+
+		if ( ! apply_filters( 'cf_images_module_enabled', false, 'auto-crop' ) ) {
+			return $crop_string;
+		}
+
+		$height = $this->calculate_size( 'height', $size );
+
+		if ( 9999 !== $height && $width === $height ) {
+			$crop_string = ",h=$height,fit=crop";
+		}
+
+		return $crop_string;
 	}
 
 	/**

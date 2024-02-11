@@ -37,6 +37,15 @@ class Page_Parser extends Module {
 	protected $only_frontend = true;
 
 	/**
+	 * Run everything regardless of module status.
+	 *
+	 * @since 1.8.0
+	 */
+	public function pre_init() {
+		add_filter( 'cf_images_default_settings', array( $this, 'add_setting' ) );
+	}
+
+	/**
 	 * Init the module.
 	 *
 	 * @since 1.4.0
@@ -102,5 +111,26 @@ class Page_Parser extends Module {
 		}
 
 		return array();
+	}
+
+	/**
+	 * Add default option.
+	 *
+	 * @since 1.8.0
+	 *
+	 * @param array $defaults Default settings.
+	 *
+	 * @return array
+	 */
+	public function add_setting( array $defaults ): array {
+		if ( ! isset( $defaults['smallest-size'] ) ) {
+			$defaults['smallest-size'] = false;
+		}
+
+		if ( ! isset( $defaults['auto-crop'] ) ) {
+			$defaults['auto-crop'] = false;
+		}
+
+		return $defaults;
 	}
 }

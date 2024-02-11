@@ -107,6 +107,8 @@ If something is still not working for you, please let me know by creating a supp
 = 1.8.0 =
 
 Added:
+* Auto crop option. If an image width matches the image height - auto crop the image.
+* Use img width size. New option that allows using the img width attribute value for the image size, if the value is smaller than the requested image. 
 * Bulk full offload
 
 Fixed:
