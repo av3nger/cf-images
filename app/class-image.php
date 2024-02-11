@@ -433,11 +433,27 @@ class Image {
 		$post_id = wp_cache_get( $url, 'cf_images' );
 
 		if ( ! $post_id ) {
-			$results = attachment_url_to_postid( $url );
+			global $wpdb;
+
+			$sql = $wpdb->prepare(
+				"SELECT ID FROM $wpdb->posts WHERE guid = %s",
+				$url
+			);
+
+			$results = $wpdb->get_results( $sql ); // phpcs:ignore WordPress.DB
+			$post_id = 0;
 
 			if ( $results ) {
-				$post_id = $results;
+				$post_id = reset( $results )->ID;
 				wp_cache_add( $url, $post_id, 'cf_images' );
+			} else {
+				// This is a fallback, in case the above doesn't work for some reason.
+				$results = attachment_url_to_postid( $url );
+
+				if ( $results ) {
+					$post_id = $results;
+					wp_cache_add( $url, $post_id, 'cf_images' );
+				}
 			}
 		}
 
