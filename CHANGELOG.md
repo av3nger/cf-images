@@ -1,4 +1,4 @@
-= 1.8.0 =
+= 1.8.0 - 16.02.2024 =
 
 Added:
 * Support for RSS feeds
