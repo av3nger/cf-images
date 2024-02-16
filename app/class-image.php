@@ -114,6 +114,15 @@ class Image {
 	protected $cdn_active = false;
 
 	/**
+	 * If the image needs the default WordPress wp-image-<id> class.
+	 *
+	 * @since 1.8.0
+	 *
+	 * @var bool
+	 */
+	private $needs_image_class = false;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 1.5.0
@@ -147,6 +156,8 @@ class Image {
 		if ( preg_match( '/wp-image-(\d+)/i', $this->image, $class_id ) ) {
 			$this->id = absint( $class_id[1] );
 			do_action( 'cf_images_log', 'Found attachment ID %s from image class name.', $this->id );
+		} else {
+			$this->needs_image_class = true;
 		}
 	}
 
@@ -217,6 +228,16 @@ class Image {
 
 			if ( $src ) {
 				$image = str_replace( $link, $src, empty( $this->processed ) ? $this->image : $this->processed );
+
+				// Some themes remove the default wp-image-* class, add it if missing.
+				if ( $this->needs_image_class && $this->id ) {
+					$class = $this->get_attribute( $image, 'class' );
+					if ( empty( $class ) ) {
+						$this->add_attribute( $image, 'class', "wp-image-$this->id" );
+					} else {
+						$this->add_attribute( $image, 'class', $class . " wp-image-$this->id" );
+					}
+				}
 			}
 
 			if ( isset( $image ) ) {
@@ -225,6 +246,41 @@ class Image {
 
 			unset( $image );
 		}
+	}
+
+	/**
+	 * Add attribute to selected tag.
+	 *
+	 * @since 1.8.0
+	 *
+	 * @param string $element Image element.
+	 * @param string $name    Img attribute name (srcset, size, etc).
+	 * @param string $value   Attribute value.
+	 */
+	private function add_attribute( string &$element, string $name, string $value = null ) {
+		$closing = false === strpos( $element, '/>' ) ? '>' : ' />';
+		$quotes  = false === strpos( $element, '"' ) ? '\'' : '"';
+
+		if ( ! is_null( $value ) ) {
+			$element = rtrim( $element, $closing ) . " $name=$quotes$value$quotes$closing";
+		} else {
+			$element = rtrim( $element, $closing ) . " $name$closing";
+		}
+	}
+
+	/**
+	 * Get attribute from an HTML element.
+	 *
+	 * @since 1.8.0
+	 *
+	 * @param string $element HTML element.
+	 * @param string $name    Attribute name.
+	 *
+	 * @return string
+	 */
+	private function get_attribute( string $element, string $name ): string {
+		preg_match( "/$name=['\"]([^'\"]+)['\"]/is", $element, $value );
+		return $value['1'] ?? '';
 	}
 
 	/**
@@ -273,18 +329,19 @@ class Image {
 			$original = $image_url;
 		}
 
-		$width = $size[1] ?? 9999;
+		$width = $this->calculate_size( 'width', $size );
+		$crop  = $this->get_crop_string( $width, $size );
 
 		/**
 		 * Keep a reference to the original width, to be used when building srcset values in the auto resize module.
 		 */
 		if ( $is_src ) {
-			$this->width = (int) $width;
+			$this->width = $width;
 		}
 
 		// We already have the image URL, just add the width parameter.
 		if ( ! empty( $this->cf_image_url ) ) {
-			return "{$this->cf_image_url}w=$width";
+			return "{$this->cf_image_url}w=$width$crop";
 		}
 
 		if ( ! $original ) {
@@ -307,7 +364,59 @@ class Image {
 		}
 
 		$this->cf_image_url = trailingslashit( $this->get_cdn_domain() . "/$hash" ) . "$this->cf_image_id/";
-		return "{$this->cf_image_url}w=$width";
+		return "{$this->cf_image_url}w=$width$crop";
+	}
+
+	/**
+	 * Get the smallest width or height of the image from the image file name vs the img width/height attribute.
+	 *
+	 * @since 1.8.0
+	 *
+	 * @param string $type Width or height. Accepts: width, height.
+	 * @param array  $size Size array.
+	 *
+	 * @return int
+	 */
+	private function calculate_size( string $type, array $size ): int {
+		$index      = 'width' === $type ? 1 : 2;
+		$size_value = $size[ $index ] ?? 9999;
+
+		if ( ! apply_filters( 'cf_images_module_enabled', false, 'smallest-size' ) ) {
+			return $size_value;
+		}
+
+		$img_attribute = $this->get_attribute( $this->image, $type );
+		if ( ! empty( $img_attribute ) ) {
+			$size_value = min( (int) $img_attribute, (int) $size_value );
+		}
+
+		return $size_value;
+	}
+
+	/**
+	 * Get crop string.
+	 *
+	 * @since 1.8.0
+	 *
+	 * @param int   $width Image width.
+	 * @param array $size  Size array.
+	 *
+	 * @return string
+	 */
+	private function get_crop_string( int $width, array $size ): string {
+		$crop_string = '';
+
+		if ( ! apply_filters( 'cf_images_module_enabled', false, 'auto-crop' ) ) {
+			return $crop_string;
+		}
+
+		$height = $this->calculate_size( 'height', $size );
+
+		if ( 9999 !== $height && $width === $height ) {
+			$crop_string = ",h=$height,fit=crop";
+		}
+
+		return $crop_string;
 	}
 
 	/**
@@ -326,11 +435,9 @@ class Image {
 		if ( ! $post_id ) {
 			global $wpdb;
 
-			$filename = pathinfo( $url, PATHINFO_FILENAME );
-
 			$sql = $wpdb->prepare(
-				"SELECT ID FROM $wpdb->posts WHERE post_name = %s",
-				$filename
+				"SELECT ID FROM $wpdb->posts WHERE guid = %s",
+				$url
 			);
 
 			$results = $wpdb->get_results( $sql ); // phpcs:ignore WordPress.DB
@@ -339,6 +446,14 @@ class Image {
 			if ( $results ) {
 				$post_id = reset( $results )->ID;
 				wp_cache_add( $url, $post_id, 'cf_images' );
+			} else {
+				// This is a fallback, in case the above doesn't work for some reason.
+				$results = attachment_url_to_postid( $url );
+
+				if ( $results ) {
+					$post_id = $results;
+					wp_cache_add( $url, $post_id, 'cf_images' );
+				}
 			}
 		}
 

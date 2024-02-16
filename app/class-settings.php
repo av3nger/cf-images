@@ -47,6 +47,7 @@ class Settings {
 		'page-parser'        => false,
 		'image-generate'     => false,
 		'logging'            => false,
+		'rss-feeds'          => false,
 	);
 
 	/**

@@ -2,7 +2,8 @@
  * External dependencies
  */
 import { useContext } from 'react';
-import { mdiImageSearch } from '@mdi/js';
+import Icon from '@mdi/react';
+import { mdiImageSearch, mdiInformationOutline } from '@mdi/js';
 
 /**
  * WordPress dependencies
@@ -19,7 +20,55 @@ const PageParser = () => {
 	const { modules, setModule } = useContext(SettingsContext);
 
 	const moduleId = 'page-parser';
-	const submoduleId = 'auto-resize';
+	const subModules = {
+		'auto-resize': {
+			label: __('Auto resize images on front-end', 'cf-images'),
+			description: __(
+				'Make images responsive by adding missing image sizes to the srcset attribute.',
+				'cf-images'
+			),
+		},
+		'smallest-size': {
+			label: __('Use img width size', 'cf-images'),
+			description: __(
+				'If the image DOM element has a width/height attribute set, use the value for the image size. Fixes issues when an incorrect attachment size is selected in the editor.',
+				'cf-images'
+			),
+		},
+		'auto-crop': {
+			label: __('Auto crop', 'cf-images'),
+			description: __(
+				'If the image height matches the image width, try to auto crop the image.',
+				'cf-images'
+			),
+		},
+	};
+
+	const subOptions = Object.entries(subModules).map((module) => {
+		const { label, description } = module[1];
+		return (
+			<div className="field" key={module[0]}>
+				<input
+					checked={!!(module[0] in modules && modules[module[0]])}
+					className="switch is-rtl is-rounded is-small"
+					disabled={!(moduleId in modules) || !modules[moduleId]}
+					id={`cf-images-${module[0]}`}
+					name={`cf-images-${module[0]}`}
+					onChange={(e) => setModule(module[0], e.target.checked)}
+					type="checkbox"
+				/>
+				<label htmlFor={`cf-images-${module[0]}`}>
+					{label}
+					<span
+						className="icon is-small ml-2 has-tooltip-arrow has-tooltip-multiline"
+						data-tooltip={description}
+					>
+						<Icon path={mdiInformationOutline} size={1} />
+					</span>
+				</label>
+			</div>
+		);
+	});
 
 	return (
 		<Card
@@ -35,34 +84,7 @@ const PageParser = () => {
 					)}
 				</p>
 
-				<p className="is-size-5 mb-2">
-					{__('Auto resize images on front-end', 'cf-images')}
-				</p>
-				<p>
-					{__(
-						'Make images responsive by adding missing image sizes to the srcset attribute.',
-						'cf-images'
-					)}
-				</p>
-
-				<div className="field">
-					<input
-						checked={
-							!!(submoduleId in modules && modules[submoduleId])
-						}
-						className="switch is-rtl is-rounded is-small"
-						disabled={!(moduleId in modules) || !modules[moduleId]}
-						id={`cf-images-${submoduleId}`}
-						name={`cf-images-${submoduleId}`}
-						onChange={(e) =>
-							setModule(submoduleId, e.target.checked)
-						}
-						type="checkbox"
-					/>
-					<label htmlFor={`cf-images-${submoduleId}`}>
-						{__('Enable feature', 'cf-images')}
-					</label>
-				</div>
+				{subOptions}
 			</div>
 		</Card>
 	);

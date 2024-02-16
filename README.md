@@ -5,8 +5,8 @@ Tags: cdn, cloudflare images, offload images, compress, cloudflare, optimize
 Donate link: https://www.paypal.com/donate/?business=JRR6QPRGTZ46N&no_recurring=0&item_name=Help+support+the+development+of+the+Cloudflare+Images+plugin+for+WordPress&currency_code=AUD
 Requires at least: 5.6
 Requires PHP: 7.0
-Tested up to: 6.4
-Stable tag: 1.7.1
+Tested up to: 6.5
+Stable tag: 1.8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -46,6 +46,14 @@ Found a hiccup? Yearning for a feature? Just shoot us a support request. Our com
 = Disclaimer =
 
 Cloudflare, the Cloudflare logo, and Cloudflare Workers are trademarks and/or registered trademarks of Cloudflare, Inc. in the United States and other jurisdictions.
+
+= Sponsors =
+
+Special thanks to the plugin sponsors:
+
+<a href="https://thismatters.agency" target="_blank">
+<img src="https://thismatters.agency/wp-content/uploads/2023/03/thismatters-logo.svg" alt="this:matters" width="200" />
+</a>
 
 == Installation ==
 
@@ -95,6 +103,19 @@ If something is still not working for you, please let me know by creating a supp
 3. Quick and easy setup wizard
 
 == Changelog ==
+
+= 1.8.0 - 16.02.2024 =
+
+Added:
+* Support for RSS feeds
+* Auto crop option. If an image width matches the image height - auto crop the image.
+* Use img width size. New option that allows using the img width attribute value for the image size, if the value is smaller than the requested image. 
+* Bulk remove files from the media library.
+* Bulk restore files to the media library.
+
+Fixed:
+* Page parser will now add the wp-image-* class to images that do not have it
+* Page parser not detecting images that have a custom title set in the media library
 
 = 1.7.1 - 31.12.2023 =
 

@@ -9,7 +9,8 @@ $switch-background-active: $blue;
 
 @import "bulma/sass/utilities/_all";
 @import "bulma/sass/grid/columns";
-@import 'bulma-switch';
+@import "bulma-switch";
+@import "@creativebulma/bulma-tooltip";
 
 .cf-images {
 	@import "bulma/sass/base/_all";
