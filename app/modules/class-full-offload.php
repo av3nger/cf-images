@@ -31,11 +31,11 @@ class Full_Offload extends Module {
 	use Traits\Stats;
 
 	/**
-	 * Action name.
+	 * Action names.
 	 *
-	 * @var string
+	 * @var array
 	 */
-	private $action = 'full-remove';
+	private $actions = array( 'full-remove', 'full-restore' );
 
 	/**
 	 * Init the module.
@@ -60,8 +60,10 @@ class Full_Offload extends Module {
 	 * @return array
 	 */
 	public function add_bulk_action( array $actions ): array {
-		if ( ! in_array( $this->action, $actions, true ) ) {
-			$actions[] = $this->action;
+		foreach ( $this->actions as $action ) {
+			if ( ! in_array( $action, $actions, true ) ) {
+				$actions[] = $action;
+			}
 		}
 
 		return $actions;
@@ -79,14 +81,14 @@ class Full_Offload extends Module {
 	 * @return array
 	 */
 	public function add_wp_query_args( array $args, string $action ): array {
-		if ( $this->action !== $action ) {
+		if ( ! in_array( $action, $this->actions, true ) ) {
 			return $args;
 		}
 
 		$args['meta_query'] = array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 			array(
 				'key'     => '_cloudflare_image_offloaded',
-				'compare' => 'NOT EXISTS',
+				'compare' => 'full-remove' === $action ? 'NOT EXISTS' : 'EXISTS',
 			),
 			array(
 				'key'     => '_cloudflare_image_id',
@@ -107,10 +109,12 @@ class Full_Offload extends Module {
 	 * @param string $action        Executing action.
 	 */
 	public function bulk_step( int $attachment_id, string $action ) {
-		if ( $this->action !== $action ) {
-			return;
+		if ( 'full-remove' === $action ) {
+			$this->media()->ajax_delete_image( $attachment_id );
 		}
 
-		$this->media()->ajax_delete_image( $attachment_id );
+		if ( 'full-restore' === $action ) {
+			$this->media()->ajax_restore_image( $attachment_id );
+		}
 	}
 }

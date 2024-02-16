@@ -613,11 +613,15 @@ class Media {
 	 * Restore image to media library from Cloudflare.
 	 *
 	 * @since 1.2.1
+	 *
+	 * @param int|string|null $attachment_id Attachment ID.
 	 */
-	public function ajax_restore_image() {
+	public function ajax_restore_image( $attachment_id = null ) {
 		$this->check_ajax_request();
 
-		$attachment_id = (int) filter_input( INPUT_POST, 'data', FILTER_SANITIZE_NUMBER_INT );
+		if ( empty( $attachment_id ) ) {
+			$attachment_id = (int) filter_input( INPUT_POST, 'data', FILTER_SANITIZE_NUMBER_INT );
+		}
 
 		if ( ! $attachment_id ) {
 			return;
@@ -641,7 +645,10 @@ class Media {
 		}
 
 		delete_post_meta( $attachment_id, '_cloudflare_image_offloaded' );
-		wp_send_json_success( $this->get_response_data( $attachment_id ) );
+
+		if ( 'cf_images_restore_image' === filter_input( INPUT_POST, 'action', FILTER_UNSAFE_RAW ) ) {
+			wp_send_json_success( $this->get_response_data( $attachment_id ) );
+		}
 	}
 
 	/**

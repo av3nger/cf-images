@@ -3,7 +3,8 @@
 Added:
 * Auto crop option. If an image width matches the image height - auto crop the image.
 * Use img width size. New option that allows using the img width attribute value for the image size, if the value is smaller than the requested image.
-* Bulk full offload
+* Bulk remove files from the media library.
+* Bulk restore files to the media library.
 
 Fixed:
 * Page parser will now add the wp-image-* class to images that do not have it
