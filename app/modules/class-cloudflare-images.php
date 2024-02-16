@@ -14,6 +14,7 @@
 
 namespace CF_Images\App\Modules;
 
+use CF_Images\App\Image;
 use WP_Post;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -329,50 +330,18 @@ class Cloudflare_Images extends Module {
 	 * @return string
 	 */
 	public function content_img_tag( string $filtered_image, $context, int $attachment_id ): string {
-		// Find `src` attribute in an image.
-		preg_match( '/src=[\'"]([^\'"]+)/i', $filtered_image, $src );
+		if ( is_feed() && ! apply_filters( 'cf_images_module_enabled', false, 'rss-feeds' ) ) {
+			return $filtered_image;
+		}
 
-		if ( ! isset( $src[1] ) ) {
+		$pattern = '/<(?:img|source)\b(?>\s+(?:src=[\'"]([^\'"]*)[\'"]|srcset=[\'"]([^\'"]*)[\'"])|[^\s>]+|\s+)*>/i';
+		if ( ! preg_match_all( $pattern, $filtered_image, $images ) ) {
 			do_action( 'cf_images_log', 'Running content_img_tag(), `src` not found, returning image. Attachment ID: %s. Image: %s', $attachment_id, $filtered_image );
 			return $filtered_image;
 		}
 
-		if ( false !== strpos( $src[1], $this->get_cdn_domain() ) ) {
-			// Image is already served via Cloudflare.
-			return $filtered_image;
-		}
-
-		// Gutenberg's interactivity module stores image data inside `data-wp-bing--src` attribute, which is caught by our regex.
-		if ( ! filter_var( $src[1], FILTER_VALIDATE_URL ) ) {
-			return $filtered_image;
-		}
-
-		// Find `width` attributes in an image.
-		preg_match( '/width=[\'"]([^\'"]+)/i', $filtered_image, $size );
-
-		// We will try to find the best possible match based on the `width` attribute.
-		$width = isset( $size[1] ) ? (int) $size[1] : 'full';
-
-		/**
-		 * Filter that allows adjusting the attachment ID.
-		 *
-		 * Some plugins will replace the WordPress image class and prevent WordPress from getting the correct attachment ID.
-		 *
-		 * @since 1.3.0
-		 *
-		 * @param int    $attachment_id   The image attachment ID. May be 0 in case the image is not an attachment.
-		 * @param string $filtered_image  Full img tag with attributes that will replace the source img tag.
-		 */
-		$attachment_id = apply_filters( 'cf_images_content_attachment_id', $attachment_id, $filtered_image );
-
-		$image = $this->get_attachment_image_src( array( $src[1] ), $attachment_id, $width );
-
-		if ( isset( $image[0] ) && $image[0] !== $src[1] ) {
-			// Replace the image with a Cloudflare alternative.
-			$filtered_image = str_replace( $src[1], $image[0], $filtered_image );
-		}
-
-		return $filtered_image;
+		$image = new Image( $filtered_image, $images[1][0], $images[2][0] );
+		return $image->get_processed();
 	}
 
 	/**
