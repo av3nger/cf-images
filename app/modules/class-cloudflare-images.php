@@ -101,6 +101,9 @@ class Cloudflare_Images extends Module {
 		add_filter( 'wp_prepare_attachment_for_js', array( $this, 'prepare_attachment_for_js' ), 10, 2 );
 		add_filter( 'wp_calculate_image_srcset', array( $this, 'calculate_image_srcset' ), 10, 5 );
 
+		// Support for various Gutenberg blocks.
+		add_filter( 'wp_get_attachment_url', array( $this, 'get_attachment_url' ), 10, 2 );
+
 		// This filter is available on WordPress 6.0 or above.
 		add_filter( 'wp_content_img_tag', array( $this, 'content_img_tag' ), 10, 3 );
 
@@ -365,5 +368,25 @@ class Cloudflare_Images extends Module {
 				),
 			)
 		);
+	}
+
+	/**
+	 * Filters the attachment URL.
+	 *
+	 * @since 1.8.1
+	 *
+	 * @param string $url           URL for the given attachment.
+	 * @param int    $attachment_id Attachment post ID.
+	 *
+	 * @return string
+	 */
+	public function get_attachment_url( string $url, int $attachment_id ): string {
+		if ( is_admin() ) {
+			return $url;
+		}
+
+		$image_src = $this->get_attachment_image_src( array( $url ), $attachment_id, null );
+
+		return $image_src[0];
 	}
 }

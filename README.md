@@ -100,6 +100,7 @@ If something is still not working for you, please let me know by creating a supp
 
 Fixed:
 * Image size can now be changed in the Gutenberg image block for fully offloaded images
+* Full size images not replaced in the gallery block on expand
 
 = 1.8.0 - 16.02.2024 =
 
