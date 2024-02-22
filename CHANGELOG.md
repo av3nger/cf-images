@@ -1,5 +1,8 @@
 = 1.8.1 =
 
+Changed:
+* Disable logging in wp-admin
+
 Fixed:
 * Image size can now be changed in the Gutenberg image block for fully offloaded images
 * Full size images not replaced in the gallery block on expand 
