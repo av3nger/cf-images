@@ -102,10 +102,12 @@ abstract class Module {
 	 *
 	 * @since 1.1.3
 	 *
+	 * @param int $attachment_id Optional. Attachment ID.
+	 *
 	 * @return bool
 	 */
-	protected function can_run(): bool {
-		if ( $this->is_rest_request() || wp_doing_cron() ) {
+	protected function can_run( int $attachment_id = 0 ): bool {
+		if ( $this->is_rest_request( $attachment_id ) || wp_doing_cron() ) {
 			return false;
 		}
 
@@ -122,9 +124,19 @@ abstract class Module {
 	 *
 	 * @since 1.2.0
 	 *
+	 * @param int $attachment_id Optional. Attachment ID.
+	 *
 	 * @return bool
 	 */
-	private function is_rest_request(): bool {
+	private function is_rest_request( int $attachment_id = 0 ): bool {
+		if ( $attachment_id ) {
+			// We must rely on the REST API endpoints if full offload is enabled.
+			$deleted = get_post_meta( $attachment_id, '_cloudflare_image_offloaded', true );
+			if ( $deleted && apply_filters( 'cf_images_module_enabled', false, 'full-offload' ) ) {
+				return false;
+			}
+		}
+
 		$wordpress_has_no_logic = filter_input( INPUT_GET, '_wp-find-template' );
 		$wordpress_has_no_logic = sanitize_key( $wordpress_has_no_logic );
 

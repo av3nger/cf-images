@@ -96,6 +96,11 @@ If something is still not working for you, please let me know by creating a supp
 
 == Changelog ==
 
+= 1.8.1 =
+
+Fixed:
+* Image size can now be changed in the Gutenberg image block for fully offloaded images
+
 = 1.8.0 - 16.02.2024 =
 
 Added:
@@ -152,30 +157,6 @@ Changed:
 Fixed:
 * Bulk processing stops if an image triggers an error during upload
 * Settings resetting on update after using a beta version
-
-= 1.5.1 - 28.10.2023 =
-
-Fixed:
-* Do not replace images on wp-admin if full offload module is disabled
-
-= 1.5.0 - 27.10.2023 =
-
-Added:
-* New and improved React-based UI
-* Image compression module: optimize the size of your media library images
-* WP CLI support via the "wp cf-images" commands (bulk & individual offload)
-* Compatibility with the "Enable Media Replace" plugin
-* Option to bulk add image captions
-* Allow viewing a page with original images, using a "?cf-images-disable=true" URL query
-
-Changed:
-* The "Auto resize images on front-end" module has been refactored to prevent double loading of images
-
-Fixed:
-* Cropped image detection
-* Compatibility with latest WordPress coding standards
-* PHP warnings with page parser module on pages with no images
-* Link for adding API key for AI module was not working
 
 [Full changelog](https://github.com/av3nger/cf-images/blob/master/CHANGELOG.md).
 

@@ -1,3 +1,8 @@
+= 1.8.1 =
+
+Fixed:
+* Image size can now be changed in the Gutenberg image block for fully offloaded images
+
 = 1.8.0 - 16.02.2024 =
 
 Added:

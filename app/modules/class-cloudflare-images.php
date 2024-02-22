@@ -141,7 +141,7 @@ class Cloudflare_Images extends Module {
 	 * @return array|false
 	 */
 	public function get_attachment_image_src( $image, $attachment_id, $size ) {
-		if ( ! $this->can_run() || ! $image ) {
+		if ( ! $this->can_run( (int) $attachment_id ) || ! $image ) {
 			do_action( 'cf_images_log', 'Cannot run get_attachment_image_src(), returning original. Attachment ID: %s. Image: %s', $attachment_id, $image );
 			return $image;
 		}
