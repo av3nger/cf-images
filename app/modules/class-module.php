@@ -192,6 +192,11 @@ abstract class Module {
 			return false;
 		}
 
+		// Full offload overrides all other settings, because there are no local images available.
+		if ( $this->is_module_enabled( false, 'full-offload' ) ) {
+			return true;
+		}
+
 		if ( $this->is_module_enabled( false, 'no-offload-user' ) && defined( 'LOGGED_IN_COOKIE' ) ) {
 			// Check logged-in user cookie.
 			return empty( $_COOKIE[ LOGGED_IN_COOKIE ] );
