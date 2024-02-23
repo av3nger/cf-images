@@ -5,6 +5,7 @@ Added:
 
 Changed:
 * Disable logging in wp-admin
+* Improve detection of cropped images
 
 Fixed:
 * Image size can now be changed in the Gutenberg image block for fully offloaded images

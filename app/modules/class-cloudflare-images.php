@@ -166,7 +166,12 @@ class Cloudflare_Images extends Module {
 
 		// Image with defined dimensions.
 		if ( isset( $image[1] ) && $image[1] > 0 ) {
-			$image[0] = $cf_image . '/w=' . $image[1];
+			$height_str = '';
+			if ( isset( $image[2] ) && $image[2] > 0 ) {
+				$height_str = ',h=' . $image[2] . ( $image[1] === $image[2] ? ',fit=crop' : '' );
+			}
+
+			$image[0] = $cf_image . '/w=' . $image[1] . $height_str;
 			return $image;
 		}
 
