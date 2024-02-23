@@ -92,7 +92,7 @@ class Cloudflare_Images extends Module {
 	public function init() {
 		add_action( 'init', array( $this, 'populate_image_sizes' ) );
 
-		if ( filter_input( INPUT_GET, 'cf-images-disable' ) ) {
+		if ( ! $this->can_offload() ) {
 			return;
 		}
 

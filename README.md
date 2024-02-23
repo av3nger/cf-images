@@ -98,6 +98,9 @@ If something is still not working for you, please let me know by creating a supp
 
 = 1.8.1 =
 
+Added:
+* Option to serve originals for logged-in users
+
 Changed:
 * Disable logging in wp-admin
 

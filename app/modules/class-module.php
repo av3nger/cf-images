@@ -179,4 +179,24 @@ abstract class Module {
 
 		return apply_filters( 'cf_images_module_status', $settings[ $module ] ?? $fallback, $module );
 	}
+
+	/**
+	 * In certain cases offloading should be disabled.
+	 *
+	 * @since 1.8.1
+	 *
+	 * @return bool
+	 */
+	public function can_offload(): bool {
+		if ( filter_input( INPUT_GET, 'cf-images-disable' ) ) {
+			return false;
+		}
+
+		if ( $this->is_module_enabled( false, 'no-offload-user' ) && defined( 'LOGGED_IN_COOKIE' ) ) {
+			// Check logged-in user cookie.
+			return empty( $_COOKIE[ LOGGED_IN_COOKIE ] );
+		}
+
+		return true;
+	}
 }

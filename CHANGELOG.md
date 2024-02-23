@@ -1,5 +1,8 @@
 = 1.8.1 =
 
+Added:
+* Option to serve originals for logged-in users
+
 Changed:
 * Disable logging in wp-admin
 
