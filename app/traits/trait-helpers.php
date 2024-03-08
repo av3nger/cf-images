@@ -14,6 +14,7 @@ namespace CF_Images\App\Traits;
 
 use CF_Images\App\Core;
 use CF_Images\App\Media;
+use CF_Images\App\Settings;
 use WP_Error;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -109,5 +110,20 @@ trait Helpers {
 	 */
 	protected function media(): Media {
 		return Core::get_instance()->admin()->media();
+	}
+
+	/**
+	 * Check if network wide settings enabled.
+	 *
+	 * @since 1.8.1
+	 *
+	 * @return bool
+	 */
+	protected function is_network_wide(): bool {
+		if ( ! is_multisite() || is_main_site() ) {
+			return false;
+		}
+
+		return get_site_option( 'cf-images-network-wide' );
 	}
 }

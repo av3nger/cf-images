@@ -14,6 +14,7 @@
 
 namespace CF_Images\App\Modules;
 
+use CF_Images\App\Settings;
 use CF_Images\App\Traits\Helpers;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -175,7 +176,7 @@ abstract class Module {
 			$module = $this->module;
 		}
 
-		$settings = get_option( 'cf-images-settings', \CF_Images\App\Settings::get_defaults() );
+		$settings = apply_filters( 'cf_images_settings', get_option( 'cf-images-settings', Settings::get_defaults() ) );
 
 		return apply_filters( 'cf_images_module_status', $settings[ $module ] ?? $fallback, $module );
 	}

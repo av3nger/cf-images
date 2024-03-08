@@ -100,6 +100,7 @@ If something is still not working for you, please let me know by creating a supp
 
 Added:
 * Option to serve originals for logged-in users
+* Option to apply settings network wide in multisite
 
 Changed:
 * Disable logging in wp-admin

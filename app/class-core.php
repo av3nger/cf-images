@@ -210,10 +210,12 @@ class Core {
 	 * @see Modules\Service
 	 * @see Modules\CDN
 	 * @see Modules\Full_Offload
+	 * @see Modules\Multisite
 	 */
 	private function load_modules() {
 		$loader = Loader::get_instance();
 
+		$loader->module( 'multisite' ); // This should be loaded before other modules.
 		$loader->module( 'cdn' ); // This should be loaded before other modules.
 		$loader->module( 'auto-offload' );
 		$loader->module( 'auto-resize' );

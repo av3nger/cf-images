@@ -127,15 +127,16 @@ class Admin {
 			$this->get_slug(),
 			'CFImages',
 			array(
-				'nonce'       => wp_create_nonce( 'cf-images-nonce' ),
-				'dirURL'      => CF_IMAGES_DIR_URL,
-				'settings'    => get_option( 'cf-images-settings', Settings::get_defaults() ),
-				'cfStatus'    => $this->is_set_up(),
-				'domain'      => get_option( 'cf-images-custom-domain', '' ),
-				'hideSidebar' => get_site_option( 'cf-images-hide-sidebar' ),
-				'fuzion'      => $this->is_fuzion_api_connected(),
-				'stats'       => $this->get_stats(),
-				'cdnEnabled'  => (bool) get_option( 'cf-images-cdn-enabled', false ),
+				'nonce'          => wp_create_nonce( 'cf-images-nonce' ),
+				'dirURL'         => CF_IMAGES_DIR_URL,
+				'settings'       => apply_filters( 'cf_images_settings', get_option( 'cf-images-settings', Settings::get_defaults() ) ),
+				'cfStatus'       => $this->is_set_up(),
+				'domain'         => get_option( 'cf-images-custom-domain', '' ),
+				'hideSidebar'    => get_site_option( 'cf-images-hide-sidebar' ),
+				'fuzion'         => $this->is_fuzion_api_connected(),
+				'stats'          => $this->get_stats(),
+				'cdnEnabled'     => (bool) get_option( 'cf-images-cdn-enabled', false ),
+				'isNetworkAdmin' => is_multisite() && is_main_site(),
 			)
 		);
 	}
@@ -150,6 +151,10 @@ class Admin {
 	 * @return array
 	 */
 	public function settings_link( array $actions ): array {
+		if ( $this->is_network_wide() ) {
+			return $actions;
+		}
+
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return $actions;
 		}
@@ -164,6 +169,10 @@ class Admin {
 	 * @since 1.0.0
 	 */
 	public function register_menu() {
+		if ( $this->is_network_wide() ) {
+			return;
+		}
+
 		add_submenu_page(
 			'upload.php',
 			__( 'Offload Images to Cloudflare', 'cf-images' ),

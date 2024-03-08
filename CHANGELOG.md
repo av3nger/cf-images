@@ -2,6 +2,7 @@
 
 Added:
 * Option to serve originals for logged-in users
+* Option to apply settings network wide in multisite
 
 Changed:
 * Disable logging in wp-admin

@@ -19,6 +19,7 @@ interface CFImages {
     settings: Object;
     stats: StatsType;
     cdnEnabled: boolean;
+    isNetworkAdmin: boolean;
 }
 
 interface SettingsContextType {
@@ -31,6 +32,7 @@ interface SettingsContextType {
     cfConnected: boolean;
     setCfConnected: (status: boolean) => void;
     inProgress: boolean;
+    isNetworkAdmin: boolean;
     setInProgress: (status: boolean) => void;
     stats: StatsType;
     setStats: (stats: StatsType) => void;

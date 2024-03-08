@@ -17,7 +17,7 @@ import Card from '../../components/card';
 import SettingsContext from '../../context/settings';
 
 const MiscOptions = () => {
-	const { modules, setModule } = useContext(SettingsContext);
+	const { isNetworkAdmin, modules, setModule } = useContext(SettingsContext);
 
 	const subModules = {
 		'rss-feeds': {
@@ -32,6 +32,16 @@ const MiscOptions = () => {
 			),
 		},
 	};
+
+	if (isNetworkAdmin) {
+		subModules['network-wide'] = {
+			label: __('Network wide settings', 'cf-images'),
+			description: __(
+				'Apply the above settings to all sub-sites in the network and hide the offload media menu option.',
+				'cf-images'
+			),
+		};
+	}
 
 	const options = Object.entries(subModules).map((module) => {
 		const { label, description } = module[1];
