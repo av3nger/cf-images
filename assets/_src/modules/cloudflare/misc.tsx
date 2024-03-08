@@ -16,7 +16,7 @@ import { __ } from '@wordpress/i18n';
 import Card from '../../components/card';
 import SettingsContext from '../../context/settings';
 
-const RSSFeeds = () => {
+const MiscOptions = () => {
 	const { modules, setModule } = useContext(SettingsContext);
 
 	const subModules = {
@@ -65,4 +65,4 @@ const RSSFeeds = () => {
 	);
 };
 
-export default RSSFeeds;
+export default MiscOptions;
