@@ -7,6 +7,7 @@ Added:
 Changed:
 * Disable logging in wp-admin
 * Improve detection of cropped images
+* Fallback to scaled images if original image is larger than 20 Mb
 
 Fixed:
 * Image size can now be changed in the Gutenberg image block for fully offloaded images

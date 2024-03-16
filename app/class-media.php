@@ -407,6 +407,10 @@ class Media {
 		$dir   = wp_get_upload_dir();
 		$path  = wp_get_original_image_path( $attachment_id );
 
+		if ( file_exists( $path ) && ( MB_IN_BYTES * 20 ) <= filesize( $path ) ) {
+			$path = get_attached_file( $attachment_id );
+		}
+
 		$url = wp_parse_url( get_site_url() );
 		if ( is_multisite() && ! is_subdomain_install() ) {
 			$host = $url['host'] . $url['path'];
