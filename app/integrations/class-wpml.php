@@ -14,6 +14,8 @@
 
 namespace CF_Images\App\Integrations;
 
+use stdClass;
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -34,6 +36,7 @@ class Wpml {
 		add_action( 'cf_images_before_wp_query', array( $this, 'remove_wpml_filters' ) );
 		add_action( 'wpml_after_duplicate_attachment', array( $this, 'ignore_attachment' ), 10, 2 );
 		add_action( 'wpml_after_copy_attached_file_postmeta', array( $this, 'ignore_attachment' ), 10, 2 );
+		add_action( 'cf_images_upload_success', array( $this, 'update_image_meta' ), 10, 2 );
 	}
 
 	/**
@@ -85,6 +88,40 @@ class Wpml {
 	 * @since 1.4.0
 	 */
 	public function ignore_attachment( int $attachment_id, int $duplicated_attachment_id ) {
+		$original = $this->get_original_image_id( $attachment_id );
+
+		// When uploading an image from the "non-original" language, the parameters are swapped.
+		if ( $original === $duplicated_attachment_id ) {
+			$duplicated_attachment_id = $attachment_id;
+		}
+
 		update_post_meta( $duplicated_attachment_id, '_cloudflare_image_skip', true );
+	}
+
+	/**
+	 * Update the meta for all images.
+	 *
+	 * @since 1.8.1
+	 *
+	 * @param int      $attachment_id Original attachment ID.
+	 * @param stdClass $results       Upload results.
+	 */
+	public function update_image_meta( int $attachment_id, stdClass $results ) {
+		global $sitepress;
+
+		if ( ! $sitepress || ! method_exists( $sitepress, 'get_element_trid' ) ) {
+			return;
+		}
+
+		$translation_id = $sitepress->get_element_trid( $attachment_id, 'post_attachment' );
+		$translations   = $sitepress->get_element_translations( $translation_id, 'post_attachment', true );
+
+		foreach ( $translations as $translation ) {
+			if ( $translation->original ) {
+				continue;
+			}
+
+			update_post_meta( $translation->element_id, '_cloudflare_image_id', $results->id );
+		}
 	}
 }

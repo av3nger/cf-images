@@ -11,7 +11,8 @@ Changed:
 
 Fixed:
 * Image size can now be changed in the Gutenberg image block for fully offloaded images
-* Full size images not replaced in the gallery block on expand 
+* Full size images not replaced in the gallery block on expand
+* Multiple fixes and improvements with the WPML integration
 
 = 1.8.0 - 16.02.2024 =
 

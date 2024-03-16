@@ -395,6 +395,9 @@ class Media {
 			return $metadata;
 		}
 
+		// This is used with WPML integration.
+		$attachment_id = apply_filters( 'cf_images_media_post_id', $attachment_id );
+
 		$mime = get_post_mime_type( $attachment_id );
 
 		if ( ! wp_attachment_is_image( $attachment_id ) || false !== strpos( $mime, 'image/svg' ) ) {
@@ -432,6 +435,8 @@ class Media {
 			delete_post_meta( $attachment_id, '_cloudflare_image_skip' );
 			update_post_meta( $attachment_id, '_cloudflare_image_id', $results->id );
 			$this->maybe_save_hash( $results->variants );
+
+			do_action( 'cf_images_upload_success', $attachment_id, $results );
 
 			if ( doing_filter( 'wp_async_wp_generate_attachment_metadata' ) ) {
 				$this->fetch_stats( new Api\Image() );
