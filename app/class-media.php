@@ -470,6 +470,8 @@ class Media {
 			delete_post_meta( $post_id, '_cloudflare_image_id' );
 			delete_post_meta( $post_id, '_cloudflare_image_skip' );
 
+			do_action( 'cf_images_remove_success', $post_id );
+
 			if ( doing_action( 'delete_attachment' ) ) {
 				$this->fetch_stats( new Api\Image() );
 			}

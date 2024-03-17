@@ -37,6 +37,7 @@ class Wpml {
 		add_action( 'wpml_after_duplicate_attachment', array( $this, 'ignore_attachment' ), 10, 2 );
 		add_action( 'wpml_after_copy_attached_file_postmeta', array( $this, 'ignore_attachment' ), 10, 2 );
 		add_action( 'cf_images_upload_success', array( $this, 'update_image_meta' ), 10, 2 );
+		add_action( 'cf_images_remove_success', array( $this, 'image_removed_from_cf' ) );
 	}
 
 	/**
@@ -99,6 +100,26 @@ class Wpml {
 	}
 
 	/**
+	 * Get translations for an image.
+	 *
+	 * @since 1.8.1
+	 *
+	 * @param int $attachment_id Attachment ID.
+	 *
+	 * @return array
+	 */
+	private function get_translations( int $attachment_id ): array {
+		global $sitepress;
+
+		if ( ! $sitepress || ! method_exists( $sitepress, 'get_element_trid' ) ) {
+			return array();
+		}
+
+		$translation_id = $sitepress->get_element_trid( $attachment_id, 'post_attachment' );
+		return $sitepress->get_element_translations( $translation_id, 'post_attachment', true );
+	}
+
+	/**
 	 * Update the meta for all images.
 	 *
 	 * @since 1.8.1
@@ -107,14 +128,7 @@ class Wpml {
 	 * @param stdClass $results       Upload results.
 	 */
 	public function update_image_meta( int $attachment_id, stdClass $results ) {
-		global $sitepress;
-
-		if ( ! $sitepress || ! method_exists( $sitepress, 'get_element_trid' ) ) {
-			return;
-		}
-
-		$translation_id = $sitepress->get_element_trid( $attachment_id, 'post_attachment' );
-		$translations   = $sitepress->get_element_translations( $translation_id, 'post_attachment', true );
+		$translations = $this->get_translations( $attachment_id );
 
 		foreach ( $translations as $translation ) {
 			if ( $translation->original ) {
@@ -122,6 +136,25 @@ class Wpml {
 			}
 
 			update_post_meta( $translation->element_id, '_cloudflare_image_id', $results->id );
+		}
+	}
+
+	/**
+	 * Remove meta from all translatable images when the main image is removed from Cloudflare.
+	 *
+	 * @since 1.8.1
+	 *
+	 * @param int $attachment_id Attachment ID.
+	 */
+	public function image_removed_from_cf( int $attachment_id ) {
+		$translations = $this->get_translations( $attachment_id );
+
+		foreach ( $translations as $translation ) {
+			if ( $translation->original ) {
+				continue;
+			}
+
+			delete_post_meta( $translation->element_id, '_cloudflare_image_id' );
 		}
 	}
 }
