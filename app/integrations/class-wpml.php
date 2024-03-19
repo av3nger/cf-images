@@ -34,10 +34,9 @@ class Wpml {
 	public function __construct() {
 		add_filter( 'cf_images_media_post_id', array( $this, 'get_original_image_id' ) );
 		add_action( 'cf_images_before_wp_query', array( $this, 'remove_wpml_filters' ) );
-		add_action( 'wpml_after_duplicate_attachment', array( $this, 'ignore_attachment' ), 10, 2 );
-		add_action( 'wpml_after_copy_attached_file_postmeta', array( $this, 'ignore_attachment' ), 10, 2 );
 		add_action( 'cf_images_upload_success', array( $this, 'update_image_meta' ), 10, 2 );
 		add_action( 'cf_images_remove_success', array( $this, 'image_removed_from_cf' ) );
+		add_filter( 'cf_images_wp_query_args', array( $this, 'add_wp_query_args' ), 10, 2 );
 	}
 
 	/**
@@ -76,27 +75,6 @@ class Wpml {
 			remove_filter( 'posts_join', array( $wpml_query_filter, 'posts_join_filter' ) );
 			remove_filter( 'posts_where', array( $wpml_query_filter, 'posts_where_filter' ) );
 		}
-	}
-
-	/**
-	 * Fires when an attachment is duplicated.
-	 *
-	 * Duplicated images do not need to be processed, otherwise this causes double uploads to Cloudflare.
-	 *
-	 * @param int $attachment_id            The ID of the source/original attachment.
-	 * @param int $duplicated_attachment_id The ID of the duplicated attachment.
-	 *
-	 * @since 1.4.0
-	 */
-	public function ignore_attachment( int $attachment_id, int $duplicated_attachment_id ) {
-		$original = $this->get_original_image_id( $attachment_id );
-
-		// When uploading an image from the "non-original" language, the parameters are swapped.
-		if ( $original === $duplicated_attachment_id ) {
-			$duplicated_attachment_id = $attachment_id;
-		}
-
-		update_post_meta( $duplicated_attachment_id, '_cloudflare_image_skip', true );
 	}
 
 	/**
@@ -156,5 +134,29 @@ class Wpml {
 
 			delete_post_meta( $translation->element_id, '_cloudflare_image_id' );
 		}
+	}
+
+	/**
+	 * Adjust the WP_Query args for bulk offload action.
+	 *
+	 * @since 1.8.1
+	 * @see Ajax::get_wp_query_args()
+	 *
+	 * @param array  $args   WP_Query args.
+	 * @param string $action Executing action.
+	 *
+	 * @return array
+	 */
+	public function add_wp_query_args( array $args, string $action ): array {
+		if ( 'upload' !== $action ) {
+			return $args;
+		}
+
+		$args['meta_query'][] = array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+			'compare' => 'NOT EXISTS',
+			'key'     => 'wpml_media_processed',
+		);
+
+		return $args;
 	}
 }
