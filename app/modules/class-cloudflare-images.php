@@ -378,7 +378,7 @@ class Cloudflare_Images extends Module {
 	/**
 	 * Filters the attachment URL.
 	 *
-	 * @since 1.8.1
+	 * @since 1.9.0
 	 *
 	 * @param string $url           URL for the given attachment.
 	 * @param int    $attachment_id Attachment post ID.

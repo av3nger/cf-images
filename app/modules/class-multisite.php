@@ -8,7 +8,7 @@
  * @subpackage CF_Images/App/Modules
  * @author Anton Vanyukov <a.vanyukov@vcore.ru>
  *
- * @since 1.8.1
+ * @since 1.9.0
  */
 
 namespace CF_Images\App\Modules;
@@ -23,7 +23,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Multisite class.
  *
- * @since 1.8.1
+ * @since 1.9.0
  */
 class Multisite extends Module {
 	use Empty_Init;
@@ -31,7 +31,7 @@ class Multisite extends Module {
 	/**
 	 * This is a core module, meaning it can't be enabled/disabled via options.
 	 *
-	 * @since 1.8.1
+	 * @since 1.9.0
 	 *
 	 * @var bool
 	 */
@@ -40,7 +40,7 @@ class Multisite extends Module {
 	/**
 	 * Run everything regardless of module status.
 	 *
-	 * @since 1.8.1
+	 * @since 1.9.0
 	 */
 	public function pre_init() {
 		add_action( 'cf_images_save_settings', array( $this, 'on_settings_update' ), 10, 2 );
@@ -50,7 +50,7 @@ class Multisite extends Module {
 	/**
 	 * Update the module status.
 	 *
-	 * @since 1.8.1
+	 * @since 1.9.0
 	 *
 	 * @param array $settings Settings array.
 	 * @param array $data     Passed in data from the app.
@@ -70,7 +70,7 @@ class Multisite extends Module {
 	/**
 	 * Use network wide settings.
 	 *
-	 * @since 1.8.1
+	 * @since 1.9.0
 	 *
 	 * @param array $settings Current settings.
 	 *

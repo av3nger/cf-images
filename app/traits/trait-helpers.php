@@ -115,7 +115,7 @@ trait Helpers {
 	/**
 	 * Check if network wide settings enabled.
 	 *
-	 * @since 1.8.1
+	 * @since 1.9.0
 	 *
 	 * @return bool
 	 */

@@ -10,7 +10,7 @@
  * @package CF_Images
  * @subpackage CF_Images/App/Modules
  * @author Anton Vanyukov <a.vanyukov@vcore.ru>
- * @since 1.8.1
+ * @since 1.9.0
  */
 
 namespace CF_Images\App\Modules;
@@ -26,7 +26,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Cache_TTL class.
  *
- * @since 1.8.1
+ * @since 1.9.0
  */
 class Cache_TTL extends Module {
 	use Traits\Ajax;
@@ -36,7 +36,7 @@ class Cache_TTL extends Module {
 	/**
 	 * Run everything regardless of module status.
 	 *
-	 * @since 1.8.1
+	 * @since 1.9.0
 	 */
 	public function pre_init() {
 		if ( wp_doing_ajax() ) {
@@ -47,7 +47,7 @@ class Cache_TTL extends Module {
 	/**
 	 * Set browser cache TTL.
 	 *
-	 * @since 1.8.1
+	 * @since 1.9.0
 	 */
 	public function ajax_set_ttl() {
 		$this->check_ajax_request();

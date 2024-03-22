@@ -184,7 +184,7 @@ abstract class Module {
 	/**
 	 * In certain cases offloading should be disabled.
 	 *
-	 * @since 1.8.1
+	 * @since 1.9.0
 	 *
 	 * @return bool
 	 */

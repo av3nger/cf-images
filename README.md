@@ -96,7 +96,7 @@ If something is still not working for you, please let me know by creating a supp
 
 == Changelog ==
 
-= 1.8.1 =
+= 1.9.0 =
 
 Added:
 * Set browser TTL for images

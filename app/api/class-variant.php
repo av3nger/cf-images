@@ -58,7 +58,7 @@ class Variant extends Cloudflare {
 	/**
 	 * Set images cache TTL.
 	 *
-	 * @since 1.8.1
+	 * @since 1.9.0
 	 *
 	 * @param int $value Cache TTL in seconds.
 	 *

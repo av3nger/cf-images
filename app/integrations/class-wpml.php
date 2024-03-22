@@ -80,7 +80,7 @@ class Wpml {
 	/**
 	 * Get translations for an image.
 	 *
-	 * @since 1.8.1
+	 * @since 1.9.0
 	 *
 	 * @param int $attachment_id Attachment ID.
 	 *
@@ -100,7 +100,7 @@ class Wpml {
 	/**
 	 * Update the meta for all images.
 	 *
-	 * @since 1.8.1
+	 * @since 1.9.0
 	 *
 	 * @param int      $attachment_id Original attachment ID.
 	 * @param stdClass $results       Upload results.
@@ -120,7 +120,7 @@ class Wpml {
 	/**
 	 * Remove meta from all translatable images when the main image is removed from Cloudflare.
 	 *
-	 * @since 1.8.1
+	 * @since 1.9.0
 	 *
 	 * @param int $attachment_id Attachment ID.
 	 */
@@ -139,7 +139,7 @@ class Wpml {
 	/**
 	 * Adjust the WP_Query args for bulk offload action.
 	 *
-	 * @since 1.8.1
+	 * @since 1.9.0
 	 * @see Ajax::get_wp_query_args()
 	 *
 	 * @param array  $args   WP_Query args.
