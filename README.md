@@ -6,7 +6,7 @@ Donate link: https://www.paypal.com/donate/?business=JRR6QPRGTZ46N&no_recurring=
 Requires at least: 5.6
 Requires PHP: 7.0
 Tested up to: 6.5
-Stable tag: 1.8.0
+Stable tag: 1.9.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -51,9 +51,7 @@ Cloudflare, the Cloudflare logo, and Cloudflare Workers are trademarks and/or re
 
 Special thanks to the plugin sponsors:
 
-<a href="https://thismatters.agency" target="_blank">
-<img src="https://thismatters.agency/wp-content/uploads/2023/03/thismatters-logo.svg" alt="this:matters" width="200" />
-</a>
+<a href="https://thismatters.agency">WordPress Agency this:matters</a>
 
 == Installation ==
 
@@ -103,6 +101,23 @@ If something is still not working for you, please let me know by creating a supp
 3. Quick and easy setup wizard
 
 == Changelog ==
+
+= 1.9.0 - 22.03.2024 =
+
+Added:
+* Set browser TTL for images
+* Option to serve originals for logged-in users
+* Option to apply settings network wide in multisite
+
+Changed:
+* Disable logging in wp-admin
+* Improve detection of cropped images
+* Fallback to scaled images if original image is larger than 20 Mb
+
+Fixed:
+* Image size can now be changed in the Gutenberg image block for fully offloaded images
+* Full size images not replaced in the gallery block on expand
+* Multiple fixes and improvements with the WPML integration
 
 = 1.8.0 - 16.02.2024 =
 
@@ -160,30 +175,6 @@ Changed:
 Fixed:
 * Bulk processing stops if an image triggers an error during upload
 * Settings resetting on update after using a beta version
-
-= 1.5.1 - 28.10.2023 =
-
-Fixed:
-* Do not replace images on wp-admin if full offload module is disabled
-
-= 1.5.0 - 27.10.2023 =
-
-Added:
-* New and improved React-based UI
-* Image compression module: optimize the size of your media library images
-* WP CLI support via the "wp cf-images" commands (bulk & individual offload)
-* Compatibility with the "Enable Media Replace" plugin
-* Option to bulk add image captions
-* Allow viewing a page with original images, using a "?cf-images-disable=true" URL query
-
-Changed:
-* The "Auto resize images on front-end" module has been refactored to prevent double loading of images
-
-Fixed:
-* Cropped image detection
-* Compatibility with latest WordPress coding standards
-* PHP warnings with page parser module on pages with no images
-* Link for adding API key for AI module was not working
 
 [Full changelog](https://github.com/av3nger/cf-images/blob/master/CHANGELOG.md).
 

@@ -10,6 +10,7 @@ interface ApiResponse {
 }
 
 interface CFImages {
+    browserTTL: string;
     cfStatus: boolean;
     domain: string;
     dirURL: string;
@@ -19,9 +20,11 @@ interface CFImages {
     settings: Object;
     stats: StatsType;
     cdnEnabled: boolean;
+    isNetworkAdmin: boolean;
 }
 
 interface SettingsContextType {
+    browserTTL: string;
     modules: object;
     setModule: (module: string, value: boolean) => void;
     noticeHidden: boolean;
@@ -31,6 +34,7 @@ interface SettingsContextType {
     cfConnected: boolean;
     setCfConnected: (status: boolean) => void;
     inProgress: boolean;
+    isNetworkAdmin: boolean;
     setInProgress: (status: boolean) => void;
     stats: StatsType;
     setStats: (stats: StatsType) => void;

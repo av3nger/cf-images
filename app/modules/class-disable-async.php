@@ -14,6 +14,7 @@
 namespace CF_Images\App\Modules;
 
 use CF_Images\App\Async;
+use CF_Images\App\Traits\Empty_Init;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -25,12 +26,7 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.4.0
  */
 class Disable_Async extends Module {
-	/**
-	 * Init the module.
-	 *
-	 * @since 1.4.0
-	 */
-	public function init() {}
+	use Empty_Init;
 
 	/**
 	 * Because the actions need to run if this module is disabled (which is reverse of a typical module),

@@ -28,13 +28,7 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Service extends Module {
 	use Traits\Ajax;
-
-	/**
-	 * Init the module.
-	 *
-	 * @since 1.7.0
-	 */
-	public function init() {}
+	use Traits\Empty_Init;
 
 	/**
 	 * Init the module.

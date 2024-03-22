@@ -92,7 +92,7 @@ class Cloudflare_Images extends Module {
 	public function init() {
 		add_action( 'init', array( $this, 'populate_image_sizes' ) );
 
-		if ( filter_input( INPUT_GET, 'cf-images-disable' ) ) {
+		if ( ! $this->can_offload() ) {
 			return;
 		}
 
@@ -100,6 +100,9 @@ class Cloudflare_Images extends Module {
 		add_filter( 'wp_get_attachment_image_src', array( $this, 'get_attachment_image_src' ), 10, 3 );
 		add_filter( 'wp_prepare_attachment_for_js', array( $this, 'prepare_attachment_for_js' ), 10, 2 );
 		add_filter( 'wp_calculate_image_srcset', array( $this, 'calculate_image_srcset' ), 10, 5 );
+
+		// Support for various Gutenberg blocks.
+		add_filter( 'wp_get_attachment_url', array( $this, 'get_attachment_url' ), 10, 2 );
 
 		// This filter is available on WordPress 6.0 or above.
 		add_filter( 'wp_content_img_tag', array( $this, 'content_img_tag' ), 10, 3 );
@@ -141,7 +144,7 @@ class Cloudflare_Images extends Module {
 	 * @return array|false
 	 */
 	public function get_attachment_image_src( $image, $attachment_id, $size ) {
-		if ( ! $this->can_run() || ! $image ) {
+		if ( ! $this->can_run( (int) $attachment_id ) || ! $image ) {
 			do_action( 'cf_images_log', 'Cannot run get_attachment_image_src(), returning original. Attachment ID: %s. Image: %s', $attachment_id, $image );
 			return $image;
 		}
@@ -163,7 +166,12 @@ class Cloudflare_Images extends Module {
 
 		// Image with defined dimensions.
 		if ( isset( $image[1] ) && $image[1] > 0 ) {
-			$image[0] = $cf_image . '/w=' . $image[1];
+			$height_str = '';
+			if ( isset( $image[2] ) && $image[2] > 0 ) {
+				$height_str = ',h=' . $image[2] . ( $image[1] === $image[2] ? ',fit=crop' : '' );
+			}
+
+			$image[0] = $cf_image . '/w=' . $image[1] . $height_str;
 			return $image;
 		}
 
@@ -365,5 +373,25 @@ class Cloudflare_Images extends Module {
 				),
 			)
 		);
+	}
+
+	/**
+	 * Filters the attachment URL.
+	 *
+	 * @since 1.9.0
+	 *
+	 * @param string $url           URL for the given attachment.
+	 * @param int    $attachment_id Attachment post ID.
+	 *
+	 * @return string
+	 */
+	public function get_attachment_url( string $url, int $attachment_id ): string {
+		if ( is_admin() ) {
+			return $url;
+		}
+
+		$image_src = $this->get_attachment_image_src( array( $url ), $attachment_id, null );
+
+		return $image_src[0];
 	}
 }

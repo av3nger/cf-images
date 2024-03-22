@@ -22,7 +22,8 @@ import CloudflareDisconnect from '../../modules/actions/cf-disconnect';
 import CloudflareStats from '../../modules/cloudflare/cf-stats';
 import Logging from '../../modules/cloudflare/logging';
 import Service from '../../modules/cloudflare/service';
-import RSSFeeds from '../../modules/cloudflare/rss-feeds';
+import MiscOptions from '../../modules/cloudflare/misc';
+import BrowserTTL from '../../modules/cloudflare/ttl';
 
 /**
  * Cloudflare Images settings routes.
@@ -48,12 +49,13 @@ const CloudflareSettings = () => {
 					</div>
 				)}
 				<CloudflareStats />
+				<BrowserTTL />
 				<AutoOffload />
 				<CustomId />
 				<CustomDomain />
 				<PageParser />
 				<DisableAsync />
-				<RSSFeeds />
+				<MiscOptions />
 				<Service />
 				<Logging />
 				<CloudflareDisconnect />

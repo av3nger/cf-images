@@ -17,7 +17,14 @@ import SettingsContext from './settings';
  * @class
  */
 const SettingsProvider = ({ children }: { children: ReactElement[] }) => {
-	const { cfStatus, fuzion, hideSidebar, settings } = window.CFImages;
+	const {
+		browserTTL,
+		cfStatus,
+		fuzion,
+		hideSidebar,
+		isNetworkAdmin,
+		settings,
+	} = window.CFImages;
 
 	const [stats, setStats] = useState(window.CFImages.stats);
 	const [modules, setModules] = useState(settings);
@@ -44,11 +51,13 @@ const SettingsProvider = ({ children }: { children: ReactElement[] }) => {
 	return (
 		<SettingsContext.Provider
 			value={{
+				browserTTL,
 				modules,
 				setModule,
 				noticeHidden,
 				hideNotice,
 				hasFuzion,
+				isNetworkAdmin,
 				setFuzion,
 				cfConnected,
 				setCfConnected,

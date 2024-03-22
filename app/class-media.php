@@ -395,6 +395,9 @@ class Media {
 			return $metadata;
 		}
 
+		// This is used with WPML integration.
+		$attachment_id = apply_filters( 'cf_images_media_post_id', $attachment_id );
+
 		$mime = get_post_mime_type( $attachment_id );
 
 		if ( ! wp_attachment_is_image( $attachment_id ) || false !== strpos( $mime, 'image/svg' ) ) {
@@ -406,6 +409,10 @@ class Media {
 		$image = new Api\Image();
 		$dir   = wp_get_upload_dir();
 		$path  = wp_get_original_image_path( $attachment_id );
+
+		if ( file_exists( $path ) && ( MB_IN_BYTES * 20 ) <= filesize( $path ) ) {
+			$path = get_attached_file( $attachment_id );
+		}
 
 		$url = wp_parse_url( get_site_url() );
 		if ( is_multisite() && ! is_subdomain_install() ) {
@@ -428,6 +435,8 @@ class Media {
 			delete_post_meta( $attachment_id, '_cloudflare_image_skip' );
 			update_post_meta( $attachment_id, '_cloudflare_image_id', $results->id );
 			$this->maybe_save_hash( $results->variants );
+
+			do_action( 'cf_images_upload_success', $attachment_id, $results );
 
 			if ( doing_filter( 'wp_async_wp_generate_attachment_metadata' ) ) {
 				$this->fetch_stats( new Api\Image() );
@@ -460,6 +469,8 @@ class Media {
 			$this->decrement_stat( 'synced' );
 			delete_post_meta( $post_id, '_cloudflare_image_id' );
 			delete_post_meta( $post_id, '_cloudflare_image_skip' );
+
+			do_action( 'cf_images_remove_success', $post_id );
 
 			if ( doing_action( 'delete_attachment' ) ) {
 				$this->fetch_stats( new Api\Image() );

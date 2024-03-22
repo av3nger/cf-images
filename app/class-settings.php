@@ -48,6 +48,7 @@ class Settings {
 		'image-generate'     => false,
 		'logging'            => false,
 		'rss-feeds'          => false,
+		'no-offload-user'    => false, // Do not offload images for logged-in users.
 	);
 
 	/**

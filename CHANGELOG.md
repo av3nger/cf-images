@@ -1,3 +1,20 @@
+= 1.9.0 - 22.03.2024 =
+
+Added:
+* Set browser TTL for images
+* Option to serve originals for logged-in users
+* Option to apply settings network wide in multisite
+
+Changed:
+* Disable logging in wp-admin
+* Improve detection of cropped images
+* Fallback to scaled images if original image is larger than 20 Mb
+
+Fixed:
+* Image size can now be changed in the Gutenberg image block for fully offloaded images
+* Full size images not replaced in the gallery block on expand
+* Multiple fixes and improvements with the WPML integration
+
 = 1.8.0 - 16.02.2024 =
 
 Added:

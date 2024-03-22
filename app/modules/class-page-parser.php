@@ -51,7 +51,7 @@ class Page_Parser extends Module {
 	 * @since 1.4.0
 	 */
 	public function init() {
-		if ( filter_input( INPUT_GET, 'cf-images-disable' ) ) {
+		if ( ! $this->can_offload() ) {
 			return;
 		}
 
