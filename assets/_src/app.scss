@@ -56,6 +56,10 @@ $switch-background-active: $blue;
 		}
 	}
 
+	select {
+		background: none !important;
+	}
+
 	// Fix bulma-switch issues.
 	& .switch[type=checkbox]+label {
 		padding-top: 0;
