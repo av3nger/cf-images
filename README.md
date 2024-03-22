@@ -51,9 +51,8 @@ Cloudflare, the Cloudflare logo, and Cloudflare Workers are trademarks and/or re
 
 Special thanks to the plugin sponsors:
 
-<a href="https://thismatters.agency" target="_blank">
-<img src="https://thismatters.agency/wp-content/uploads/2023/03/thismatters-logo.svg" alt="this:matters" width="200" />
-</a>
+<a href="https://thismatters.agency">WordPress Agency this:matters</a>
+
 
 == Installation ==
 
