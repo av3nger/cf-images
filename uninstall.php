@@ -34,6 +34,7 @@ delete_site_option( 'cf-images-hide-sidebar' );
 delete_site_option( 'cf-images-account-id' );
 delete_site_option( 'cf-images-api-token' );
 delete_site_option( 'cf-images-network-wide' );
+delete_site_option( 'cf-images-browser-ttl' );
 delete_option( 'cf-images-custom-domain' );
 delete_option( 'cf-images-setup-done' );
 delete_option( 'cf-images-config-written' );

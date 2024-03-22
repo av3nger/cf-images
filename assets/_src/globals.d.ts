@@ -10,6 +10,7 @@ interface ApiResponse {
 }
 
 interface CFImages {
+    browserTTL: string;
     cfStatus: boolean;
     domain: string;
     dirURL: string;
@@ -23,6 +24,7 @@ interface CFImages {
 }
 
 interface SettingsContextType {
+    browserTTL: string;
     modules: object;
     setModule: (module: string, value: boolean) => void;
     noticeHidden: boolean;

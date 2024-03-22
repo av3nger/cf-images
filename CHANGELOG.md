@@ -1,6 +1,7 @@
 = 1.8.1 =
 
 Added:
+* Set browser TTL for images
 * Option to serve originals for logged-in users
 * Option to apply settings network wide in multisite
 

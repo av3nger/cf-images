@@ -14,6 +14,7 @@
 namespace CF_Images\App\Modules;
 
 use CF_Images\App\Settings;
+use CF_Images\App\Traits\Empty_Init;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -25,6 +26,8 @@ if ( ! defined( 'WPINC' ) ) {
  * @since 1.8.1
  */
 class Multisite extends Module {
+	use Empty_Init;
+
 	/**
 	 * This is a core module, meaning it can't be enabled/disabled via options.
 	 *
@@ -43,13 +46,6 @@ class Multisite extends Module {
 		add_action( 'cf_images_save_settings', array( $this, 'on_settings_update' ), 10, 2 );
 		add_filter( 'cf_images_settings', array( $this, 'network_settings' ) );
 	}
-
-	/**
-	 * Init the module if enabled.
-	 *
-	 * @since 1.8.1
-	 */
-	public function init() {}
 
 	/**
 	 * Update the module status.

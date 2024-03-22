@@ -211,6 +211,7 @@ class Core {
 	 * @see Modules\CDN
 	 * @see Modules\Full_Offload
 	 * @see Modules\Multisite
+	 * @see Modules\Cache_TTL
 	 */
 	private function load_modules() {
 		$loader = Loader::get_instance();
@@ -231,6 +232,7 @@ class Core {
 		$loader->module( 'custom-path' );
 		$loader->module( 'service' );
 		$loader->module( 'full-offload' );
+		$loader->module( 'cache-ttl' );
 	}
 
 	/**

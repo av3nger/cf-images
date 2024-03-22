@@ -137,6 +137,7 @@ class Admin {
 				'stats'          => $this->get_stats(),
 				'cdnEnabled'     => (bool) get_option( 'cf-images-cdn-enabled', false ),
 				'isNetworkAdmin' => is_multisite() && is_main_site(),
+				'browserTTL'     => get_site_option( 'cf-images-browser-ttl', 172800 ),
 			)
 		);
 	}

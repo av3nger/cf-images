@@ -54,4 +54,27 @@ class Variant extends Cloudflare {
 
 		return $this->request();
 	}
+
+	/**
+	 * Set images cache TTL.
+	 *
+	 * @since 1.8.1
+	 *
+	 * @param int $value Cache TTL in seconds.
+	 *
+	 * @return stdClass
+	 * @throws Exception Exception during API call.
+	 */
+	public function set_cache_ttl( int $value ): stdClass {
+		$data = array(
+			'browser_ttl' => $value,
+		);
+
+		$this->set_method( 'PATCH' );
+		$this->set_timeout( 2 );
+		$this->set_endpoint( '/config' );
+		$this->set_request_body( wp_json_encode( $data ) );
+
+		return $this->request();
+	}
 }

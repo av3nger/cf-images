@@ -23,6 +23,7 @@ import CloudflareStats from '../../modules/cloudflare/cf-stats';
 import Logging from '../../modules/cloudflare/logging';
 import Service from '../../modules/cloudflare/service';
 import MiscOptions from '../../modules/cloudflare/misc';
+import BrowserTTL from '../../modules/cloudflare/ttl';
 
 /**
  * Cloudflare Images settings routes.
@@ -48,6 +49,7 @@ const CloudflareSettings = () => {
 					</div>
 				)}
 				<CloudflareStats />
+				<BrowserTTL />
 				<AutoOffload />
 				<CustomId />
 				<CustomDomain />
