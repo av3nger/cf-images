@@ -1,4 +1,4 @@
-= 1.9.0 =
+= 1.9.0 - 22.03.2024 =
 
 Added:
 * Set browser TTL for images
