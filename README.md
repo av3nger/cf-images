@@ -53,7 +53,6 @@ Special thanks to the plugin sponsors:
 
 <a href="https://thismatters.agency">WordPress Agency this:matters</a>
 
-
 == Installation ==
 
 1. Upload the plugin to the `/wp-content/plugins/` directory
