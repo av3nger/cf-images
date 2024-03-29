@@ -149,6 +149,9 @@ class Cloudflare_Images extends Module {
 			return $image;
 		}
 
+		// This is used with WPML integration.
+		$attachment_id = apply_filters( 'cf_images_media_post_id', $attachment_id );
+
 		list( $hash, $cloudflare_image_id ) = self::get_hash_id_url_string( (int) $attachment_id );
 
 		if ( empty( $cloudflare_image_id ) || ( empty( $hash ) && ! $this->is_module_enabled( false, 'custom-path' ) ) ) {

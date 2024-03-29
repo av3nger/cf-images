@@ -105,7 +105,7 @@ If something is still not working for you, please let me know by creating a supp
 = 1.9.1 =
 
 Fixed:
-
+* WPML compatibility
 * "Disable WordPress image sizes" option causing issues with image URLs
 
 = 1.9.0 - 22.03.2024 =

@@ -361,7 +361,10 @@ class Image {
 			return false;
 		}
 
-		list( $hash, $this->cf_image_id ) = Cloudflare_Images::get_hash_id_url_string( $this->id );
+		// This is used with WPML integration.
+		$attachment_id = apply_filters( 'cf_images_media_post_id', $this->id );
+
+		list( $hash, $this->cf_image_id ) = Cloudflare_Images::get_hash_id_url_string( $attachment_id );
 
 		if ( empty( $this->cf_image_id ) || ( empty( $hash ) && ! apply_filters( 'cf_images_module_enabled', false, 'custom-path' ) ) ) {
 			return false;
