@@ -202,6 +202,7 @@ class Cloudflare_Images extends Module {
 		// Handle `scaled` images.
 		if ( false !== strpos( $image[0], '-scaled' ) ) {
 			$scaled_size = apply_filters( 'big_image_size_threshold', 2560 );
+			$scaled_size = false === $scaled_size ? 2560 : $scaled_size;
 
 			/**
 			 * This covers two cases:

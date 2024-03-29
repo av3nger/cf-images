@@ -1,3 +1,8 @@
+= 1.9.1 =
+
+Fixed:
+* "Disable WordPress image sizes" option causing issues with image URLs
+
 = 1.9.0 - 22.03.2024 =
 
 Added:

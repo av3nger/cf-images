@@ -324,7 +324,11 @@ class Image {
 			$original = preg_replace( '/-\d+x\d+(?=\.(jpg|jpeg|png|gif)$)/i', '', $image_url );
 		} elseif ( false !== strpos( $image_url, '-scaled.' ) ) {
 			$original = str_replace( '-scaled.', '.', $image_url );
-			$size[1]  = apply_filters( 'big_image_size_threshold', 2560 );
+
+			$scaled_size = apply_filters( 'big_image_size_threshold', 2560 );
+			$scaled_size = false === $scaled_size ? 2560 : $scaled_size;
+
+			$size[1] = $scaled_size;
 		} else {
 			$original = $image_url;
 		}
