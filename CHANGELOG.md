@@ -1,5 +1,8 @@
 = 1.9.1 =
 
+Added:
+* Integration with Elementor lightbox
+
 Fixed:
 * WPML compatibility
 * "Disable WordPress image sizes" option causing issues with image URLs
