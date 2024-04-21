@@ -138,12 +138,23 @@ class Image_Ai extends Module {
 	 * @return string|void|WP_Error
 	 */
 	private function caption_image( int $attachment_id ) {
+		$restore_filter = false;
+		if ( has_filter( 'cf_images_hash', '__return_empty_string' ) ) {
+			$restore_filter = true;
+			remove_filter( 'cf_images_hash', '__return_empty_string' );
+		}
+
 		list( $hash, $cloudflare_image_id ) = Cloudflare_Images::get_hash_id_url_string( $attachment_id );
 
 		if ( empty( $cloudflare_image_id ) || ( empty( $hash ) && ! $this->is_module_enabled( false, 'custom-path' ) ) ) {
 			$image = wp_get_original_image_url( $attachment_id );
 		} else {
-			$image = trailingslashit( $this->get_cdn_domain() . "/$hash" ) . "$cloudflare_image_id/w=9999";
+			// Use the default Cloudflare Images URL here, so we do not get issues with access.
+			$image = trailingslashit( "https://imagedelivery.net/$hash" ) . "$cloudflare_image_id/w=9999";
+		}
+
+		if ( $restore_filter ) {
+			add_filter( 'cf_images_hash', '__return_empty_string' );
 		}
 
 		try {

@@ -104,7 +104,11 @@ If something is still not working for you, please let me know by creating a supp
 
 = 1.9.1 =
 
+Added:
+* Integration with Elementor lightbox
+
 Fixed:
+* AI image captioning when custom image paths are set
 * WPML compatibility
 * "Disable WordPress image sizes" option causing issues with image URLs
 

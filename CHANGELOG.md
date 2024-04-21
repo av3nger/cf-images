@@ -4,6 +4,7 @@ Added:
 * Integration with Elementor lightbox
 
 Fixed:
+* AI image captioning when custom image paths are set
 * WPML compatibility
 * "Disable WordPress image sizes" option causing issues with image URLs
 
