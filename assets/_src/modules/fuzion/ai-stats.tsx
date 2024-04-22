@@ -100,8 +100,8 @@ const CompressionStats = () => {
 							</p>
 							<p className="title">
 								{formatBytes(
-									(stats.size_before ?? 0) -
-										(stats.size_after ?? 0)
+									Number(stats.size_before ?? 0) -
+										Number(stats.size_after ?? 0)
 								)}
 							</p>
 						</div>
