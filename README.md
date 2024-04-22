@@ -1,7 +1,7 @@
 === Offload, AI & Optimize with Cloudflare Images ===
 Plugin Name: Offload, AI & Optimize with Cloudflare Images
 Contributors: vanyukov
-Tags: cdn, cloudflare images, offload images, compress, optimize
+Tags: cdn, cloudflare images, image ai, compress, optimize
 Donate link: https://www.paypal.com/donate/?business=JRR6QPRGTZ46N&no_recurring=0&item_name=Help+support+the+development+of+the+Cloudflare+Images+plugin+for+WordPress&currency_code=AUD
 Requires at least: 5.6
 Requires PHP: 7.0
