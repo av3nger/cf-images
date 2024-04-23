@@ -188,6 +188,7 @@ class Core {
 		$loader->integration( 'acf' );
 		$loader->integration( 'wpml' );
 		$loader->integration( 'shortpixel' );
+		$loader->integration( 'elementor' );
 	}
 
 	/**

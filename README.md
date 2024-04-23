@@ -1,12 +1,12 @@
 === Offload, AI & Optimize with Cloudflare Images ===
 Plugin Name: Offload, AI & Optimize with Cloudflare Images
 Contributors: vanyukov
-Tags: cdn, cloudflare images, offload images, compress, cloudflare, optimize
+Tags: cdn, cloudflare images, image ai, compress, optimize
 Donate link: https://www.paypal.com/donate/?business=JRR6QPRGTZ46N&no_recurring=0&item_name=Help+support+the+development+of+the+Cloudflare+Images+plugin+for+WordPress&currency_code=AUD
 Requires at least: 5.6
 Requires PHP: 7.0
 Tested up to: 6.5
-Stable tag: 1.9.0
+Stable tag: 1.9.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -101,6 +101,17 @@ If something is still not working for you, please let me know by creating a supp
 3. Quick and easy setup wizard
 
 == Changelog ==
+
+= 1.9.1 - 23.04.2024 =
+
+Added:
+* Integration with Elementor lightbox
+
+Fixed:
+* NaN undefined error in compression savings stats
+* AI image captioning when custom image paths are set
+* WPML compatibility
+* "Disable WordPress image sizes" option causing issues with image URLs
 
 = 1.9.0 - 22.03.2024 =
 

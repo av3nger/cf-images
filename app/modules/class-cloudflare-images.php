@@ -149,6 +149,9 @@ class Cloudflare_Images extends Module {
 			return $image;
 		}
 
+		// This is used with WPML integration.
+		$attachment_id = apply_filters( 'cf_images_media_post_id', $attachment_id );
+
 		list( $hash, $cloudflare_image_id ) = self::get_hash_id_url_string( (int) $attachment_id );
 
 		if ( empty( $cloudflare_image_id ) || ( empty( $hash ) && ! $this->is_module_enabled( false, 'custom-path' ) ) ) {
@@ -202,6 +205,7 @@ class Cloudflare_Images extends Module {
 		// Handle `scaled` images.
 		if ( false !== strpos( $image[0], '-scaled' ) ) {
 			$scaled_size = apply_filters( 'big_image_size_threshold', 2560 );
+			$scaled_size = false === $scaled_size ? 2560 : $scaled_size;
 
 			/**
 			 * This covers two cases:

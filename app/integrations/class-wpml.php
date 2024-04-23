@@ -32,6 +32,12 @@ class Wpml {
 	 * @since 1.4.0
 	 */
 	public function __construct() {
+		global $sitepress;
+
+		if ( ! $sitepress ) {
+			return;
+		}
+
 		add_filter( 'cf_images_media_post_id', array( $this, 'get_original_image_id' ) );
 		add_action( 'cf_images_before_wp_query', array( $this, 'remove_wpml_filters' ) );
 		add_action( 'cf_images_upload_success', array( $this, 'update_image_meta' ), 10, 2 );

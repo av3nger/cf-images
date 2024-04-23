@@ -1,5 +1,5 @@
 export const formatBytes = (bytes: number, decimals: number = 2) => {
-	if (bytes === 0) {
+	if (isNaN(bytes) || bytes <= 0) {
 		return '0 B';
 	}
 
