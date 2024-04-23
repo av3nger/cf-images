@@ -1,4 +1,4 @@
-= 1.9.1 =
+= 1.9.1 - 23.04.2024 =
 
 Added:
 * Integration with Elementor lightbox
