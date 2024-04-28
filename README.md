@@ -107,6 +107,12 @@ If something is still not working for you, please let me know by creating a supp
 Added:
 * Integration with Elementor Pro Gallery
 
+Changed:
+* Improve image AI modules
+
+Fixed:
+* Only allow generating image alt text for supported formats (JPEG, PNG, GIF, BMP)
+
 = 1.9.1 - 23.04.2024 =
 
 Added:
