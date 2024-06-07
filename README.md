@@ -106,6 +106,7 @@ If something is still not working for you, please let me know by creating a supp
 
 Added:
 * Integration with Elementor Pro Gallery
+* cf_images_upload_host filter to adjust the image host ID
 
 Changed:
 * Improve image AI modules
