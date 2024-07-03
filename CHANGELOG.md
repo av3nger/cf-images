@@ -1,6 +1,7 @@
 = 1.9.2 =
 
 Added:
+* Integration with WPBakery page builder image galleries
 * Integration with Elementor Pro Gallery
 * cf_images_upload_host filter to adjust the image host ID
 
