@@ -32,7 +32,7 @@ class JS_Composer {
 	/**
 	 * Class constructor.
 	 *
-	 * @since 1.4.0
+	 * @since 1.9.2
 	 */
 	public function __construct() {
 		add_filter( 'vc_wpb_getimagesize', array( $this, 'fix_getimagesize_paths' ), 10, 3 );
