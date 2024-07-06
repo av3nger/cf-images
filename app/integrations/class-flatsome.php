@@ -42,10 +42,6 @@ class Flatsome {
 	 * @since 1.9.2
 	 */
 	public function load_images_ajax() {
-		if ( is_admin() ) {
-			return;
-		}
-
 		$cf_images = new Cloudflare_Images( 'cloudflare-images' );
 		add_filter( 'wp_get_attachment_image_src', array( $cf_images, 'get_attachment_image_src' ), 10, 3 );
 	}
