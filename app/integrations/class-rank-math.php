@@ -100,7 +100,10 @@ class Rank_Math {
 			return false;
 		}
 
-		preg_match( '/\/([^\/]+?)\/[^\/]+$/', $image, $matches );
+		$url_path = wp_parse_url( $image, PHP_URL_PATH );
+		$pattern  = '/\/[a-zA-Z0-9-]+\/([^\/]+(?:\/[^\/]+)*\.[a-z]+|[^\/]+)(?:\/.*)?/';
+
+		preg_match( $pattern, $url_path, $matches );
 
 		if ( ! isset( $matches[1] ) ) {
 			return false;
