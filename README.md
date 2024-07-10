@@ -115,6 +115,7 @@ Changed:
 
 Fixed:
 * Only allow generating image alt text for supported formats (JPEG, PNG, GIF, BMP)
+* Duplicate queries for images that are not part of the media library
 
 = 1.9.1 - 23.04.2024 =
 
