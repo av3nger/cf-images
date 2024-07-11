@@ -8,6 +8,7 @@ Added:
 
 Changed:
 * Improve image AI modules
+* Improve performance when Rank Math image SEO is active
 
 Fixed:
 * Only allow generating image alt text for supported formats (JPEG, PNG, GIF, BMP)

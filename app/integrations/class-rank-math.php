@@ -17,6 +17,7 @@ namespace CF_Images\App\Integrations;
 use CF_Images\App\Traits;
 use Exception;
 use MyThemeShop\Helpers\Str;
+use RankMath\Helper;
 use WP_Query;
 use function pathinfo;
 
@@ -33,13 +34,24 @@ class Rank_Math {
 	use Traits\Helpers;
 
 	/**
+	 * Rank Math Image SEO active flag.
+	 *
+	 * @since 1.9.2
+	 *
+	 * @var bool
+	 */
+	private $image_seo_active = false;
+
+	/**
 	 * Class constructor.
 	 *
 	 * @since 1.1.5
 	 */
 	public function __construct() {
+		add_action( 'init', array( $this, 'is_image_seo_active' ) );
 		add_filter( 'rank_math/replacements', array( $this, 'fix_file_name_replacement' ), 10, 2 );
 		add_filter( 'cf_images_can_run', array( $this, 'can_run' ) );
+		add_action( 'cf_images_get_attachment_image_src', array( $this, 'cache_image_ids' ), 10, 2 );
 	}
 
 	/**
@@ -109,6 +121,12 @@ class Rank_Math {
 			return false;
 		}
 
+		$post_id = wp_cache_get( $matches[1], 'cf_images' );
+
+		if ( false !== $post_id ) {
+			return $post_id;
+		}
+
 		$args = array(
 			'fields'                 => 'ids',
 			'meta_key'               => '_cloudflare_image_id', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
@@ -126,6 +144,8 @@ class Rank_Math {
 		if ( ! $results->have_posts() ) {
 			return false;
 		}
+
+		wp_cache_add( $matches[1], $results->posts[0], 'cf_images' );
 
 		return $results->posts[0];
 	}
@@ -156,5 +176,37 @@ class Rank_Math {
 		$name = trim( str_replace( '_', ' ', $name ) );
 
 		return '' !== $name ? $name : null;
+	}
+
+	/**
+	 * Check is Rank Math Image SEO is active.
+	 *
+	 * @since 1.9.2
+	 */
+	public function is_image_seo_active() {
+		if ( ! method_exists( '\RankMath\Helper', 'get_settings' ) ) {
+			$this->image_seo_active = false;
+		}
+
+		$is_alt   = Helper::get_settings( 'general.add_img_alt' ) && Helper::get_settings( 'general.img_alt_format' ) && trim( Helper::get_settings( 'general.img_alt_format' ) );
+		$is_title = Helper::get_settings( 'general.add_img_title' ) && Helper::get_settings( 'general.img_title_format' ) && trim( Helper::get_settings( 'general.img_title_format' ) );
+
+		$this->image_seo_active = $is_alt || $is_title;
+	}
+
+	/**
+	 * Cache Cloudflare Image ID and WordPress attachment ID.
+	 *
+	 * @since 1.9.2
+	 *
+	 * @param string     $cloudflare_image_id Cloudflare Image ID.
+	 * @param int|string $attachment_id       Attachment ID.
+	 */
+	public function cache_image_ids( string $cloudflare_image_id, $attachment_id ) {
+		if ( ! $this->image_seo_active ) {
+			return;
+		}
+
+		wp_cache_add( $cloudflare_image_id, $attachment_id, 'cf_images' );
 	}
 }
