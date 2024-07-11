@@ -185,7 +185,7 @@ class Rank_Math {
 	 */
 	public function is_image_seo_active() {
 		if ( ! method_exists( '\RankMath\Helper', 'get_settings' ) ) {
-			$this->image_seo_active = false;
+			return;
 		}
 
 		$is_alt   = Helper::get_settings( 'general.add_img_alt' ) && Helper::get_settings( 'general.img_alt_format' ) && trim( Helper::get_settings( 'general.img_alt_format' ) );
