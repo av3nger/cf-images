@@ -1,3 +1,20 @@
+= 1.9.2 - 17.07.2024 =
+
+Added:
+* Integration with WPBakery page builder image galleries
+* Integration with Elementor Pro Gallery
+* Integration with Flatsome theme gallery
+* cf_images_upload_host filter to adjust the image host ID
+
+Changed:
+* Improve image AI modules
+* Improve performance when Rank Math image SEO is active
+
+Fixed:
+* Only allow generating image alt text for supported formats (JPEG, PNG, GIF, BMP)
+* Duplicate queries for images that are not part of the media library
+* Rank Math image SEO module not working with custom domains
+
 = 1.9.1 - 23.04.2024 =
 
 Added:

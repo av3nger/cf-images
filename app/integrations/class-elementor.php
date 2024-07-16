@@ -17,6 +17,7 @@ namespace CF_Images\App\Integrations;
 use CF_Images\App\Traits;
 use Elementor\Widget_Base;
 use Elementor\Widget_Image_Carousel;
+use ElementorPro\Modules\Gallery\Widgets\Gallery;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -53,17 +54,18 @@ class Elementor {
 	 * @param Widget_Base $widget         The widget.
 	 */
 	public function add_lightbox_support( string $widget_content, Widget_Base $widget ): string {
-		if ( ! $widget instanceof Widget_Image_Carousel ) {
+		if ( ! $widget instanceof Widget_Image_Carousel && ! $widget instanceof Gallery ) {
 			return $widget_content;
 		}
 
 		// Regular expression to find <a> tags with data-elementor-open-lightbox="yes" and Cloudflare Images links.
-		$pattern = '/(<a\s[^>]*data-elementor-open-lightbox="yes"[^>]*href=")(' . preg_quote( $this->get_cdn_domain(), '/' ) . '[^"]+)(")/i';
+		$pattern = '/(<a\s[^>]*href="' . preg_quote( $this->get_cdn_domain(), '/' ) . '[^"#]*)(#[^"]*)?(".*?data-elementor-open-lightbox="yes".*?>)/i';
 
 		// Callback function to append '#.jpg' to the href attribute.
 		$callback = function ( $matches ) {
-			// Append '#.jpg' only if it's not already appended.
-			return $matches[1] . $matches[2] . ( substr( $matches[2], -5 ) !== '#.jpg' ? '#.jpg' : '' ) . $matches[3];
+			// Check if '#.jpg' is not already appended, and append if necessary.
+			$new_url = $matches[1] . ( isset( $matches[2] ) && strpos( $matches[2], '#.jpg' ) !== false ? $matches[2] : '#.jpg' );
+			return $new_url . $matches[3];
 		};
 
 		return preg_replace_callback( $pattern, $callback, $widget_content );

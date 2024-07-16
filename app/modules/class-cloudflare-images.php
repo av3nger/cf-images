@@ -159,6 +159,8 @@ class Cloudflare_Images extends Module {
 			return $image;
 		}
 
+		do_action( 'cf_images_get_attachment_image_src', $cloudflare_image_id, $attachment_id );
+
 		$cf_image = trailingslashit( $this->get_cdn_domain() . "/$hash" ) . $cloudflare_image_id;
 
 		// If this is a known crop image.

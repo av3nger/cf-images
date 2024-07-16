@@ -1,12 +1,12 @@
 === Offload, AI & Optimize with Cloudflare Images ===
 Plugin Name: Offload, AI & Optimize with Cloudflare Images
 Contributors: vanyukov
-Tags: cdn, cloudflare images, image ai, compress, optimize
+Tags: cdn, cloudflare images, image AI, compress, optimize
 Donate link: https://www.paypal.com/donate/?business=JRR6QPRGTZ46N&no_recurring=0&item_name=Help+support+the+development+of+the+Cloudflare+Images+plugin+for+WordPress&currency_code=AUD
 Requires at least: 5.6
 Requires PHP: 7.0
-Tested up to: 6.5
-Stable tag: 1.9.1
+Tested up to: 6.6
+Stable tag: 1.9.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -101,6 +101,23 @@ If something is still not working for you, please let me know by creating a supp
 3. Quick and easy setup wizard
 
 == Changelog ==
+
+= 1.9.2 - 17.07.2024 =
+
+Added:
+* Integration with WPBakery page builder image galleries
+* Integration with Elementor Pro Gallery
+* Integration with Flatsome theme gallery
+* cf_images_upload_host filter to adjust the image host ID
+
+Changed:
+* Improve image AI modules
+* Improve performance when Rank Math image SEO is active
+
+Fixed:
+* Only allow generating image alt text for supported formats (JPEG, PNG, GIF, BMP)
+* Duplicate queries for images that are not part of the media library
+* Rank Math image SEO module not working with custom domains
 
 = 1.9.1 - 23.04.2024 =
 

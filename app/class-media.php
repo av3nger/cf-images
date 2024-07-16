@@ -421,7 +421,17 @@ class Media {
 			$host = $url['host'];
 		}
 
-		$name = trailingslashit( $host ) . str_replace( trailingslashit( $dir['basedir'] ), '', $path );
+		/**
+		 * This filters allows modifying the host slug in the image path that is used to identify the image on Cloudflare.
+		 *
+		 * @since 1.9.2
+		 *
+		 * @param string $host          Site domain.
+		 * @param int    $attachment_id Attachment ID.
+		 */
+		$host = apply_filters( 'cf_images_upload_host', $host, $attachment_id );
+
+		$name = ( $host ? trailingslashit( $host ) : '' ) . str_replace( trailingslashit( $dir['basedir'] ), '', $path );
 
 		try {
 			// This allows us to replace the image on Cloudflare.

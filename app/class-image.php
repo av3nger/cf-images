@@ -439,7 +439,7 @@ class Image {
 	private function attachment_url_to_post_id( string $url ): int {
 		$post_id = wp_cache_get( $url, 'cf_images' );
 
-		if ( ! $post_id ) {
+		if ( false === $post_id ) {
 			global $wpdb;
 
 			$sql = $wpdb->prepare(
@@ -452,16 +452,17 @@ class Image {
 
 			if ( $results ) {
 				$post_id = reset( $results )->ID;
-				wp_cache_add( $url, $post_id, 'cf_images' );
 			} else {
 				// This is a fallback, in case the above doesn't work for some reason.
 				$results = attachment_url_to_postid( $url );
 
 				if ( $results ) {
 					$post_id = $results;
-					wp_cache_add( $url, $post_id, 'cf_images' );
 				}
 			}
+
+			// Store this regardless if we have the post ID, prevents duplicate queries.
+			wp_cache_add( $url, $post_id, 'cf_images' );
 		}
 
 		return $post_id;

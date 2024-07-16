@@ -178,6 +178,8 @@ class Core {
 	 * @see Integrations\Spectra
 	 * @see Integrations\Wpml
 	 * @see Integrations\Shortpixel
+	 * @see Integrations\JS_Composer
+	 * @see Integrations\Flatsome
 	 */
 	private function init_integrations() {
 		$loader = Loader::get_instance();
@@ -189,6 +191,8 @@ class Core {
 		$loader->integration( 'wpml' );
 		$loader->integration( 'shortpixel' );
 		$loader->integration( 'elementor' );
+		$loader->integration( 'js-composer' );
+		$loader->integration( 'flatsome' );
 	}
 
 	/**

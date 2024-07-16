@@ -147,10 +147,10 @@ class Image_Ai extends Module {
 		list( $hash, $cloudflare_image_id ) = Cloudflare_Images::get_hash_id_url_string( $attachment_id );
 
 		if ( empty( $cloudflare_image_id ) || ( empty( $hash ) && ! $this->is_module_enabled( false, 'custom-path' ) ) ) {
-			$image = wp_get_original_image_url( $attachment_id );
+			$image = wp_get_attachment_image_url( $attachment_id, 'full' );
 		} else {
 			// Use the default Cloudflare Images URL here, so we do not get issues with access.
-			$image = trailingslashit( "https://imagedelivery.net/$hash" ) . "$cloudflare_image_id/w=9999";
+			$image = trailingslashit( "https://imagedelivery.net/$hash" ) . "$cloudflare_image_id/w=2560";
 		}
 
 		if ( $restore_filter ) {
@@ -229,6 +229,9 @@ class Image_Ai extends Module {
 		if ( 'alt-tags' !== $action ) {
 			return $args;
 		}
+
+		// Allow only supported mime types.
+		$args['post_mime_type'] = array( 'image/jpeg', 'image/png', 'image/gif', 'image/bmp' );
 
 		$args['meta_query'] = array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 			array(
