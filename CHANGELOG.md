@@ -1,4 +1,4 @@
-= 1.9.2 =
+= 1.9.2 - 17.07.2024 =
 
 Added:
 * Integration with WPBakery page builder image galleries
