@@ -210,7 +210,13 @@ class Image {
 	 * @param bool   $is_src  Is this the src attribute.
 	 */
 	private function process( string $content, bool $is_src = false ) {
-		preg_match_all( '/https?[^\s\'"]*/i', $content, $urls );
+		/**
+		 * Match URLs that start with:
+		 * - http:
+		 * - https:
+		 * - // (but only if this string is at the beginning of a word or after whitespace)
+		 */
+		preg_match_all( '/https?:\S+|(?<!\S)\/\/\S+/i', $content, $urls );
 		if ( ! is_array( $urls ) || empty( $urls[0] ) ) {
 			return;
 		}
@@ -441,6 +447,11 @@ class Image {
 
 		if ( false === $post_id ) {
 			global $wpdb;
+
+			// Normalize the URL.
+			if ( str_starts_with( $url, '//' ) ) {
+				$url = set_url_scheme( $url );
+			}
 
 			$sql = $wpdb->prepare(
 				"SELECT ID FROM $wpdb->posts WHERE guid = %s",
