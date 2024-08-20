@@ -3,6 +3,9 @@
 Added:
 * Integration with Smart Slider 3
 
+Changed:
+* Improve performance processing external images
+
 = 1.9.2 - 17.07.2024 =
 
 Added:
