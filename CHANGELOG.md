@@ -6,6 +6,9 @@ Added:
 Changed:
 * Improve performance processing external images
 
+Fixed:
+* Images being replaced in RSS feeds, regardless of the settings
+
 = 1.9.2 - 17.07.2024 =
 
 Added:

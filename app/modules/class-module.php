@@ -116,6 +116,10 @@ abstract class Module {
 			return false;
 		}
 
+		if ( ! $this->is_module_enabled( false, 'rss-feeds' ) && is_feed() ) {
+			return false;
+		}
+
 		return true;
 	}
 
