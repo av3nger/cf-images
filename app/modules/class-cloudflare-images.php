@@ -183,7 +183,7 @@ class Cloudflare_Images extends Module {
 		preg_match( '/-(\d+)x(\d+)\.[a-zA-Z]{3,4}$/', $image[0], $variant_image );
 
 		// Image with `-<width>x<height>` prefix, for example, image-300x125.jpg.
-		if ( isset( $variant_image[1] ) && isset( $variant_image[2] ) ) {
+		if ( isset( $variant_image[1] ) && isset( $variant_image[2] ) && is_array( $this->heights ) && is_array( $this->widths ) ) {
 			// Check if the image is a cropped version.
 			$height_key = array_search( (int) $variant_image[1], $this->heights, true );
 			$width_key  = array_search( (int) $variant_image[2], $this->widths, true );

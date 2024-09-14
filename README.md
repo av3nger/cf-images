@@ -112,6 +112,7 @@ Changed:
 
 Fixed:
 * Images being replaced in RSS feeds, regardless of the settings
+* Fatal error when a registered image size does not have height or width defined
 
 = 1.9.2 - 17.07.2024 =
 
