@@ -2,6 +2,7 @@
 
 Added:
 * Integration with Smart Slider 3
+* Filter cf_images_disable_crop to disable auto cropping for registered crop images
 
 Changed:
 * Improve performance processing external images
