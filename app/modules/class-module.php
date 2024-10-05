@@ -116,7 +116,7 @@ abstract class Module {
 			return false;
 		}
 
-		if ( ! $this->is_module_enabled( false, 'rss-feeds' ) && is_feed() ) {
+		if ( did_action( 'wp' ) && ! $this->is_module_enabled( false, 'rss-feeds' ) && is_feed() ) {
 			return false;
 		}
 
