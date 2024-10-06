@@ -15,7 +15,7 @@ import { __ } from '@wordpress/i18n';
 import SettingsContext from '../context/settings';
 
 const Nav = () => {
-	const { modules, noticeHidden } = useContext(SettingsContext);
+	const { modules, noticeHidden, integrations } = useContext(SettingsContext);
 
 	const getClass = (status: boolean) => {
 		return status ? 'is-active' : '';
@@ -40,6 +40,16 @@ const Nav = () => {
 						{__('Settings', 'cf-images')}
 					</NavLink>
 				</li>
+				{typeof integrations === 'object' && (
+					<li>
+						<NavLink
+							to="/cf/integrations"
+							className={({ isActive }) => getClass(isActive)}
+						>
+							{__('Integrations', 'cf-images')}
+						</NavLink>
+					</li>
+				)}
 				<li>
 					<NavLink
 						to="/cf/experimental"

@@ -21,12 +21,15 @@ interface CFImages {
     stats: StatsType;
     cdnEnabled: boolean;
     isNetworkAdmin: boolean;
+    integrationData: object;
 }
 
 interface SettingsContextType {
     browserTTL: string;
     modules: object;
     setModule: (module: string, value: boolean) => void;
+    integrations: object;
+    setIntegration: (module: string, setting: string, value: boolean) => void;
     noticeHidden: boolean;
     hideNotice: (hide: boolean) => void;
     hasFuzion: boolean;
@@ -51,4 +54,11 @@ interface StatsType {
     size_before: number;
     synced: number;
     image_ai: number;
+}
+
+interface IntegrationOption {
+    name: string;
+    label: string;
+    value: boolean;
+    description: string;
 }

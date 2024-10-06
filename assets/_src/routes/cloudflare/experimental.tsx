@@ -22,7 +22,7 @@ import CloudflareLogin from './login';
  *
  * @class
  */
-const CloudflareExperimental = () => {
+const Experimental = () => {
 	const { cfConnected } = useContext(SettingsContext);
 
 	if (!cfConnected) {
@@ -54,4 +54,4 @@ const CloudflareExperimental = () => {
 	);
 };
 
-export default CloudflareExperimental;
+export default Experimental;

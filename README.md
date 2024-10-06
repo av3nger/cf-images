@@ -106,6 +106,7 @@ If something is still not working for you, please let me know by creating a supp
 
 Added:
 * Integration with Smart Slider 3
+* Integration with All in One SEO: allow controlling application/ld+json schema image URLs
 * Filter cf_images_disable_crop to disable auto cropping for registered crop images
 
 Changed:
