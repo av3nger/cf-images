@@ -30,7 +30,7 @@ if ( ! defined( 'WPINC' ) ) {
  *
  * @since 1.1.5
  */
-class Rank_Math {
+class Rank_Math extends Integration {
 	use Traits\Helpers;
 
 	/**
@@ -43,15 +43,65 @@ class Rank_Math {
 	private $image_seo_active = false;
 
 	/**
-	 * Class constructor.
+	 * Check if the integration should run.
+	 *
+	 * @since 1.9.3
+	 *
+	 * @return bool
+	 */
+	protected function should_run(): bool {
+		if ( ! function_exists( 'is_plugin_active' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
+		return is_plugin_active( 'seo-by-rank-math/rank-math.php' );
+	}
+
+	/**
+	 * Define the variables for the integration.
 	 *
 	 * @since 1.1.5
+	 * @since 1.9.3 Moved into init() from the constructor.
 	 */
-	public function __construct() {
+	protected function init() {
+		$this->name = esc_html__( 'Rank Math', 'cf-images' );
+		$this->slug = 'rank_math';
+
 		add_action( 'init', array( $this, 'is_image_seo_active' ) );
 		add_filter( 'rank_math/replacements', array( $this, 'fix_file_name_replacement' ), 10, 2 );
-		add_filter( 'cf_images_can_run', array( $this, 'can_run' ) );
+		add_filter( 'cf_images_skip_image', array( $this, 'maybe_skip_image' ) );
 		add_action( 'cf_images_get_attachment_image_src', array( $this, 'cache_image_ids' ), 10, 2 );
+	}
+
+	/**
+	 * Define the integration options.
+	 *
+	 * @since 1.9.3
+	 *
+	 * @param array  $options Integration options.
+	 * @param string $slug    Integration slug.
+	 *
+	 * @return array
+	 */
+	public function integration_options( array $options, string $slug ): array {
+		if ( $this->slug !== $slug ) {
+			return $options;
+		}
+
+		return array(
+			array(
+				'name'        => 'image_object',
+				'label'       => esc_html__( 'Replace ImageObject', 'cf-images' ),
+				'description' => esc_html__( 'Use Cloudflare image for the ImageObject in the application/ld+json schema.', 'cf-images' ),
+				'value'       => apply_filters( 'cf_images_integration_option_value', false, 'image_object' ),
+			),
+			array(
+				'name'        => 'head',
+				'label'       => esc_html__( 'Replace images in head', 'cf-images' ),
+				'description' => esc_html__( 'Use Cloudflare images in the head page element.', 'cf-images' ),
+				'value'       => apply_filters( 'cf_images_integration_option_value', false, 'head' ),
+			),
+		);
 	}
 
 	/**
@@ -61,8 +111,17 @@ class Rank_Math {
 	 *
 	 * @return bool
 	 */
-	public function can_run(): bool {
-		return doing_filter( 'rank_math/head' ) || doing_action( 'rank_math/opengraph/facebook' );
+	public function maybe_skip_image(): bool {
+		// Allow controlling the ImageObject in the application/ld+json schema.
+		if ( doing_filter( 'rank_math/json_ld' ) ) {
+			return ! $this->integration_option_value( false, 'image_object' );
+		}
+
+		if ( doing_filter( 'rank_math/head' ) ) {
+			return ! $this->integration_option_value( false, 'head' );
+		}
+
+		return doing_action( 'rank_math/opengraph/facebook' );
 	}
 
 	/**

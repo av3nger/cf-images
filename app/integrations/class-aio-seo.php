@@ -49,7 +49,7 @@ class AIO_SEO extends Integration {
 		 *
 		 * @see https://github.com/av3nger/cf-images/issues/49
 		 */
-		if ( $this->integration_option_value( true, 'skip_image_object' ) ) {
+		if ( ! $this->integration_option_value( false, 'image_object' ) ) {
 			add_action( 'wp_head', array( $this, 'halt_offload' ), 0 );
 			add_action( 'wp_head', array( $this, 'resume_offload' ), 2 );
 		}
@@ -72,10 +72,10 @@ class AIO_SEO extends Integration {
 
 		return array(
 			array(
-				'name'        => 'skip_image_object',
-				'label'       => esc_html__( 'Ignore ImageObject', 'cf-images' ),
-				'description' => esc_html__( 'Use local image for the ImageObject in the application/ld+json schema.', 'cf-images' ),
-				'value'       => apply_filters( 'cf_images_integration_option_value', true, 'skip_image_object' ),
+				'name'        => 'image_object',
+				'label'       => esc_html__( 'Replace ImageObject', 'cf-images' ),
+				'description' => esc_html__( 'Use Cloudflare image for the ImageObject in the application/ld+json schema.', 'cf-images' ),
+				'value'       => apply_filters( 'cf_images_integration_option_value', false, 'image_object' ),
 			),
 		);
 	}
@@ -86,7 +86,7 @@ class AIO_SEO extends Integration {
 	 * @since 1.9.3
 	 */
 	public function halt_offload() {
-		add_filter( 'cf_images_can_run', '__return_true' );
+		add_filter( 'cf_images_skip_image', '__return_true' );
 	}
 
 	/**
@@ -95,6 +95,6 @@ class AIO_SEO extends Integration {
 	 * @since 1.9.3
 	 */
 	public function resume_offload() {
-		remove_filter( 'cf_images_can_run', '__return_false' );
+		remove_filter( 'cf_images_skip_image', '__return_false' );
 	}
 }

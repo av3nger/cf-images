@@ -112,7 +112,7 @@ abstract class Module {
 			return false;
 		}
 
-		if ( apply_filters( 'cf_images_can_run', false ) ) {
+		if ( apply_filters( 'cf_images_skip_image', false ) ) {
 			return false;
 		}
 

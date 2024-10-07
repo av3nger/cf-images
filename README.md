@@ -107,11 +107,13 @@ If something is still not working for you, please let me know by creating a supp
 Added:
 * Integration with Smart Slider 3
 * Integration with All in One SEO: allow controlling application/ld+json schema image URLs
+* Integration with Rank Math: allow controlling application/ld+json schema image URLs
 * Filter cf_images_disable_crop to disable auto cropping for registered crop images
 * Background image support in Spectra plugin when styles are inlined (props @josephdsouza86)
 
 Changed:
 * Improve performance processing external images
+* Rename 'cf_images_can_run' filter to 'cf_images_skip_image' so it's more clear what it does
 
 Fixed:
 * Images being replaced in RSS feeds, regardless of the settings
