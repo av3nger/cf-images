@@ -4,6 +4,7 @@ Added:
 * Integration with Smart Slider 3
 * Integration with All in One SEO: allow controlling application/ld+json schema image URLs
 * Filter cf_images_disable_crop to disable auto cropping for registered crop images
+* Background image support in Spectra plugin when styles are inlined (props @josephdsouza86)
 
 Changed:
 * Improve performance processing external images
