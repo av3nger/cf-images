@@ -102,7 +102,7 @@ If something is still not working for you, please let me know by creating a supp
 
 == Changelog ==
 
-= 1.9.3 =
+= 1.9.3 - 07.10.2024 =
 
 Added:
 * Integration with Smart Slider 3
