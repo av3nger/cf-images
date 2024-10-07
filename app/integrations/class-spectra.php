@@ -14,8 +14,6 @@
 
 namespace CF_Images\App\Integrations;
 
-use CF_Images\App\Image;
-
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -33,7 +31,7 @@ class Spectra {
 	 */
 	public function __construct() {
 		add_filter( 'cf_images_content_attachment_id', array( $this, 'detect_image_id' ), 10, 2 );
-		add_filter( 'uagb_block_attributes_for_css_and_js', array( $this, 'replace_background_images' ), 10, 2 );
+		add_filter( 'uagb_block_attributes_for_css_and_js', array( $this, 'replace_background_images' ) );
 	}
 
 	/**
@@ -66,28 +64,23 @@ class Spectra {
 	 * Replace background images in Spectra blocks.
 	 *
 	 * @param array $attributes Block attributes.
-	 * @param array $block      Block data.
 	 *
 	 * @return array
 	 */
-	public function replace_background_images( $attributes, $block ) {
-		$device_aliases = [ 'Desktop', 'Tablet', 'Mobile' ];
+	public function replace_background_images( array $attributes ): array {
+		$device_aliases = array( 'Desktop', 'Tablet', 'Mobile' );
 
 		// Check background images for all devices.
 		foreach ( $device_aliases as $device ) {
-			if ( isset( $attributes['backgroundImage' . $device] ) ) {
-				// Create a fake <img> tag with the standard WordPress class to indicate the attachment ID and the URL being passed from Spectra prior to creating inline CSS.
-				$image = new Image( '<img class="wp-image-' . $attributes['backgroundImage' . $device]['id'] . '" src="' . $attributes['backgroundImage' . $device]['url'] . '" />', $attributes['backgroundImage' . $device]['url'], '' );
-
-				// Do the CF Images magic.
-				$image_dom = $image->get_processed();
-
-				// Get the src attribute from the image.
-				preg_match( '/src=[\'"]([^\'"]+)/i', $image_dom, $src );
-
-				// Replace the background image URL.
-				$attributes['backgroundImage' . $device]['url'] = $src[1];
+			$key = 'backgroundImage' . $device;
+			if ( ! isset( $attributes[ $key ] ) ) {
+				continue;
 			}
+
+			$image = apply_filters( 'wp_get_attachment_image_src', array( $attributes[ $key ]['url'] ), $attributes[ $key ]['id'], '', false );
+
+			// Replace the background image URL.
+			$attributes[ $key ]['url'] = $image[0];
 		}
 
 		return $attributes;
