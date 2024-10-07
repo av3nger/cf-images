@@ -31,6 +31,7 @@ class Spectra {
 	 */
 	public function __construct() {
 		add_filter( 'cf_images_content_attachment_id', array( $this, 'detect_image_id' ), 10, 2 );
+		add_filter( 'uagb_block_attributes_for_css_and_js', array( $this, 'replace_background_images' ) );
 	}
 
 	/**
@@ -57,5 +58,31 @@ class Spectra {
 		}
 
 		return $attachment_id;
+	}
+
+	/**
+	 * Replace background images in Spectra blocks.
+	 *
+	 * @param array $attributes Block attributes.
+	 *
+	 * @return array
+	 */
+	public function replace_background_images( array $attributes ): array {
+		$device_aliases = array( 'Desktop', 'Tablet', 'Mobile' );
+
+		// Check background images for all devices.
+		foreach ( $device_aliases as $device ) {
+			$key = 'backgroundImage' . $device;
+			if ( ! isset( $attributes[ $key ] ) ) {
+				continue;
+			}
+
+			$image = apply_filters( 'wp_get_attachment_image_src', array( $attributes[ $key ]['url'] ), $attributes[ $key ]['id'], '', false );
+
+			// Replace the background image URL.
+			$attributes[ $key ]['url'] = $image[0];
+		}
+
+		return $attributes;
 	}
 }
