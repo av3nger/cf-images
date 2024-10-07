@@ -112,7 +112,11 @@ abstract class Module {
 			return false;
 		}
 
-		if ( apply_filters( 'cf_images_can_run', false ) ) {
+		if ( apply_filters( 'cf_images_skip_image', false ) ) {
+			return false;
+		}
+
+		if ( did_action( 'wp' ) && ! $this->is_module_enabled( false, 'rss-feeds' ) && is_feed() ) {
 			return false;
 		}
 

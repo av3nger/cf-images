@@ -210,7 +210,13 @@ class Image {
 	 * @param bool   $is_src  Is this the src attribute.
 	 */
 	private function process( string $content, bool $is_src = false ) {
-		preg_match_all( '/https?[^\s\'"]*/i', $content, $urls );
+		/**
+		 * Match URLs that start with:
+		 * - http:
+		 * - https:
+		 * - // (but only if this string is at the beginning of a word or after whitespace)
+		 */
+		preg_match_all( '/https?:\S+|(?<!\S)\/\/\S+/i', $content, $urls );
 		if ( ! is_array( $urls ) || empty( $urls[0] ) ) {
 			return;
 		}
@@ -352,7 +358,7 @@ class Image {
 			return false;
 		}
 
-		if ( 0 === $this->id ) {
+		if ( 0 === $this->id && $this->is_local_image( $original ) ) {
 			// Could not get image ID from class name, try to get it from URL.
 			$this->id = $this->attachment_url_to_post_id( $original );
 		}
@@ -441,6 +447,11 @@ class Image {
 
 		if ( false === $post_id ) {
 			global $wpdb;
+
+			// Normalize the URL.
+			if ( str_starts_with( $url, '//' ) ) {
+				$url = set_url_scheme( $url );
+			}
 
 			$sql = $wpdb->prepare(
 				"SELECT ID FROM $wpdb->posts WHERE guid = %s",
@@ -547,5 +558,32 @@ class Image {
 	 */
 	public function get_id(): int {
 		return $this->id;
+	}
+
+	/**
+	 * Check if this is a local image.
+	 *
+	 * @since 1.9.3
+	 *
+	 * @param string $url Image URL.
+	 *
+	 * @return bool
+	 */
+	private function is_local_image( string $url ): bool {
+		// Normalize the URL.
+		if ( str_starts_with( $url, '//' ) ) {
+			$url = set_url_scheme( $url );
+		}
+
+		$uploads = wp_get_upload_dir();
+
+		// Check if the URL is within the wp-content/uploads directory.
+		$uploads = ! isset( $uploads['baseurl'] ) || false !== strpos( $url, $uploads['baseurl'] );
+
+		if ( false === strpos( $url, content_url() ) && ! $uploads ) {
+			return false;
+		}
+
+		return true;
 	}
 }

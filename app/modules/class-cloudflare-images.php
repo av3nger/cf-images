@@ -164,7 +164,7 @@ class Cloudflare_Images extends Module {
 		$cf_image = trailingslashit( $this->get_cdn_domain() . "/$hash" ) . $cloudflare_image_id;
 
 		// If this is a known crop image.
-		if ( is_string( $size ) && isset( $this->registered_sizes[ $size ]['crop'] ) && true === $this->registered_sizes[ $size ]['crop'] ) {
+		if ( is_string( $size ) && isset( $this->registered_sizes[ $size ]['crop'] ) && true === $this->registered_sizes[ $size ]['crop'] && ! apply_filters( 'cf_images_disable_crop', false ) ) {
 			$image[0] = $cf_image . '/w=' . $this->registered_sizes[ $size ]['width'] . ',h=' . $this->registered_sizes[ $size ]['height'] . ',fit=crop';
 			return $image;
 		}
@@ -183,7 +183,7 @@ class Cloudflare_Images extends Module {
 		preg_match( '/-(\d+)x(\d+)\.[a-zA-Z]{3,4}$/', $image[0], $variant_image );
 
 		// Image with `-<width>x<height>` prefix, for example, image-300x125.jpg.
-		if ( isset( $variant_image[1] ) && isset( $variant_image[2] ) ) {
+		if ( isset( $variant_image[1] ) && isset( $variant_image[2] ) && is_array( $this->heights ) && is_array( $this->widths ) ) {
 			// Check if the image is a cropped version.
 			$height_key = array_search( (int) $variant_image[1], $this->heights, true );
 			$width_key  = array_search( (int) $variant_image[2], $this->widths, true );

@@ -44,6 +44,8 @@ delete_option( 'cf-image-ai-api-key' );
 delete_option( 'cf-images-settings' );
 delete_option( 'cf-images-custom-path' );
 delete_option( 'cf-images-cdn-enabled' );
+delete_option( 'cf-images-integrations' );
+
 
 /**
  * These have been removed since version 1.4.0.

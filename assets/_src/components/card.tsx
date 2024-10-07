@@ -18,7 +18,7 @@ import SettingsContext from '../context/settings';
 type CardProps = {
 	children: ReactElement;
 	footer?: ReactElement;
-	icon: string;
+	icon?: string;
 	id?: string;
 	title: string;
 	wide?: boolean;
@@ -39,7 +39,7 @@ type CardProps = {
 const Card = ({
 	children,
 	footer,
-	icon,
+	icon = '',
 	id,
 	title,
 	wide = false,
@@ -61,9 +61,11 @@ const Card = ({
 					})}
 				>
 					<div className="media is-align-content-center is-align-items-center">
-						<div className="media-left">
-							<Icon path={icon} size={2} />
-						</div>
+						{icon && (
+							<div className="media-left">
+								<Icon path={icon} size={2} />
+							</div>
+						)}
 						<div className="media-content">
 							<p
 								className={classNames('title is-4', {

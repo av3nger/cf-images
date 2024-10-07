@@ -123,22 +123,24 @@ class Admin {
 			true
 		);
 
+		$i10n = array(
+			'nonce'          => wp_create_nonce( 'cf-images-nonce' ),
+			'dirURL'         => CF_IMAGES_DIR_URL,
+			'settings'       => apply_filters( 'cf_images_settings', get_option( 'cf-images-settings', Settings::get_defaults() ) ),
+			'cfStatus'       => $this->is_set_up(),
+			'domain'         => get_option( 'cf-images-custom-domain', '' ),
+			'hideSidebar'    => get_site_option( 'cf-images-hide-sidebar' ),
+			'fuzion'         => $this->is_fuzion_api_connected(),
+			'stats'          => $this->get_stats(),
+			'cdnEnabled'     => (bool) get_option( 'cf-images-cdn-enabled', false ),
+			'isNetworkAdmin' => is_multisite() && is_main_site(),
+			'browserTTL'     => get_site_option( 'cf-images-browser-ttl', 172800 ),
+		);
+
 		wp_localize_script(
 			$this->get_slug(),
 			'CFImages',
-			array(
-				'nonce'          => wp_create_nonce( 'cf-images-nonce' ),
-				'dirURL'         => CF_IMAGES_DIR_URL,
-				'settings'       => apply_filters( 'cf_images_settings', get_option( 'cf-images-settings', Settings::get_defaults() ) ),
-				'cfStatus'       => $this->is_set_up(),
-				'domain'         => get_option( 'cf-images-custom-domain', '' ),
-				'hideSidebar'    => get_site_option( 'cf-images-hide-sidebar' ),
-				'fuzion'         => $this->is_fuzion_api_connected(),
-				'stats'          => $this->get_stats(),
-				'cdnEnabled'     => (bool) get_option( 'cf-images-cdn-enabled', false ),
-				'isNetworkAdmin' => is_multisite() && is_main_site(),
-				'browserTTL'     => get_site_option( 'cf-images-browser-ttl', 172800 ),
-			)
+			apply_filters( 'cf_images_i10n', $i10n )
 		);
 	}
 

@@ -5,8 +5,8 @@ Tags: cdn, cloudflare images, image AI, compress, optimize
 Donate link: https://www.paypal.com/donate/?business=JRR6QPRGTZ46N&no_recurring=0&item_name=Help+support+the+development+of+the+Cloudflare+Images+plugin+for+WordPress&currency_code=AUD
 Requires at least: 5.6
 Requires PHP: 7.0
-Tested up to: 6.6
-Stable tag: 1.9.2
+Tested up to: 6.7
+Stable tag: 1.9.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -101,6 +101,23 @@ If something is still not working for you, please let me know by creating a supp
 3. Quick and easy setup wizard
 
 == Changelog ==
+
+= 1.9.3 - 07.10.2024 =
+
+Added:
+* Integration with Smart Slider 3
+* Integration with All in One SEO: allow controlling application/ld+json schema image URLs
+* Integration with Rank Math: allow controlling application/ld+json schema image URLs
+* Filter cf_images_disable_crop to disable auto cropping for registered crop images
+* Background image support in Spectra plugin when styles are inlined (props @josephdsouza86)
+
+Changed:
+* Improve performance processing external images
+* Rename 'cf_images_can_run' filter to 'cf_images_skip_image' so it's more clear what it does
+
+Fixed:
+* Images being replaced in RSS feeds, regardless of the settings
+* Fatal error when a registered image size does not have height or width defined
 
 = 1.9.2 - 17.07.2024 =
 
