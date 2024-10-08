@@ -1,6 +1,13 @@
 const path = require('path');
+const glob = require('glob');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const { PurgeCSSPlugin } = require('purgecss-webpack-plugin');
+
+const PATHS = {
+	app: path.join(__dirname, 'app'),
+	src: path.join(__dirname, 'assets/_src'),
+};
 
 module.exports = {
 	mode: 'production',
@@ -61,6 +68,16 @@ module.exports = {
 			// both options are optional
 			filename: '../css/[name].min.css',
 			chunkFilename: '[id].min.css',
+		}),
+		new PurgeCSSPlugin({
+			paths: [
+				...glob.sync(`${PATHS.src}/**/*`, { nodir: true }),
+				...glob.sync(`${PATHS.app}/**/*`, { nodir: true }),
+			],
+			variables: true, // remove unused CSS variables
+			safelist: {
+				standard: ['wpcontent'],
+			},
 		}),
 	],
 

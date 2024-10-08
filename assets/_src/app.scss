@@ -3,35 +3,49 @@
 /**
  * Local overrides.
  */
-$primary: #4597de;
-$blue: $primary;
+//$blue: #4597de;
+$blue: hsl(207, 70%, 57%);
 $switch-background-active: $blue;
 
-@import "bulma/sass/utilities/_all";
-@import "bulma/sass/grid/columns";
-@import "bulma-switch";
-@import "@creativebulma/bulma-tooltip";
+@use "bulma/sass/utilities" with (
+	$primary: $blue,
+	$blue: $blue,
+	$turquoise: $blue,
+	$radius-small: 0.125rem,
+);
+@use "bulma/sass/base";
+@use "bulma/sass/grid/columns";
+@use "bulma/sass/elements/box";
+@use "bulma/sass/elements/content";
+@use "bulma/sass/elements/title" with (
+	$title-weight: 600
+);
+@use "bulma/sass/elements/icon";
+@use "bulma/sass/elements/notification";
+@use "bulma/sass/elements/progress";
+@use "bulma/sass/form/shared";
+@use "bulma/sass/form/input-textarea";
+@use "bulma/sass/form/select";
+@use "bulma/sass/form/tools";
+@use "bulma/sass/components/card";
+@use "bulma/sass/components/menu";
+@use "bulma/sass/helpers";
+@use "bulma/sass/layout/container";
+@use "bulma/sass/layout/hero";
+@use "bulma/sass/layout/level";
+@use "bulma/sass/layout/media";
+
+@use "bulma/sass/themes";
+@use "./css/switch";
+@use "./css/tooltip";
+
+/* Fix for white padding at the bottom */
+#wpcontent {
+	background-color: #f0f0f1;
+}
 
 .cf-images {
-	@import "bulma/sass/base/_all";
-	@import "bulma/sass/elements/box";
 	@import "bulma/sass/elements/button";
-	@import "bulma/sass/elements/container";
-	@import "bulma/sass/elements/content";
-	@import "bulma/sass/elements/title";
-	@import "bulma/sass/elements/icon";
-	@import "bulma/sass/elements/notification";
-	@import "bulma/sass/elements/progress";
-	@import "bulma/sass/form/shared";
-	@import "bulma/sass/form/input-textarea";
-	@import "bulma/sass/form/select";
-	@import "bulma/sass/form/tools";
-	@import "bulma/sass/components/card";
-	@import "bulma/sass/components/media";
-	@import "bulma/sass/components/menu";
-	@import "bulma/sass/components/level";
-	@import "bulma/sass/helpers/_all";
-	@import "bulma/sass/layout/hero";
 
 	.cf-plugin-title {
 		line-height: 1.3em;
@@ -71,8 +85,44 @@ $switch-background-active: $blue;
 	}
 
 	& .cf-images-logs {
-		overflow-y: scroll;
 		max-height: 400px;
+		overflow-y: scroll;
+		text-wrap: auto;
+	}
+
+	// Bulma overrides.
+	.menu-list a {
+		&:not(.is-active) {
+			background-color: transparent;
+
+			&:hover {
+				background-color: hsl(0, 0%, 96%);
+			}
+		}
+
+		&.is-active {
+			color: white;
+		}
+	}
+
+	.button.is-primary {
+		color: white;
+
+		&:hover {
+			background-color: hsl(207, 61%, 50.5%);
+		}
+	}
+
+	.button.is-ghost {
+		--bulma-button-ghost-color: hsl(207, 70%, 57%);
+	}
+
+	.button.is-small {
+		--bulma-button-weight: 400;
+	}
+
+	.notification.is-danger {
+		color: white;
 	}
 }
 

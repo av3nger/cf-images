@@ -48,7 +48,7 @@ const FullOffload = () => {
 
 				{inProgress && <ProgressBar action={action} />}
 
-				<div className="buttons mb-1">
+				<div className="buttons mb-2">
 					<button
 						className="button is-small"
 						onClick={(e) => runAction(e, 'full-remove')}

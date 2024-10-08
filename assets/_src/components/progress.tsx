@@ -92,7 +92,7 @@ const ProgressBar = ({ action }) => {
 	return (
 		<div className="has-text-centered">
 			<progress
-				className="progress is-info mb-1"
+				className="progress is-primary mb-1"
 				value={progress}
 				max="100"
 			>
@@ -109,7 +109,7 @@ const ProgressBar = ({ action }) => {
 							),
 							currentStep + 1,
 							totalSteps
-					  )}
+						)}
 			</small>
 		</div>
 	);

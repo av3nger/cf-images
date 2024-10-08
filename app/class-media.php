@@ -164,28 +164,32 @@ class Media {
 			<?php echo esc_html( implode( ' | ', $status ) ); ?>
 			<?php do_action( 'cf_images_media_custom_column', (int) $post_id ); ?>
 		</span>
-		<ul>
-			<li role="list" dir="rtl">
-				<a href="#" aria-haspopup="listbox"><?php esc_html_e( 'Actions', 'cf-images' ); ?></a>
-				<ul role="listbox">
+		<div class="dropdown is-hoverable">
+			<div class="dropdown-trigger">
+				<a href="#" aria-haspopup="true" aria-controls="dropdown-menu">
+					<?php esc_html_e( 'Actions', 'cf-images' ); ?>
+				</a>
+			</div>
+			<div class="dropdown-menu" id="dropdown-menu" role="menu">
+				<div class="dropdown-content">
 					<?php if ( ! empty( $meta ) ) : ?>
-						<li><a href="#" class="cf-images-undo" data-id="<?php echo esc_attr( $post_id ); ?>">
+						<a href="#" class="dropdown-item cf-images-undo" data-id="<?php echo esc_attr( $post_id ); ?>">
 							<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/cloud-off.svg' ); ?>" alt="<?php esc_attr_e( 'Remove from Cloudflare', 'cf-images' ); ?>" />
 							<?php esc_html_e( 'Remove from Cloudflare', 'cf-images' ); ?>
-						</a></li>
+						</a>
 						<?php if ( $deleted ) : ?>
-							<li><a href="#" class="cf-images-restore" data-id="<?php echo esc_attr( $post_id ); ?>">
+							<<a href="#" class="dropdown-item cf-images-restore" data-id="<?php echo esc_attr( $post_id ); ?>">
 								<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/download.svg' ); ?>" alt="<?php esc_attr_e( 'Restore in media library', 'cf-images' ); ?>" />
 								<?php esc_html_e( 'Restore in media library', 'cf-images' ); ?>
-							</a></li>
+							</a>
 						<?php elseif ( apply_filters( 'cf_images_module_enabled', false, 'full-offload' ) ) : ?>
-							<li><a href="#" class="cf-images-delete" data-id="<?php echo esc_attr( $post_id ); ?>">
+							<a href="#" class="dropdown-item cf-images-delete" data-id="<?php echo esc_attr( $post_id ); ?>">
 								<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/delete.svg' ); ?>" alt="<?php esc_attr_e( 'Remove from media library', 'cf-images' ); ?>" />
 								<?php esc_html_e( 'Delete files on WordPress', 'cf-images' ); ?>
-							</a></li>
+							</a>
 						<?php endif; ?>
 					<?php else : ?>
-						<li><a href="#" class="cf-images-offload" data-id="<?php echo esc_attr( $post_id ); ?>">
+						<a href="#" class="dropdown-item cf-images-offload" data-id="<?php echo esc_attr( $post_id ); ?>">
 							<?php if ( $skipped ) : ?>
 								<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/unpause.svg' ); ?>" alt="<?php esc_attr_e( 'Re-upload to Cloudflare', 'cf-images' ); ?>" />
 								<?php esc_html_e( 'Re-upload to Cloudflare', 'cf-images' ); ?>
@@ -193,24 +197,24 @@ class Media {
 								<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/cloud.svg' ); ?>" alt="<?php esc_attr_e( 'Upload to Cloudflare', 'cf-images' ); ?>" />
 								<?php esc_html_e( 'Upload to Cloudflare', 'cf-images' ); ?>
 							<?php endif; ?>
-						</a></li>
+						</a>
 						<?php if ( ! $skipped ) : ?>
-							<li><a href="#" class="cf-images-skip" data-id="<?php echo esc_attr( $post_id ); ?>">
+							<a href="#" class="dropdown-item cf-images-skip" data-id="<?php echo esc_attr( $post_id ); ?>">
 								<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/pause.svg' ); ?>" alt="<?php esc_attr_e( 'Ignore and skip image', 'cf-images' ); ?>" />
 								<?php esc_html_e( 'Ignore and skip image', 'cf-images' ); ?>
-							</a></li>
+							</a>
 						<?php endif; ?>
 					<?php endif; ?>
 					<?php if ( apply_filters( 'cf_images_module_enabled', false, 'image-ai' ) ) : ?>
-						<li><a href="#" class="cf-images-ai-alt" data-id="<?php echo esc_attr( $post_id ); ?>">
+						<a href="#" class="dropdown-item cf-images-ai-alt" data-id="<?php echo esc_attr( $post_id ); ?>">
 							<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/wand.svg' ); ?>" alt="<?php esc_attr_e( 'Generate alt text', 'cf-images' ); ?>" />
 							<?php esc_html_e( 'Generate alt text', 'cf-images' ); ?>
-						</a></li>
+						</a>
 					<?php endif; ?>
 					<?php do_action( 'cf_images_media_module_actions', (int) $post_id ); ?>
-				</ul>
-			</li>
-		</ul>
+				</div>
+			</div>
+		</div>
 		<?php
 	}
 

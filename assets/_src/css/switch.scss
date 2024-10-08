@@ -1,0 +1,290 @@
+@use 'bulma/sass/utilities/initial-variables' as iv;
+@use 'bulma/sass/utilities/derived-variables' as dv;
+@use 'bulma/sass/utilities/controls' as ctrl;
+@use "bulma/sass/utilities/css-variables" as cv;
+
+
+$switch-background: iv.$grey-light !default;
+$switch-border: 0.1rem solid transparent !default;
+$switch-background-active: dv.$primary !default;
+$switch-radius: iv.$radius !default;
+$switch-paddle-background: iv.$white !default;
+$switch-paddle-background-active: dv.$primary !default;
+$switch-paddle-offset: 0.25rem !default;
+$switch-paddle-transition: all 0.25s ease-out !default;
+$switch-focus: 1px dotted iv.$grey-light !default;
+
+@mixin switch-size($size) {
+	$switch-height: $size * 1.5;
+	$switch-width: $switch-height * 2;
+	$paddle-height: $switch-height - ($switch-paddle-offset * 2);
+	$paddle-width: $switch-height - ($switch-paddle-offset * 2);
+	$paddle-active-offest: $switch-width - $paddle-width - ($switch-paddle-offset * 1.5);
+
+	+ label {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		justify-content: flex-start;
+		font-size: $size;
+		height: ctrl.$control-height;
+		line-height: ctrl.$control-line-height;
+		padding-left: $switch-width + 0.5;
+		padding-top: 0.2rem;
+		cursor: pointer;
+
+		&::before,
+		&:before {
+			position: absolute;
+			display: block;
+			top: calc(50% - #{$switch-height} * 0.5);
+			left: 0;
+			width: $switch-width;
+			height: $switch-height;
+			border: $switch-border;
+			border-radius: $switch-radius;
+			background: $switch-background;
+			content: '';
+		}
+		&::after,
+		&:after {
+			display: block;
+			position: absolute;
+			top: calc(50% - #{$paddle-height} * 0.5);
+			left: $switch-paddle-offset;
+			width: $paddle-width;
+			height: $paddle-height;
+			transform: translate3d(0, 0, 0);
+			border-radius: $switch-radius;
+			background: $switch-paddle-background;
+			transition: $switch-paddle-transition;
+			content: '';
+		}
+		.switch-active,
+		.switch-inactive {
+			font-size: $size - 0.1;
+			z-index: 1;
+			margin-top: -4px;
+		}
+		&.has-text-inside {
+			.switch-inactive {
+				margin-left: -($paddle-active-offest + 0.3);
+			}
+			.switch-active {
+				margin-left: -($paddle-active-offest * 2);
+			}
+		}
+	}
+	&.is-rtl {
+		+ label {
+			padding-left: 0;
+			padding-right: $switch-width + 0.5;
+			&::before,
+			&:before {
+				left: auto;
+				right: 0;
+			}
+			&::after,
+			&:after {
+				left: auto;
+				right: $paddle-active-offest;
+			}
+		}
+	}
+	&:checked {
+		+ label {
+			&::before,
+			&:before {
+				background: $switch-background-active;
+			}
+			&::after {
+				left: $paddle-active-offest;
+			}
+		}
+		&.is-rtl {
+			+ label {
+				&::after,
+				&:after {
+					left: auto;
+					right: $switch-paddle-offset;
+				}
+			}
+		}
+	}
+	&.is-outlined {
+		+ label {
+			&::before,
+			&:before {
+				background-color: transparent;
+				border-color: $switch-background;
+			}
+			&::after,
+			&:after {
+				background: $switch-background;
+			}
+		}
+		&:checked {
+			+ label {
+				&::before,
+				&:before {
+					background-color: transparent;
+					border-color: $switch-background-active;
+				}
+				&::after,
+				&:after {
+					background: $switch-paddle-background-active;
+				}
+			}
+		}
+	}
+	&.is-thin {
+		+ label {
+			&::before,
+			&:before {
+				top: divide($switch-height, 2.75);
+				height: divide($switch-height, 4);
+			}
+			&::after,
+			&:after {
+				box-shadow: 0px 0px 3px iv.$grey;
+			}
+		}
+	}
+	&.is-rounded {
+		+ label {
+			&::before,
+			&:before {
+				border-radius: iv.$radius-large * 4;
+			}
+			&::after,
+			&:after {
+				border-radius: 50%;
+			}
+		}
+	}
+}
+.switch[type='checkbox'] {
+	outline: 0;
+	user-select: none;
+	display: inline-block;
+	position: absolute;
+	opacity: 0;
+
+	&:focus {
+		+ label {
+			&::before,
+			&:before,
+			&::after,
+			&:after {
+				outline: $switch-focus;
+			}
+		}
+	}
+	&[disabled] {
+		cursor: not-allowed;
+		+ label {
+			opacity: 0.5;
+			&::before,
+			&:before {
+				opacity: 0.5;
+			}
+			&::after,
+			&:after {
+				opacity: 0.5;
+			}
+			&:hover {
+				cursor: not-allowed;
+			}
+		}
+	}
+	@include switch-size(dv.$size-normal);
+	&.is-small {
+		@include switch-size(dv.$size-small);
+	}
+	&.is-medium {
+		@include switch-size(dv.$size-medium);
+	}
+	&.is-large {
+		@include switch-size(dv.$size-large);
+	}
+
+	@each $name, $pair in dv.$colors {
+		&.is-#{$name} {
+			+ label {
+				.switch-active {
+					display: none;
+				}
+				.switch-inactive {
+					display: inline-block;
+				}
+			}
+			&:checked {
+				+ label {
+					&::before,
+					&:before {
+						background: cv.getVar($name);
+					}
+					.switch-active {
+						display: inline-block;
+					}
+					.switch-inactive {
+						display: none;
+					}
+				}
+			}
+			&.is-outlined {
+				&:checked {
+					+ label {
+						&::before,
+						&:before {
+							background-color: transparent;
+							border-color: cv.getVar($name) !important;
+						}
+						&::after,
+						&:after {
+							background: cv.getVar($name);
+						}
+					}
+				}
+			}
+			&.is-thin {
+				&.is-outlined {
+					+ label {
+						&::after,
+						&:after {
+							box-shadow: none;
+						}
+					}
+				}
+			}
+		}
+		&.is-unchecked-#{$name} {
+			+ label {
+				&::before,
+				&:before {
+					background: cv.getVar($name);
+				}
+			}
+			&.is-outlined {
+				+ label {
+					&::before,
+					&:before {
+						background-color: transparent;
+						border-color: cv.getVar($name) !important;
+					}
+					&::after,
+					&:after {
+						background: cv.getVar($name);
+					}
+				}
+			}
+		}
+	}
+}
+.field-body {
+	.switch[type='checkbox'] {
+		+ label {
+			margin-top: 0.375em;
+		}
+	}
+}

@@ -135,7 +135,7 @@ const CustomPath = () => {
 							</div>
 							<div className="control">
 								<button
-									className="button is-info"
+									className="button is-primary"
 									disabled={loading}
 									onClick={reSyncStatus}
 								>
