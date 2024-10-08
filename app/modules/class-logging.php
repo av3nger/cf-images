@@ -82,7 +82,7 @@ class Logging extends Module {
 	 * @return void
 	 */
 	public function log( $message, ...$args ) {
-		if ( ( empty( $message ) && empty( $args ) ) || is_admin() ) {
+		if ( ( empty( $message ) && empty( $args ) ) || ( is_admin() && ! wp_doing_ajax() ) ) {
 			return;
 		}
 

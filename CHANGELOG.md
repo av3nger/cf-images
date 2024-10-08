@@ -2,6 +2,7 @@
 
 Changed:
 * Improved UI/UX. Fixed minor bugs.
+* Improved logging to better catch offload errors.
 
 = 1.9.3 - 07.10.2024 =
 
