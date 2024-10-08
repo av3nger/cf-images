@@ -104,9 +104,15 @@ If something is still not working for you, please let me know by creating a supp
 
 = 1.9.4 =
 
+Added:
+* Bulk offload actions to the media library list view
+
 Changed:
-* Improved UI/UX. Fixed minor bugs.
-* Improved logging to better catch offload errors.
+* Improved UI/UX
+* Improved logging to better catch offload errors
+
+Fixed:
+* Fix logs layout spanning off-screen
 
 = 1.9.3 - 07.10.2024 =
 

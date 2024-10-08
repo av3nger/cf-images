@@ -59,6 +59,11 @@ class Media {
 
 		// Image actions.
 		add_action( 'delete_attachment', array( $this, 'remove_from_cloudflare' ) );
+
+		// Bulk dropdown actions in the media library.
+		add_filter( 'bulk_actions-upload', array( $this, 'bulk_media_actions' ) );
+		add_filter( 'handle_bulk_actions-upload', array( $this, 'bulk_action_handler' ), 10, 3 );
+		add_action( 'admin_notices', array( $this, 'bulk_action_admin_notice' ) );
 	}
 
 	/**
@@ -776,5 +781,70 @@ class Media {
 		}
 
 		return $query;
+	}
+
+	/**
+	 * Filters the items in the bulk actions menu of the list table.
+	 *
+	 * @since 1.9.4
+	 *
+	 * @param array $actions An array of the available bulk actions.
+	 *
+	 * @return array
+	 */
+	public function bulk_media_actions( array $actions ): array {
+		$actions['cf-offload'] = esc_html__( 'Upload to Cloudflare', 'cf-images' );
+
+		return $actions;
+	}
+
+	/**
+	 * Fires when a custom bulk action should be handled.
+	 *
+	 * @since 1.9.4
+	 *
+	 * @param string $redirect_to The redirect URL.
+	 * @param string $action      The action being taken.
+	 * @param array  $items       The items to take the action on. Accepts an array of IDs of attachments.
+	 */
+	public function bulk_action_handler( string $redirect_to, string $action, array $items ): string {
+		if ( 'cf-offload' !== $action || empty( $items ) ) {
+			return $redirect_to;
+		}
+
+		foreach ( $items as $id ) {
+			$this->upload_image( wp_get_attachment_metadata( $id ), $id );
+		}
+
+		return add_query_arg( 'cf_offload_done', count( $items ), $redirect_to );
+	}
+
+	/**
+	 * Show success notice.
+	 *
+	 * @since 1.9.4
+	 */
+	public function bulk_action_admin_notice() {
+		$items_count = filter_input( INPUT_GET, 'cf_offload_done', FILTER_SANITIZE_NUMBER_INT );
+
+		if ( ! $items_count ) {
+			return;
+		}
+
+		printf(
+			'<div id="message" class="updated notice is-dismissible"><p>' .
+			/* translators: %d - number of items processed */
+			esc_html__( '%d image(s) offloaded to Cloudflare.', 'cf-images' ) . '</p></div>',
+			(int) $items_count
+		);
+
+		// Remove the query parameter after showing the notice.
+		$current_url = remove_query_arg( 'cf_offload_done' );
+		echo '<script type="text/javascript">
+			if (history.pushState) {
+				const newurl = "' . esc_url_raw( $current_url ) . '";
+				window.history.pushState({path: newurl}, "", newurl);
+			}
+		  </script>';
 	}
 }
