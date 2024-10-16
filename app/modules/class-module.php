@@ -116,6 +116,10 @@ abstract class Module {
 			return false;
 		}
 
+		if ( doing_action( 'wp_head' ) && ! $this->is_module_enabled( false, 'process-head' ) ) {
+			return false;
+		}
+
 		if ( did_action( 'wp' ) && ! $this->is_module_enabled( false, 'rss-feeds' ) && is_feed() ) {
 			return false;
 		}

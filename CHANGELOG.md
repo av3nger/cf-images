@@ -2,6 +2,7 @@
 
 Added:
 * Bulk offload actions to the media library list view
+* Global option to disable processing in the page head section
 
 Changed:
 * Improved UI/UX

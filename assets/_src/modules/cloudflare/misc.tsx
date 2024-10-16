@@ -31,6 +31,13 @@ const MiscOptions = () => {
 				'cf-images'
 			),
 		},
+		'process-head': {
+			label: __('Process images in head', 'cf-images'),
+			description: __(
+				'Replace images inside the head element.',
+				'cf-images'
+			),
+		},
 	};
 
 	if (isNetworkAdmin) {
