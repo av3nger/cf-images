@@ -428,7 +428,7 @@ class Media {
 		}
 
 		$url = wp_parse_url( get_site_url() );
-		if ( is_multisite() && ! is_subdomain_install() ) {
+		if ( is_multisite() && ! is_subdomain_install() && isset( $url['path'] ) ) {
 			$host = $url['host'] . $url['path'];
 		} else {
 			$host = $url['host'];

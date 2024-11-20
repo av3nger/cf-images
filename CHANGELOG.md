@@ -10,6 +10,7 @@ Changed:
 
 Fixed:
 * Fix logs layout spanning off-screen
+* Undefined array key PHP warning (props @ablears)
 
 = 1.9.3 - 07.10.2024 =
 
