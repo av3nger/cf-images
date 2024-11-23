@@ -93,6 +93,24 @@ const BrowserTTL = () => {
 									{__('1 month', 'cf-images')}
 								</option>
 								<option
+									value="7884000"
+									selected={7884000 === ttl}
+								>
+									{__('3 month', 'cf-images')}
+								</option>
+								<option
+									value="15768000"
+									selected={15768000 === ttl}
+								>
+									{__('6 month', 'cf-images')}
+								</option>
+								<option
+									value="23652000"
+									selected={23652000 === ttl}
+								>
+									{__('9 month', 'cf-images')}
+								</option>
+								<option
 									value="31536000"
 									selected={31536000 === ttl}
 								>

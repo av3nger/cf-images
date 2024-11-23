@@ -107,6 +107,7 @@ If something is still not working for you, please let me know by creating a supp
 Added:
 * Bulk offload actions to the media library list view
 * Global option to disable processing in the page head section
+* Additional TTL options (3, 6 and 9 months)
 
 Changed:
 * Improved UI/UX
