@@ -89,6 +89,7 @@ trait Stats {
 			update_option( 'cf-images-stats', $stats, false );
 		} catch ( Exception $e ) {
 			do_action( 'cf_images_error', $e->getCode(), $e->getMessage() );
+			do_action( 'cf_images_log', $e->getMessage() );
 		}
 	}
 

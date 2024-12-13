@@ -59,6 +59,11 @@ class Media {
 
 		// Image actions.
 		add_action( 'delete_attachment', array( $this, 'remove_from_cloudflare' ) );
+
+		// Bulk dropdown actions in the media library.
+		add_filter( 'bulk_actions-upload', array( $this, 'bulk_media_actions' ) );
+		add_filter( 'handle_bulk_actions-upload', array( $this, 'bulk_action_handler' ), 10, 3 );
+		add_action( 'admin_notices', array( $this, 'bulk_action_admin_notice' ) );
 	}
 
 	/**
@@ -164,28 +169,32 @@ class Media {
 			<?php echo esc_html( implode( ' | ', $status ) ); ?>
 			<?php do_action( 'cf_images_media_custom_column', (int) $post_id ); ?>
 		</span>
-		<ul>
-			<li role="list" dir="rtl">
-				<a href="#" aria-haspopup="listbox"><?php esc_html_e( 'Actions', 'cf-images' ); ?></a>
-				<ul role="listbox">
+		<div class="dropdown is-hoverable">
+			<div class="dropdown-trigger">
+				<a href="#" aria-haspopup="true" aria-controls="dropdown-menu">
+					<?php esc_html_e( 'Actions', 'cf-images' ); ?>
+				</a>
+			</div>
+			<div class="dropdown-menu" id="dropdown-menu" role="menu">
+				<div class="dropdown-content">
 					<?php if ( ! empty( $meta ) ) : ?>
-						<li><a href="#" class="cf-images-undo" data-id="<?php echo esc_attr( $post_id ); ?>">
+						<a href="#" class="dropdown-item cf-images-undo" data-id="<?php echo esc_attr( $post_id ); ?>">
 							<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/cloud-off.svg' ); ?>" alt="<?php esc_attr_e( 'Remove from Cloudflare', 'cf-images' ); ?>" />
 							<?php esc_html_e( 'Remove from Cloudflare', 'cf-images' ); ?>
-						</a></li>
+						</a>
 						<?php if ( $deleted ) : ?>
-							<li><a href="#" class="cf-images-restore" data-id="<?php echo esc_attr( $post_id ); ?>">
+							<<a href="#" class="dropdown-item cf-images-restore" data-id="<?php echo esc_attr( $post_id ); ?>">
 								<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/download.svg' ); ?>" alt="<?php esc_attr_e( 'Restore in media library', 'cf-images' ); ?>" />
 								<?php esc_html_e( 'Restore in media library', 'cf-images' ); ?>
-							</a></li>
+							</a>
 						<?php elseif ( apply_filters( 'cf_images_module_enabled', false, 'full-offload' ) ) : ?>
-							<li><a href="#" class="cf-images-delete" data-id="<?php echo esc_attr( $post_id ); ?>">
+							<a href="#" class="dropdown-item cf-images-delete" data-id="<?php echo esc_attr( $post_id ); ?>">
 								<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/delete.svg' ); ?>" alt="<?php esc_attr_e( 'Remove from media library', 'cf-images' ); ?>" />
 								<?php esc_html_e( 'Delete files on WordPress', 'cf-images' ); ?>
-							</a></li>
+							</a>
 						<?php endif; ?>
 					<?php else : ?>
-						<li><a href="#" class="cf-images-offload" data-id="<?php echo esc_attr( $post_id ); ?>">
+						<a href="#" class="dropdown-item cf-images-offload" data-id="<?php echo esc_attr( $post_id ); ?>">
 							<?php if ( $skipped ) : ?>
 								<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/unpause.svg' ); ?>" alt="<?php esc_attr_e( 'Re-upload to Cloudflare', 'cf-images' ); ?>" />
 								<?php esc_html_e( 'Re-upload to Cloudflare', 'cf-images' ); ?>
@@ -193,24 +202,24 @@ class Media {
 								<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/cloud.svg' ); ?>" alt="<?php esc_attr_e( 'Upload to Cloudflare', 'cf-images' ); ?>" />
 								<?php esc_html_e( 'Upload to Cloudflare', 'cf-images' ); ?>
 							<?php endif; ?>
-						</a></li>
+						</a>
 						<?php if ( ! $skipped ) : ?>
-							<li><a href="#" class="cf-images-skip" data-id="<?php echo esc_attr( $post_id ); ?>">
+							<a href="#" class="dropdown-item cf-images-skip" data-id="<?php echo esc_attr( $post_id ); ?>">
 								<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/pause.svg' ); ?>" alt="<?php esc_attr_e( 'Ignore and skip image', 'cf-images' ); ?>" />
 								<?php esc_html_e( 'Ignore and skip image', 'cf-images' ); ?>
-							</a></li>
+							</a>
 						<?php endif; ?>
 					<?php endif; ?>
 					<?php if ( apply_filters( 'cf_images_module_enabled', false, 'image-ai' ) ) : ?>
-						<li><a href="#" class="cf-images-ai-alt" data-id="<?php echo esc_attr( $post_id ); ?>">
+						<a href="#" class="dropdown-item cf-images-ai-alt" data-id="<?php echo esc_attr( $post_id ); ?>">
 							<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/wand.svg' ); ?>" alt="<?php esc_attr_e( 'Generate alt text', 'cf-images' ); ?>" />
 							<?php esc_html_e( 'Generate alt text', 'cf-images' ); ?>
-						</a></li>
+						</a>
 					<?php endif; ?>
 					<?php do_action( 'cf_images_media_module_actions', (int) $post_id ); ?>
-				</ul>
-			</li>
-		</ul>
+				</div>
+			</div>
+		</div>
 		<?php
 	}
 
@@ -392,6 +401,13 @@ class Media {
 		if ( ! isset( $metadata['file'] ) ) {
 			update_post_meta( $attachment_id, '_cloudflare_image_skip', true );
 			do_action( 'cf_images_error', 404, __( 'Media file not found', 'cf-images' ) );
+			do_action(
+				'cf_images_log',
+				sprintf( /* translators: %d: attachment ID */
+					esc_html__( 'Unable to offload image. Media file not found. Attachment ID: %d.', 'cf-images' ),
+					absint( $attachment_id )
+				)
+			);
 			return $metadata;
 		}
 
@@ -403,6 +419,13 @@ class Media {
 		if ( ! wp_attachment_is_image( $attachment_id ) || false !== strpos( $mime, 'image/svg' ) ) {
 			update_post_meta( $attachment_id, '_cloudflare_image_skip', true );
 			do_action( 'cf_images_error', 415, __( 'Unsupported media type', 'cf-images' ) );
+			do_action(
+				'cf_images_log',
+				sprintf( /* translators: %d: attachment ID */
+					esc_html__( 'Unable to offload image. Unsupported media type. Attachment ID: %d.', 'cf-images' ),
+					absint( $attachment_id )
+				)
+			);
 			return $metadata;
 		}
 
@@ -415,7 +438,7 @@ class Media {
 		}
 
 		$url = wp_parse_url( get_site_url() );
-		if ( is_multisite() && ! is_subdomain_install() ) {
+		if ( is_multisite() && ! is_subdomain_install() && isset( $url['path'] ) ) {
 			$host = $url['host'] . $url['path'];
 		} else {
 			$host = $url['host'];
@@ -453,6 +476,14 @@ class Media {
 			}
 		} catch ( Exception $e ) {
 			do_action( 'cf_images_error', $e->getCode(), $e->getMessage() );
+			do_action(
+				'cf_images_log',
+				sprintf( /* translators: %1$d: attachment ID, %2$s: error message */
+					esc_html__( 'Unable to offload image. Attachment ID: %1$d. Error: %2$s', 'cf-images' ),
+					absint( $attachment_id ),
+					esc_html( $e->getMessage() )
+				)
+			);
 		}
 
 		return $metadata;
@@ -487,6 +518,14 @@ class Media {
 			}
 		} catch ( Exception $e ) {
 			do_action( 'cf_images_error', $e->getCode(), $e->getMessage() );
+			do_action(
+				'cf_images_log',
+				sprintf( /* translators: %1$d: attachment ID, %2$s: error message */
+					esc_html__( 'Unable to remove image from Cloudflare. Attachment ID: %1$d. Error: %2$s', 'cf-images' ),
+					absint( $post_id ),
+					esc_html( $e->getMessage() )
+				)
+			);
 		}
 	}
 
@@ -663,6 +702,14 @@ class Media {
 			wp_create_image_subsizes( $original, $attachment_id );
 		} catch ( Exception $e ) {
 			do_action( 'cf_images_error', $e->getCode(), $e->getMessage() );
+			do_action(
+				'cf_images_log',
+				sprintf( /* translators: %1$d: attachment ID, %2$s: error message */
+					esc_html__( 'Unable to restore image. Attachment ID: %1$d. Error: %2$s', 'cf-images' ),
+					absint( $attachment_id ),
+					esc_html( $e->getMessage() )
+				)
+			);
 		}
 
 		delete_post_meta( $attachment_id, '_cloudflare_image_offloaded' );
@@ -762,5 +809,70 @@ class Media {
 		}
 
 		return $query;
+	}
+
+	/**
+	 * Filters the items in the bulk actions menu of the list table.
+	 *
+	 * @since 1.9.4
+	 *
+	 * @param array $actions An array of the available bulk actions.
+	 *
+	 * @return array
+	 */
+	public function bulk_media_actions( array $actions ): array {
+		$actions['cf-offload'] = esc_html__( 'Upload to Cloudflare', 'cf-images' );
+
+		return $actions;
+	}
+
+	/**
+	 * Fires when a custom bulk action should be handled.
+	 *
+	 * @since 1.9.4
+	 *
+	 * @param string $redirect_to The redirect URL.
+	 * @param string $action      The action being taken.
+	 * @param array  $items       The items to take the action on. Accepts an array of IDs of attachments.
+	 */
+	public function bulk_action_handler( string $redirect_to, string $action, array $items ): string {
+		if ( 'cf-offload' !== $action || empty( $items ) ) {
+			return $redirect_to;
+		}
+
+		foreach ( $items as $id ) {
+			$this->upload_image( wp_get_attachment_metadata( $id ), $id );
+		}
+
+		return add_query_arg( 'cf_offload_done', count( $items ), $redirect_to );
+	}
+
+	/**
+	 * Show success notice.
+	 *
+	 * @since 1.9.4
+	 */
+	public function bulk_action_admin_notice() {
+		$items_count = filter_input( INPUT_GET, 'cf_offload_done', FILTER_SANITIZE_NUMBER_INT );
+
+		if ( ! $items_count ) {
+			return;
+		}
+
+		printf(
+			'<div id="message" class="updated notice is-dismissible"><p>' .
+			/* translators: %d - number of items processed */
+			esc_html__( '%d image(s) offloaded to Cloudflare.', 'cf-images' ) . '</p></div>',
+			(int) $items_count
+		);
+
+		// Remove the query parameter after showing the notice.
+		$current_url = remove_query_arg( 'cf_offload_done' );
+		echo '<script type="text/javascript">
+			if (history.pushState) {
+				const newurl = "' . esc_url_raw( $current_url ) . '";
+				window.history.pushState({path: newurl}, "", newurl);
+			}
+		  </script>';
 	}
 }

@@ -92,13 +92,13 @@ class Rank_Math extends Integration {
 			array(
 				'name'        => 'image_object',
 				'label'       => esc_html__( 'Replace ImageObject', 'cf-images' ),
-				'description' => esc_html__( 'Use Cloudflare image for the ImageObject in the application/ld+json schema.', 'cf-images' ),
+				'description' => esc_html__( 'Use Cloudflare image for the ImageObject in the application/ld+json schema. Requires the `Process images in head` option to be enabled in Settings - Misc Options.', 'cf-images' ),
 				'value'       => apply_filters( 'cf_images_integration_option_value', false, 'image_object' ),
 			),
 			array(
 				'name'        => 'head',
 				'label'       => esc_html__( 'Replace images in head', 'cf-images' ),
-				'description' => esc_html__( 'Use Cloudflare images in the head page element.', 'cf-images' ),
+				'description' => esc_html__( 'Use Cloudflare images in the head page element. Requires the `Process images in head` option to be enabled in Settings - Misc Options.', 'cf-images' ),
 				'value'       => apply_filters( 'cf_images_integration_option_value', false, 'head' ),
 			),
 		);

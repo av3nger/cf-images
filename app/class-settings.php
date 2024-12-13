@@ -49,6 +49,7 @@ class Settings {
 		'logging'            => false,
 		'rss-feeds'          => false,
 		'no-offload-user'    => false, // Do not offload images for logged-in users.
+		'process-head'       => false,
 	);
 
 	/**

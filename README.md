@@ -6,7 +6,7 @@ Donate link: https://www.paypal.com/donate/?business=JRR6QPRGTZ46N&no_recurring=
 Requires at least: 5.6
 Requires PHP: 7.0
 Tested up to: 6.7
-Stable tag: 1.9.3
+Stable tag: 1.9.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -101,6 +101,21 @@ If something is still not working for you, please let me know by creating a supp
 3. Quick and easy setup wizard
 
 == Changelog ==
+
+= 1.9.4 - 14.12.2024 =
+
+Added:
+* Bulk offload actions to the media library list view
+* Global option to disable processing in the page head section
+* Additional TTL options (3, 6 and 9 months)
+
+Changed:
+* Improved UI/UX
+* Improved logging to better catch offload errors
+
+Fixed:
+* Fix logs layout spanning off-screen
+* Undefined array key PHP warning (props @ablears)
 
 = 1.9.3 - 07.10.2024 =
 

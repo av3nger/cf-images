@@ -173,6 +173,7 @@ class Image_Ai extends Module {
 			}
 		} catch ( Exception $e ) {
 			do_action( 'cf_images_error', $e->getCode(), $e->getMessage() );
+			do_action( 'cf_images_log', $e->getMessage() );
 			return new WP_Error( 'caption_error', $e->getMessage() );
 		}
 	}

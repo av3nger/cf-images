@@ -254,7 +254,6 @@ class Core {
 		if ( '' === $code ) {
 			self::$error = false;
 		} else {
-			do_action( 'cf_images_log', $message );
 			self::$error = new WP_Error( $code, $message );
 		}
 	}

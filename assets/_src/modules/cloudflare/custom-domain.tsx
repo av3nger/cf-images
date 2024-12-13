@@ -99,7 +99,7 @@ const CustomDomain = () => {
 						</div>
 						<div className="control">
 							<button
-								className={classNames('button is-info', {
+								className={classNames('button is-primary', {
 									'is-loading': saving,
 								})}
 								onClick={saveDomain}

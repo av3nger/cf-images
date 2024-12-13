@@ -84,8 +84,8 @@ const Nav = () => {
 			{(!noticeHidden || ('logging' in modules && modules.logging)) && (
 				<>
 					<p className="menu-label">{__('Misc', 'cf-images')}</p>
-					{'logging' in modules && modules.logging && (
-						<ul className="menu-list">
+					<ul className="menu-list">
+						{'logging' in modules && modules.logging && (
 							<li>
 								<NavLink
 									to="/misc/logs"
@@ -96,11 +96,9 @@ const Nav = () => {
 									{__('Logs', 'cf-images')}
 								</NavLink>
 							</li>
-						</ul>
-					)}
+						)}
 
-					{!noticeHidden && (
-						<ul className="menu-list">
+						{!noticeHidden && (
 							<li>
 								<NavLink
 									to="/misc/support"
@@ -111,8 +109,8 @@ const Nav = () => {
 									{__('Support', 'cf-images')}
 								</NavLink>
 							</li>
-						</ul>
-					)}
+						)}
+					</ul>
 				</>
 			)}
 		</aside>
