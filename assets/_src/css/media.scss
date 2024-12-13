@@ -74,15 +74,11 @@
 	}
 
 	& span.spinner.is-active {
+		background-size: 17px 17px;
 		font-size: 13px;
-		margin: 0;
+		margin: 0 7px 0 0;
 		min-width: 20px;
 		padding: 0;
 		text-align: left;
-	}
-
-	& span.spinner.is-active {
-		background-size: 17px 17px;
-		margin-right: 7px;
 	}
 }
