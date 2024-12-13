@@ -401,8 +401,13 @@ class Media {
 		if ( ! isset( $metadata['file'] ) ) {
 			update_post_meta( $attachment_id, '_cloudflare_image_skip', true );
 			do_action( 'cf_images_error', 404, __( 'Media file not found', 'cf-images' ) );
-			/* translators: %d: attachment ID */
-			do_action( 'cf_images_log', sprintf( esc_html__( 'Unable to offload image. Media file not found. Attachment ID: %d.', 'cf-images' ), absint( $attachment_id ) ) );
+			do_action(
+				'cf_images_log',
+				sprintf( /* translators: %d: attachment ID */
+					esc_html__( 'Unable to offload image. Media file not found. Attachment ID: %d.', 'cf-images' ),
+					absint( $attachment_id )
+				)
+			);
 			return $metadata;
 		}
 
@@ -414,8 +419,13 @@ class Media {
 		if ( ! wp_attachment_is_image( $attachment_id ) || false !== strpos( $mime, 'image/svg' ) ) {
 			update_post_meta( $attachment_id, '_cloudflare_image_skip', true );
 			do_action( 'cf_images_error', 415, __( 'Unsupported media type', 'cf-images' ) );
-			/* translators: %d: attachment ID */
-			do_action( 'cf_images_log', sprintf( esc_html__( 'Unable to offload image. Unsupported media type. Attachment ID: %d.', 'cf-images' ), absint( $attachment_id ) ) );
+			do_action(
+				'cf_images_log',
+				sprintf( /* translators: %d: attachment ID */
+					esc_html__( 'Unable to offload image. Unsupported media type. Attachment ID: %d.', 'cf-images' ),
+					absint( $attachment_id )
+				)
+			);
 			return $metadata;
 		}
 
@@ -466,8 +476,14 @@ class Media {
 			}
 		} catch ( Exception $e ) {
 			do_action( 'cf_images_error', $e->getCode(), $e->getMessage() );
-			/* translators: %1$d: attachment ID, %2$s: error message */
-			do_action( 'cf_images_log', sprintf( esc_html__( 'Unable to offload image. Attachment ID: %1$d. Error: %2$s', 'cf-images' ), absint( $attachment_id ), esc_html( $e->getMessage() ) ) );
+			do_action(
+				'cf_images_log',
+				sprintf( /* translators: %1$d: attachment ID, %2$s: error message */
+					esc_html__( 'Unable to offload image. Attachment ID: %1$d. Error: %2$s', 'cf-images' ),
+					absint( $attachment_id ),
+					esc_html( $e->getMessage() )
+				)
+			);
 		}
 
 		return $metadata;
@@ -502,8 +518,14 @@ class Media {
 			}
 		} catch ( Exception $e ) {
 			do_action( 'cf_images_error', $e->getCode(), $e->getMessage() );
-			/* translators: %1$d: attachment ID, %2$s: error message */
-			do_action( 'cf_images_log', sprintf( esc_html__( 'Unable to remove image from Cloudflare. Attachment ID: %1$d. Error: %2$s', 'cf-images' ), absint( $post_id ), esc_html( $e->getMessage() ) ) );
+			do_action(
+				'cf_images_log',
+				sprintf( /* translators: %1$d: attachment ID, %2$s: error message */
+					esc_html__( 'Unable to remove image from Cloudflare. Attachment ID: %1$d. Error: %2$s', 'cf-images' ),
+					absint( $post_id ),
+					esc_html( $e->getMessage() )
+				)
+			);
 		}
 	}
 
@@ -680,8 +702,14 @@ class Media {
 			wp_create_image_subsizes( $original, $attachment_id );
 		} catch ( Exception $e ) {
 			do_action( 'cf_images_error', $e->getCode(), $e->getMessage() );
-			/* translators: %1$d: attachment ID, %2$s: error message */
-			do_action( 'cf_images_log', sprintf( esc_html__( 'Unable to restore image. Attachment ID: %1$d. Error: %2$s', 'cf-images' ), absint( $attachment_id ), esc_html( $e->getMessage() ) ) );
+			do_action(
+				'cf_images_log',
+				sprintf( /* translators: %1$d: attachment ID, %2$s: error message */
+					esc_html__( 'Unable to restore image. Attachment ID: %1$d. Error: %2$s', 'cf-images' ),
+					absint( $attachment_id ),
+					esc_html( $e->getMessage() )
+				)
+			);
 		}
 
 		delete_post_meta( $attachment_id, '_cloudflare_image_offloaded' );
