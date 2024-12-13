@@ -1,4 +1,4 @@
-= 1.9.4 =
+= 1.9.4 - 14.12.2024 =
 
 Added:
 * Bulk offload actions to the media library list view
