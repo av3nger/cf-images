@@ -27,7 +27,6 @@
 
 @mixin tooltip-box-top {
 	&::before {
-		top: 0;
 		right: auto;
 		bottom: auto;
 		left: 50%;
