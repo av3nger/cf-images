@@ -102,6 +102,11 @@ If something is still not working for you, please let me know by creating a supp
 
 == Changelog ==
 
+= 1.9.5 =
+
+Fixed:
+* RankMath overriding images when they are fully offloaded
+
 = 1.9.4 - 14.12.2024 =
 
 Added:
