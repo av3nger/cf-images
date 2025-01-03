@@ -2,6 +2,7 @@
 <phpunit
 	bootstrap="tests/bootstrap.php"
 	backupGlobals="false"
+	cacheResult="false"
 	colors="true"
 	convertErrorsToExceptions="true"
 	convertNoticesToExceptions="true"
@@ -13,4 +14,10 @@
 			<exclude>./tests/test-sample.php</exclude>
 		</testsuite>
 	</testsuites>
+
+	<coverage>
+		<include>
+			<directory suffix=".php">app</directory>
+		</include>
+	</coverage>
 </phpunit>
