@@ -83,10 +83,6 @@ class UrlReplaceTest extends WP_UnitTestCase {
 			case 'thumbnail':
 				$image = array( "http://example.org/wp-content/uploads/$year/$month/test-image-150x150.jpg", 150, 150, true );
 				break;
-			case 'medium':
-			default:
-				$image = array( "http://example.org/wp-content/uploads/$year/$month/test-image-300x200.jpg", 300, 200, true );
-				break;
 			case 'large':
 				$image = array( "http://example.org/wp-content/uploads/$year/$month/test-image-1024x683.jpg", 1024, 1024, false );
 				break;
@@ -96,6 +92,10 @@ class UrlReplaceTest extends WP_UnitTestCase {
 			case 'full':
 			case 'original':
 				$image = array( "http://example.org/wp-content/uploads/$year/$month/test-image.jpg", 2400, 1600, false );
+				break;
+			case 'medium':
+			default:
+				$image = array( "http://example.org/wp-content/uploads/$year/$month/test-image-300x200.jpg", 300, 200, true );
 				break;
 		}
 
@@ -210,7 +210,11 @@ class UrlReplaceTest extends WP_UnitTestCase {
 
 		// Pass in just an image link without the sizes.
 		$image = $this->cf_images->get_attachment_image_src( array( $original[0] ), self::$attachment_id, null );
-		$this->assertStringEndsWith( 'w=150,h=150,fit=crop', $image[0], 'Should detect file suffix and apply cropping if matched in arrays.' );
+		$this->assertStringEndsWith(
+			'w=150,h=150,fit=crop',
+			$image[0],
+			'Should detect file suffix and apply cropping if matched in arrays.'
+		);
 	}
 
 	/**
