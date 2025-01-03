@@ -2,12 +2,12 @@ workflows:
   version: 2
   main:
     jobs:
-      - php56-build
-      - php70-build
-      - php71-build
       - php72-build
       - php73-build
       - php74-build
+      - php80-build
+      - php81-build
+      - php82-build
 
 version: 2
 
@@ -37,7 +37,7 @@ job-references:
       - run:
           name: "Run Tests"
           command: |
-            composer global require "phpunit/phpunit=7.*"
+            composer global require "phpunit/phpunit=8.*"
             composer global require yoast/phpunit-polyfills:"^3.0"
             rm -rf $WP_TESTS_DIR $WP_CORE_DIR
             bash bin/install-wp-tests.sh wordpress_test root '' 127.0.0.1 latest
@@ -45,44 +45,6 @@ job-references:
             WP_MULTISITE=1 phpunit
 
 jobs:
-  php56-build:
-    <<: *php_job
-    docker:
-      - image: cimg/php:5.6
-      - image: *mysql_image
-    steps:
-      - checkout
-      - run: *setup_environment
-      - run: *install_dependencies
-      - run:
-          name: "Run Tests"
-          command: |
-            composer global require "phpunit/phpunit=5.7.*"
-            composer global require yoast/phpunit-polyfills:"^2.0"
-            SKIP_DB_CREATE=false
-            rm -rf $WP_TESTS_DIR $WP_CORE_DIR
-            bash bin/install-wp-tests.sh wordpress_test root '' 127.0.0.1 latest $SKIP_DB_CREATE
-            phpunit
-            WP_MULTISITE=1 phpunit
-            SKIP_DB_CREATE=true
-            rm -rf $WP_TESTS_DIR $WP_CORE_DIR
-            bash bin/install-wp-tests.sh wordpress_test root '' 127.0.0.1 trunk $SKIP_DB_CREATE
-            phpunit
-            WP_MULTISITE=1 phpunit
-            SKIP_DB_CREATE=true
-
-  php70-build:
-    <<: *php_job
-    docker:
-      - image: cimg/php:7.0
-      - image: *mysql_image
-
-  php71-build:
-    <<: *php_job
-    docker:
-      - image: cimg/php:7.1
-      - image: *mysql_image
-
   php72-build:
     <<: *php_job
     docker:
@@ -99,4 +61,22 @@ jobs:
     <<: *php_job
     docker:
       - image: cimg/php:7.4
+      - image: *mysql_image
+
+  php80-build:
+    <<: *php_job
+    docker:
+      - image: cimg/php:8.0
+      - image: *mysql_image
+
+  php81-build:
+    <<: *php_job
+    docker:
+      - image: cimg/php:8.1
+      - image: *mysql_image
+
+  php82-build:
+    <<: *php_job
+    docker:
+      - image: cimg/php:8.2
       - image: *mysql_image
