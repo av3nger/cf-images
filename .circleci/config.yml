@@ -24,9 +24,7 @@ job-references:
   install_dependencies: &install_dependencies
     name: "Install Dependencies"
     command: |
-      sudo apt-get update && sudo apt-get install subversion
-      sudo -E docker-php-ext-install mysqli
-      sudo apt-get update && sudo apt-get install mysql-client-5.7
+      sudo apt-get update && sudo apt-get install subversion php-mysqli mysql-client-5.7
 
   php_job: &php_job
     environment:
