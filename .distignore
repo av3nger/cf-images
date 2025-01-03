@@ -1,15 +1,22 @@
+/.circleci
 /.git
 /.github
 /.wordpress-org
 /assets/_src
+/bin
 /node_modules
+/tests
+/vendor
 
 .distignore
 .eslintrc.json
 .gitattributes
 .gitignore
+composer.json
+composer.lock
 LICENSE
 package.json
 package-lock.json
+phpunit.xml.dist
 tsconfig.json
 webpack.config.js

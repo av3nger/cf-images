@@ -35,7 +35,8 @@
   "scripts": {
     "watch": "webpack --watch",
     "build": "webpack --progress",
-    "translate": "wp i18n make-pot . languages/cf-images.pot"
+    "translate": "wp i18n make-pot . languages/cf-images.pot",
+    "install-unit-tests": "bash bin/install-wp-tests.sh wordpress_test root root localhost latest"
   },
   "dependencies": {
     "@mdi/js": "^7.4.47",
