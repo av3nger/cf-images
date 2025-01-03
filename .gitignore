@@ -1,6 +1,5 @@
 .DS_Store
 .idea
-.phpunit.result.cache
 node_modules
 vendor
 composer.lock

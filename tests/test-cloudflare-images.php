@@ -1,6 +1,6 @@
-<?php
+<?php /* phpcs:ignore WordPress.Files.FileName.InvalidClassFileName */
 /**
- * Class UrlReplaceTest
+ * Test cases for the Cloudflare_Images module
  *
  * @package Cf_Images
  */
@@ -9,42 +9,15 @@ use CF_Images\App\Modules\Cloudflare_Images;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
- * Sample test case.
+ * Class Test_Cloudflare_Images.
  */
-class UrlReplaceTest extends WP_UnitTestCase {
+class Test_Cloudflare_Images extends Unit_Test_Base {
 	/**
 	 * Cloudflare Images module.
 	 *
 	 * @var Cloudflare_Images|MockObject
 	 */
 	protected $cf_images;
-
-	/**
-	 * Attachment ID.
-	 *
-	 * @var int
-	 */
-	protected static $attachment_id;
-
-	/**
-	 * Runs the routine before setting up all tests
-	 */
-	public static function set_up_before_class() {
-		parent::set_up_before_class();
-
-		self::$attachment_id = self::factory()->attachment->create_upload_object( __DIR__ . '/assets/test-image.jpg' );
-	}
-
-	/**
-	 * Runs the routine after all tests have been run.
-	 */
-	public static function tear_down_after_class() {
-		wp_delete_attachment( self::$attachment_id, true );
-		delete_post_meta( self::$attachment_id, '_cloudflare_image_id' ); // Just in case.
-		delete_site_option( 'cf-images-hash' );
-
-		parent::tear_down_after_class();
-	}
 
 	/**
 	 * Set up before each test.
@@ -66,48 +39,6 @@ class UrlReplaceTest extends WP_UnitTestCase {
 			->expects( $this->once() )
 			->method( 'can_run' )
 			->willReturn( true );
-	}
-
-	/**
-	 * Get original image object.
-	 *
-	 * @param string $size WordPress attachment size.
-	 *
-	 * @return array
-	 */
-	private function get_original_image_object( string $size = 'medium' ): array {
-		$year  = gmdate( 'Y' );
-		$month = gmdate( 'm' );
-
-		switch ( $size ) {
-			case 'thumbnail':
-				$image = array( "http://example.org/wp-content/uploads/$year/$month/test-image-150x150.jpg", 150, 150, true );
-				break;
-			case 'large':
-				$image = array( "http://example.org/wp-content/uploads/$year/$month/test-image-1024x683.jpg", 1024, 1024, false );
-				break;
-			case 'scaled':
-				$image = array( "http://example.org/wp-content/uploads/$year/$month/test-image-scaled.jpg", 2560, 0, false );
-				break;
-			case 'full':
-			case 'original':
-				$image = array( "http://example.org/wp-content/uploads/$year/$month/test-image.jpg", 2400, 1600, false );
-				break;
-			case 'medium':
-			default:
-				$image = array( "http://example.org/wp-content/uploads/$year/$month/test-image-300x200.jpg", 300, 200, true );
-				break;
-		}
-
-		return $image;
-	}
-
-	/**
-	 * Add Cloudflare image ID and hash.
-	 */
-	private function add_cf_image_id_and_hash() {
-		add_post_meta( self::$attachment_id, '_cloudflare_image_id', 'CLOUDFLARE_IMAGE_ID' );
-		update_site_option( 'cf-images-hash', 'CF_IMAGES_HASH' );
 	}
 
 	/**
@@ -148,7 +79,7 @@ class UrlReplaceTest extends WP_UnitTestCase {
 	public function test_returns_original_if_missing_cloudflare_hash() {
 		$original = $this->get_original_image_object();
 
-		add_post_meta( self::$attachment_id, '_cloudflare_image_id', 'CLOUDFLARE_IMAGE_ID' );
+		add_post_meta( self::$attachment_id, '_cloudflare_image_id', 'CF_IMAGE_ID' );
 
 		$image = wp_get_attachment_image_src( self::$attachment_id, 'medium' );
 		$this->assertSame( $original, $image, 'Should return original image if Cloudflare hash is missing.' );

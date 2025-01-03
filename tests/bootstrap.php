@@ -36,3 +36,4 @@ tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
 
 // Start up the WP testing environment.
 require_once "$_tests_dir/includes/bootstrap.php";
+require_once __DIR__ . '/unit-test-base.php';
