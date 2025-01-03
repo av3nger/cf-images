@@ -39,6 +39,7 @@ job-references:
           command: |
             composer global require "phpunit/phpunit=5.7.*"
             composer global require wp-coding-standards/wpcs
+            composer global require phpcompatibility/phpcompatibility-wp:"*"
             phpcs --config-set installed_paths $HOME/.composer/vendor/wp-coding-standards/wpcs
             phpcs
             rm -rf $WP_TESTS_DIR $WP_CORE_DIR
@@ -61,6 +62,7 @@ jobs:
           command: |
             composer global require "phpunit/phpunit=5.7.*"
             composer global require wp-coding-standards/wpcs
+            composer global require phpcompatibility/phpcompatibility-wp:"*"
             phpcs --config-set installed_paths $HOME/.composer/vendor/wp-coding-standards/wpcs
             phpcs
             SKIP_DB_CREATE=false
