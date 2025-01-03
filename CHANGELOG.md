@@ -1,6 +1,7 @@
 = 1.9.5 =
 
 Fixed:
+* Full offload issue with GreenShift - Animation and Page Builder Blocks plugin
 * RankMath overriding images when they are fully offloaded
 
 = 1.9.4 - 14.12.2024 =

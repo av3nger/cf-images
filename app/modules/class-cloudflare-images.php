@@ -285,6 +285,11 @@ class Cloudflare_Images extends Module {
 			$response['sizes'][ $id ]['url'] = $image_src[0];
 		}
 
+		if ( ! empty( $response['url'] ) ) {
+			$image_src       = $this->get_attachment_image_src( array( $response['url'] ), $attachment->ID, null );
+			$response['url'] = $image_src[0];
+		}
+
 		return $response;
 	}
 
