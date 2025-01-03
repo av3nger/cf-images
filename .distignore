@@ -12,7 +12,6 @@
 .eslintrc.json
 .gitattributes
 .gitignore
-.phpcs.xml.dist
 composer.json
 composer.lock
 LICENSE
