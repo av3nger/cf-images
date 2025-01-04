@@ -21,14 +21,15 @@ class Test_Image extends Unit_Test_Base {
 		$this->add_cf_image_id_and_hash();
 
 		$image_html = '<img src="' . $original[0] . '" />';
-		$image      = new Image( $image_html, $original[0], '' );
+		$image      = new Image( $image_html, $original[0] );
 
 		$processed = '<img src="https://imagedelivery.net/CF_IMAGES_HASH/CF_IMAGE_ID/w=300" class="wp-image-' . self::$attachment_id . '" />';
+		$results   = $image->get_processed();
 
 		$this->assertSame( self::$attachment_id, $image->get_id(), 'Expected attachment ID match the detected ID.' );
 		$this->assertSame( $original[0], $image->get_src(), 'get_src() should return the original src.' );
 		$this->assertSame( '', $image->get_srcset(), 'get_srcset() should return the original srcset.' );
-		$this->assertSame( $processed, $image->get_processed(), 'Processed image should contain the Cloudflare image.' );
+		$this->assertSame( $processed, $results, 'Processed image should contain the Cloudflare image.' );
 		$this->assertFalse( $image->is_source_tag(), 'Should not be recognized as a <source> tag.' );
 	}
 
@@ -38,7 +39,8 @@ class Test_Image extends Unit_Test_Base {
 	public function test_id_from_class_name() {
 		$image_html = '<img src="https://example.com/wp-content/uploads/image/jpg" class="wp-image-25" alt="test">';
 
-		$image = new Image( $image_html, 'https://example.com/wp-content/uploads/image/jpg', '' );
+		$image = new Image( $image_html, 'https://example.com/wp-content/uploads/image/jpg' );
+		$image->get_processed();
 
 		$this->assertSame( 25, $image->get_id(), 'Expected attachment ID match the detected ID.' );
 	}
@@ -51,7 +53,7 @@ class Test_Image extends Unit_Test_Base {
 		$this->add_cf_image_id_and_hash();
 
 		$image_html = '<img src="' . $original[0] . '" />';
-		$image      = new Image( $image_html, $original[0], '' );
+		$image      = new Image( $image_html, $original[0] );
 
 		$this->assertStringContainsString( '/w=2560', $image->get_processed(), 'Processed image should contain the Cloudflare image.' );
 	}
@@ -77,7 +79,7 @@ class Test_Image extends Unit_Test_Base {
 		);
 
 		$image_html = '<img src="' . $original[0] . '" width="300" />';
-		$image      = new Image( $image_html, $original[0], '' );
+		$image      = new Image( $image_html, $original[0] );
 
 		$this->assertStringContainsString( '/w=300', $image->get_processed(), 'Processed image should contain the Cloudflare image.' );
 	}
@@ -103,7 +105,7 @@ class Test_Image extends Unit_Test_Base {
 		);
 
 		$image_html = '<img src="' . $original[0] . '" width="350" height="350" />';
-		$image      = new Image( $image_html, $original[0], '' );
+		$image      = new Image( $image_html, $original[0] );
 
 		$this->assertStringContainsString( '/w=350,h=350,fit=crop', $image->get_processed(), 'Processed image should contain the Cloudflare image.' );
 	}

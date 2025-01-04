@@ -123,6 +123,18 @@ class Image {
 	private $needs_image_class = false;
 
 	/**
+	 * Cloudflare image dimensions string.
+	 *
+	 * When we process images via WordPress hooks, we are able to get the image dimensions in a different way,
+	 * compared to processing the DOM. When we have the dimensions - skip the parsing.
+	 *
+	 * @since 1.9.5
+	 *
+	 * @var string
+	 */
+	private $dimensions = '';
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 1.5.0
@@ -131,16 +143,12 @@ class Image {
 	 * @param string $src    Image src attribute value.
 	 * @param string $srcset Image srcset attribute value.
 	 */
-	public function __construct( string $image, string $src, string $srcset ) {
+	public function __construct( string $image, string $src, string $srcset = '' ) {
 		$this->image  = $image;
 		$this->src    = $src;
 		$this->srcset = $srcset;
 
 		$this->cdn_active = get_option( 'cf-images-cdn-enabled', false );
-
-		$this->get_attachment_id();
-		$this->check_if_cf_image();
-		$this->process_image();
 	}
 
 	/**
@@ -149,7 +157,7 @@ class Image {
 	 * @since 1.5.0
 	 */
 	private function get_attachment_id() {
-		if ( $this->cdn_active ) {
+		if ( $this->cdn_active || 0 < $this->id ) {
 			return;
 		}
 
@@ -326,6 +334,17 @@ class Image {
 			return false;
 		}
 
+		// Exit early, if we already have the dimensions.
+		if ( ! empty( $this->dimensions ) ) {
+			$this->populate_cf_image_url();
+
+			if ( empty( $this->cf_image_url ) ) {
+				return false;
+			}
+
+			return $this->cf_image_url . $this->dimensions;
+		}
+
 		if ( preg_match( '/-(\d+)x(\d+)\.(jpg|jpeg|png|gif)$/i', $image_url, $size ) ) {
 			$original = preg_replace( '/-\d+x\d+(?=\.(jpg|jpeg|png|gif)$)/i', '', $image_url );
 		} elseif ( false !== strpos( $image_url, '-scaled.' ) ) {
@@ -367,16 +386,12 @@ class Image {
 			return false;
 		}
 
-		// This is used with WPML integration.
-		$attachment_id = apply_filters( 'cf_images_media_post_id', $this->id );
+		$this->populate_cf_image_url();
 
-		list( $hash, $this->cf_image_id ) = Cloudflare_Images::get_hash_id_url_string( $attachment_id );
-
-		if ( empty( $this->cf_image_id ) || ( empty( $hash ) && ! apply_filters( 'cf_images_module_enabled', false, 'custom-path' ) ) ) {
+		if ( empty( $this->cf_image_url ) ) {
 			return false;
 		}
 
-		$this->cf_image_url = trailingslashit( $this->get_cdn_domain() . "/$hash" ) . "$this->cf_image_id/";
 		return "{$this->cf_image_url}w=$width$crop";
 	}
 
@@ -516,10 +531,15 @@ class Image {
 	 * Getter for processed image.
 	 *
 	 * @since 1.5.0
+	 * @since 1.9.5 Moved the methods from constructor.
 	 *
 	 * @return string
 	 */
 	public function get_processed(): string {
+		$this->get_attachment_id();
+		$this->check_if_cf_image();
+		$this->process_image();
+
 		if ( ! empty( $this->processed ) ) {
 			return apply_filters( 'cf_images_replace_paths', $this->processed, $this );
 		}
@@ -585,5 +605,131 @@ class Image {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Setter for attachment ID.
+	 *
+	 * @since 1.9.5
+	 *
+	 * @param int $attachment_id Attachment ID.
+	 *
+	 * @return Image
+	 */
+	public function set_id( int $attachment_id ): self {
+		$this->id = $attachment_id;
+		return $this;
+	}
+
+	/**
+	 * Set image dimensions.
+	 *
+	 * @since 1.9.5
+	 *
+	 * @param array|false      $image {
+	 *      Array of image data, or boolean false if no image is available.
+	 *
+	 *      @type string $image[0] Image source URL.
+	 *      @type int    $image[1] Image width in pixels.
+	 *      @type int    $image[2] Image height in pixels.
+	 *      @type bool   $image[3] Whether the image is a resized image.
+	 *  }
+	 * @param string|int|int[] $size  Requested image size. Can be any registered image size name, or
+	 *                                an array of width and height values in pixels (in that order),
+	 *                                can also be just a single integer value.
+	 *
+	 * @return Image
+	 */
+	public function set_dimensions( $image, $size ): self {
+		$sizes = Cloudflare_Images::$registered_sizes;
+
+		// If this is a known crop image.
+		if ( is_string( $size ) && isset( $sizes[ $size ]['crop'] ) && true === $sizes[ $size ]['crop'] && ! apply_filters( 'cf_images_disable_crop', false ) ) {
+			$this->dimensions = 'w=' . $sizes[ $size ]['width'] . ',h=' . $sizes[ $size ]['height'] . ',fit=crop';
+			return $this;
+		}
+
+		// Image with defined dimensions.
+		if ( isset( $image[1] ) && $image[1] > 0 ) {
+			$height_str = '';
+			if ( isset( $image[2] ) && $image[2] > 0 ) {
+				$height_str = ',h=' . $image[2] . ( $image[1] === $image[2] ? ',fit=crop' : '' );
+			}
+
+			$this->dimensions = 'w=' . $image[1] . $height_str;
+			return $this;
+		}
+
+		preg_match( '/-(\d+)x(\d+)\.[a-zA-Z]{3,4}$/', $image[0], $variant_image );
+
+		// Image with `-<width>x<height>` prefix, for example, image-300x125.jpg.
+		if ( isset( $variant_image[1] ) && isset( $variant_image[2] ) && is_array( Cloudflare_Images::$heights ) && is_array( Cloudflare_Images::$widths ) ) {
+			// Check if the image is a cropped version.
+			$height_key = array_search( (int) $variant_image[1], Cloudflare_Images::$heights, true );
+			$width_key  = array_search( (int) $variant_image[2], Cloudflare_Images::$widths, true );
+
+			if ( $width_key && $height_key && $width_key === $height_key && true === $sizes[ $width_key ]['crop'] ) {
+				$this->dimensions = 'w=' . $variant_image[1] . ',h=' . $variant_image[2] . ',fit=crop';
+				return $this;
+			}
+
+			// Not a cropped image.
+			$this->dimensions = 'w=' . $variant_image[1] . ',h=' . $variant_image[2];
+			return $this;
+		}
+
+		// Maybe it's not a scaled, but we have the size?
+		if ( is_int( $size ) ) {
+			$this->dimensions = 'w=' . $size;
+			return $this;
+		}
+
+		// Handle `scaled` images.
+		if ( false !== strpos( $image[0], '-scaled' ) ) {
+			$scaled_size = apply_filters( 'big_image_size_threshold', 2560 );
+			$scaled_size = false === $scaled_size ? 2560 : $scaled_size;
+
+			/**
+			 * This covers two cases:
+			 * 1: scaled sizes are disabled, but we have the size passed to the function
+			 * 2: scaled size equals the requested size
+			 * In both cases - use the size value.
+			 */
+			if ( ( ! $scaled_size && is_int( $size ) ) || $scaled_size === $size ) {
+				$this->dimensions = 'w=' . $size;
+			} else { // Fallback to scaled size.
+				$this->dimensions = 'w=' . $scaled_size;
+			}
+
+			return $this;
+		}
+
+		// Image without size prefix and no defined sizes - use the maximum available width.
+		if ( ! $variant_image && ! isset( $image[1] ) ) {
+			$this->dimensions = 'w=9999';
+			return $this;
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Populate Cloudflare image URL.
+	 *
+	 * @since 1.9.5
+	 */
+	private function populate_cf_image_url() {
+		// This is used with WPML integration.
+		$attachment_id = apply_filters( 'cf_images_media_post_id', $this->id );
+
+		list( $hash, $this->cf_image_id ) = Cloudflare_Images::get_hash_id_url_string( $attachment_id );
+
+		if ( empty( $this->cf_image_id ) || ( empty( $hash ) && ! apply_filters( 'cf_images_module_enabled', false, 'custom-path' ) ) ) {
+			return;
+		}
+
+		do_action( 'cf_images_get_attachment_image_src', $this->cf_image_id, $attachment_id );
+
+		$this->cf_image_url = trailingslashit( $this->get_cdn_domain() . "/$hash" ) . "$this->cf_image_id/";
 	}
 }

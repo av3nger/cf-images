@@ -50,28 +50,25 @@ class Cloudflare_Images extends Module {
 	 * Registered image sizes in WordPress.
 	 *
 	 * @since 1.0.0
-	 * @access private
 	 * @var array $registered_sizes
 	 */
-	private $registered_sizes;
+	public static $registered_sizes;
 
 	/**
 	 * Widths from the $registered_sizes array.
 	 *
 	 * @since 1.0.0
-	 * @access private
 	 * @var array $widths
 	 */
-	private $widths;
+	public static $widths;
 
 	/**
 	 * Heights from the $registered_sizes array.
 	 *
 	 * @since 1.0.0
-	 * @access private
 	 * @var array $heights
 	 */
-	private $heights;
+	public static $heights;
 
 	/**
 	 * Pre-init actions.
@@ -117,10 +114,10 @@ class Cloudflare_Images extends Module {
 	 * @since 1.0.0
 	 */
 	public function populate_image_sizes() {
-		$this->registered_sizes = wp_get_registered_image_subsizes();
+		self::$registered_sizes = wp_get_registered_image_subsizes();
 
-		$this->heights = wp_list_pluck( $this->registered_sizes, 'height' );
-		$this->widths  = wp_list_pluck( $this->registered_sizes, 'width' );
+		self::$heights = wp_list_pluck( self::$registered_sizes, 'height' );
+		self::$widths  = wp_list_pluck( self::$registered_sizes, 'width' );
 	}
 
 	/**
@@ -149,86 +146,10 @@ class Cloudflare_Images extends Module {
 			return $image;
 		}
 
-		// This is used with WPML integration.
-		$attachment_id = apply_filters( 'cf_images_media_post_id', $attachment_id );
-
-		list( $hash, $cloudflare_image_id ) = self::get_hash_id_url_string( (int) $attachment_id );
-
-		if ( empty( $cloudflare_image_id ) || ( empty( $hash ) && ! $this->is_module_enabled( false, 'custom-path' ) ) ) {
-			do_action( 'cf_images_log', 'Missing Cloudflare Image ID or hash. Attachment ID: %s. Image: %s', $attachment_id, $image );
-			return $image;
-		}
-
-		do_action( 'cf_images_get_attachment_image_src', $cloudflare_image_id, $attachment_id );
-
-		$cf_image = trailingslashit( $this->get_cdn_domain() . "/$hash" ) . $cloudflare_image_id;
-
-		// If this is a known crop image.
-		if ( is_string( $size ) && isset( $this->registered_sizes[ $size ]['crop'] ) && true === $this->registered_sizes[ $size ]['crop'] && ! apply_filters( 'cf_images_disable_crop', false ) ) {
-			$image[0] = $cf_image . '/w=' . $this->registered_sizes[ $size ]['width'] . ',h=' . $this->registered_sizes[ $size ]['height'] . ',fit=crop';
-			return $image;
-		}
-
-		// Image with defined dimensions.
-		if ( isset( $image[1] ) && $image[1] > 0 ) {
-			$height_str = '';
-			if ( isset( $image[2] ) && $image[2] > 0 ) {
-				$height_str = ',h=' . $image[2] . ( $image[1] === $image[2] ? ',fit=crop' : '' );
-			}
-
-			$image[0] = $cf_image . '/w=' . $image[1] . $height_str;
-			return $image;
-		}
-
-		preg_match( '/-(\d+)x(\d+)\.[a-zA-Z]{3,4}$/', $image[0], $variant_image );
-
-		// Image with `-<width>x<height>` prefix, for example, image-300x125.jpg.
-		if ( isset( $variant_image[1] ) && isset( $variant_image[2] ) && is_array( $this->heights ) && is_array( $this->widths ) ) {
-			// Check if the image is a cropped version.
-			$height_key = array_search( (int) $variant_image[1], $this->heights, true );
-			$width_key  = array_search( (int) $variant_image[2], $this->widths, true );
-
-			if ( $width_key && $height_key && $width_key === $height_key && true === $this->registered_sizes[ $width_key ]['crop'] ) {
-				$image[0] = $cf_image . '/w=' . $variant_image[1] . ',h=' . $variant_image[2] . ',fit=crop';
-				return $image;
-			}
-
-			// Not a cropped image.
-			$image[0] = $cf_image . '/w=' . $variant_image[1] . ',h=' . $variant_image[2];
-			return $image;
-		}
-
-		// Maybe it's not a scaled, but we have the size?
-		if ( is_int( $size ) ) {
-			$image[0] = $cf_image . '/w=' . $size;
-			return $image;
-		}
-
-		// Handle `scaled` images.
-		if ( false !== strpos( $image[0], '-scaled' ) ) {
-			$scaled_size = apply_filters( 'big_image_size_threshold', 2560 );
-			$scaled_size = false === $scaled_size ? 2560 : $scaled_size;
-
-			/**
-			 * This covers two cases:
-			 * 1: scaled sizes are disabled, but we have the size passed to the function
-			 * 2: scaled size equals the requested size
-			 * In both cases - use the size value.
-			 */
-			if ( ( ! $scaled_size && is_int( $size ) ) || $scaled_size === $size ) {
-				$image[0] = $cf_image . '/w=' . $size;
-			} else { // Fallback to scaled size.
-				$image[0] = $cf_image . '/w=' . $scaled_size;
-			}
-
-			return $image;
-		}
-
-		// Image without size prefix and no defined sizes - use the maximum available width.
-		if ( ! $variant_image && ! isset( $image[1] ) ) {
-			$image[0] = $cf_image . '/w=9999';
-			return $image;
-		}
+		$image[0] = ( new Image( $image[0], $image[0] ) )
+			->set_id( $attachment_id )
+			->set_dimensions( $image, $size )
+			->get_processed();
 
 		return $image;
 	}
