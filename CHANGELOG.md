@@ -1,5 +1,8 @@
 = 1.9.5 =
 
+Added:
+* cf_images_is_rest_request filter to control REST API requests
+
 Fixed:
 * Full offload issue with GreenShift - Animation and Page Builder Blocks plugin
 * RankMath overriding images when they are fully offloaded
