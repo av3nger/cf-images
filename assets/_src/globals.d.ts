@@ -54,6 +54,8 @@ interface StatsType {
     size_before: number;
     synced: number;
     image_ai: number;
+    r2_count: number;
+    r2_total: number;
 }
 
 interface IntegrationOption {

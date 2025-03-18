@@ -219,6 +219,7 @@ class Core {
 	 * @see Modules\Full_Offload
 	 * @see Modules\Multisite
 	 * @see Modules\Cache_TTL
+	 * @see Modules\R2
 	 */
 	private function load_modules() {
 		$loader = Loader::get_instance();
@@ -228,6 +229,7 @@ class Core {
 		$loader->module( 'auto-offload' );
 		$loader->module( 'auto-resize' );
 		$loader->module( 'cloudflare-images' ); // Core module.
+		$loader->module( 'r2' ); // Core module.
 		$loader->module( 'custom-id' );
 		$loader->module( 'disable-async' );
 		$loader->module( 'disable-generation' );

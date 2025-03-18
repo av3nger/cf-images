@@ -18,6 +18,7 @@ import Logs from './routes/misc/logs';
 import ImageGenerateRoute from './routes/image/generate';
 import ToolsPremium from './routes/tools/premium';
 import Integrations from './routes/cloudflare/integrations';
+import R2Settings from './routes/cloudflare/r2';
 
 /**
  * App
@@ -31,6 +32,7 @@ const App = () => {
 				<Route index element={<CloudflareSettings />} />
 				<Route path="/cf/integrations" element={<Integrations />} />
 				<Route path="/cf/experimental" element={<Experimental />} />
+				<Route path="/cf/r2" element={<R2Settings />} />
 				<Route path="/tools/settings" element={<ToolsSettings />} />
 				<Route path="/tools/premium" element={<ToolsPremium />} />
 				<Route

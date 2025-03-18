@@ -29,7 +29,7 @@ const Nav = () => {
 				{__('Image Optimize', 'cf-images')}
 			</span>
 
-			<p className="menu-label">{__('Cloudflare Images', 'cf-images')}</p>
+			<p className="menu-label">{__('Cloudflare', 'cf-images')}</p>
 
 			<ul className="menu-list">
 				<li>
@@ -37,7 +37,15 @@ const Nav = () => {
 						to="/"
 						className={({ isActive }) => getClass(isActive)}
 					>
-						{__('Settings', 'cf-images')}
+						{__('Images', 'cf-images')}
+					</NavLink>
+				</li>
+				<li>
+					<NavLink
+						to="/cf/r2"
+						className={({ isActive }) => getClass(isActive)}
+					>
+						{__('R2 Storage', 'cf-images')}
 					</NavLink>
 				</li>
 				{typeof integrations === 'object' && (

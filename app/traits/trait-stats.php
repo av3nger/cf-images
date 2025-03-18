@@ -41,6 +41,7 @@ trait Stats {
 		'size_after'  => 0, // Compress module.
 		'alt_tags'    => 0, // Alt tags generated.
 		'image_ai'    => 0, // Images generated.
+		'r2_count'    => 0, // Offloaded to R2.
 	);
 
 	/**
@@ -143,6 +144,8 @@ trait Stats {
 	 * @return array
 	 */
 	private function get_stats(): array {
-		return get_option( 'cf-images-stats', $this->default_stats );
+		$stats = get_option( 'cf-images-stats', array() );
+
+		return wp_parse_args( $stats, $this->default_stats );
 	}
 }
