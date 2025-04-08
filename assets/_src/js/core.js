@@ -26,6 +26,7 @@ import { post } from './helpers/post';
 		cf_images_restore_image: '.cf-images-restore', // Download image back to media library.
 		cf_images_ai_caption: '.cf-images-ai-alt', // Process AI caption.
 		cf_images_compress: '.cf-images-compress', // Compress image.
+		cf_images_r2_upload: '.cf-images-offload-r2', // Process offloading to R2.
 	};
 
 	/**

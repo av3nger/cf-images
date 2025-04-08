@@ -50,6 +50,7 @@ class Settings {
 		'rss-feeds'          => false,
 		'no-offload-user'    => false, // Do not offload images for logged-in users.
 		'process-head'       => false,
+		'r2-enabled'         => false, // Enable R2 storage.
 	);
 
 	/**
@@ -61,6 +62,8 @@ class Settings {
 		if ( wp_doing_ajax() ) {
 			add_action( 'wp_ajax_cf_images_update_settings', array( $this, 'ajax_update_settings' ) );
 			add_action( 'wp_ajax_cf_images_set_custom_domain', array( $this, 'ajax_set_custom_domain' ) );
+			add_action( 'wp_ajax_cf_images_save_r2_settings', array( $this, 'ajax_save_r2_settings' ) );
+			add_action( 'wp_ajax_cf_images_disconnect_r2', array( $this, 'ajax_disconnect_r2' ) );
 		}
 	}
 
@@ -251,6 +254,74 @@ class Settings {
 
 		delete_option( 'cf-images-auth-error' );
 		$this->fetch_stats( new Api\Image() );
+
+		wp_send_json_success();
+	}
+
+	/**
+	 * Save R2 settings.
+	 *
+	 * @since 1.9.5
+	 */
+	public function ajax_save_r2_settings() {
+		$this->check_ajax_request();
+
+		$data = filter_input( INPUT_POST, 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+
+		if ( ! isset( $data['bucket'] ) || ! isset( $data['public-url'] ) || ! isset( $data['key-id'] ) || ! isset( $data['key-secret'] ) ) {
+			wp_send_json_error( esc_html__( 'Missing required fields', 'cloudflare-images' ) );
+		}
+
+		$bucket     = sanitize_text_field( $data['bucket'] );
+		$public_url = esc_url_raw( $data['public-url'] );
+		$key_id     = sanitize_text_field( $data['key-id'] );
+		$key_secret = sanitize_text_field( $data['key-secret'] );
+
+		// Check if we need to store in wp-config.php.
+		if ( empty( $data['compat'] ) ) {
+			$this->write_config( 'CF_IMAGES_R2_BUCKET', $bucket );
+			$this->write_config( 'CF_IMAGES_R2_PUBLIC_URL', $public_url );
+			$this->write_config( 'CF_IMAGES_R2_KEY_ID', $key_id );
+			$this->write_config( 'CF_IMAGES_R2_KEY_SECRET', $key_secret );
+		} else {
+			update_site_option( 'cf-images-r2-bucket', $bucket );
+			update_site_option( 'cf-images-r2-public-url', $public_url );
+			update_site_option( 'cf-images-r2-key-id', $key_id );
+			update_site_option( 'cf-images-r2-key-secret', $key_secret );
+		}
+
+		// Update the r2-enabled setting.
+		$settings               = get_option( 'cf-images-settings', self::get_defaults() );
+		$settings['r2-enabled'] = true;
+		update_option( 'cf-images-settings', $settings );
+
+		wp_send_json_success();
+	}
+
+	/**
+	 * Disconnect R2 settings.
+	 *
+	 * @since 1.9.5
+	 */
+	public function ajax_disconnect_r2() {
+		$this->check_ajax_request();
+
+		// Remove R2 settings.
+		delete_site_option( 'cf-images-r2-bucket' );
+		delete_site_option( 'cf-images-r2-public-url' );
+		delete_site_option( 'cf-images-r2-key-id' );
+		delete_site_option( 'cf-images-r2-key-secret' );
+
+		// Remove defines from wp-config.php file.
+		$this->write_config( 'CF_IMAGES_R2_BUCKET' );
+		$this->write_config( 'CF_IMAGES_R2_PUBLIC_URL' );
+		$this->write_config( 'CF_IMAGES_R2_KEY_ID' );
+		$this->write_config( 'CF_IMAGES_R2_KEY_SECRET' );
+
+		// Update the r2-enabled setting.
+		$settings               = get_option( 'cf-images-settings', self::get_defaults() );
+		$settings['r2-enabled'] = false;
+		update_option( 'cf-images-settings', $settings );
 
 		wp_send_json_success();
 	}

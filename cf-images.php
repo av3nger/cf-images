@@ -34,6 +34,11 @@ if ( ! defined( 'WPINC' ) ) {
 define( 'CF_IMAGES_VERSION', '1.9.5-beta.1' );
 define( 'CF_IMAGES_DIR_URL', plugin_dir_url( __FILE__ ) );
 
+// Load Composer autoloader if it exists
+if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
+	require_once __DIR__ . '/vendor/autoload.php';
+}
+
 require_once 'app/class-activator.php';
 register_activation_hook( __FILE__, array( 'CF_Images\App\Activator', 'activate' ) );
 register_deactivation_hook( __FILE__, array( 'CF_Images\App\Activator', 'deactivate' ) );

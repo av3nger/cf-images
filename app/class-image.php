@@ -135,6 +135,24 @@ class Image {
 	private $dimensions = '';
 
 	/**
+	 * R2 object name.
+	 *
+	 * @since 1.9.5
+	 *
+	 * @var string
+	 */
+	private $r2_object_name = '';
+
+	/**
+	 * R2 public URL.
+	 *
+	 * @since 1.9.5
+	 *
+	 * @var string
+	 */
+	private $r2_public_url = '';
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 1.5.0
@@ -724,6 +742,29 @@ class Image {
 
 		list( $hash, $this->cf_image_id ) = Cloudflare_Images::get_hash_id_url_string( $attachment_id );
 
+		// Check if this is an R2 image.
+		if ( ! empty( $this->cf_image_id ) && 0 === strpos( $this->cf_image_id, 'r2:' ) ) {
+			$this->r2_object_name = substr( $this->cf_image_id, 3 ); // Remove 'r2:' prefix.
+			$this->set_r2_public_url();
+
+			if ( ! empty( $this->r2_public_url ) ) {
+				// For R2, we simply need to replace the upload URL with the R2 public URL.
+				$uploads  = wp_get_upload_dir();
+				$base_url = $uploads['baseurl'];
+
+				// Get the current image URL (either from src or from a size-specific URL).
+				$current_url = $this->src;
+
+				// Replace the upload URL with the R2 public URL.
+				$this->cf_image_url = str_replace( $base_url, rtrim( $this->r2_public_url, '/' ), $current_url );
+
+				// R2 doesn't need any additional parameters, so we'll clear dimensions
+				// to prevent the code from adding width parameters later.
+				$this->dimensions = '';
+				return;
+			}
+		}
+
 		if ( empty( $this->cf_image_id ) || ( empty( $hash ) && ! apply_filters( 'cf_images_module_enabled', false, 'custom-path' ) ) ) {
 			return;
 		}
@@ -731,5 +772,23 @@ class Image {
 		do_action( 'cf_images_get_attachment_image_src', $this->cf_image_id, $attachment_id );
 
 		$this->cf_image_url = trailingslashit( $this->get_cdn_domain() . "/$hash" ) . "$this->cf_image_id/";
+	}
+
+	/**
+	 * Set the R2 public URL.
+	 *
+	 * @since 1.9.5
+	 */
+	private function set_r2_public_url() {
+		if ( defined( 'CF_IMAGES_R2_PUBLIC_URL' ) ) {
+			$this->r2_public_url = constant( 'CF_IMAGES_R2_PUBLIC_URL' );
+		} else {
+			$this->r2_public_url = get_site_option( 'cf-images-r2-public-url', '' );
+		}
+
+		// Ensure the URL ends with a trailing slash.
+		if ( ! empty( $this->r2_public_url ) && substr( $this->r2_public_url, -1 ) !== '/' ) {
+			$this->r2_public_url .= '/';
+		}
 	}
 }

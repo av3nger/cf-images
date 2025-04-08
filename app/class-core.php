@@ -148,6 +148,7 @@ class Core {
 		require_once __DIR__ . '/api/class-compress.php';
 		require_once __DIR__ . '/api/class-image.php';
 		require_once __DIR__ . '/api/class-variant.php';
+		require_once __DIR__ . '/api/class-r2.php';
 	}
 
 	/**

@@ -210,6 +210,10 @@ class Media {
 							</a>
 						<?php endif; ?>
 					<?php endif; ?>
+					<a href="#"	class="dropdown-item cf-images-offload-r2" data-id="<?php echo esc_attr( $post_id ); ?>">
+						<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/cloud.svg' ); ?>" alt="<?php esc_attr_e( 'Upload to R2', 'cf-images' ); ?>" />
+						<?php esc_html_e( 'Upload to R2', 'cf-images' ); ?>
+					</a>
 					<?php if ( apply_filters( 'cf_images_module_enabled', false, 'image-ai' ) ) : ?>
 						<a href="#" class="dropdown-item cf-images-ai-alt" data-id="<?php echo esc_attr( $post_id ); ?>">
 							<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/wand.svg' ); ?>" alt="<?php esc_attr_e( 'Generate alt text', 'cf-images' ); ?>" />

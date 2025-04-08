@@ -61,6 +61,8 @@ class Admin {
 			add_action( 'wp_ajax_cf_images_disconnect', array( $settings, 'ajax_disconnect' ) );
 			add_action( 'wp_ajax_cf_images_hide_sidebar', array( $settings, 'ajax_hide_sidebar' ) );
 			add_action( 'wp_ajax_cf_images_check_status', array( $settings, 'ajax_check_status' ) );
+			add_action( 'wp_ajax_cf_images_save_r2_settings', array( $settings, 'ajax_save_r2_settings' ) );
+			add_action( 'wp_ajax_cf_images_disconnect_r2', array( $settings, 'ajax_disconnect_r2' ) );
 
 			add_action( 'wp_ajax_cf_images_offload_image', array( $this->media, 'ajax_offload_image' ) );
 			add_action( 'wp_ajax_cf_images_bulk_process', array( $this->media, 'ajax_bulk_process' ) );

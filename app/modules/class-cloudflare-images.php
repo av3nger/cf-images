@@ -146,6 +146,13 @@ class Cloudflare_Images extends Module {
 			return $image;
 		}
 
+		// Check if this is an R2 offloaded image.
+		if ( $this->is_r2_offloaded( (int) $attachment_id ) ) {
+			$image[0] = $this->get_r2_url( $image[0], (int) $attachment_id );
+			return $image;
+		}
+
+		// Process with Cloudflare Images.
 		$image[0] = ( new Image( $image[0], $image[0] ) )
 			->set_id( $attachment_id )
 			->set_dimensions( $image, $size )
@@ -179,6 +186,58 @@ class Cloudflare_Images extends Module {
 		$hash = apply_filters( 'cf_images_hash', get_site_option( 'cf-images-hash', '' ) );
 
 		return array( $hash, $cloudflare_image_id );
+	}
+
+	/**
+	 * Check if an attachment is offloaded to R2.
+	 *
+	 * @since 1.9.5
+	 *
+	 * @param int $attachment_id Attachment ID.
+	 *
+	 * @return bool
+	 */
+	public function is_r2_offloaded( int $attachment_id ): bool {
+		$r2_offloaded = get_post_meta( $attachment_id, '_cloudflare_image_r2_offloaded', true );
+		return ! empty( $r2_offloaded );
+	}
+
+	/**
+	 * Get R2 URL for an attachment.
+	 *
+	 * @since 1.9.5
+	 *
+	 * @param string $url           Original URL.
+	 * @param int    $attachment_id Attachment ID.
+	 *
+	 * @return string R2 URL or original URL if not offloaded.
+	 */
+	public function get_r2_url( string $url, int $attachment_id ): string {
+		if ( ! $this->is_r2_offloaded( $attachment_id ) ) {
+			return $url;
+		}
+
+		// Get R2 public URL.
+		if ( defined( 'CF_IMAGES_R2_PUBLIC_URL' ) ) {
+			$r2_public_url = constant( 'CF_IMAGES_R2_PUBLIC_URL' );
+		} else {
+			$r2_public_url = get_site_option( 'cf-images-r2-public-url', '' );
+		}
+
+		if ( empty( $r2_public_url ) ) {
+			return $url;
+		}
+
+		// Ensure the URL ends with a trailing slash.
+		if ( substr( $r2_public_url, -1 ) !== '/' ) {
+			$r2_public_url .= '/';
+		}
+
+		// Replace the upload URL with the R2 public URL.
+		$uploads  = wp_get_upload_dir();
+		$base_url = $uploads['baseurl'];
+
+		return str_replace( $base_url, rtrim( $r2_public_url, '/' ), $url );
 	}
 
 	/**
@@ -235,6 +294,20 @@ class Cloudflare_Images extends Module {
 	 * @param int    $attachment_id Image attachment ID or 0.
 	 */
 	public function calculate_image_srcset( array $sources, array $size_array, string $image_src, array $image_meta, int $attachment_id ): array {
+		// Check if this is an R2 offloaded image.
+		if ( $this->is_r2_offloaded( $attachment_id ) ) {
+			foreach ( $sources as $id => $size ) {
+				if ( ! isset( $size['url'] ) ) {
+					continue;
+				}
+
+				$sources[ $id ]['url'] = $this->get_r2_url( $size['url'], $attachment_id );
+			}
+
+			return $sources;
+		}
+
+		// Process with Cloudflare Images.
 		foreach ( $sources as $id => $size ) {
 			if ( ! isset( $size['url'] ) ) {
 				continue;
@@ -269,7 +342,40 @@ class Cloudflare_Images extends Module {
 			return $filtered_image;
 		}
 
-		$pattern = '/<(?:img|source)\b(?>\s+(?:src=[\'"]([^\'"]*)[\'"]|srcset=[\'"]([^\'"]*)[\'"])|[^\s>]+|\s+)*>/i';
+		// Check if this is an R2 offloaded image.
+		if ( $attachment_id > 0 && $this->is_r2_offloaded( $attachment_id ) ) {
+			$pattern = '/<(?:img|source)\b(?:\s+(?:src=[\'"]([^\'"]*)[\'"]|srcset=[\'"]([^\'"]*)[\'"])|[^\s>]+|\s+)*>/i';
+			if ( preg_match_all( $pattern, $filtered_image, $images ) ) {
+				// Replace src attribute.
+				if ( ! empty( $images[1][0] ) ) {
+					$r2_url         = $this->get_r2_url( $images[1][0], $attachment_id );
+					$filtered_image = str_replace( $images[1][0], $r2_url, $filtered_image );
+				}
+
+				// Replace srcset attribute if present.
+				if ( ! empty( $images[2][0] ) ) {
+					$srcset_values     = explode( ',', $images[2][0] );
+					$new_srcset_values = array();
+
+					foreach ( $srcset_values as $srcset_value ) {
+						$parts = preg_split( '/\s+/', trim( $srcset_value ) );
+						if ( count( $parts ) >= 1 ) {
+							$url                 = $parts[0];
+							$descriptor          = isset( $parts[1] ) ? ' ' . $parts[1] : '';
+							$r2_url              = $this->get_r2_url( $url, $attachment_id );
+							$new_srcset_values[] = $r2_url . $descriptor;
+						}
+					}
+
+					$new_srcset     = implode( ', ', $new_srcset_values );
+					$filtered_image = str_replace( $images[2][0], $new_srcset, $filtered_image );
+				}
+
+				return $filtered_image;
+			}
+		}
+
+		$pattern = '/<(?:img|source)\b(?:\s+(?:src=[\'"]([^\'"]*)[\'"]|srcset=[\'"]([^\'"]*)[\'"])|[^\s>]+|\s+)*>/i';
 		if ( ! preg_match_all( $pattern, $filtered_image, $images ) ) {
 			do_action( 'cf_images_log', 'Running content_img_tag(), `src` not found, returning image. Attachment ID: %s. Image: %s', $attachment_id, $filtered_image );
 			return $filtered_image;
@@ -315,6 +421,11 @@ class Cloudflare_Images extends Module {
 	public function get_attachment_url( string $url, int $attachment_id ): string {
 		if ( is_admin() ) {
 			return $url;
+		}
+
+		// Check if this is an R2 offloaded image.
+		if ( $this->is_r2_offloaded( $attachment_id ) ) {
+			return $this->get_r2_url( $url, $attachment_id );
 		}
 
 		$image_src = $this->get_attachment_image_src( array( $url ), $attachment_id, null );
