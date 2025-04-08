@@ -140,7 +140,7 @@ class Media {
 		$post_id = apply_filters( 'cf_images_media_post_id', $post_id );
 
 		// Check if supported format.
-		$supported_mimes = array( 'image/jpeg', 'image/png', 'image/gif', 'image/webp' );
+		$supported_mimes = array( 'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg' );
 		if ( ! in_array( get_post_mime_type( $post_id ), $supported_mimes, true ) ) {
 			?>
 			<span class="status"><?php esc_html_e( 'Unsupported format', 'cf-images' ); ?></span>
@@ -416,7 +416,7 @@ class Media {
 
 		$mime = get_post_mime_type( $attachment_id );
 
-		if ( ! wp_attachment_is_image( $attachment_id ) || false !== strpos( $mime, 'image/svg' ) ) {
+		if ( ! wp_attachment_is_image( $attachment_id ) ) {
 			update_post_meta( $attachment_id, '_cloudflare_image_skip', true );
 			do_action( 'cf_images_error', 415, __( 'Unsupported media type', 'cf-images' ) );
 			do_action(
