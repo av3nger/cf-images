@@ -2,6 +2,7 @@
 
 Added:
 * Support for Elementor gallery widget
+* Support for Voxel theme gallery widget
 * Support for SVG images
 * cf_images_is_rest_request filter to control REST API requests
 

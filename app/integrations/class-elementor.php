@@ -55,7 +55,12 @@ class Elementor {
 	 * @param Widget_Base $widget         The widget.
 	 */
 	public function add_lightbox_support( string $widget_content, Widget_Base $widget ) {
-		if ( ! $widget instanceof Widget_Image_Carousel && ! $widget instanceof Gallery && ! $widget instanceof Widget_Image_Gallery ) {
+		if (
+			! $widget instanceof Widget_Image_Carousel &&
+			! $widget instanceof Gallery &&
+			! $widget instanceof Widget_Image_Gallery &&
+			! $widget instanceof \Voxel\Widgets\Gallery
+		) {
 			return $widget_content;
 		}
 
