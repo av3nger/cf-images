@@ -414,8 +414,6 @@ class Media {
 		// This is used with WPML integration.
 		$attachment_id = apply_filters( 'cf_images_media_post_id', $attachment_id );
 
-		$mime = get_post_mime_type( $attachment_id );
-
 		if ( ! wp_attachment_is_image( $attachment_id ) ) {
 			update_post_meta( $attachment_id, '_cloudflare_image_skip', true );
 			do_action( 'cf_images_error', 415, __( 'Unsupported media type', 'cf-images' ) );
