@@ -31,7 +31,6 @@ class Disable_Generation extends Module {
 	 * @since 1.3.0
 	 */
 	public function init() {
-		add_filter( 'wp_image_editors', '__return_empty_array' );
 		add_filter( 'big_image_size_threshold', '__return_false' );
 		add_filter( 'intermediate_image_sizes_advanced', '__return_empty_array' );
 	}
