@@ -33,7 +33,7 @@ trait Ajax {
 	private function check_ajax_request( bool $no_data = false ) {
 		check_ajax_referer( 'cf-images-nonce' );
 
-		if ( ! current_user_can( 'manage_options' ) || ( ! $no_data && ! isset( $_POST['data'] ) ) ) {
+		if ( ! current_user_can( 'upload_files' ) || ( ! $no_data && ! isset( $_POST['data'] ) ) ) {
 			wp_die();
 		}
 	}

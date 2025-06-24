@@ -7,6 +7,7 @@ Added:
 * cf_images_is_rest_request filter to control REST API requests
 
 Fixed:
+* Now all users with upload_files permission can offload images
 * Full offload issue with GreenShift - Animation and Page Builder Blocks plugin
 * RankMath overriding images when they are fully offloaded
 * Fix "The web server cannot generate responsive image sizes for this image. Convert it to JPEG or PNG before uploading" error 
