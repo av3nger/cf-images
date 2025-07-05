@@ -1,4 +1,4 @@
-= 1.9.5 =
+= 1.9.5 - 06.07.2025 =
 
 Added:
 * Support for Elementor gallery widget
