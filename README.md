@@ -5,8 +5,8 @@ Tags: cdn, cloudflare images, image AI, compress, optimize
 Donate link: https://www.paypal.com/donate/?business=JRR6QPRGTZ46N&no_recurring=0&item_name=Help+support+the+development+of+the+Cloudflare+Images+plugin+for+WordPress&currency_code=AUD
 Requires at least: 5.6
 Requires PHP: 7.0
-Tested up to: 6.7
-Stable tag: 1.9.4
+Tested up to: 6.8
+Stable tag: 1.9.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -101,6 +101,20 @@ If something is still not working for you, please let me know by creating a supp
 3. Quick and easy setup wizard
 
 == Changelog ==
+
+= 1.9.5 - 06.07.2025 =
+
+Added:
+* Support for Elementor gallery widget
+* Support for Voxel theme gallery widget
+* Support for SVG images
+* cf_images_is_rest_request filter to control REST API requests
+
+Fixed:
+* Now all users with upload_files permission can offload images
+* Full offload issue with GreenShift - Animation and Page Builder Blocks plugin
+* RankMath overriding images when they are fully offloaded
+* Fix "The web server cannot generate responsive image sizes for this image. Convert it to JPEG or PNG before uploading" error
 
 = 1.9.4 - 14.12.2024 =
 

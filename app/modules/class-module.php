@@ -161,7 +161,8 @@ abstract class Module {
 
 		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
 
-		return strpos( $request_uri, $rest_url_prefix ) !== false;
+		$is_rest_request = strpos( $request_uri, $rest_url_prefix ) !== false;
+		return apply_filters( 'cf_images_is_rest_request', $is_rest_request, $attachment_id );
 	}
 
 	/**

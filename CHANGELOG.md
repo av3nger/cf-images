@@ -1,3 +1,17 @@
+= 1.9.5 - 06.07.2025 =
+
+Added:
+* Support for Elementor gallery widget
+* Support for Voxel theme gallery widget
+* Support for SVG images
+* cf_images_is_rest_request filter to control REST API requests
+
+Fixed:
+* Now all users with upload_files permission can offload images
+* Full offload issue with GreenShift - Animation and Page Builder Blocks plugin
+* RankMath overriding images when they are fully offloaded
+* Fix "The web server cannot generate responsive image sizes for this image. Convert it to JPEG or PNG before uploading" error 
+
 = 1.9.4 - 14.12.2024 =
 
 Added:

@@ -1,7 +1,7 @@
 {
   "name": "cf-images",
   "description": "Offload, Store, Resize & Optimize with Cloudflare Images",
-  "version": "1.9.4",
+  "version": "1.9.5",
   "main": "cf-images.php",
   "author": "Anton Vanyukov",
   "license": "GPL-2.0-or-later",
@@ -10,41 +10,42 @@
     "optimization"
   ],
   "devDependencies": {
-    "@babel/plugin-transform-react-jsx": "^7.25.7",
-    "@babel/preset-env": "^7.25.7",
-    "@babel/preset-typescript": "^7.25.7",
-    "@types/jquery": "^3.5.31",
-    "@types/react": "^18.3.11",
-    "@types/react-dom": "^18.3.0",
-    "@wordpress/babel-plugin-import-jsx-pragma": "^5.9.0",
-    "@wordpress/eslint-plugin": "^21.2.0",
-    "@wordpress/i18n": "^5.9.0",
-    "@wordpress/prettier-config": "^4.9.0",
+    "@babel/plugin-transform-react-jsx": "^7.25.9",
+    "@babel/preset-env": "^7.26.0",
+    "@babel/preset-typescript": "^7.26.0",
+    "@types/jquery": "^3.5.32",
+    "@types/react": "^19.0.1",
+    "@types/react-dom": "^19.0.2",
+    "@wordpress/babel-plugin-import-jsx-pragma": "^5.14.0",
+    "@wordpress/eslint-plugin": "^22.0.0",
+    "@wordpress/i18n": "^5.14.0",
+    "@wordpress/prettier-config": "^4.14.0",
     "babel-loader": "^9.2.1",
     "css-loader": "^7.1.2",
-    "mini-css-extract-plugin": "^2.9.1",
-    "prettier": "^3.3.3",
-    "purgecss-webpack-plugin": "^6.0.0",
-    "sass": "^1.79.4",
-    "sass-loader": "^16.0.2",
-    "terser-webpack-plugin": "^5.3.10",
-    "typescript": "^5.6.2",
-    "webpack": "^5.95.0",
+    "mini-css-extract-plugin": "^2.9.2",
+    "prettier": "^3.4.2",
+    "purgecss-webpack-plugin": "^7.0.2",
+    "sass": "^1.83.0",
+    "sass-loader": "^16.0.4",
+    "terser-webpack-plugin": "^5.3.11",
+    "typescript": "^5.7.2",
+    "webpack": "^5.97.1",
     "webpack-cli": "^5.1.4"
   },
   "scripts": {
     "watch": "webpack --watch",
     "build": "webpack --progress",
-    "translate": "wp i18n make-pot . languages/cf-images.pot"
+    "translate": "wp i18n make-pot . languages/cf-images.pot",
+    "install-unit-tests": "bash bin/install-wp-tests.sh wordpress_test root root localhost latest"
   },
   "dependencies": {
     "@mdi/js": "^7.4.47",
     "@mdi/react": "^1.6.1",
     "bulma": "^1.0.2",
     "classnames": "^2.5.1",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-router-dom": "^6.26.2"
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.0.2"
   },
   "babel": {
     "presets": [
