@@ -86,14 +86,6 @@ class Multisite extends Module {
 			return $settings;
 		}
 
-		$main_site_id = get_main_site_id();
-
-		switch_to_blog( $main_site_id );
-
-		$settings = get_option( 'cf-images-settings', Settings::get_defaults() );
-
-		restore_current_blog();
-
-		return $settings;
+		return get_site_option( 'cf-images-settings', Settings::get_defaults() );
 	}
 }

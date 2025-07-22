@@ -1,3 +1,8 @@
+= 1.9.6 =
+
+Fixed:
+* Performance issues with network installs
+
 = 1.9.5 - 06.07.2025 =
 
 Added:
