@@ -47,12 +47,6 @@ Found a hiccup? Yearning for a feature? Just shoot us a support request. Our com
 
 Cloudflare, the Cloudflare logo, and Cloudflare Workers are trademarks and/or registered trademarks of Cloudflare, Inc. in the United States and other jurisdictions.
 
-= Sponsors =
-
-Special thanks to the plugin sponsors:
-
-<a href="https://thismatters.agency">WordPress Agency this:matters</a>
-
 == Installation ==
 
 1. Upload the plugin to the `/wp-content/plugins/` directory
