@@ -33,6 +33,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 define( 'CF_IMAGES_VERSION', '1.9.6-beta.1' );
 define( 'CF_IMAGES_DIR_URL', plugin_dir_url( __FILE__ ) );
+define( 'CF_IMAGES_DIR_PATH', plugin_dir_path( __FILE__ ) );
 
 require_once 'app/class-activator.php';
 register_activation_hook( __FILE__, array( 'CF_Images\App\Activator', 'activate' ) );
