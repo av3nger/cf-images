@@ -104,6 +104,9 @@ If something is still not working for you, please let me know by creating a supp
 
 = 1.9.6 =
 
+Added:
+* Track image changes and update images on Cloudflare
+
 Fixed:
 * Performance issues with network installs
 

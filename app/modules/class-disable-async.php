@@ -37,7 +37,9 @@ class Disable_Async extends Module {
 	public function pre_init() {
 		if ( ! $this->is_module_enabled() ) {
 			require_once __DIR__ . '/../async/class-task.php';
+			require_once __DIR__ . '/../async/class-edit.php';
 			require_once __DIR__ . '/../async/class-upload.php';
+			new Async\Edit();
 			new Async\Upload();
 		}
 	}
