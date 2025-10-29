@@ -5,6 +5,7 @@ Added:
 
 Fixed:
 * Performance issues with network installs
+* Network installs
 
 = 1.9.5 - 06.07.2025 =
 
