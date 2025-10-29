@@ -21,7 +21,6 @@
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       cf-images
  * Domain Path:       /languages
- * Network:           true
  */
 
 namespace CF_Images;
