@@ -1,7 +1,7 @@
 {
   "name": "cf-images",
   "description": "Offload, Store, Resize & Optimize with Cloudflare Images",
-  "version": "1.9.5",
+  "version": "1.9.6",
   "main": "cf-images.php",
   "author": "Anton Vanyukov",
   "license": "GPL-2.0-or-later",
@@ -10,27 +10,27 @@
     "optimization"
   ],
   "devDependencies": {
-    "@babel/plugin-transform-react-jsx": "^7.25.9",
-    "@babel/preset-env": "^7.26.0",
-    "@babel/preset-typescript": "^7.26.0",
-    "@types/jquery": "^3.5.32",
-    "@types/react": "^19.0.1",
-    "@types/react-dom": "^19.0.2",
-    "@wordpress/babel-plugin-import-jsx-pragma": "^5.14.0",
-    "@wordpress/eslint-plugin": "^22.0.0",
-    "@wordpress/i18n": "^5.14.0",
-    "@wordpress/prettier-config": "^4.14.0",
-    "babel-loader": "^9.2.1",
+    "@babel/plugin-transform-react-jsx": "^7.27.1",
+    "@babel/preset-env": "^7.28.3",
+    "@babel/preset-typescript": "^7.27.1",
+    "@types/jquery": "^3.5.33",
+    "@types/react": "^19.1.11",
+    "@types/react-dom": "^19.1.7",
+    "@wordpress/babel-plugin-import-jsx-pragma": "^5.29.0",
+    "@wordpress/eslint-plugin": "^22.15.0",
+    "@wordpress/i18n": "^6.2.0",
+    "@wordpress/prettier-config": "^4.29.0",
+    "babel-loader": "^10.0.0",
     "css-loader": "^7.1.2",
-    "mini-css-extract-plugin": "^2.9.2",
-    "prettier": "^3.4.2",
+    "mini-css-extract-plugin": "^2.9.4",
+    "prettier": "^3.6.2",
     "purgecss-webpack-plugin": "^7.0.2",
-    "sass": "^1.83.0",
-    "sass-loader": "^16.0.4",
-    "terser-webpack-plugin": "^5.3.11",
-    "typescript": "^5.7.2",
-    "webpack": "^5.97.1",
-    "webpack-cli": "^5.1.4"
+    "sass": "^1.91.0",
+    "sass-loader": "^16.0.5",
+    "terser-webpack-plugin": "^5.3.14",
+    "typescript": "^5.9.2",
+    "webpack": "^5.101.3",
+    "webpack-cli": "^6.0.1"
   },
   "scripts": {
     "watch": "webpack --watch",
@@ -41,11 +41,11 @@
   "dependencies": {
     "@mdi/js": "^7.4.47",
     "@mdi/react": "^1.6.1",
-    "bulma": "^1.0.2",
+    "bulma": "^1.0.4",
     "classnames": "^2.5.1",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "react-router-dom": "^7.0.2"
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-router-dom": "^7.8.2"
   },
   "babel": {
     "presets": [

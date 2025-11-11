@@ -387,6 +387,25 @@ class Media {
 	}
 
 	/**
+	 * Update the image on Cloudflare after editing.
+	 *
+	 * @since 1.9.6
+	 *
+	 * @param array $data          Array of updated attachment meta data.
+	 * @param int   $attachment_id Attachment post ID.
+	 */
+	public function update_image( array $data, int $attachment_id ) {
+		// Only process image editor updates.
+		if ( ! doing_action( 'wp_ajax_image-editor' ) ) {
+			return $data;
+		}
+
+		$this->upload_image( $data, $attachment_id, 'replace' );
+
+		return $data;
+	}
+
+	/**
 	 * Upload to Cloudflare images.
 	 *
 	 * @since 1.0.0

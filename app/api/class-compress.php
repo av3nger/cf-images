@@ -95,7 +95,7 @@ class Compress extends API_Multi {
 
 		if ( empty( $results ) && ! empty( $errors ) ) {
 			$error_code = array_key_first( $errors );
-			throw new Exception( $errors[ $error_code ], (int) $error_code );
+			throw new Exception( esc_html( $errors[ $error_code ] ), (int) $error_code );
 		}
 
 		return $results;

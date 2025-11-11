@@ -6,7 +6,7 @@ Donate link: https://www.paypal.com/donate/?business=JRR6QPRGTZ46N&no_recurring=
 Requires at least: 5.6
 Requires PHP: 7.0
 Tested up to: 6.8
-Stable tag: 1.9.5
+Stable tag: 1.9.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -46,12 +46,6 @@ Found a hiccup? Yearning for a feature? Just shoot us a support request. Our com
 = Disclaimer =
 
 Cloudflare, the Cloudflare logo, and Cloudflare Workers are trademarks and/or registered trademarks of Cloudflare, Inc. in the United States and other jurisdictions.
-
-= Sponsors =
-
-Special thanks to the plugin sponsors:
-
-<a href="https://thismatters.agency">WordPress Agency this:matters</a>
 
 == Installation ==
 
@@ -101,6 +95,16 @@ If something is still not working for you, please let me know by creating a supp
 3. Quick and easy setup wizard
 
 == Changelog ==
+
+= 1.9.6 =
+
+Added:
+* Track image changes and update images on Cloudflare
+
+Fixed:
+* Performance issues with network installs
+* Network installs
+* Prevent unauthenticated users from changing the settings
 
 = 1.9.5 - 06.07.2025 =
 

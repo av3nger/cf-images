@@ -49,8 +49,10 @@ class Auto_Offload extends Module {
 		// If async uploads are disabled, use the default hook.
 		if ( $this->is_module_enabled( false, 'disable-async' ) ) {
 			add_filter( 'wp_generate_attachment_metadata', array( $this->media(), 'upload_image' ), 10, 3 );
+			add_filter( 'wp_update_attachment_metadata', array( $this->media(), 'update_image' ), 10, 2 );
 		} else {
 			add_filter( 'wp_async_wp_generate_attachment_metadata', array( $this->media(), 'upload_image' ), 10, 3 );
+			add_filter( 'wp_async_wp_save_image_editor_file', array( $this->media(), 'upload_image' ), 10, 3 );
 		}
 	}
 

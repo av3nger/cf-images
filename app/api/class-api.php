@@ -190,7 +190,7 @@ abstract class Api {
 
 		$code = wp_remote_retrieve_response_code( $response );
 		if ( is_wp_error( $response ) ) {
-			throw new Exception( $response->get_error_message(), (int) $code );
+			throw new Exception( esc_html( $response->get_error_message() ), (int) $code );
 		}
 
 		$body = wp_remote_retrieve_body( $response );
