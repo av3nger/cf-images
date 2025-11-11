@@ -94,7 +94,7 @@ class Edit extends Task {
 			}
 
 			$metadata = array(
-				'file' => ! empty( $_POST['filepath'] ) ? wp_unslash( $_POST['filepath'] ) : '',
+				'file' => ! empty( $_POST['filepath'] ) ? sanitize_text_field( wp_unslash( $_POST['filepath'] ) ) : '',
 			);
 
 			do_action( "wp_async_$this->action", $metadata, $attachment_id, 'replace' );

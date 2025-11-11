@@ -99,7 +99,7 @@ class Image_Generate extends Module {
 		$result = media_sideload_image( $file, $post_id, null, 'id' );
 
 		if ( is_wp_error( $result ) ) {
-			throw new Exception( $result->get_error_message(), $result->get_error_code() );
+			throw new Exception( esc_html( $result->get_error_message() ), (int) $result->get_error_code() );
 		}
 
 		return $result;

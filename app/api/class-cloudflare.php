@@ -115,7 +115,7 @@ class Cloudflare extends Api {
 		}
 
 		if ( 200 !== $code ) {
-			throw new Exception( $body, $code );
+			throw new Exception( esc_html( $body ), absint( $code ) );
 		}
 
 		return $decode ? json_decode( $body ) : $body;
