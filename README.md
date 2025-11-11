@@ -100,6 +100,7 @@ If something is still not working for you, please let me know by creating a supp
 
 Added:
 * Track image changes and update images on Cloudflare
+* Allow image offloading from front-end facing upload forms
 
 Fixed:
 * Performance issues with network installs
