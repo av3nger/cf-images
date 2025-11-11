@@ -159,6 +159,12 @@ class Settings {
 	 * @since 1.1.2
 	 */
 	public function ajax_disconnect() {
+		$this->check_ajax_request( true );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die();
+		}
+
 		delete_site_option( 'cf-images-hash' );
 		delete_site_option( 'cf-images-account-id' );
 		delete_site_option( 'cf-images-api-token' );
