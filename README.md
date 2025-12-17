@@ -96,6 +96,11 @@ If something is still not working for you, please let me know by creating a supp
 
 == Changelog ==
 
+= 1.9.7 =
+
+Fixed:
+* MyThemeShop\Helpers\Str not found error
+
 = 1.9.6 =
 
 Added:

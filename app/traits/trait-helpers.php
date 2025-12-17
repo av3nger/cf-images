@@ -126,4 +126,20 @@ trait Helpers {
 
 		return get_site_option( 'cf-images-network-wide' );
 	}
+
+	/**
+	 * Small helper function for pre PHP 8.x setups.
+	 *
+	 * @param string $haystack Haystack.
+	 * @param string $needle   Needle.
+	 *
+	 * @return bool
+	 */
+	protected function contains( string $haystack, string $needle ): bool {
+		if ( '' === $needle ) {
+			return true;
+		}
+
+		return false !== strpos( $haystack, $needle );
+	}
 }
