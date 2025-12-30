@@ -1,7 +1,7 @@
 = 1.9.7 =
 
 Fixed:
-* MyThemeShop\Helpers\Str not found error
+* Fatal error with latest RankMath update
 
 = 1.9.6 =
 
