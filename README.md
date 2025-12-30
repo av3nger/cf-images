@@ -6,7 +6,7 @@ Donate link: https://www.paypal.com/donate/?business=JRR6QPRGTZ46N&no_recurring=
 Requires at least: 5.6
 Requires PHP: 7.0
 Tested up to: 6.8
-Stable tag: 1.9.6
+Stable tag: 1.9.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -96,12 +96,17 @@ If something is still not working for you, please let me know by creating a supp
 
 == Changelog ==
 
-= 1.9.7 =
+= 1.9.8 - 31.12.2025 =
+
+Fixed:
+* Version conflict
+
+= 1.9.7 - 31.12.2025 =
 
 Fixed:
 * Fatal error with latest RankMath update
 
-= 1.9.6 =
+= 1.9.6 - 11.11.2025 =
 
 Added:
 * Track image changes and update images on Cloudflare
