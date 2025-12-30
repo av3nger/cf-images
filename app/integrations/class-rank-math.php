@@ -16,7 +16,6 @@ namespace CF_Images\App\Integrations;
 
 use CF_Images\App\Traits;
 use Exception;
-use MyThemeShop\Helpers\Str;
 use RankMath\Helper;
 use WP_Query;
 use function pathinfo;
@@ -226,7 +225,7 @@ class Rank_Math extends Integration {
 
 		// Remove size if embedded.
 		$name = explode( '-', $name['filename'] );
-		if ( Str::contains( 'x', end( $name ) ) ) {
+		if ( $this->contains( 'x', end( $name ) ) ) {
 			array_pop( $name );
 		}
 

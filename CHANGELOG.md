@@ -1,3 +1,8 @@
+= 1.9.7 =
+
+Fixed:
+* Fatal error with latest RankMath update
+
 = 1.9.6 =
 
 Added:
