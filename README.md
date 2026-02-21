@@ -96,6 +96,11 @@ If something is still not working for you, please let me know by creating a supp
 
 == Changelog ==
 
+= 1.9.9 =
+
+Fixed:
+* PHP warning: Implicitly marking parameter $value as nullable is deprecated
+
 = 1.9.8 - 31.12.2025 =
 
 Fixed:

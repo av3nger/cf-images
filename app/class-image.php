@@ -259,11 +259,11 @@ class Image {
 	 *
 	 * @since 1.8.0
 	 *
-	 * @param string $element Image element.
-	 * @param string $name    Img attribute name (srcset, size, etc).
-	 * @param string $value   Attribute value.
+	 * @param string      $element Image element.
+	 * @param string      $name    Img attribute name (srcset, size, etc).
+	 * @param string|null $value   Attribute value.
 	 */
-	private function add_attribute( string &$element, string $name, string $value = null ) {
+	private function add_attribute( string &$element, string $name, ?string $value = null ) {
 		$closing = false === strpos( $element, '/>' ) ? '>' : ' />';
 		$quotes  = false === strpos( $element, '"' ) ? '\'' : '"';
 
