@@ -10,26 +10,26 @@
     "optimization"
   ],
   "devDependencies": {
-    "@babel/plugin-transform-react-jsx": "^7.27.1",
-    "@babel/preset-env": "^7.28.5",
+    "@babel/plugin-transform-react-jsx": "^7.28.6",
+    "@babel/preset-env": "^7.29.0",
     "@babel/preset-typescript": "^7.28.5",
     "@types/jquery": "^3.5.33",
-    "@types/react": "^19.2.7",
+    "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "@wordpress/babel-plugin-import-jsx-pragma": "^5.37.0",
-    "@wordpress/eslint-plugin": "^23.0.0",
-    "@wordpress/i18n": "^6.10.0",
-    "@wordpress/prettier-config": "^4.37.0",
+    "@wordpress/babel-plugin-import-jsx-pragma": "^5.40.0",
+    "@wordpress/eslint-plugin": "^24.2.0",
+    "@wordpress/i18n": "^6.13.0",
+    "@wordpress/prettier-config": "^4.40.0",
     "babel-loader": "^10.0.0",
-    "css-loader": "^7.1.2",
-    "mini-css-extract-plugin": "^2.9.4",
-    "prettier": "^3.7.4",
-    "purgecss-webpack-plugin": "^7.0.2",
-    "sass": "^1.97.1",
-    "sass-loader": "^16.0.6",
+    "css-loader": "^7.1.4",
+    "mini-css-extract-plugin": "^2.10.0",
+    "prettier": "^3.8.1",
+    "purgecss-webpack-plugin": "^8.0.0",
+    "sass": "^1.97.3",
+    "sass-loader": "^16.0.7",
     "terser-webpack-plugin": "^5.3.16",
     "typescript": "^5.9.3",
-    "webpack": "^5.104.1",
+    "webpack": "^5.105.2",
     "webpack-cli": "^6.0.1"
   },
   "scripts": {
@@ -43,9 +43,9 @@
     "@mdi/react": "^1.6.1",
     "bulma": "^1.0.4",
     "classnames": "^2.5.1",
-    "react": "^19.2.3",
-    "react-dom": "^19.2.3",
-    "react-router-dom": "^7.11.0"
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-router-dom": "^7.13.0"
   },
   "babel": {
     "presets": [
