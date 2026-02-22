@@ -63,7 +63,7 @@ class Rank_Math extends Integration {
 	 * @since 1.9.3 Moved into init() from the constructor.
 	 */
 	protected function init() {
-		$this->name = esc_html__( 'Rank Math', 'cf-images' );
+		$this->name = 'Rank Math';
 		$this->slug = 'rank_math';
 
 		add_action( 'init', array( $this, 'is_image_seo_active' ) );

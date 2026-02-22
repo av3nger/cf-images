@@ -2,6 +2,7 @@
 
 Fixed:
 * PHP warning: Implicitly marking parameter $value as nullable is deprecated
+* PHP notice: Function _load_textdomain_just_in_time was called incorrectly
 
 = 1.9.8 - 31.12.2025 =
 

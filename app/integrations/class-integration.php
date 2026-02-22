@@ -108,7 +108,7 @@ abstract class Integration {
 	 */
 	public function add_integration( array $i10n ): array {
 		$i10n['integrationData'][ $this->slug ] = array(
-			'name'    => $this->name,
+			'name'    => esc_html( $this->name ),
 			'options' => apply_filters( 'cf_images_integration_options', array(), $this->slug ),
 		);
 
