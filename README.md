@@ -101,6 +101,7 @@ If something is still not working for you, please let me know by creating a supp
 Fixed:
 * PHP warning: Implicitly marking parameter $value as nullable is deprecated
 * PHP notice: Function _load_textdomain_just_in_time was called incorrectly
+* Broken srcset parsing caused by unencoded commas in Cloudflare Image URLs
 
 = 1.9.8 - 31.12.2025 =
 

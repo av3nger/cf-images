@@ -233,6 +233,15 @@ class Image {
 			}
 
 			if ( $src ) {
+				/**
+				 * Encode commas in srcset URLs to prevent conflict with the srcset delimiter.
+				 *
+				 * @see https://github.com/av3nger/cf-images/issues/66
+				 */
+				if ( ! $is_src ) {
+					$src = str_replace( ',', '%2C', $src );
+				}
+
 				$image = str_replace( $link, $src, empty( $this->processed ) ? $this->image : $this->processed );
 
 				// Some themes remove the default wp-image-* class, add it if missing.

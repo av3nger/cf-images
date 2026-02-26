@@ -189,4 +189,31 @@ class Test_Cloudflare_Images extends Unit_Test_Base {
 		$image = $this->cf_images->get_attachment_image_src( array( $original[0] ), self::$attachment_id, null );
 		$this->assertStringContainsString( '/w=9999', $image[0], 'Should default to /w=9999 if no size is found.' );
 	}
+
+	/**
+	 * Test: srcset URLs should have commas encoded as %2C.
+	 *
+	 * @see https://github.com/av3nger/cf-images/issues/66
+	 *
+	 * @covers Cloudflare_Images::calculate_image_srcset()
+	 */
+	public function test_srcset_urls_encode_commas() {
+		$original = $this->get_original_image_object();
+
+		$this->cf_images->populate_image_sizes();
+		$this->add_cf_image_id_and_hash();
+
+		$sources = array(
+			300 => array(
+				'url'        => $original[0],
+				'descriptor' => 'w',
+				'value'      => 300,
+			),
+		);
+
+		$result = $this->cf_images->calculate_image_srcset( $sources, array( 300, 200 ), '', array(), self::$attachment_id );
+
+		$this->assertStringNotContainsString( ',', $result[300]['url'], 'Srcset URL should not contain literal commas.' );
+		$this->assertStringContainsString( '%2C', $result[300]['url'], 'Srcset URL should encode commas as %2C.' );
+	}
 }
