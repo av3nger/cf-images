@@ -376,7 +376,7 @@ class Image {
 			/**
 			 * Resolve a Cloudflare image ID for images that have no WP attachment post.
 			 *
-			 * @since 1.9.9
+			 * @since 1.10.0
 			 *
 			 * @param string $cf_image_id Cloudflare image ID (empty string by default).
 			 * @param string $original    Normalized original image URL.

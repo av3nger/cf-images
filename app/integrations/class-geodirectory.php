@@ -11,13 +11,15 @@
  * @package CF_Images
  * @subpackage CF_Images/App/Integrations
  * @author Anton Vanyukov <a.vanyukov@vcore.ru>
- * @since 1.9.9
+ * @since 1.10.0
  */
 
 namespace CF_Images\App\Integrations;
 
 use CF_Images\App\Api;
 use Exception;
+use GeoDir_Media;
+use WP_Post;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -26,7 +28,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Geodirectory class.
  *
- * @since 1.9.9
+ * @since 1.10.0
  */
 class Geodirectory {
 	/**
@@ -34,7 +36,7 @@ class Geodirectory {
 	 *
 	 * Stores an array of [ gd_attachment_id => cf_image_id, ... ].
 	 *
-	 * @since 1.9.9
+	 * @since 1.10.0
 	 *
 	 * @var string
 	 */
@@ -45,16 +47,16 @@ class Geodirectory {
 	 *
 	 * Populated by resolve_image_sources(), consumed by resolve_external_image_id().
 	 *
-	 * @since 1.9.9
+	 * @since 1.10.0
 	 *
 	 * @var array<string, string>
 	 */
-	private static $url_cf_map = array();
+	private static array $url_cf_map = array();
 
 	/**
 	 * Class constructor.
 	 *
-	 * @since 1.9.9
+	 * @since 1.10.0
 	 */
 	public function __construct() {
 		add_action( 'init', array( $this, 'init_hooks' ) );
@@ -63,7 +65,7 @@ class Geodirectory {
 	/**
 	 * Register hooks once GeoDirectory is loaded.
 	 *
-	 * @since 1.9.9
+	 * @since 1.10.0
 	 */
 	public function init_hooks(): void {
 		if ( ! defined( 'GEODIRECTORY_VERSION' ) ) {
@@ -71,7 +73,7 @@ class Geodirectory {
 		}
 
 		if ( is_admin() ) {
-			add_action( 'geodir_post_saved', array( $this, 'offload_gallery_images' ), 10, 4 );
+			add_action( 'geodir_post_saved', array( $this, 'offload_gallery_images' ), 10, 3 );
 			add_action( 'before_delete_post', array( $this, 'cleanup_on_delete' ) );
 		} else {
 			add_filter( 'cf_images_page_parser_sources', array( $this, 'resolve_image_sources' ), 10, 2 );
@@ -82,19 +84,18 @@ class Geodirectory {
 	/**
 	 * Offload gallery images to Cloudflare after a GeoDirectory listing is saved.
 	 *
-	 * @since 1.9.9
+	 * @since 1.10.0
 	 *
-	 * @param array    $postarr Post array.
-	 * @param array    $gd_post GeoDirectory post array.
-	 * @param \WP_Post $post    WordPress post object.
-	 * @param bool     $update  Whether this is an update.
+	 * @param array   $postarr Post array.
+	 * @param array   $gd_post GeoDirectory post array.
+	 * @param WP_Post $post    WordPress post object.
 	 */
-	public function offload_gallery_images( array $postarr, array $gd_post, \WP_Post $post, bool $update ): void {
+	public function offload_gallery_images( array $postarr, array $gd_post, WP_Post $post ): void {
 		if ( ! class_exists( 'GeoDir_Media' ) ) {
 			return;
 		}
 
-		$images = \GeoDir_Media::get_post_images( $post->ID );
+		$images = GeoDir_Media::get_post_images( $post->ID );
 
 		$upload_dir = wp_upload_dir();
 		$basedir    = $upload_dir['basedir'];
@@ -203,7 +204,7 @@ class Geodirectory {
 	 * No URL building or DOM rewriting happens here — the Image class handles
 	 * that via the `cf_images_external_image_id` filter.
 	 *
-	 * @since 1.9.9
+	 * @since 1.10.0
 	 *
 	 * @param array  $sources { Sources attribute.
 	 *     @type string $src    Image src attribute value.
@@ -254,7 +255,7 @@ class Geodirectory {
 	 * Hooked to `cf_images_external_image_id`. The Image class calls this filter
 	 * with both the normalized URL and the raw URL.
 	 *
-	 * @since 1.9.9
+	 * @since 1.10.0
 	 *
 	 * @param string $cf_image_id Cloudflare image ID (empty string by default).
 	 * @param string $original    Normalized original image URL.
@@ -279,7 +280,7 @@ class Geodirectory {
 	 *
 	 * Matches the naming convention used in Media::upload_image().
 	 *
-	 * @since 1.9.9
+	 * @since 1.10.0
 	 *
 	 * @return string Host prefix (e.g. "example.com" or "example.com/subsite").
 	 */
@@ -299,7 +300,7 @@ class Geodirectory {
 	/**
 	 * Clean up Cloudflare images when a GeoDirectory listing is deleted.
 	 *
-	 * @since 1.9.9
+	 * @since 1.10.0
 	 *
 	 * @param int $post_id Post ID.
 	 */

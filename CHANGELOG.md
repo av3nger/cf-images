@@ -1,4 +1,4 @@
-= 1.9.9 =
+= 1.10.0 =
 
 Added:
 * Compatibility with Geodirectory plugin

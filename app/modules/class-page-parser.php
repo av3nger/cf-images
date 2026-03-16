@@ -104,7 +104,7 @@ class Page_Parser extends Module {
 			 * Integrations can use this filter to cache URL-to-Cloudflare-ID mappings
 			 * or modify src/srcset values for images they manage.
 			 *
-			 * @since 1.9.9
+			 * @since 1.10.0
 			 *
 			 * @param array  $sources {
 			 *     @type string $src    Image src attribute value.
