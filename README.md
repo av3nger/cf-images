@@ -101,6 +101,9 @@ If something is still not working for you, please let me know by creating a supp
 Added:
 * Compatibility with Geodirectory plugin
 
+Enhance:
+* Network settings management
+
 Fixed:
 * Page parser not properly detecting images sizes for WebP and AVIF formats
 * PHP warning: Implicitly marking parameter $value as nullable is deprecated
