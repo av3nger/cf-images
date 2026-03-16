@@ -51,7 +51,7 @@ class Geodirectory {
 	 *
 	 * @var array<string, string>
 	 */
-	private static array $url_cf_map = array();
+	private static $url_cf_map = array();
 
 	/**
 	 * Class constructor.
