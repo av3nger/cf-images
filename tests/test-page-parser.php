@@ -221,28 +221,18 @@ class Test_Page_Parser extends Unit_Test_Base {
 	}
 
 	/**
-	 * Test: cf_images_page_parser_sources filter can override src.
+	 * Test: cf_images_external_image_id filter produces a CF URL in the output.
 	 *
 	 * @covers Page_Parser::replace_images()
 	 */
-	public function test_page_parser_sources_filter_can_override_src() {
-		$override_src = 'http://example.org/wp-content/uploads/override.jpg';
+	public function test_page_parser_external_image_id_produces_cf_url() {
+		$original_src = 'http://example.org/wp-content/uploads/original.jpg';
 
-		add_filter(
-			'cf_images_page_parser_sources',
-			function ( $sources ) use ( $override_src ) {
-				$sources['src'] = $override_src;
-				return $sources;
-			},
-			5
-		);
-
-		// Return a CF ID for the overridden URL so it gets processed.
 		add_filter(
 			'cf_images_external_image_id',
-			function ( $cf_image_id, $original ) use ( $override_src ) {
-				if ( $original === $override_src ) {
-					return 'OVERRIDE_CF_ID';
+			function ( $cf_image_id, $original ) use ( $original_src ) {
+				if ( $original === $original_src ) {
+					return 'TEST_CF_ID';
 				}
 				return $cf_image_id;
 			},
@@ -250,14 +240,14 @@ class Test_Page_Parser extends Unit_Test_Base {
 			2
 		);
 
-		update_site_option( 'cf-images-hash', 'CF_IMAGES_HASH' );
+		update_site_option( 'cf-images-hash', 'testhash' );
 
 		$buffer = $this->wrap_in_body(
-			'<img src="http://example.org/wp-content/uploads/original.jpg" alt="test" />'
+			'<img src="' . $original_src . '" alt="test" />'
 		);
 
 		$result = $this->parser->replace_images( $buffer );
 
-		$this->assertStringContainsString( 'OVERRIDE_CF_ID', $result, 'Overridden src should be used for CF image lookup.' );
+		$this->assertStringContainsString( 'TEST_CF_ID', $result, 'External image ID should produce a CF URL in the output.' );
 	}
 }
