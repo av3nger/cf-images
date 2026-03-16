@@ -205,7 +205,7 @@ class Geodirectory {
 	 *
 	 * @since 1.9.9
 	 *
-	 * @param array  $sources {
+	 * @param array  $sources { Sources attribute.
 	 *     @type string $src    Image src attribute value.
 	 *     @type string $srcset Image srcset attribute value.
 	 * }

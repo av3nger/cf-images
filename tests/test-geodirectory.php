@@ -127,7 +127,10 @@ class Test_Geodirectory extends Unit_Test_Base {
 
 		// Prime the cache.
 		$this->geodir->resolve_image_sources(
-			array( 'src' => $src, 'srcset' => '' ),
+			array(
+				'src'    => $src,
+				'srcset' => ''
+			),
 			'<img src="' . $src . '" class="geodir-image-' . $gd_id . '" />'
 		);
 

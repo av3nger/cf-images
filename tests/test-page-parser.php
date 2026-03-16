@@ -24,7 +24,7 @@ class Test_Page_Parser extends Unit_Test_Base {
 	public function set_up() {
 		parent::set_up();
 
-		$this->parser = new Page_Parser();
+		$this->parser = new Page_Parser( 'page-parser' );
 	}
 
 	/**
