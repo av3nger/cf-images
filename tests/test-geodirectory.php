@@ -63,7 +63,7 @@ class Test_Geodirectory extends Unit_Test_Base {
 		update_post_meta( $post_id, Geodirectory::META_KEY, array( $gd_id => $cf_id ) );
 
 		// Set the global post so get_the_ID() works.
-		$GLOBALS['post'] = get_post( $post_id );
+		$GLOBALS['post'] = get_post( $post_id ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 
 		$src     = 'http://example.org/wp-content/uploads/geodir/photo.jpg';
 		$sources = array(
@@ -94,7 +94,7 @@ class Test_Geodirectory extends Unit_Test_Base {
 	public function test_resolve_returns_sources_unchanged_when_no_meta() {
 		$post_id = self::factory()->post->create();
 
-		$GLOBALS['post'] = get_post( $post_id );
+		$GLOBALS['post'] = get_post( $post_id ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 
 		$sources = array(
 			'src'    => 'http://example.org/wp-content/uploads/geodir/no-meta.jpg',
@@ -123,13 +123,13 @@ class Test_Geodirectory extends Unit_Test_Base {
 		$src     = 'http://example.org/wp-content/uploads/geodir/known.jpg';
 
 		update_post_meta( $post_id, Geodirectory::META_KEY, array( $gd_id => $cf_id ) );
-		$GLOBALS['post'] = get_post( $post_id );
+		$GLOBALS['post'] = get_post( $post_id ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 
 		// Prime the cache.
 		$this->geodir->resolve_image_sources(
 			array(
 				'src'    => $src,
-				'srcset' => ''
+				'srcset' => '',
 			),
 			'<img src="' . $src . '" class="geodir-image-' . $gd_id . '" />'
 		);

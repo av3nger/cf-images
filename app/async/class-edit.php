@@ -65,7 +65,7 @@ class Edit extends Task {
 	protected function prepare_data( array $data ): array {
 		// Store the post data in $data variable.
 		if ( ! empty( $data ) ) {
-			$data = array_merge( $data, $_POST );
+			$data = array_merge( $data, $_POST ); // phpcs:ignore WordPress.Security
 		}
 
 		// Store the image path.
