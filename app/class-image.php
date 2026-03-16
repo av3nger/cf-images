@@ -335,8 +335,8 @@ class Image {
 			return false;
 		}
 
-		if ( preg_match( '/-(\d+)x(\d+)\.(jpg|jpeg|png|gif)$/i', $image_url, $size ) ) {
-			$original = preg_replace( '/-\d+x\d+(?=\.(jpg|jpeg|png|gif)$)/i', '', $image_url );
+		if ( preg_match( '/-(\d+)x(\d+)\.(jpg|jpeg|png|gif|webp|avif)$/i', $image_url, $size ) ) {
+			$original = preg_replace( '/-\d+x\d+(?=\.(jpg|jpeg|png|gif|webp|avif)$)/i', '', $image_url );
 		} elseif ( false !== strpos( $image_url, '-scaled.' ) ) {
 			$original = str_replace( '-scaled.', '.', $image_url );
 
@@ -373,13 +373,28 @@ class Image {
 		}
 
 		if ( 0 === $this->id ) {
-			return false;
+			/**
+			 * Resolve a Cloudflare image ID for images that have no WP attachment post.
+			 *
+			 * @since 1.9.9
+			 *
+			 * @param string $cf_image_id Cloudflare image ID (empty string by default).
+			 * @param string $original    Normalized original image URL.
+			 * @param string $image_url   Raw image URL (before normalization).
+			 */
+			$this->cf_image_id = apply_filters( 'cf_images_external_image_id', '', $original, $image_url );
+
+			if ( empty( $this->cf_image_id ) ) {
+				return false;
+			}
+
+			$hash = apply_filters( 'cf_images_hash', get_site_option( 'cf-images-hash', '' ) );
+		} else {
+			// This is used with WPML integration.
+			$attachment_id = apply_filters( 'cf_images_media_post_id', $this->id );
+
+			list( $hash, $this->cf_image_id ) = Cloudflare_Images::get_hash_id_url_string( $attachment_id );
 		}
-
-		// This is used with WPML integration.
-		$attachment_id = apply_filters( 'cf_images_media_post_id', $this->id );
-
-		list( $hash, $this->cf_image_id ) = Cloudflare_Images::get_hash_id_url_string( $attachment_id );
 
 		if ( empty( $this->cf_image_id ) || ( empty( $hash ) && ! apply_filters( 'cf_images_module_enabled', false, 'custom-path' ) ) ) {
 			return false;

@@ -1,6 +1,10 @@
 = 1.9.9 =
 
+Added:
+* Compatibility with Geodirectory plugin
+
 Fixed:
+* Page parser not properly detecting images sizes for WebP and AVIF formats
 * PHP warning: Implicitly marking parameter $value as nullable is deprecated
 * PHP notice: Function _load_textdomain_just_in_time was called incorrectly
 * Broken srcset parsing caused by unencoded commas in Cloudflare Image URLs

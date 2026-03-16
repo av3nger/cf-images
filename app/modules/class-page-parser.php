@@ -84,8 +84,40 @@ class Page_Parser extends Module {
 		}
 
 		foreach ( $images[0] as $key => $image_dom ) {
-			$image  = new Image( $image_dom, $images[1][ $key ], $images[2][ $key ] );
-			$buffer = str_replace( $image_dom, $image->get_processed(), $buffer );
+			$src    = $images[1][ $key ];
+			$srcset = $images[2][ $key ];
+
+			// Promote data-src/data-srcset for lazy-loaded images.
+			if ( empty( $src ) || str_starts_with( $src, 'data:' ) ) {
+				if ( preg_match( '/\sdata-src=[\'"]([^\'"]+)[\'"]/', $image_dom, $ds ) ) {
+					$src = $ds[1];
+				}
+			}
+
+			if ( empty( $srcset ) && preg_match( '/\sdata-srcset=[\'"]([^\'"]+)[\'"]/', $image_dom, $dss ) ) {
+				$srcset = $dss[1];
+			}
+
+			/**
+			 * Allow integrations to resolve metadata for images before the Image class processes them.
+			 *
+			 * Integrations can use this filter to cache URL-to-Cloudflare-ID mappings
+			 * or modify src/srcset values for images they manage.
+			 *
+			 * @since 1.9.9
+			 *
+			 * @param array  $sources {
+			 *     @type string $src    Image src attribute value.
+			 *     @type string $srcset Image srcset attribute value.
+			 * }
+			 * @param string $image_dom Original image DOM element string (unmodified).
+			 */
+			$sources = apply_filters( 'cf_images_page_parser_sources', compact( 'src', 'srcset' ), $image_dom );
+			$src     = $sources['src'] ?? $src;
+			$srcset  = $sources['srcset'] ?? $srcset;
+
+			$image  = new Image( $image_dom, $src, $srcset );
+			$buffer = str_replace( $images[0][ $key ], $image->get_processed(), $buffer );
 		}
 
 		return $buffer;
