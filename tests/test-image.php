@@ -198,45 +198,4 @@ class Test_Image extends Unit_Test_Base {
 		$this->assertStringNotContainsString( 'imagedelivery.net', $image->get_processed(), 'Image should be left unchanged when filter returns empty.' );
 		$this->assertSame( $image_html, $image->get_processed(), 'Original HTML should be returned unchanged.' );
 	}
-
-	/**
-	 * Test: srcset URLs should have commas encoded as %2C.
-	 *
-	 * @see https://github.com/av3nger/cf-images/issues/66
-	 */
-	public function test_srcset_encodes_commas() {
-		$original  = $this->get_original_image_object( 'original' );
-		$thumbnail = $this->get_original_image_object( 'thumbnail' );
-		$this->add_cf_image_id_and_hash();
-
-		add_filter(
-			'cf_images_module_enabled',
-			function ( $value, $module ) {
-				if ( 'auto-crop' === $module || 'smallest-size' === $module ) {
-					return true;
-				}
-
-				return $value;
-			},
-			10,
-			2
-		);
-
-		$srcset     = $thumbnail[0] . ' 150w';
-		$image_html = '<img src="' . $original[0] . '" srcset="' . $srcset . '" width="350" height="350" />';
-		$image      = new Image( $image_html, $original[0], $srcset );
-
-		$processed = $image->get_processed();
-
-		// The src attribute should still contain literal commas.
-		$this->assertStringContainsString( '/w=350,h=350,fit=crop', $processed, 'Src URL should retain literal commas.' );
-
-		// The srcset attribute should have commas encoded as %2C.
-		preg_match( '/srcset="([^"]+)"/', $processed, $matches );
-		$srcset_value = $matches[1] ?? '';
-
-		$this->assertNotEmpty( $srcset_value, 'Processed image should have a srcset attribute.' );
-		$this->assertStringContainsString( '%2C', $srcset_value, 'Srcset URLs should encode commas as %2C.' );
-		$this->assertStringNotContainsString( ',h=', $srcset_value, 'Srcset URLs should not contain literal comma before h=.' );
-	}
 }

@@ -6,7 +6,7 @@ Donate link: https://www.paypal.com/donate/?business=JRR6QPRGTZ46N&no_recurring=
 Requires at least: 5.6
 Requires PHP: 7.0
 Tested up to: 7.0
-Stable tag: 1.10.0
+Stable tag: 1.10.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -95,6 +95,11 @@ If something is still not working for you, please let me know by creating a supp
 3. Quick and easy setup wizard
 
 == Changelog ==
+
+= 1.10.1 - 18.03.2026 =
+
+Fixed:
+* Malformed links in image srcset
 
 = 1.10.0 - 17.03.2026 =
 

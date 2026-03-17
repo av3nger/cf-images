@@ -233,15 +233,6 @@ class Image {
 			}
 
 			if ( $src ) {
-				/**
-				 * Encode commas in srcset URLs to prevent conflict with the srcset delimiter.
-				 *
-				 * @see https://github.com/av3nger/cf-images/issues/66
-				 */
-				if ( ! $is_src ) {
-					$src = str_replace( ',', '%2C', $src );
-				}
-
 				$image = str_replace( $link, $src, empty( $this->processed ) ? $this->image : $this->processed );
 
 				// Some themes remove the default wp-image-* class, add it if missing.
@@ -349,7 +340,7 @@ class Image {
 		}
 
 		$width = $this->calculate_size( 'width', $size );
-		$crop  = $this->get_crop_string( $width, $size );
+		$crop  = $this->get_crop_string( $width, $size, $is_src );
 
 		/**
 		 * Keep a reference to the original width, to be used when building srcset values in the auto resize module.
@@ -435,12 +426,13 @@ class Image {
 	 *
 	 * @since 1.8.0
 	 *
-	 * @param int   $width Image width.
-	 * @param array $size  Size array.
+	 * @param int   $width  Image width.
+	 * @param array $size   Size array.
+	 * @param bool  $is_src Is this the src attribute.
 	 *
 	 * @return string
 	 */
-	private function get_crop_string( int $width, array $size ): string {
+	private function get_crop_string( int $width, array $size, bool $is_src = false ): string {
 		$crop_string = '';
 
 		if ( ! apply_filters( 'cf_images_module_enabled', false, 'auto-crop' ) ) {
@@ -449,7 +441,8 @@ class Image {
 
 		$height = $this->calculate_size( 'height', $size );
 
-		if ( 9999 !== $height && $width === $height ) {
+		// We cannot add comma symbols to srcset images.
+		if ( 9999 !== $height && $width === $height && $is_src ) {
 			$crop_string = ",h=$height,fit=crop";
 		}
 

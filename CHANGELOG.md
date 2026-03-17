@@ -1,3 +1,8 @@
+= 1.10.1 - 18.03.2026 =
+
+Fixed:
+* Malformed links in image srcset
+
 = 1.10.0 - 17.03.2026 =
 
 Added:
