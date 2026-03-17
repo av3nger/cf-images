@@ -1,4 +1,4 @@
-= 1.10.0 =
+= 1.10.0 - 17.03.2026 =
 
 Added:
 * Compatibility with Geodirectory plugin

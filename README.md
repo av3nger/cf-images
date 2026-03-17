@@ -96,7 +96,7 @@ If something is still not working for you, please let me know by creating a supp
 
 == Changelog ==
 
-= 1.10.0 =
+= 1.10.0 - 17.03.2026 =
 
 Added:
 * Compatibility with Geodirectory plugin
@@ -234,50 +234,6 @@ Added:
 Fixed:
 * Page parser will now add the wp-image-* class to images that do not have it
 * Page parser not detecting images that have a custom title set in the media library
-
-= 1.7.1 - 31.12.2023 =
-
-Fixed:
-* Fatal error on plugin uninstall
-* Do not bulk offload SVG images
-* Compatibility with Gutenberg Interactivity API
-* Type error when fetching image hashes
-
-= 1.7.0 - 03.12.2023 =
-
-Added:
-* Bunny CDN integration
-* Service tools module - reset ignored images
-* Custom URLs module - control your image links
-* Track stats for images served via Cloudflare Images
-* REST API integration module
-
-Changed:
-* UI/UX improvements
-
-Fixed:
-* Notices getting injected into plugin navigation
-* Do not expose internal methods to WP CLI commands
-* WP CLI command only processing the first 10 images
-* Auto resize feature using incorrect descriptors
-* Page parser not replacing all images
-* Expand on click functionality
-
-= 1.6.0 - 12.11.2023 =
-
-Added:
-* Generate images with AI
-* Logging module
-* Images in media library can now be sorted by offload status
-* Integration with ShortPixel
-* Compatibility option to store credentials in the database
-
-Changed:
-* Increase timeout to 15 seconds when offloading images
-
-Fixed:
-* Bulk processing stops if an image triggers an error during upload
-* Settings resetting on update after using a beta version
 
 [Full changelog](https://github.com/av3nger/cf-images/blob/master/CHANGELOG.md).
 
