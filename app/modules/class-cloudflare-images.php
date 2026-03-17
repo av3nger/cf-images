@@ -140,10 +140,12 @@ class Cloudflare_Images extends Module {
 	 * @param string|int|int[] $size          Requested image size. Can be any registered image size name, or
 	 *                                        an array of width and height values in pixels (in that order),
 	 *                                        can also be just a single integer value.
+	 * @param bool             $skip_params   Skip `h` and `crop` parameters, because we cannot use a comma symbol
+	 *                                        in srcset links.
 	 *
 	 * @return array|false
 	 */
-	public function get_attachment_image_src( $image, $attachment_id, $size ) {
+	public function get_attachment_image_src( $image, $attachment_id, $size, $skip_params = false ) {
 		if ( ! $this->can_run( (int) $attachment_id ) || ! $image ) {
 			do_action( 'cf_images_log', 'Cannot run get_attachment_image_src(), returning original. Attachment ID: %s. Image: %s', $attachment_id, $image );
 			return $image;
@@ -165,18 +167,28 @@ class Cloudflare_Images extends Module {
 
 		// If this is a known crop image.
 		if ( is_string( $size ) && isset( $this->registered_sizes[ $size ]['crop'] ) && true === $this->registered_sizes[ $size ]['crop'] && ! apply_filters( 'cf_images_disable_crop', false ) ) {
-			$image[0] = $cf_image . '/w=' . $this->registered_sizes[ $size ]['width'] . ',h=' . $this->registered_sizes[ $size ]['height'] . ',fit=crop';
+			$image[0] = $cf_image . '/w=' . $this->registered_sizes[ $size ]['width'];
+
+			if ( ! $skip_params ) {
+				$image[0] = $image[0] . ',h=' . $this->registered_sizes[ $size ]['height'] . ',fit=crop';
+			}
+
 			return $image;
 		}
 
 		// Image with defined dimensions.
 		if ( isset( $image[1] ) && $image[1] > 0 ) {
 			$height_str = '';
-			if ( isset( $image[2] ) && $image[2] > 0 ) {
+			if ( isset( $image[2] ) && $image[2] > 0 && ! $skip_params ) {
 				$height_str = ',h=' . $image[2] . ( $image[1] === $image[2] ? ',fit=crop' : '' );
 			}
 
-			$image[0] = $cf_image . '/w=' . $image[1] . $height_str;
+			$image[0] = $cf_image . '/w=' . $image[1];
+
+			if ( ! $skip_params ) {
+				$image[0] = $image[0] . $height_str;
+			}
+
 			return $image;
 		}
 
@@ -189,12 +201,22 @@ class Cloudflare_Images extends Module {
 			$width_key  = array_search( (int) $variant_image[2], $this->widths, true );
 
 			if ( $width_key && $height_key && $width_key === $height_key && true === $this->registered_sizes[ $width_key ]['crop'] ) {
-				$image[0] = $cf_image . '/w=' . $variant_image[1] . ',h=' . $variant_image[2] . ',fit=crop';
+				$image[0] = $cf_image . '/w=' . $variant_image[1];
+
+				if ( ! $skip_params ) {
+					$image[0] = $image[0] . ',h=' . $variant_image[2] . ',fit=crop';
+				}
+
 				return $image;
 			}
 
 			// Not a cropped image.
-			$image[0] = $cf_image . '/w=' . $variant_image[1] . ',h=' . $variant_image[2];
+			$image[0] = $cf_image . '/w=' . $variant_image[1];
+
+			if ( ! $skip_params ) {
+				$image[0] = $image[0] . ',h=' . $variant_image[2];
+			}
+
 			return $image;
 		}
 
@@ -324,14 +346,9 @@ class Cloudflare_Images extends Module {
 				continue;
 			}
 
-			$image = $this->get_attachment_image_src( array( $size['url'] ), $attachment_id, $id );
+			$image = $this->get_attachment_image_src( array( $size['url'] ), $attachment_id, $id, true );
 
-			/**
-			 * Encode commas in srcset URLs to prevent conflict with the srcset delimiter.
-			 *
-			 * @see https://github.com/av3nger/cf-images/issues/66
-			 */
-			$sources[ $id ]['url'] = str_replace( ',', '%2C', $image[0] );
+			$sources[ $id ]['url'] = $image[0];
 		}
 
 		return $sources;
