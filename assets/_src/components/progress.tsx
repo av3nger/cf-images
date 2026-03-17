@@ -65,11 +65,13 @@ const ProgressBar = ({ action }) => {
 
 	useEffect(() => {
 		if (error || success) {
-			setTimeout(() => {
+			const timer = setTimeout(() => {
 				setError('');
 				setSuccess(false);
 				setInProgress(false);
 			}, 5000);
+
+			return () => clearTimeout(timer);
 		}
 	}, [error, success]);
 
