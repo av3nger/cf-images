@@ -189,6 +189,15 @@ class Settings {
 	}
 
 	/**
+	 * Hide Eluxo upsell.
+	 *
+	 * @since 1.10.0
+	 */
+	public function ajax_hide_eluxo() {
+		update_site_option( 'cf-images-hide-eluxo', true );
+	}
+
+	/**
 	 * Update settings from React app.
 	 *
 	 * @since 1.5.0

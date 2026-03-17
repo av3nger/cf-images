@@ -13,6 +13,7 @@ import { __ } from '@wordpress/i18n';
  * Internal dependencies
  */
 import SettingsContext from '../context/settings';
+import EluxoUpsell from '../modules/eluxo/upsell';
 
 const Nav = () => {
 	const { modules, noticeHidden, integrations } = useContext(SettingsContext);
@@ -22,6 +23,7 @@ const Nav = () => {
 	};
 
 	return (
+	<>
 		<aside className="menu">
 			<span className="is-size-4 pb-3 cf-plugin-title">
 				{__('Offload. Store. Resize.', 'cf-images')}
@@ -114,6 +116,8 @@ const Nav = () => {
 				</>
 			)}
 		</aside>
+		<EluxoUpsell />
+	</>
 	);
 };
 
