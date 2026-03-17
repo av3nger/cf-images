@@ -1,7 +1,7 @@
 = 1.10.0 - 17.03.2026 =
 
 Added:
-* Compatibility with Geodirectory plugin
+* Integration with Geodirectory plugin
 * Compatibility with WordPress 7.0
 
 Enhance:
