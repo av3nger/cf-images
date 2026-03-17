@@ -2,6 +2,7 @@
 
 Added:
 * Compatibility with Geodirectory plugin
+* Compatibility with WordPress 7.0
 
 Enhance:
 * Network settings management

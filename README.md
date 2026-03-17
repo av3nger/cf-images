@@ -100,6 +100,7 @@ If something is still not working for you, please let me know by creating a supp
 
 Added:
 * Compatibility with Geodirectory plugin
+* Compatibility with WordPress 7.0
 
 Enhance:
 * Network settings management
