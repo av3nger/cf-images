@@ -162,4 +162,68 @@ class Test_Geodirectory extends Unit_Test_Base {
 		$result = $this->geodir->resolve_external_image_id( $existing, 'http://example.org/any.jpg', 'http://example.org/any.jpg' );
 		$this->assertSame( $existing, $result, 'Should preserve an existing CF ID without overwriting.' );
 	}
+
+	/**
+	 * Test: add_wp_query_args() returns args unchanged when GeoDirectory functions are not available.
+	 *
+	 * @covers Geodirectory::add_wp_query_args()
+	 */
+	public function test_add_wp_query_args_returns_unchanged_without_geodir() {
+		$args = array(
+			'post_type'   => 'attachment',
+			'post_status' => 'inherit',
+		);
+
+		$result = $this->geodir->add_wp_query_args( $args, 'upload' );
+
+		$this->assertSame( $args, $result, 'Args should be unchanged when geodir_get_posttypes() is not available.' );
+	}
+
+	/**
+	 * Test: add_wp_query_args() returns args unchanged for non-bulk actions.
+	 *
+	 * @covers Geodirectory::add_wp_query_args()
+	 */
+	public function test_add_wp_query_args_skips_non_bulk_actions() {
+		$args = array(
+			'post_type'   => 'attachment',
+			'post_status' => 'inherit',
+		);
+
+		$result = $this->geodir->add_wp_query_args( $args, 'compress' );
+
+		$this->assertSame( $args, $result, 'Args should be unchanged for non-upload/remove actions.' );
+	}
+
+	/**
+	 * Test: bulk_process_post() returns false for non-GeoDirectory post types.
+	 *
+	 * @covers Geodirectory::bulk_process_post()
+	 */
+	public function test_bulk_process_post_returns_false_for_non_geodir() {
+		$post_id = self::factory()->post->create( array( 'post_type' => 'post' ) );
+		$post    = get_post( $post_id );
+
+		$result = $this->geodir->bulk_process_post( false, $post, 'upload' );
+
+		$this->assertFalse( $result, 'Should return false for non-GeoDirectory post types.' );
+
+		wp_delete_post( $post_id, true );
+	}
+
+	/**
+	 * Test: bulk_process_post() preserves already-handled state.
+	 *
+	 * @covers Geodirectory::bulk_process_post()
+	 */
+	public function test_bulk_process_post_preserves_handled() {
+		$post_id = self::factory()->post->create();
+		$post    = get_post( $post_id );
+
+		$result = $this->geodir->bulk_process_post( true, $post, 'upload' );
+
+		$this->assertTrue( $result, 'Should return true when already handled by another integration.' );
+
+		wp_delete_post( $post_id, true );
+	}
 }

@@ -336,20 +336,33 @@ class Media {
 		// Look for images that have been offloaded.
 		$image = new WP_Query( $args );
 
-		if ( 'upload' === $action ) {
-			$metadata = wp_get_attachment_metadata( $image->post->ID );
-			if ( false === $metadata ) {
-				update_post_meta( $image->post->ID, '_cloudflare_image_skip', true );
-			} else {
-				$this->upload_image( $metadata, $image->post->ID );
+		/**
+		 * Allow integrations to handle bulk processing for non-attachment post types.
+		 *
+		 * @since 1.10.0
+		 *
+		 * @param bool    $handled Whether the post was handled by an integration.
+		 * @param WP_Post $post    The post object being processed.
+		 * @param string  $action  The bulk action: 'upload' or 'remove'.
+		 */
+		$handled = apply_filters( 'cf_images_bulk_process_post', false, $image->post, $action );
 
-				// If there's an error with offloading, we need to mark such an image as skipped.
-				if ( is_wp_error( Core::get_error() ) ) {
+		if ( ! $handled ) {
+			if ( 'upload' === $action ) {
+				$metadata = wp_get_attachment_metadata( $image->post->ID );
+				if ( false === $metadata ) {
 					update_post_meta( $image->post->ID, '_cloudflare_image_skip', true );
+				} else {
+					$this->upload_image( $metadata, $image->post->ID );
+
+					// If there's an error with offloading, we need to mark such an image as skipped.
+					if ( is_wp_error( Core::get_error() ) ) {
+						update_post_meta( $image->post->ID, '_cloudflare_image_skip', true );
+					}
 				}
+			} elseif ( 'remove' === $action ) {
+				$this->remove_from_cloudflare( $image->post->ID );
 			}
-		} elseif ( 'remove' === $action ) {
-			$this->remove_from_cloudflare( $image->post->ID );
 		}
 
 		do_action( 'cf_images_bulk_step', $image->post->ID, $action );
@@ -393,8 +406,10 @@ class Media {
 	 *
 	 * @param array $data          Array of updated attachment meta data.
 	 * @param int   $attachment_id Attachment post ID.
+	 *
+	 * @return array
 	 */
-	public function update_image( array $data, int $attachment_id ) {
+	public function update_image( array $data, int $attachment_id ): array {
 		// Only process image editor updates.
 		if ( ! doing_action( 'wp_ajax_image-editor' ) ) {
 			return $data;
