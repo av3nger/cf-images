@@ -13,35 +13,18 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import { post } from '../../js/helpers/post';
 import Card from '../../components/card';
 import SettingsContext from '../../context/settings';
+import { useApiSave } from '../../hooks/useApiSave';
 
 const BrowserTTL = () => {
 	const { browserTTL } = useContext(SettingsContext);
 
 	const [ttl, setTTL] = useState(parseInt(browserTTL));
-	const [done, setDone] = useState(false);
-	const [error, setError] = useState('');
-	const [saving, setSaving] = useState(false);
+	const { saving, done, error, execute } = useApiSave();
 
 	const saveTTL = () => {
-		setError('');
-		setSaving(true);
-
-		post('cf_images_set_ttl', { ttl })
-			.then((response: ApiResponse) => {
-				setSaving(false);
-
-				if (!response.success && response.data) {
-					setError(response.data);
-					setTimeout(() => setError(''), 10000);
-				} else {
-					setDone(true);
-					setTimeout(() => setDone(false), 2000);
-				}
-			})
-			.catch(window.console.log);
+		execute('cf_images_set_ttl', { ttl });
 	};
 
 	return (

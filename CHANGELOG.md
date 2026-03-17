@@ -6,6 +6,7 @@ Added:
 
 Enhance:
 * Network settings management
+* Code quality improvements
 
 Fixed:
 * Fix HTML links on dropdowns in media library

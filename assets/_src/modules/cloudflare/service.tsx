@@ -1,7 +1,6 @@
 /**
  * External dependencies
  */
-import { useState } from 'react';
 import * as classNames from 'classnames';
 import { mdiWrenchCogOutline } from '@mdi/js';
 
@@ -14,28 +13,13 @@ import { __ } from '@wordpress/i18n';
  * Internal dependencies
  */
 import Card from '../../components/card';
-import { post } from '../../js/helpers/post';
+import { useApiSave } from '../../hooks/useApiSave';
 
 const Service = () => {
-	const [done, setDone] = useState(false);
-	const [error, setError] = useState('');
-	const [loading, setLoading] = useState(false);
+	const { saving: loading, done, error, execute } = useApiSave();
 
 	const resetIgnoreMeta = () => {
-		setLoading(true);
-
-		post('cf_images_reset_ignored')
-			.then((response: ApiResponse) => {
-				if (!response.success && response.data) {
-					setError(response.data);
-					setTimeout(() => setError(''), 10000);
-				} else {
-					setDone(true);
-					setTimeout(() => setDone(false), 2000);
-				}
-			})
-			.catch(window.console.log)
-			.finally(() => setLoading(false));
+		execute('cf_images_reset_ignored');
 	};
 
 	return (
