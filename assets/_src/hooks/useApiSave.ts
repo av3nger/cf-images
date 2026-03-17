@@ -9,7 +9,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { post } from '../js/helpers/post';
 
 const ERROR_TIMEOUT = 10000;
-const SUCCESS_TIMEOUT = 2000;
+const SUCCESS_TIMEOUT = 4000;
 
 /**
  * Hook for API save operations with loading, success, and error state management.
