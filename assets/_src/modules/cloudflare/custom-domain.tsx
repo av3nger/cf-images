@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import * as classNames from 'classnames';
 import Icon from '@mdi/react';
 import { mdiCheck, mdiLinkVariant } from '@mdi/js';
@@ -14,36 +14,18 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import { post } from '../../js/helpers/post';
 import Card from '../../components/card';
 import SettingsContext from '../../context/settings';
+import { useApiSave } from '../../hooks/useApiSave';
 
 const CustomDomain = () => {
-	const [done, setDone] = useState(false);
-	const [error, setError] = useState('');
-	const [saving, setSaving] = useState(false);
-
+	const { saving, done, error, execute } = useApiSave();
 	const { domain, modules, setDomain } = useContext(SettingsContext);
 
 	const moduleId = 'custom-domain';
 
 	const saveDomain = () => {
-		setError('');
-		setSaving(true);
-
-		post('cf_images_set_custom_domain', { domain })
-			.then((response: ApiResponse) => {
-				setSaving(false);
-
-				if (!response.success && response.data) {
-					setError(response.data);
-					setTimeout(() => setError(''), 10000);
-				} else {
-					setDone(true);
-					setTimeout(() => setDone(false), 2000);
-				}
-			})
-			.catch(window.console.log);
+		execute('cf_images_set_custom_domain', { domain });
 	};
 
 	return (

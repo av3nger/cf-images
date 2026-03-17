@@ -22,6 +22,7 @@ interface CFImages {
     cdnEnabled: boolean;
     isNetworkAdmin: boolean;
     integrationData: object;
+    hideEluxo: boolean;
 }
 
 interface SettingsContextType {
@@ -45,6 +46,8 @@ interface SettingsContextType {
     setDomain: (domain: string) => void;
     cdnEnabled: boolean;
     setCdnEnabled: (cdnEnabled: boolean) => void;
+    eluxoHidden: boolean;
+    hideEluxo: (hide: boolean) => void;
 }
 
 interface StatsType {

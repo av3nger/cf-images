@@ -41,7 +41,7 @@ class AIO_SEO extends Integration {
 	 * @since 1.9.3
 	 */
 	protected function init() {
-		$this->name = esc_html__( 'All in One SEO', 'cf-images' );
+		$this->name = 'All in One SEO';
 		$this->slug = 'aio_seo';
 
 		/**

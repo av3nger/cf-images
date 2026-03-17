@@ -81,11 +81,31 @@ class Multisite extends Module {
 			return $settings;
 		}
 
+		// Cache the network-wide flag to avoid repeated DB lookups.
+		static $network_wide = null;
+		if ( null === $network_wide ) {
+			$network_wide = (bool) get_site_option( 'cf-images-network-wide' );
+		}
+
 		if ( is_main_site() ) {
-			$settings['network-wide'] = get_site_option( 'cf-images-network-wide' );
+			$settings['network-wide'] = $network_wide;
 			return $settings;
 		}
 
-		return get_site_option( 'cf-images-settings', Settings::get_defaults() );
+		// Only override subsite settings when network-wide mode is enabled.
+		if ( ! $network_wide ) {
+			return $settings;
+		}
+
+		// Cache main site settings to avoid repeated switch_to_blog calls.
+		static $main_settings = null;
+		if ( null === $main_settings ) {
+			$main_site_id = get_main_site_id();
+			switch_to_blog( $main_site_id );
+			$main_settings = get_option( 'cf-images-settings', Settings::get_defaults() );
+			restore_current_blog();
+		}
+
+		return $main_settings;
 	}
 }

@@ -1,3 +1,21 @@
+= 1.10.0 - 17.03.2026 =
+
+Added:
+* Integration with Geodirectory plugin
+* Compatibility with WordPress 7.0
+
+Enhance:
+* Network settings management
+* Code quality improvements
+
+Fixed:
+* Fix HTML links on dropdowns in media library
+* Page parser not properly detecting images sizes for WebP and AVIF formats
+* PHP warning: Implicitly marking parameter $value as nullable is deprecated
+* PHP notice: Function _load_textdomain_just_in_time was called incorrectly
+* Broken srcset parsing caused by unencoded commas in Cloudflare Image URLs
+* Memory leak from setTimeout without cleanup in progress bar component
+
 = 1.9.8 - 31.12.2025 =
 
 Fixed:

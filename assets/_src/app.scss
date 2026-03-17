@@ -123,6 +123,31 @@ $switch-background-active: $blue;
 	.notification.is-danger {
 		color: white;
 	}
+
+	// Eluxo upsell notice.
+	& .cf-eluxo-notice {
+		font-size: 0.85rem;
+		position: relative;
+
+		&__close {
+			position: absolute;
+			top: 0.6rem;
+			right: 0.6rem;
+			background: none;
+			border: none;
+			cursor: pointer;
+			padding: 0.25rem;
+			line-height: 0;
+			color: inherit;
+			opacity: 0.5;
+		}
+
+		&__links {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+	}
 }
 
 // Remove extra WordPress stuff.

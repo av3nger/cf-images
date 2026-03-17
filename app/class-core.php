@@ -181,6 +181,7 @@ class Core {
 	 * @see Integrations\JS_Composer
 	 * @see Integrations\Flatsome
 	 * @see Integrations\AIO_SEO
+	 * @see Integrations\Geodirectory
 	 */
 	private function init_integrations() {
 		$loader = Loader::get_instance();
@@ -195,6 +196,7 @@ class Core {
 		$loader->integration( 'js-composer' );
 		$loader->integration( 'flatsome' );
 		$loader->integration( 'aio-seo' );
+		$loader->integration( 'geodirectory' );
 	}
 
 	/**

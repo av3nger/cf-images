@@ -326,7 +326,12 @@ class Cloudflare_Images extends Module {
 
 			$image = $this->get_attachment_image_src( array( $size['url'] ), $attachment_id, $id );
 
-			$sources[ $id ]['url'] = $image[0];
+			/**
+			 * Encode commas in srcset URLs to prevent conflict with the srcset delimiter.
+			 *
+			 * @see https://github.com/av3nger/cf-images/issues/66
+			 */
+			$sources[ $id ]['url'] = str_replace( ',', '%2C', $image[0] );
 		}
 
 		return $sources;

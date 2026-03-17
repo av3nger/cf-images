@@ -2,12 +2,13 @@ workflows:
   version: 2
   main:
     jobs:
-      - php72-build
       - php73-build
       - php74-build
       - php80-build
       - php81-build
       - php82-build
+      - php83-build
+      - php84-build
 
 version: 2
 
@@ -37,7 +38,7 @@ job-references:
       - run:
           name: "Run Tests"
           command: |
-            composer global require "phpunit/phpunit=8.*"
+            composer global require "phpunit/phpunit=9.*"
             composer global require yoast/phpunit-polyfills:"^3.0"
             rm -rf $WP_TESTS_DIR $WP_CORE_DIR
             bash bin/install-wp-tests.sh wordpress_test root '' 127.0.0.1 latest
@@ -45,12 +46,6 @@ job-references:
             WP_MULTISITE=1 phpunit
 
 jobs:
-  php72-build:
-    <<: *php_job
-    docker:
-      - image: cimg/php:7.2
-      - image: *mysql_image
-
   php73-build:
     <<: *php_job
     docker:
@@ -79,4 +74,16 @@ jobs:
     <<: *php_job
     docker:
       - image: cimg/php:8.2
+      - image: *mysql_image
+
+  php83-build:
+    <<: *php_job
+    docker:
+      - image: cimg/php:8.3
+      - image: *mysql_image
+
+  php84-build:
+    <<: *php_job
+    docker:
+      - image: cimg/php:8.4
       - image: *mysql_image

@@ -60,6 +60,7 @@ class Admin {
 			add_action( 'wp_ajax_cf_images_do_setup', array( $settings, 'ajax_do_setup' ) );
 			add_action( 'wp_ajax_cf_images_disconnect', array( $settings, 'ajax_disconnect' ) );
 			add_action( 'wp_ajax_cf_images_hide_sidebar', array( $settings, 'ajax_hide_sidebar' ) );
+			add_action( 'wp_ajax_cf_images_hide_eluxo', array( $settings, 'ajax_hide_eluxo' ) );
 			add_action( 'wp_ajax_cf_images_check_status', array( $settings, 'ajax_check_status' ) );
 
 			add_action( 'wp_ajax_cf_images_offload_image', array( $this->media, 'ajax_offload_image' ) );
@@ -135,6 +136,7 @@ class Admin {
 			'cdnEnabled'     => (bool) get_option( 'cf-images-cdn-enabled', false ),
 			'isNetworkAdmin' => is_multisite() && is_main_site(),
 			'browserTTL'     => get_site_option( 'cf-images-browser-ttl', 172800 ),
+			'hideEluxo'      => (bool) get_site_option( 'cf-images-hide-eluxo' ),
 		);
 
 		wp_localize_script(

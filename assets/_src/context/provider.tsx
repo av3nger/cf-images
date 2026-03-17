@@ -22,6 +22,7 @@ const SettingsProvider = ({ children }: { children: ReactElement[] }) => {
 		cfStatus,
 		fuzion,
 		hideSidebar,
+		hideEluxo: hideEluxoInit,
 		isNetworkAdmin,
 		settings,
 		integrationData,
@@ -36,6 +37,7 @@ const SettingsProvider = ({ children }: { children: ReactElement[] }) => {
 	const [inProgress, setInProgress] = useState(false);
 	const [domain, setDomain] = useState(window.CFImages.domain);
 	const [cdnEnabled, setCdnEnabled] = useState(window.CFImages.cdnEnabled);
+	const [eluxoHidden, hideEluxo] = useState(hideEluxoInit);
 
 	const setModule = (module: string, value: boolean) => {
 		const newSettings = { ...modules };
@@ -92,6 +94,8 @@ const SettingsProvider = ({ children }: { children: ReactElement[] }) => {
 				setCdnEnabled,
 				integrations,
 				setIntegration,
+				eluxoHidden,
+				hideEluxo,
 			}}
 		>
 			{children}

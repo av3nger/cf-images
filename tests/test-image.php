@@ -107,4 +107,136 @@ class Test_Image extends Unit_Test_Base {
 
 		$this->assertStringContainsString( '/w=350,h=350,fit=crop', $image->get_processed(), 'Processed image should contain the Cloudflare image.' );
 	}
+
+	/**
+	 * Test: webp image with size suffix is normalized correctly.
+	 *
+	 * @covers Image::generate_url()
+	 */
+	public function test_webp_size_suffix_stripped() {
+		$this->add_cf_image_id_and_hash();
+
+		$year  = gmdate( 'Y' );
+		$month = gmdate( 'm' );
+		$src   = "http://example.org/wp-content/uploads/$year/$month/test-image-300x200.webp";
+
+		$image_html = '<img src="' . $src . '" class="wp-image-' . self::$attachment_id . '" />';
+		$image      = new Image( $image_html, $src, '' );
+
+		$this->assertStringContainsString( 'imagedelivery.net', $image->get_processed(), 'Webp image with size suffix should be processed.' );
+		$this->assertStringContainsString( '/w=300', $image->get_processed(), 'Width should be extracted from the size suffix.' );
+	}
+
+	/**
+	 * Test: avif image with size suffix is normalized correctly.
+	 *
+	 * @covers Image::generate_url()
+	 */
+	public function test_avif_size_suffix_stripped() {
+		$this->add_cf_image_id_and_hash();
+
+		$year  = gmdate( 'Y' );
+		$month = gmdate( 'm' );
+		$src   = "http://example.org/wp-content/uploads/$year/$month/test-image-400x300.avif";
+
+		$image_html = '<img src="' . $src . '" class="wp-image-' . self::$attachment_id . '" />';
+		$image      = new Image( $image_html, $src, '' );
+
+		$this->assertStringContainsString( 'imagedelivery.net', $image->get_processed(), 'Avif image with size suffix should be processed.' );
+		$this->assertStringContainsString( '/w=400', $image->get_processed(), 'Width should be extracted from the size suffix.' );
+	}
+
+	/**
+	 * Test: external image resolved via cf_images_external_image_id filter.
+	 *
+	 * @covers Image::generate_url()
+	 */
+	public function test_external_image_resolved_via_filter() {
+		update_site_option( 'cf-images-hash', 'CF_IMAGES_HASH' );
+
+		$src = 'http://example.org/wp-content/uploads/external/photo.jpg';
+
+		add_filter(
+			'cf_images_external_image_id',
+			function ( $cf_image_id, $original ) use ( $src ) {
+				if ( $original === $src ) {
+					return 'EXTERNAL_CF_ID';
+				}
+				return $cf_image_id;
+			},
+			10,
+			2
+		);
+
+		$image_html = '<img src="' . $src . '" alt="external" />';
+		$image      = new Image( $image_html, $src, '' );
+
+		$this->assertStringContainsString( 'EXTERNAL_CF_ID', $image->get_processed(), 'External image should use the CF ID from the filter.' );
+		$this->assertStringContainsString( 'imagedelivery.net', $image->get_processed(), 'External image should use Cloudflare delivery URL.' );
+	}
+
+	/**
+	 * Test: external image skipped when filter returns empty.
+	 *
+	 * @covers Image::generate_url()
+	 */
+	public function test_external_image_skipped_when_filter_returns_empty() {
+		update_site_option( 'cf-images-hash', 'CF_IMAGES_HASH' );
+
+		$src = 'http://example.org/wp-content/uploads/external/unknown.jpg';
+
+		add_filter(
+			'cf_images_external_image_id',
+			function () {
+				return '';
+			}
+		);
+
+		$image_html = '<img src="' . $src . '" alt="unknown" />';
+		$image      = new Image( $image_html, $src, '' );
+
+		$this->assertStringNotContainsString( 'imagedelivery.net', $image->get_processed(), 'Image should be left unchanged when filter returns empty.' );
+		$this->assertSame( $image_html, $image->get_processed(), 'Original HTML should be returned unchanged.' );
+	}
+
+	/**
+	 * Test: srcset URLs should have commas encoded as %2C.
+	 *
+	 * @see https://github.com/av3nger/cf-images/issues/66
+	 */
+	public function test_srcset_encodes_commas() {
+		$original  = $this->get_original_image_object( 'original' );
+		$thumbnail = $this->get_original_image_object( 'thumbnail' );
+		$this->add_cf_image_id_and_hash();
+
+		add_filter(
+			'cf_images_module_enabled',
+			function ( $value, $module ) {
+				if ( 'auto-crop' === $module || 'smallest-size' === $module ) {
+					return true;
+				}
+
+				return $value;
+			},
+			10,
+			2
+		);
+
+		$srcset     = $thumbnail[0] . ' 150w';
+		$image_html = '<img src="' . $original[0] . '" srcset="' . $srcset . '" width="350" height="350" />';
+		$image      = new Image( $image_html, $original[0], $srcset );
+
+		$processed = $image->get_processed();
+
+		// The src attribute should still contain literal commas.
+		$this->assertStringContainsString( '/w=350,h=350,fit=crop', $processed, 'Src URL should retain literal commas.' );
+
+		// The srcset attribute should have commas encoded as %2C.
+		preg_match( '/srcset="([^"]+)"/', $processed, $matches );
+		$srcset_value = $matches[1] ?? '';
+
+		$this->assertNotEmpty( $srcset_value, 'Processed image should have a srcset attribute.' );
+		$this->assertStringContainsString( '%2C', $srcset_value, 'Srcset URLs should encode commas as %2C.' );
+		$this->assertStringNotContainsString( ',h=', $srcset_value, 'Srcset URLs should not contain literal comma before h=.' );
+	}
 }

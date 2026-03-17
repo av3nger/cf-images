@@ -233,6 +233,15 @@ class Image {
 			}
 
 			if ( $src ) {
+				/**
+				 * Encode commas in srcset URLs to prevent conflict with the srcset delimiter.
+				 *
+				 * @see https://github.com/av3nger/cf-images/issues/66
+				 */
+				if ( ! $is_src ) {
+					$src = str_replace( ',', '%2C', $src );
+				}
+
 				$image = str_replace( $link, $src, empty( $this->processed ) ? $this->image : $this->processed );
 
 				// Some themes remove the default wp-image-* class, add it if missing.
@@ -259,11 +268,11 @@ class Image {
 	 *
 	 * @since 1.8.0
 	 *
-	 * @param string $element Image element.
-	 * @param string $name    Img attribute name (srcset, size, etc).
-	 * @param string $value   Attribute value.
+	 * @param string      $element Image element.
+	 * @param string      $name    Img attribute name (srcset, size, etc).
+	 * @param string|null $value   Attribute value.
 	 */
-	private function add_attribute( string &$element, string $name, string $value = null ) {
+	private function add_attribute( string &$element, string $name, ?string $value = null ) {
 		$closing = false === strpos( $element, '/>' ) ? '>' : ' />';
 		$quotes  = false === strpos( $element, '"' ) ? '\'' : '"';
 
@@ -326,8 +335,8 @@ class Image {
 			return false;
 		}
 
-		if ( preg_match( '/-(\d+)x(\d+)\.(jpg|jpeg|png|gif)$/i', $image_url, $size ) ) {
-			$original = preg_replace( '/-\d+x\d+(?=\.(jpg|jpeg|png|gif)$)/i', '', $image_url );
+		if ( preg_match( '/-(\d+)x(\d+)\.(jpg|jpeg|png|gif|webp|avif)$/i', $image_url, $size ) ) {
+			$original = preg_replace( '/-\d+x\d+(?=\.(jpg|jpeg|png|gif|webp|avif)$)/i', '', $image_url );
 		} elseif ( false !== strpos( $image_url, '-scaled.' ) ) {
 			$original = str_replace( '-scaled.', '.', $image_url );
 
@@ -364,13 +373,28 @@ class Image {
 		}
 
 		if ( 0 === $this->id ) {
-			return false;
+			/**
+			 * Resolve a Cloudflare image ID for images that have no WP attachment post.
+			 *
+			 * @since 1.10.0
+			 *
+			 * @param string $cf_image_id Cloudflare image ID (empty string by default).
+			 * @param string $original    Normalized original image URL.
+			 * @param string $image_url   Raw image URL (before normalization).
+			 */
+			$this->cf_image_id = apply_filters( 'cf_images_external_image_id', '', $original, $image_url );
+
+			if ( empty( $this->cf_image_id ) ) {
+				return false;
+			}
+
+			$hash = apply_filters( 'cf_images_hash', get_site_option( 'cf-images-hash', '' ) );
+		} else {
+			// This is used with WPML integration.
+			$attachment_id = apply_filters( 'cf_images_media_post_id', $this->id );
+
+			list( $hash, $this->cf_image_id ) = Cloudflare_Images::get_hash_id_url_string( $attachment_id );
 		}
-
-		// This is used with WPML integration.
-		$attachment_id = apply_filters( 'cf_images_media_post_id', $this->id );
-
-		list( $hash, $this->cf_image_id ) = Cloudflare_Images::get_hash_id_url_string( $attachment_id );
 
 		if ( empty( $this->cf_image_id ) || ( empty( $hash ) && ! apply_filters( 'cf_images_module_enabled', false, 'custom-path' ) ) ) {
 			return false;
