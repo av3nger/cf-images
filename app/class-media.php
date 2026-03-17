@@ -183,7 +183,7 @@ class Media {
 							<?php esc_html_e( 'Remove from Cloudflare', 'cf-images' ); ?>
 						</a>
 						<?php if ( $deleted ) : ?>
-							<<a href="#" class="dropdown-item cf-images-restore" data-id="<?php echo esc_attr( $post_id ); ?>">
+							<a href="#" class="dropdown-item cf-images-restore" data-id="<?php echo esc_attr( $post_id ); ?>">
 								<img src="<?php echo esc_url( CF_IMAGES_DIR_URL . 'assets/images/icons/download.svg' ); ?>" alt="<?php esc_attr_e( 'Restore in media library', 'cf-images' ); ?>" />
 								<?php esc_html_e( 'Restore in media library', 'cf-images' ); ?>
 							</a>

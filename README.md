@@ -106,6 +106,7 @@ Enhance:
 * Network settings management
 
 Fixed:
+* Fix HTML links on dropdowns in media library
 * Page parser not properly detecting images sizes for WebP and AVIF formats
 * PHP warning: Implicitly marking parameter $value as nullable is deprecated
 * PHP notice: Function _load_textdomain_just_in_time was called incorrectly
