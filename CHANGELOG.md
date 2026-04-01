@@ -35,6 +35,7 @@ Fixed:
 
 Added:
 * Track image changes and update images on Cloudflare
+* Allow image offloading from front-end facing upload forms
 
 Fixed:
 * Performance issues with network installs
