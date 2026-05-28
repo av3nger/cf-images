@@ -1,3 +1,9 @@
+= 1.10.2 - 29.05.2026 =
+
+Fixed:
+* Security issue (CVE-2026-9860)
+* Bulk delete (full offload) stops on error
+
 = 1.10.1 - 18.03.2026 =
 
 Fixed:

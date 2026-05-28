@@ -589,6 +589,9 @@ class Media {
 			$attachment_id = (int) filter_input( INPUT_POST, 'data', FILTER_SANITIZE_NUMBER_INT );
 		}
 
+		// During bulk "full-remove", a per-image failure must skip the image instead of aborting the whole run.
+		$is_bulk = 'cf_images_bulk_process' === filter_input( INPUT_POST, 'action', FILTER_UNSAFE_RAW );
+
 		// This is a backward compat check to make sure we have the original offloaded before removing it.
 		$metadata = wp_get_attachment_metadata( $attachment_id );
 		$original = wp_get_original_image_path( $attachment_id );
@@ -603,10 +606,18 @@ class Media {
 			}
 
 			if ( empty( $results->result->filename ) ) {
+				if ( $is_bulk ) {
+					update_post_meta( $attachment_id, '_cloudflare_image_full_offload_skip', true );
+					return;
+				}
 				wp_send_json_error( esc_html__( 'Cannot map local image to image on Cloudflare.', 'cf-images' ) );
 			}
 
 			if ( isset( $results ) && false !== strpos( $results->result->filename, $metadata['file'] ) ) {
+				if ( $is_bulk ) {
+					update_post_meta( $attachment_id, '_cloudflare_image_full_offload_skip', true );
+					return;
+				}
 				wp_send_json_error( esc_html__( 'Cannot remove image, scaled image offloaded.', 'cf-images' ) );
 			}
 		}

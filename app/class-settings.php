@@ -72,6 +72,10 @@ class Settings {
 	public function ajax_do_setup() {
 		$this->check_ajax_request();
 
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die();
+		}
+
 		$form = filter_input( INPUT_POST, 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 
 		if ( ! isset( $form['account-id'] ) || ! isset( $form['api-key'] ) ) {
