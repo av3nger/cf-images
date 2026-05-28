@@ -100,6 +100,7 @@ If something is still not working for you, please let me know by creating a supp
 
 Fixed:
 * Security issue (CVE-2026-9860)
+* Bulk delete (full offload) stops on error
 
 = 1.10.1 - 18.03.2026 =
 

@@ -96,6 +96,14 @@ class Full_Offload extends Module {
 			),
 		);
 
+		// Exclude images skipped during a previous bulk delete (e.g. scaled-image offloads that cannot be removed).
+		if ( 'full-remove' === $action ) {
+			$args['meta_query'][] = array(
+				'key'     => '_cloudflare_image_full_offload_skip',
+				'compare' => 'NOT EXISTS',
+			);
+		}
+
 		return $args;
 	}
 

@@ -2,6 +2,7 @@
 
 Fixed:
 * Security issue (CVE-2026-9860)
+* Bulk delete (full offload) stops on error
 
 = 1.10.1 - 18.03.2026 =
 
