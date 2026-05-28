@@ -96,6 +96,11 @@ If something is still not working for you, please let me know by creating a supp
 
 == Changelog ==
 
+= 1.10.2 - 29.05.2026 =
+
+Fixed:
+* Security issue (CVE-2026-9860)
+
 = 1.10.1 - 18.03.2026 =
 
 Fixed:
