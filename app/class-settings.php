@@ -85,7 +85,7 @@ class Settings {
 		$account_id = sanitize_text_field( $form['account-id'] );
 		$api_key    = sanitize_text_field( $form['api-key'] );
 
-		// Cloudflare account IDs and API keys/tokens are alphanumeric tokens (optionally prefixed, e.g. cfut_) - reject anything else.
+		// Cloudflare account IDs and API keys/tokens are alphanumeric tokens (optionally prefixed, e.g. cfut_).
 		if ( ! preg_match( '/^[A-Za-z0-9_\-]+$/', $account_id ) || ! preg_match( '/^[A-Za-z0-9_\-]+$/', $api_key ) ) {
 			wp_send_json_error( esc_html__( 'Invalid credentials format.', 'cf-images' ) );
 		}
