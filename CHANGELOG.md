@@ -1,3 +1,8 @@
+= 1.10.3 - 08.06.2026 =
+
+Fixed:
+* Improve account ID and API key validation
+
 = 1.10.2 - 29.05.2026 =
 
 Fixed:

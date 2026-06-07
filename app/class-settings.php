@@ -82,12 +82,20 @@ class Settings {
 			wp_die();
 		}
 
+		$account_id = sanitize_text_field( $form['account-id'] );
+		$api_key    = sanitize_text_field( $form['api-key'] );
+
+		// Cloudflare account IDs and API keys/tokens are alphanumeric tokens (optionally prefixed, e.g. cfut_).
+		if ( ! preg_match( '/^[A-Za-z0-9_\-]+$/', $account_id ) || ! preg_match( '/^[A-Za-z0-9_\-]+$/', $api_key ) ) {
+			wp_send_json_error( esc_html__( 'Invalid credentials format.', 'cf-images' ) );
+		}
+
 		if ( empty( $form['compat'] ) ) {
-			$this->write_config( 'CF_IMAGES_ACCOUNT_ID', sanitize_text_field( $form['account-id'] ) );
-			$this->write_config( 'CF_IMAGES_KEY_TOKEN', sanitize_text_field( $form['api-key'] ) );
+			$this->write_config( 'CF_IMAGES_ACCOUNT_ID', $account_id );
+			$this->write_config( 'CF_IMAGES_KEY_TOKEN', $api_key );
 		} else {
-			update_site_option( 'cf-images-account-id', sanitize_text_field( $form['account-id'] ) );
-			update_site_option( 'cf-images-api-token', sanitize_text_field( $form['api-key'] ) );
+			update_site_option( 'cf-images-account-id', $account_id );
+			update_site_option( 'cf-images-api-token', $api_key );
 		}
 
 		// Remove any auth errors.
@@ -124,7 +132,9 @@ class Settings {
 			}
 
 			if ( ! empty( $value ) && preg_match( "/\/\* That's all, stop editing!.*/i", $line ) ) {
-				$new_file_content[] = "define( '$name', '$value' );\n";
+				// Escape backslashes and single quotes so the value cannot break out of the single-quoted string literal.
+				$escaped_value      = str_replace( array( '\\', "'" ), array( '\\\\', "\\'" ), $value );
+				$new_file_content[] = "define( '$name', '$escaped_value' );\n";
 
 				// Exit early, if we are overwriting.
 				if ( $overwrite ) {
